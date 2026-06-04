@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Convergence Compass — Which Test Do I Use? · Unit 10 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23e8e4dc%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%23c8841f%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#0d0c0a; --panel:#1a1813; --panel-2:#211e18; --ink:#ece7dd; --muted:#9a9183;
+    --line:#332e25; --line-2:#453f33; --true:#3fd0b0; --approx:#a98cf0; --gold:#a98cf0;
+    --conv:#3fd0b0; --div:#e0644f; --faint:#6b6457;
+    --display:'Fraunces',Georgia,serif; --body:'Spline Sans',system-ui,sans-serif;
+    --mono:'Spline Sans Mono',ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:
+      radial-gradient(ellipse 60% 50% at 15% -8%, rgba(169,140,240,.09), transparent 55%),
+      var(--bg);
+    color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;padding:30px 18px;line-height:1.6}
+  .wrap{max-width:1060px;margin:0 auto}
+  .backlink{display:inline-block;font-family:var(--mono);font-size:12.5px;color:var(--muted);
+    text-decoration:none;margin-bottom:18px;padding:5px 11px;border:1px solid var(--line);
+    border-radius:20px;background:var(--panel);transition:border-color .15s,color .15s,transform .15s}
+  .backlink:hover{border-color:var(--gold);color:var(--ink);transform:translateX(-2px)}
+  header{margin-bottom:8px}
+  h1{font-family:var(--display);font-weight:600;font-size:32px;margin:0;letter-spacing:-0.02em;line-height:1.05}
+  h1 .em{color:var(--approx)}
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7);transition:box-shadow .25s;margin-top:14px}
+  .mono{font-family:var(--mono)}
+  .tag{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:20px;
+    background:var(--panel-2);color:var(--muted);border:1px solid var(--line);margin-left:8px;vertical-align:middle}
+
+  /* ----- reference cards ----- */
+  .tests{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:14px}
+  .formula-hero{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:14px}
+  .fb-eq{text-align:center;overflow-x:auto}
+  .fb-plain{font-size:13.5px;line-height:1.55;margin-top:12px}
+  .fb-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin-top:14px}
+  @media(max-width:560px){.fb-legend{grid-template-columns:1fr}}
+  .leg-item{display:flex;gap:9px;align-items:baseline;font-size:12.5px}
+  .leg-sym{font-family:var(--mono);font-weight:600;flex:none;min-width:48px}
+  .leg-desc{color:var(--ink);line-height:1.4}
+  .ac-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.ac-grid{grid-template-columns:1fr}}
+  .ac-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .ac-card.abs{border-top:4px solid var(--conv)}
+  .ac-card.cond{border-top:4px solid var(--approx)}
+  .ac-h{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:6px}
+  .ac-card.abs .ac-h{color:var(--conv)} .ac-card.cond .ac-h{color:var(--approx)}
+  .ac-card p{font-size:13.5px;line-height:1.55;margin:0}
+  .ac-eg{font-size:12.5px;line-height:1.5;margin-top:11px;background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+  .ac-eg-h{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:3px}
+  .ac-method{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:16px;max-width:820px}
+  .ac-method-h{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:8px}
+  .ac-steps{margin:0;padding-left:20px}
+  .ac-steps li{font-size:13.5px;line-height:1.55;margin:8px 0}
+  .ac-why{font-size:13px;line-height:1.55;margin:14px 0 0;border-left:3px solid var(--gold);padding-left:12px;color:var(--ink)}
+  .test{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s;cursor:default}
+  .test:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(60,40,10,.5)}
+  .test h3{font-family:var(--display);font-size:17px;margin:0 0 2px}
+  .test .when{font-size:12px;color:var(--approx);font-weight:600;margin-bottom:8px;letter-spacing:.02em}
+  .test p{font-size:13.5px;margin:6px 0}
+  .test .cond{background:var(--panel-2);border:1px solid var(--line);
+    border-radius:8px;padding:10px 12px;margin-top:8px}
+  .test .cond .katex{font-size:1.04em}
+  .cnote{font-family:var(--body);font-size:12px;color:var(--muted);margin-top:7px;line-height:1.45}
+  .tex-fallback{font-family:var(--mono);font-size:12.5px;color:var(--ink)}
+  .mini{width:100%;height:78px;margin-top:10px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px}
+
+  /* ----- shared quiz card ----- */
+  .qcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .series-display{font-family:var(--mono);font-size:18px;background:var(--panel-2);border:1px solid var(--line);
+    border-radius:10px;padding:16px;text-align:center;margin-bottom:16px;min-height:58px;display:flex;
+    align-items:center;justify-content:center}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px}
+  button{font-family:var(--body);cursor:pointer;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:11px 14px;font-size:14px;text-align:left;
+    transition:transform .14s cubic-bezier(.2,.7,.2,1),border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+
+  /* ----- comparison table ----- */
+  .tablewrap{margin-top:14px;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:var(--panel);box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  table.cheat{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.cheat th{font-family:var(--body);font-weight:600;font-size:11px;letter-spacing:.07em;
+    text-transform:uppercase;color:var(--muted);text-align:left;padding:14px 14px;background:var(--panel-2);
+    border-bottom:1px solid var(--line);white-space:nowrap}
+  table.cheat td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.45}
+  table.cheat tr:last-child td{border-bottom:none}
+  table.cheat tr{transition:background .15s;cursor:pointer}
+  table.cheat tbody tr:hover{background:rgba(255,255,255,.03)}
+  table.cheat tr.focus{background:rgba(169,140,240,.08);box-shadow:inset 3px 0 0 var(--approx)}
+  td.tname{font-family:var(--display);font-weight:600;font-size:15px;color:var(--ink);white-space:nowrap}
+  td.cell-cond{color:var(--ink);font-size:12.5px}
+  td.cell-cond .katex{font-size:1em}
+  .series-display .katex{font-size:1.3em}
+  .series-display .katex-display{margin:0}
+  td.cell-watch{color:var(--muted);font-size:12.5px}
+  .tablewrap{overflow-x:auto}
+  @media(max-width:680px){table.cheat{min-width:640px}}
+
+  /* ----- quiz ----- */
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .solbtn{margin-top:12px;background:transparent;border:1px dashed var(--line);color:var(--approx);
+    font-size:13px;font-weight:600;padding:8px 12px;width:100%;text-align:center}
+  .solbtn:hover{border-color:var(--approx);transform:none}
+  .solution{margin-top:0;overflow:hidden}
+  .solution.open{margin-top:12px;animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+  .step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:none}
+  .step-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--panel-2);color:var(--muted);
+    font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .step-body{flex:1}
+  .step-t{font-size:13.5px;line-height:1.5}
+  .step-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;overflow-x:auto}
+  .step-m .katex{font-size:1.05em}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+
+  footer{color:var(--muted);font-size:12px;margin-top:46px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .katex{color:var(--ink)}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  sup{font-size:.72em} sub{font-size:.72em}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal,.result{opacity:1!important;transform:none!important}}
+  .whatsnext{max-width:640px;margin-top:18px;font-size:14px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  button:focus-visible, a:focus-visible, input:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html">← Unit 10 Guide</a>
+  <header class="reveal">
+    <h1>Convergence <span class="em">Compass</span></h1>
+    <div class="sub">AP Calc BC, Unit 10. There are nine convergence tests and the hard part was never
+      any one of them — it's knowing <i>which</i> to reach for. This is the map I wish I'd had.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    A convergence test answers one yes/no question: <b>does this infinite sum add up to a finite number,
+    or blow up forever?</b> The trouble is there are nine tests, each tuned for a different shape of series.
+    Pick the wrong one and you hit a dead end. So this page goes in four steps: <b>meet the tests</b> (what
+    each one is for), <b>compare them side by side</b> (a sortable cheat sheet), <b>classify the convergence</b>
+    (absolute vs. conditional), and <b>drill it</b> (a quick quiz).
+  </div>
+
+  <h2 class="reveal">1 · Meet the tests</h2>
+  <p class="lead reveal">Each test is built for a particular kind of series. Here's what each one is really
+    asking and when to reach for it — the "when" line is the trigger to memorize.</p>
+  <div class="formula-hero reveal" id="ratioKeystone" style="max-width:760px;margin-bottom:18px"></div>
+  <div class="tests reveal" id="tests"></div>
+
+  <h2 class="reveal">2 · The cheat sheet — all nine at a glance</h2>
+  <p class="lead reveal">The cards above are for reading one at a time. This is for comparing them side by side —
+    the single-screen reference to scan right before a test. Tap any column header to sort the focus,
+    or just read across.</p>
+
+  <div class="tablewrap reveal">
+    <table class="cheat" id="cheat">
+      <thead>
+        <tr>
+          <th class="tname">Test</th>
+          <th>Use when…</th>
+          <th>The condition</th>
+          <th>What it proves</th>
+          <th>Watch out</th>
+        </tr>
+      </thead>
+      <tbody id="cheatBody"></tbody>
+    </table>
+  </div>
+  <p class="lead reveal" style="font-size:13px;color:var(--muted)">
+    Tip: the ratio &amp; root tests are inconclusive when L = 1, and the nth-term test can <i>only</i> prove
+    divergence — never convergence. Those two facts trip up the most people.</p>
+
+  <h2 class="reveal">3 · Absolute vs. conditional convergence</h2>
+  <p class="lead reveal">Once a series converges, there's a finer question the exam loves: does it <i>still</i> converge
+    if you make every term positive? That split — absolute vs. conditional — is its own topic, and it hinges
+    entirely on the alternating tests you just met.</p>
+
+  <div class="ac-grid reveal">
+    <div class="ac-card abs">
+      <div class="ac-h">Converges absolutely</div>
+      <p>The series of <b>absolute values</b> Σ|aₙ| converges too. The convergence is "robust" — it doesn't
+        depend on cancellation between positive and negative terms.</p>
+      <div class="ac-eg"><span class="ac-eg-h">Example</span> Σ (−1)ⁿ/n² converges, and so does Σ 1/n²
+        (a p-series, p = 2 &gt; 1). Stripping the signs changes nothing → absolute.</div>
+    </div>
+    <div class="ac-card cond">
+      <div class="ac-h">Converges conditionally</div>
+      <p>The series converges as written, but Σ|aₙ| <b>diverges</b>. It only survives <i>because</i> of the
+        alternating cancellation — remove the signs and it falls apart.</p>
+      <div class="ac-eg"><span class="ac-eg-h">Example</span> Σ (−1)ⁿ⁺¹/n converges (alternating harmonic),
+        but Σ 1/n is the harmonic series → diverges. So it's conditional.</div>
+    </div>
+  </div>
+
+  <div class="ac-method reveal">
+    <div class="ac-method-h">The test is a two-step check</div>
+    <ol class="ac-steps">
+      <li>Take absolute values and test Σ|aₙ|. If it <b>converges</b> → the original converges <b>absolutely</b>. Done.</li>
+      <li>If Σ|aₙ| <b>diverges</b>, go back and test the original series itself (usually the Alternating Series Test). If the original still converges → <b>conditionally</b>. If it diverges too → it just <b>diverges</b>.</li>
+    </ol>
+    <p class="ac-why">Why care? Absolute convergence is the stronger guarantee — you can rearrange the terms in
+      any order and the sum won't change. Conditionally convergent series are fragile: rearranging them can
+      actually change what they add up to.</p>
+  </div>
+
+  <h2 class="reveal">4 · Drill it — pick the test</h2>
+  <p class="lead reveal">Now the real skill: see a series, name the test you'd use. Instant feedback with the
+    reasoning. This is what turns "I sort of remember the tests" into "I know which one on sight."</p>
+
+  <div class="qcard reveal" style="max-width:620px">
+    <div class="row" style="margin-bottom:10px">
+      <span class="score" id="score">Score: 0 / 0</span>
+      <span class="score" id="streak"></span>
+    </div>
+    <div class="series-display mono" id="quizSeries"></div>
+    <div class="qtext" id="quizPrompt">Step 1 — which test would you use first?</div>
+    <div class="quiz-opts" id="quizOpts"></div>
+    <div class="feedback" id="quizFb"></div>
+    <button class="next" id="quizNext" style="margin-top:14px;display:none;width:100%">Next series →</button>
+  </div>
+
+  <div class="whatsnext reveal">
+    Comfortable picking tests? Head back to the <a href="index.html">Unit 10 Guide</a> or build and
+    explore the series themselves in the <a href="breaking-point.html">Taylor Toolkit</a>.
+  </div>
+
+  <footer class="reveal">Convergence Compass · part of the Unit 10 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const sup=s=>`<sup>${s}</sup>`, sub=s=>`<sub>${s}</sub>`;
+
+// Render a LaTeX string to an HTML string via KaTeX, with a readable plain-text fallback
+// if KaTeX hasn't loaded (e.g. no internet). `display` makes it a centered block.
+function tex(latex, fallback, display){
+  if(window.katex){
+    try{ return katex.renderToString(latex,{throwOnError:false,displayMode:!!display}); }
+    catch(e){ /* fall through */ }
+  }
+  return `<span class="tex-fallback">${fallback!=null?fallback:latex}</span>`;
+}
+const VC={ratio:"#e0644f", lim:"#e8a13c", verdict:"#a98cf0"};
+const cc=(hex,body)=>`\\textcolor{${hex}}{${body}}`;
+function formulaBlock(latex, fallback, plain, legend){
+  const leg=legend.map(([color,sym,desc])=>`<div class="leg-item"><span class="leg-sym" style="color:${color}">${sym}</span><span class="leg-desc">${desc}</span></div>`).join("");
+  return `<div class="fb-eq">${tex(latex,fallback,true)}</div><div class="fb-plain">${plain}</div><div class="fb-legend">${leg}</div>`;
+}
+
+/* ============================ 1 · TEST REFERENCE ============================ */
+const TESTS=[
+  {key:"nth",name:"nth-Term Test",when:"First thing to check, always",
+   body:"Asks the cheapest possible question: do the terms even shrink to zero? If they don't, the sum can't possibly settle — it diverges. It can <i>only</i> prove divergence, never convergence.",
+   ctex:"\\lim_{n\\to\\infty} a_n \\ne 0 \\;\\Rightarrow\\; \\text{diverges}",
+   cfall:"lim(n→∞) aₙ ≠ 0 ⟹ diverges",
+   cnote:"If the limit is 0, the test is inconclusive — keep going.",
+   viz:"nth"},
+  {key:"geo",name:"Geometric Series",when:"Each term = previous × constant r",
+   body:"The friendliest series of all. If every term is a fixed ratio times the one before, you know the answer instantly — and you even get the exact sum.",
+   ctex:"\\sum a\\,r^{\\,n}=\\dfrac{a}{1-r}\\ \\text{if}\\ |r|<1",
+   cfall:"Σ a·rⁿ = a/(1−r) if |r| < 1",
+   cnote:"Diverges if |r| ≥ 1.",
+   viz:"geo"},
+  {key:"p",name:"p-Series",when:"Looks like Σ 1/nᵖ",
+   body:"A whole family judged by one number, the exponent p. The harmonic series (p=1) is the famous one that diverges even though its terms go to zero.",
+   ctex:"\\sum \\dfrac{1}{n^{p}}\\ \\text{converges}\\iff p>1",
+   cfall:"Σ 1/nᵖ converges ⟺ p > 1",
+   cnote:"Diverges if p ≤ 1 (p = 1 is the harmonic series).",
+   viz:"p"},
+  {key:"alt",name:"Alternating Series Test",when:"Signs flip: +, −, +, − …",
+   body:"For series whose terms alternate sign. If the sizes shrink steadily to zero, the partial sums bounce back and forth in ever-tighter steps and close in on a limit — which also bounds the error.",
+   ctex:"\\sum (-1)^{n} b_n,\\ b_n\\downarrow 0 \\;\\Rightarrow\\; \\text{converges}",
+   cfall:"Σ (−1)ⁿ bₙ with bₙ ↓ 0 ⟹ converges",
+   cnote:"bₙ must decrease AND tend to 0.",
+   viz:"alt"},
+  {key:"ratio",name:"Ratio Test",when:"Factorials or n in the exponent",
+   body:"Built for explosive growth. Compare each term to the one before; if the ratio settles below 1, the terms collapse fast enough to converge. The go-to for n! or constants raised to the n.",
+   ctex:"L=\\lim_{n\\to\\infty}\\left|\\dfrac{a_{n+1}}{a_n}\\right|",
+   cfall:"L = lim |aₙ₊₁ / aₙ|",
+   cnote:"Converges if L < 1, diverges if L > 1, inconclusive if L = 1.",
+   viz:"ratio"},
+  {key:"root",name:"Root Test",when:"The whole term is raised to the n",
+   body:"A cousin of the ratio test for when the entire term is something raised to the nth power — take the nth root to peel off the exponent.",
+   ctex:"L=\\lim_{n\\to\\infty}\\sqrt[n]{\\,|a_n|\\,}",
+   cfall:"L = lim ⁿ√|aₙ|",
+   cnote:"Converges if L < 1, diverges if L > 1.",
+   viz:"root"},
+  {key:"dct",name:"Direct Comparison",when:"Terms sit just above or below a known series",
+   body:"The most intuitive comparison: if your positive terms stay <i>below</i> a series you know converges, yours converges too; if they stay <i>above</i> one you know diverges, yours diverges. You're sandwiching an unknown against a known benchmark, term by term.",
+   ctex:"0\\le a_n\\le b_n:\\ \\textstyle\\sum b_n\\,\\text{conv}\\Rightarrow\\sum a_n\\,\\text{conv}",
+   cfall:"0 ≤ aₙ ≤ bₙ: Σbₙ conv ⟹ Σaₙ conv",
+   cnote:"Reverse for divergence: aₙ ≥ bₙ ≥ 0 and Σbₙ diverges ⟹ Σaₙ diverges. Needs the inequality to hold for all n.",
+   viz:"dct"},
+  {key:"lct",name:"Limit Comparison",when:"Messy, but acts like a p-series",
+   body:"When a series is too tangled to judge directly but clearly behaves like a simpler benchmark, compare their dominant growth. Same behavior → same fate. Needs positive terms.",
+   ctex:"L=\\lim_{n\\to\\infty}\\dfrac{a_n}{b_n},\\ 0<L<\\infty",
+   cfall:"L = lim aₙ/bₙ, 0 < L < ∞",
+   cnote:"Then aₙ and bₙ share the same fate. Needs positive terms.",
+   viz:"lct"},
+  {key:"int",name:"Integral Test",when:"Term is positive, decreasing, easy to integrate",
+   body:"If the term matches a function you can integrate, the sum and the area under that curve share the same fate. The bridge between sums and integrals.",
+   ctex:"\\sum a_n \\ \\text{and}\\ \\int_{1}^{\\infty} f(x)\\,dx \\ \\text{share fate}",
+   cfall:"Σ aₙ and ∫₁^∞ f(x)dx share fate",
+   cnote:"Requires f positive and decreasing, with aₙ = f(n).",
+   viz:"int"}
+];
+
+function drawMini(svg,kind){
+  const W=300,H=78,m=8; svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const bx=i=>m+ i*(W-2*m)/13, base=H-14;
+  const axis=()=>{svg.appendChild(el("line",{x1:m,y1:base,x2:W-m,y2:base,stroke:"#332e25"}));};
+  if(kind==="nth"){ // terms NOT shrinking -> dots staying high
+    axis(); for(let i=0;i<13;i++){const y=24+6*Math.sin(i);svg.appendChild(el("circle",{cx:bx(i),cy:y,r:3,fill:"var(--div)"}));}
+    svg.appendChild(el("text",{x:W-m,y:18,"text-anchor":"end","font-size":10,fill:"var(--div)","font-family":"var(--mono)"},"terms ↛ 0"));
+  }else if(kind==="geo"){ // partial sums leveling to a limit
+    axis(); let s=0,pts=[]; for(let i=0;i<13;i++){s+=Math.pow(0.6,i);pts.push([bx(i),base-(s/2.5)*(base-16)]);}
+    let d="M"+pts.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L"); svg.appendChild(el("path",{d,fill:"none",stroke:"var(--conv)","stroke-width":2}));
+    const lim=base-(2.5/2.5)*(base-16); svg.appendChild(el("line",{x1:m,y1:lim,x2:W-m,y2:lim,stroke:"var(--gold)","stroke-dasharray":"4 4","stroke-width":1}));
+    pts.forEach(p=>svg.appendChild(el("circle",{cx:p[0],cy:p[1],r:2.4,fill:"var(--conv)"})));
+  }else if(kind==="p"){ // two curves: p>1 converge, p=1 (harmonic) creeping up
+    axis(); let s1=0,s2=0,a=[],b=[]; for(let i=1;i<=13;i++){s1+=1/(i*i);s2+=1/i;a.push([bx(i-1),base-(s1/1.7)*(base-16)]);b.push([bx(i-1),base-(s2/3.3)*(base-16)]);}
+    svg.appendChild(el("path",{d:"M"+a.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L"),fill:"none",stroke:"var(--conv)","stroke-width":2}));
+    svg.appendChild(el("path",{d:"M"+b.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L"),fill:"none",stroke:"var(--div)","stroke-width":2}));
+    svg.appendChild(el("text",{x:W-m,y:20,"text-anchor":"end","font-size":9,fill:"var(--conv)","font-family":"var(--mono)"},"p>1"));
+    svg.appendChild(el("text",{x:W-m,y:base-4,"text-anchor":"end","font-size":9,fill:"var(--div)","font-family":"var(--mono)"},"p=1"));
+  }else if(kind==="alt"){ // partial sums bouncing into a limit
+    axis(); let s=0,pts=[]; for(let i=0;i<13;i++){s+=Math.pow(-1,i)/(i+1);pts.push([bx(i),base-((s+0.3)/1.2)*(base-20)-6]);}
+    const lim=base-((Math.log(2)+0.3)/1.2)*(base-20)-6; svg.appendChild(el("line",{x1:m,y1:lim,x2:W-m,y2:lim,stroke:"var(--gold)","stroke-dasharray":"4 4","stroke-width":1}));
+    svg.appendChild(el("path",{d:"M"+pts.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L"),fill:"none",stroke:"var(--conv)","stroke-width":2}));
+    pts.forEach(p=>svg.appendChild(el("circle",{cx:p[0],cy:p[1],r:2.4,fill:"var(--conv)"})));
+  }else if(kind==="ratio"){ // ratio bars dropping below 1 line
+    const one=base-(1/2)*(base-16); svg.appendChild(el("line",{x1:m,y1:one,x2:W-m,y2:one,stroke:"var(--gold)","stroke-dasharray":"4 4","stroke-width":1}));
+    svg.appendChild(el("text",{x:m+2,y:one-3,"font-size":9,fill:"var(--gold)","font-family":"var(--mono)"},"L=1"));
+    for(let i=0;i<13;i++){const r=0.3+0.9/(i+1);const h=(r/2)*(base-16);const col=r<1?"var(--conv)":"var(--div)";
+      svg.appendChild(el("rect",{x:bx(i)-5,y:base-h,width:10,height:h,rx:2,fill:col,opacity:.85}));}
+  }else if(kind==="root"){ // nth-root values settling to a limit below the L=1 line (dots on a curve — distinct from ratio's bars)
+    const one=base-(1/2)*(base-16); svg.appendChild(el("line",{x1:m,y1:one,x2:W-m,y2:one,stroke:"var(--gold)","stroke-dasharray":"4 4","stroke-width":1}));
+    svg.appendChild(el("text",{x:m+2,y:one-3,"font-size":9,fill:"var(--gold)","font-family":"var(--mono)"},"L=1"));
+    let pts=[]; for(let i=0;i<13;i++){const r=0.5+0.45*Math.pow(0.7,i);pts.push([bx(i),base-(r/2)*(base-16)]);}
+    svg.appendChild(el("path",{d:"M"+pts.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L"),fill:"none",stroke:"var(--conv)","stroke-width":2}));
+    pts.forEach(p=>svg.appendChild(el("circle",{cx:p[0],cy:p[1],r:2.4,fill:"var(--conv)"})));
+    svg.appendChild(el("text",{x:W-m,y:base-4,"text-anchor":"end","font-size":9,fill:"var(--conv)","font-family":"var(--mono)"},"ⁿ√|aₙ|→L"));
+  }else if(kind==="dct"){ // the sandwich: your terms (dots) sit strictly UNDER a known benchmark curve
+    axis();
+    let bench=[],mine=[]; for(let i=0;i<13;i++){const b=Math.pow(0.72,i);bench.push([bx(i),base-(b)*(base-18)]);mine.push([bx(i),base-(b*0.6)*(base-18)]);}
+    svg.appendChild(el("path",{d:"M"+bench.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L"),fill:"none",stroke:"var(--div)","stroke-width":1.5,"stroke-dasharray":"3 3"}));
+    bench.forEach(p=>svg.appendChild(el("circle",{cx:p[0],cy:p[1],r:1.8,fill:"var(--div)"})));
+    mine.forEach(p=>svg.appendChild(el("circle",{cx:p[0],cy:p[1],r:2.6,fill:"var(--conv)"})));
+    svg.appendChild(el("text",{x:W-m,y:20,"text-anchor":"end","font-size":9,fill:"var(--div)","font-family":"var(--mono)"},"known bₙ"));
+    svg.appendChild(el("text",{x:W-m,y:base-4,"text-anchor":"end","font-size":9,fill:"var(--conv)","font-family":"var(--mono)"},"yours ≤ bₙ"));
+  }else if(kind==="lct"){ // two curves tracking at the SAME rate (proportional)
+    axis();
+    let a=[],b=[]; for(let i=0;i<13;i++){const v=Math.pow(0.75,i);a.push([bx(i),base-(v)*(base-18)]);b.push([bx(i),base-(v*0.65)*(base-18)]);}
+    svg.appendChild(el("path",{d:"M"+a.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L"),fill:"none",stroke:"var(--conv)","stroke-width":2}));
+    svg.appendChild(el("path",{d:"M"+b.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L"),fill:"none",stroke:"var(--gold)","stroke-width":2,"stroke-dasharray":"4 3"}));
+    svg.appendChild(el("text",{x:W-m,y:base-4,"text-anchor":"end","font-size":9,fill:"var(--muted)","font-family":"var(--mono)"},"same rate → same fate"));
+  }else if(kind==="int"){ // sum-as-area: bars (terms) overlaid on a smooth decreasing curve (the integral)
+    axis();
+    for(let i=0;i<13;i++){const h=Math.pow(0.78,i)*(base-18);svg.appendChild(el("rect",{x:bx(i)-5,y:base-h,width:10,height:h,rx:1.5,fill:"var(--approx)",opacity:.28}));}
+    let pts=[]; for(let i=0;i<=13;i++){const x=m+i*(W-2*m)/13;const h=Math.pow(0.78,i)*(base-18);pts.push([x,base-h]);}
+    svg.appendChild(el("path",{d:"M"+pts.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L"),fill:"none",stroke:"var(--conv)","stroke-width":2}));
+    svg.appendChild(el("text",{x:W-m,y:20,"text-anchor":"end","font-size":9,fill:"var(--conv)","font-family":"var(--mono)"},"∫f(x)dx ≈ Σaₙ"));
+  }
+}
+
+const testsBox=document.getElementById("tests");
+function buildTests(){
+  const ks=document.getElementById("ratioKeystone");
+  if(ks) ks.innerHTML=formulaBlock(
+    `${cc(VC.lim,"L")}=\\lim_{n\\to\\infty}\\left|\\frac{${cc(VC.ratio,"a_{n+1}")}}{${cc(VC.ratio,"a_n")}}\\right| \\quad\\begin{cases}${cc(VC.verdict,"L<1")} & \\text{converges}\\\\ ${cc(VC.verdict,"L>1")} & \\text{diverges}\\\\ L=1 & \\text{inconclusive}\\end{cases}`,
+    "L = lim|aₙ₊₁/aₙ|; L<1 converges, L>1 diverges, L=1 inconclusive",
+    `The workhorse test. Take the <b style="color:${VC.ratio}">ratio of consecutive terms</b>, find its limit <b style="color:${VC.lim}">L</b>, and <b style="color:${VC.verdict}">compare to 1</b>. Best when factorials or powers like rⁿ appear. The catch: if L = 1 it tells you nothing — switch tests.`,
+    [[VC.ratio,"aₙ₊₁ / aₙ","ratio of the next term to the current one"],
+     [VC.lim,"L","the limit of that ratio's absolute value"],
+     [VC.verdict,"L vs 1","< 1 converges, > 1 diverges, = 1 inconclusive"]]);
+  testsBox.innerHTML="";
+  TESTS.forEach(t=>{
+    const d=document.createElement("div"); d.className="test";
+    d.innerHTML=`<h3>${t.name}</h3><div class="when">USE WHEN: ${t.when}</div>
+      <p>${t.body}</p>
+      <div class="cond">${tex(t.ctex,t.cfall)}<div class="cnote">${t.cnote}</div></div>`;
+    const svg=document.createElementNS(NS,"svg"); svg.setAttribute("class","mini");
+    d.appendChild(svg); drawMini(svg,t.viz);
+    testsBox.appendChild(d);
+  });
+}
+
+/* ============================ 2 · COMPARISON TABLE ============================ */
+// compact reference rows — ctex is KaTeX, cfall is the plain-text fallback
+const CHEAT=[
+  {name:"nth-Term",use:"Always — your first reflex",
+   ctex:"\\lim a_n \\ne 0",cfall:"lim aₙ ≠ 0",proves:"Divergence only",watch:"If lim = 0 it says nothing — keep going."},
+  {name:"Geometric",use:"Constant ratio r between terms",
+   ctex:"\\sum a\\,r^{n}",cfall:"Σ a·rⁿ",proves:"Both (|r|<1 conv, else div)",watch:"Terms must have a fixed ratio, not just shrink."},
+  {name:"p-Series",use:"Shape is 1/nᵖ",
+   ctex:"\\sum \\tfrac{1}{n^{p}}",cfall:"Σ 1/nᵖ",proves:"Both (p>1 conv, p≤1 div)",watch:"p = 1 is the harmonic series — it diverges."},
+  {name:"Alternating",use:"Signs flip +, −, +, −",
+   ctex:"\\sum (-1)^{n} b_n",cfall:"Σ(−1)ⁿbₙ",proves:"Convergence",watch:"bₙ must decrease AND go to 0 — both."},
+  {name:"Ratio",use:"Factorials n! or kⁿ",
+   ctex:"L=\\lim\\left|\\tfrac{a_{n+1}}{a_n}\\right|",cfall:"L = lim|aₙ₊₁/aₙ|",proves:"Both (L<1 conv, L>1 div)",watch:"L = 1 is inconclusive — switch tests."},
+  {name:"Root",use:"Whole term raised to the n",
+   ctex:"L=\\lim\\sqrt[n]{|a_n|}",cfall:"L = lim ⁿ√|aₙ|",proves:"Both (L<1 conv, L>1 div)",watch:"L = 1 is inconclusive, same as ratio."},
+  {name:"Direct Comparison",use:"Terms sit above/below a known series",
+   ctex:"0\\le a_n\\le b_n",cfall:"0 ≤ aₙ ≤ bₙ",proves:"Both (sandwich vs. a known series)",watch:"Inequality must hold for all n; needs positive terms."},
+  {name:"Limit Comparison",use:"Messy but acts like a p-series",
+   ctex:"L=\\lim\\tfrac{a_n}{b_n},\\,0<L<\\infty",cfall:"L = lim aₙ/bₙ, 0<L<∞",proves:"Both (shares bₙ's fate)",watch:"Needs positive terms; pick a smart bₙ."},
+  {name:"Integral",use:"Positive, decreasing, integrable",
+   ctex:"\\int_{1}^{\\infty} f(x)\\,dx",cfall:"∫₁^∞ f(x)dx",proves:"Both (shares integral's fate)",watch:"f must be positive AND decreasing first."}
+];
+const cheatBody=document.getElementById("cheatBody");
+let focusedRow=null;
+function buildCheat(){
+  cheatBody.innerHTML=""; focusedRow=null;
+  CHEAT.forEach(r=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`<td class="tname">${r.name}</td>
+      <td>${r.use}</td>
+      <td class="cell-cond">${tex(r.ctex,r.cfall)}</td>
+      <td>${r.proves}</td>
+      <td class="cell-watch">${r.watch}</td>`;
+    cheatBody.appendChild(tr);
+  });
+  // gentle row-focus on tap for readability on the wide grid
+  cheatBody.querySelectorAll("tr").forEach(tr=>{
+    tr.addEventListener("click",()=>{
+      if(focusedRow===tr){tr.classList.remove("focus");focusedRow=null;return;}
+      cheatBody.querySelectorAll("tr").forEach(x=>x.classList.remove("focus"));
+      tr.classList.add("focus");focusedRow=tr;
+    });
+  });
+}
+
+/* ============================ 3 · QUIZ ============================ */
+// each item: series, the test to pick, converge/diverge verdict, why the test fits,
+// a verdict explanation, and `traps` — why specific tempting wrong picks fail here.
+const QUIZ=[
+  {s:"Σ (5/3)ⁿ",stex:"\\sum \\left(\\tfrac{5}{3}\\right)^{n}",ans:"Geometric",verdict:"Diverges",steps:[{t:"Identify the form — a constant ratio r between terms.",m:"a_n=\\left(\\tfrac{5}{3}\\right)^{n}\\;\\Rightarrow\\;r=\\tfrac{5}{3}"},{t:"Compare |r| to 1.",m:"|r|=\\tfrac{5}{3}>1"},{t:"Since |r| ≥ 1, the geometric series diverges.",m:"\\sum\\left(\\tfrac{5}{3}\\right)^{n}\\ \\text{diverges}"}],
+    why:"A constant ratio between terms is the geometric signature — reach for it on sight.",
+    vexp:"r = 5/3, and |r| ≥ 1, so the terms grow and the sum runs off to infinity.",
+    traps:{"Ratio":"The ratio test would actually work too (you'd get L = 5/3 > 1), but when the ratio is a flat constant, 'geometric' is the faster, cleaner read.","nth-Term":"True that the terms don't → 0, so nth-term also catches it — but geometric tells you more (you'd get the exact sum when it converges)."}},
+  {s:"Σ 1/n^0.5",stex:"\\sum \\dfrac{1}{n^{1/2}}",ans:"p-Series",verdict:"Diverges",steps:[{t:"Recognize the p-series shape and read off p.",m:"\\sum\\frac{1}{n^{1/2}}\\;\\Rightarrow\\;p=\\tfrac12"},{t:"Apply the p-series rule (converges only if p > 1).",m:"p=\\tfrac12\\le 1"},{t:"So it diverges.",m:"\\sum n^{-1/2}\\ \\text{diverges}"}],
+    why:"The shape 1/nᵖ is the p-series signature — just read off p.",
+    vexp:"p = ½, and since p ≤ 1 the series diverges (it shrinks too slowly to add up).",
+    traps:{"Integral":"The integral test does work here, but it's extra labor — recognizing the p-series shape gives the answer instantly.","Ratio":"The ratio test fails on p-series: you'd get L = 1, which is inconclusive and wastes your time."}},
+  {s:"Σ cos(n)",stex:"\\sum \\cos n",ans:"nth-Term",verdict:"Diverges",steps:[{t:"Try the nth-term test first: does aₙ → 0?",m:"\\lim_{n\\to\\infty}\\cos n\\ \\text{does not exist}"},{t:"cos n oscillates in [−1, 1] and never settles to 0.",m:"\\lim_{n\\to\\infty}\\cos n\\ne 0"},{t:"A nonzero (or missing) limit forces divergence.",m:"\\sum\\cos n\\ \\text{diverges}"}],
+    why:"Always check the nth-term test first — it's the cheapest question you can ask.",
+    vexp:"cos(n) oscillates and never settles to 0, so the sum can't converge. Done.",
+    traps:{"Ratio":"The ratio test needs a clean |aₙ₊₁/aₙ| limit; cos(n) has none, so it's a dead end.","Geometric":"There's no constant ratio here — cos(n) isn't geometric."}},
+  {s:"Σ (−1)ⁿ / √n",stex:"\\sum \\dfrac{(-1)^{n}}{\\sqrt{n}}",ans:"Alternating",verdict:"Converges",steps:[{t:"Alternating signs → check the two AST conditions on bₙ = 1/√n.",m:"b_n=\\frac{1}{\\sqrt n}"},{t:"Condition 1: terms decrease.",m:"b_{n+1}<b_n\\ \\text{for all }n"},{t:"Condition 2: terms go to 0.",m:"\\lim_{n\\to\\infty}\\frac{1}{\\sqrt n}=0"},{t:"Both hold, so it converges (conditionally — the absolute series is a divergent p-series with p = ½).",m:"\\sum\\frac{(-1)^n}{\\sqrt n}\\ \\text{converges}"}],
+    why:"Flipping signs (+, −, +, −) point straight at the alternating series test.",
+    vexp:"1/√n decreases steadily to 0, so by the alternating series test it converges (conditionally — the absolute version is a divergent p-series).",
+    traps:{"p-Series":"The 1/√n part looks p-series-ish, but the alternating sign changes everything — without the signs it would diverge.","nth-Term":"Terms do → 0 here, so the nth-term test is inconclusive; it can never prove convergence."}},
+  {s:"Σ 2ⁿ / n!",stex:"\\sum \\dfrac{2^{n}}{n!}",ans:"Ratio",verdict:"Converges",steps:[{t:"A factorial appears → ratio test. Form the ratio of consecutive terms.",m:"\\frac{a_{n+1}}{a_n}=\\frac{2^{\\,n+1}/(n+1)!}{2^{\\,n}/n!}"},{t:"Simplify — the 2ⁿ and n! mostly cancel.",m:"=\\frac{2}{\\,n+1\\,}"},{t:"Take the limit.",m:"L=\\lim_{n\\to\\infty}\\frac{2}{n+1}=0"},{t:"L = 0 < 1, so it converges.",m:"\\sum\\frac{2^{n}}{n!}\\ \\text{converges}"}],
+    why:"A factorial is the ratio test's calling card — it cancels beautifully term-to-term.",
+    vexp:"The ratio simplifies to 2/(n+1) → 0 < 1, so it converges (fast).",
+    traps:{"Root":"The root test can handle nth powers, but a factorial doesn't simplify under an nth root — the ratio test is the right reach.","Geometric":"It's not geometric: the ratio between terms isn't constant, it shrinks as n grows."}},
+  {s:"Σ (2n)/(n²+1)",stex:"\\sum \\dfrac{2n}{n^{2}+1}",ans:"Limit Comparison",verdict:"Diverges",steps:[{t:"Rational in n → limit comparison. Pick bₙ from the dominant powers (2n/n² = 2/n).",m:"b_n=\\frac{1}{n}"},{t:"Compute the comparison limit.",m:"L=\\lim_{n\\to\\infty}\\frac{2n/(n^2+1)}{1/n}=\\lim_{n\\to\\infty}\\frac{2n^2}{n^2+1}=2"},{t:"0 < L < ∞, so this shares the fate of Σ 1/n.",m:"0<2<\\infty"},{t:"Σ 1/n is the harmonic series (p = 1), which diverges — so this diverges too.",m:"\\sum\\frac{2n}{n^2+1}\\ \\text{diverges}"}],
+    why:"A rational function of n → compare it to the p-series of its dominant powers.",
+    vexp:"It behaves like 2n/n² = 2/n, the harmonic series (p = 1), which diverges — so this does too.",
+    traps:{"p-Series":"It's not literally 1/nᵖ, but it acts like one; limit comparison is how you cash that in.","Ratio":"Rational functions give ratio-test limit L = 1 — inconclusive. Don't reach for it here."}},
+  {s:"Σ 1/(n·ln n)",stex:"\\sum \\dfrac{1}{n\\ln n}",ans:"Integral",verdict:"Diverges",steps:[{t:"Positive & decreasing → integral test. Set up the matching integral.",m:"\\int_{2}^{\\infty}\\frac{dx}{x\\ln x}"},{t:"Substitute u = ln x, du = dx/x.",m:"=\\int \\frac{du}{u}=\\ln|u|=\\ln(\\ln x)"},{t:"Evaluate the improper integral.",m:"\\lim_{b\\to\\infty}\\ln(\\ln b)=\\infty"},{t:"The integral diverges, so the series diverges.",m:"\\sum\\frac{1}{n\\ln n}\\ \\text{diverges}"}],
+    why:"Positive, decreasing, and easy to integrate → the integral test is the natural fit.",
+    vexp:"∫ 1/(x ln x) dx = ln(ln x), which grows without bound, so the series diverges.",
+    traps:{"p-Series":"The extra ln n factor means it's not a clean p-series — the integral test is what handles that twist.","Limit Comparison":"Comparison is tricky here because the ln n makes a clean benchmark hard to find; integrating is cleaner."}},
+  {s:"Σ (n/(2n+1))ⁿ",stex:"\\sum \\left(\\dfrac{n}{2n+1}\\right)^{n}",ans:"Root",verdict:"Converges",steps:[{t:"Whole term is raised to the n → root test. Take the nth root.",m:"\\sqrt[n]{\\left(\\tfrac{n}{2n+1}\\right)^{n}}=\\frac{n}{2n+1}"},{t:"Take the limit of that.",m:"L=\\lim_{n\\to\\infty}\\frac{n}{2n+1}=\\tfrac12"},{t:"L = ½ < 1, so it converges.",m:"\\sum\\left(\\tfrac{n}{2n+1}\\right)^{n}\\ \\text{converges}"}],
+    why:"The whole term is raised to the n — take the nth root and the exponent peels away.",
+    vexp:"The nth root → 1/2 < 1, so it converges.",
+    traps:{"Ratio":"The ratio test gets ugly with this nth power; the root test is purpose-built for (…)ⁿ.","Geometric":"The base isn't constant — it depends on n — so it's not geometric."}},
+  {s:"Σ n / 2ⁿ",stex:"\\sum \\dfrac{n}{2^{n}}",ans:"Ratio",verdict:"Converges",steps:[{t:"A constant raised to the n (2ⁿ) → ratio test.",m:"\\frac{a_{n+1}}{a_n}=\\frac{(n+1)/2^{\\,n+1}}{n/2^{\\,n}}"},{t:"Simplify.",m:"=\\frac{n+1}{2n}"},{t:"Take the limit.",m:"L=\\lim_{n\\to\\infty}\\frac{n+1}{2n}=\\tfrac12"},{t:"L = ½ < 1, so it converges.",m:"\\sum\\frac{n}{2^{n}}\\ \\text{converges}"}],
+    why:"A constant raised to the n (here 2ⁿ) is ratio-test territory.",
+    vexp:"The ratio → 1/2 < 1, so it converges.",
+    traps:{"Geometric":"Close, but the n in the numerator means the ratio isn't constant — not purely geometric.","Root":"The root test works too (you'd get 1/2), but the ratio test is usually less fiddly when there's a factorial-free polynomial times kⁿ."}},
+  {s:"Σ 1/n³",stex:"\\sum \\dfrac{1}{n^{3}}",ans:"p-Series",verdict:"Converges",steps:[{t:"Clean p-series — just read off p.",m:"\\sum\\frac{1}{n^{3}}\\;\\Rightarrow\\;p=3"},{t:"Apply the rule (converges if p > 1).",m:"p=3>1"},{t:"So it converges.",m:"\\sum\\frac{1}{n^{3}}\\ \\text{converges}"}],
+    why:"Pure 1/nᵖ — the p-series shape, read off the exponent.",
+    vexp:"p = 3 > 1, so it converges.",
+    traps:{"Integral":"The integral test confirms it, but it's unnecessary work when the p-series shape is staring at you.","Ratio":"Ratio gives L = 1 on any p-series — inconclusive."}},
+  {s:"Σ 1/(2ⁿ+1)",stex:"\\sum \\dfrac{1}{2^{n}+1}",ans:"Direct Comparison",verdict:"Converges",steps:[{t:"The +1 blocks a clean geometric/ratio read, but each term sits just below a series you know.",m:"\\frac{1}{2^{n}+1}<\\frac{1}{2^{n}}"},{t:"Σ 1/2ⁿ is a convergent geometric series (r = ½).",m:"\\sum\\frac{1}{2^{n}}=1\\ \\text{(converges)}"},{t:"Smaller positive terms than a convergent series → it converges too.",m:"\\sum\\frac{1}{2^{n}+1}\\ \\text{converges}"}],
+    why:"Terms sit just under 1/2ⁿ, a known convergent geometric series — sandwich it with direct comparison.",
+    vexp:"Bounded above by a convergent geometric series, so it converges.",
+    traps:{"Geometric":"Not quite geometric — the +1 in the denominator breaks the constant ratio.","Ratio":"The ratio test is messier here; direct comparison against 1/2ⁿ is the clean reach.","Limit Comparison":"Limit comparison also works (against 1/2ⁿ), but direct comparison is more immediate since the inequality is obvious."}}
+];
+const CHOICES=["nth-Term","Geometric","p-Series","Alternating","Ratio","Root","Direct Comparison","Limit Comparison","Integral"];
+let qi=-1,score=0,asked=0,streak=0,stage=0,pickedTest=null;
+const quizSeries=document.getElementById("quizSeries"),quizOpts=document.getElementById("quizOpts"),
+  quizFb=document.getElementById("quizFb"),quizNext=document.getElementById("quizNext"),
+  scoreEl=document.getElementById("score"),streakEl=document.getElementById("streak"),
+  quizPrompt=document.getElementById("quizPrompt");
+
+function nextQuiz(){
+  stage=0; pickedTest=null; quizFb.innerHTML=""; quizNext.style.display="none";
+  let n; do{n=Math.floor(Math.random()*QUIZ.length);}while(n===qi&&QUIZ.length>1); qi=n;
+  const q=QUIZ[qi];
+  quizSeries.innerHTML=tex(q.stex, q.s, true);
+  renderTestStage(q);
+}
+// STAGE 1: pick the test
+function renderTestStage(q){
+  quizPrompt.textContent="Step 1 — which test would you use first?";
+  quizOpts.className="quiz-opts"; quizOpts.innerHTML="";
+  CHOICES.forEach(c=>{
+    const b=document.createElement("button");b.textContent=c;
+    b.onclick=()=>answerTest(b,c,q);
+    quizOpts.appendChild(b);
+  });
+}
+function answerTest(btn,choice,q){
+  if(stage!==0)return; stage=1; pickedTest=choice;
+  const right=choice===q.ans;
+  [...quizOpts.children].forEach(b=>b.disabled=true);
+  if(right){btn.classList.add("correct");
+    quizFb.innerHTML=`<b style="color:var(--conv)">Right test.</b> ${q.why}`;}
+  else{btn.classList.add("wrong");
+    [...quizOpts.children].forEach(b=>{if(b.textContent===q.ans)b.classList.add("correct");});
+    const trap=q.traps&&q.traps[choice];
+    quizFb.innerHTML=`<b style="color:var(--div)">${q.ans} is the cleaner first reach.</b> `
+      +(trap?trap+" ":"")+`<span style="color:var(--muted)">${q.why}</span>`;
+  }
+  // wait for the user to read the explanation, then continue to the verdict step on click
+  quizNext.textContent="Continue → verdict";
+  quizNext.style.display="block";
+  quizNext.onclick=()=>{ renderVerdictStage(q,right); };
+}
+// STAGE 2: converge or diverge
+function renderVerdictStage(q,testWasRight){
+  quizFb.innerHTML=""; quizNext.style.display="none"; quizNext.textContent="Next series →";
+  quizPrompt.textContent="Step 2 — so does it converge or diverge?";
+  quizOpts.className=""; quizOpts.innerHTML="";
+  const wrap=document.createElement("div"); wrap.className="quiz-opts";
+  ["Converges","Diverges"].forEach(v=>{
+    const b=document.createElement("button");b.textContent=v;
+    b.onclick=()=>answerVerdict(b,v,q,testWasRight);
+    wrap.appendChild(b);
+  });
+  quizOpts.appendChild(wrap);
+}
+function answerVerdict(btn,choice,q,testWasRight){
+  if(stage!==1)return; stage=2; asked++;
+  const right=choice===q.verdict;
+  [...btn.parentElement.children].forEach(b=>b.disabled=true);
+  // scoring: a point only if BOTH the test and the verdict were right
+  const fullyRight=testWasRight&&right;
+  if(fullyRight){score++;streak++;} else {streak=0;}
+  if(right){btn.classList.add("correct");}
+  else{btn.classList.add("wrong");
+    [...btn.parentElement.children].forEach(b=>{if(b.textContent===q.verdict)b.classList.add("correct");});}
+  const head=right?`<b style="color:var(--conv)">Yes — it ${q.verdict.toLowerCase()}.</b>`
+                  :`<b style="color:var(--div)">Actually it ${q.verdict.toLowerCase()}.</b>`;
+  quizFb.innerHTML=`${head} ${q.vexp}`
+    +(fullyRight?"":`<div style="color:var(--muted);font-size:13px;margin-top:6px">A point counts only when both the test and the verdict are right — that's the real exam skill.</div>`);
+  scoreEl.textContent=`Score: ${score} / ${asked}`;
+  streakEl.textContent=streak>=2?`🔥 ${streak} in a row`:"";
+  // worked-solution toggle
+  if(q.steps&&q.steps.length){
+    const sol=document.createElement("div");
+    sol.innerHTML=`<button class="solbtn" id="solBtn">▸ Show the full solution</button>
+      <div class="solution" id="solBody"></div>`;
+    quizFb.appendChild(sol);
+    const solBtn=sol.querySelector("#solBtn"), solBody=sol.querySelector("#solBody");
+    let open=false;
+    solBtn.onclick=()=>{
+      open=!open;
+      if(open){
+        solBody.innerHTML=q.steps.map((st,i)=>
+          `<div class="step">
+             <div class="step-n">${i+1}</div>
+             <div class="step-body"><div class="step-t">${st.t}</div>
+               ${st.m?`<div class="step-m">${tex(st.m,st.m,false)}</div>`:""}</div>
+           </div>`).join("");
+        solBody.classList.add("open");
+        solBtn.innerHTML="▾ Hide the full solution";
+      }else{
+        solBody.classList.remove("open"); solBody.innerHTML="";
+        solBtn.innerHTML="▸ Show the full solution";
+      }
+    };
+  }
+  quizNext.textContent="Next series →";
+  quizNext.onclick=nextQuiz;
+  quizNext.style.display="block";
+}
+quizNext.onclick=nextQuiz;
+
+// Build everything; re-run after KaTeX finishes loading so math upgrades from
+// plain-text fallback to typeset form.
+function buildAll(){ buildTests(); buildCheat(); }
+buildAll();
+nextQuiz();
+
+// KaTeX loads with `defer`, so it may arrive after this script. Re-render when ready.
+if(window.katex){ /* already here */ }
+else {
+  let tries=0;
+  const t=setInterval(()=>{
+    if(window.katex){ clearInterval(t); buildAll();
+      // refresh the current quiz series too
+      if(QUIZ[qi]) quizSeries.innerHTML=tex(QUIZ[qi].stex,QUIZ[qi].s,true);
+    } else if(++tries>40){ clearInterval(t); } // give up after ~6s, fallback stays
+  },150);
+}
+
+// stagger reveal
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*45,360)+'ms';});
+</script>
+</body>
+</html>

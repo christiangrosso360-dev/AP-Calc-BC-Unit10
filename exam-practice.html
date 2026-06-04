@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Exam Practice — Mixed Review &amp; FRQ · Unit 10 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23e8e4dc%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%23c8841f%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#0d0c0a; --panel:#1a1813; --panel-2:#211e18; --ink:#ece7dd; --muted:#9a9183;
+    --line:#332e25; --line-2:#453f33; --true:#3fd0b0; --approx:#46c8d8; --gold:#46c8d8;
+    --conv:#3fd0b0; --div:#e0644f; --faint:#6b6457;
+    --display:'Fraunces',Georgia,serif; --body:'Spline Sans',system-ui,sans-serif;
+    --mono:'Spline Sans Mono',ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:
+      radial-gradient(ellipse 60% 50% at 15% -8%, rgba(70,200,216,.08), transparent 55%),
+      var(--bg);
+    color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;padding:30px 18px;line-height:1.6}
+  .wrap{max-width:820px;margin:0 auto}
+  .backlink{display:inline-block;font-family:var(--mono);font-size:12.5px;color:var(--muted);
+    text-decoration:none;margin-bottom:18px;padding:5px 11px;border:1px solid var(--line);
+    border-radius:20px;background:var(--panel);transition:border-color .15s,color .15s,transform .15s}
+  .backlink:hover{border-color:var(--gold);color:var(--ink);transform:translateX(-2px)}
+  header{margin-bottom:8px}
+  h1{font-family:var(--display);font-weight:600;font-size:32px;margin:0;letter-spacing:-0.02em;line-height:1.05}
+  h1 .em{color:var(--approx)}
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:680px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:720px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-top:18px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7);margin-top:14px}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .modes{display:flex;gap:8px;flex-wrap:wrap}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:14px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button:disabled{cursor:default}
+  .modes button{text-align:center;font-size:13px;padding:8px 13px}
+  .modes button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .modes button.on .katex{color:#16140f}
+  .qtag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--muted);
+    border:1px solid var(--line);border-radius:20px;padding:3px 10px;margin-bottom:10px;background:var(--panel-2)}
+  .qprompt{font-size:15.5px;font-weight:500;margin:6px 0 4px;line-height:1.5}
+  .qmath{font-family:var(--mono);font-size:16px;background:var(--panel-2);border:1px solid var(--line);
+    border-radius:10px;padding:14px;text-align:center;margin:12px 0;overflow-x:auto}
+  .qmath .katex{font-size:1.06em}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px}
+  @media(max-width:560px){.opts{grid-template-columns:1fr}}
+  .opts button{text-align:center;font-size:14.5px;padding:11px}
+  .opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv);font-weight:600}
+  .opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .fb{font-size:13.5px;line-height:1.55;margin-top:12px;background:var(--bg);border-radius:9px;padding:11px 13px;display:none}
+  .fb.show{display:block}
+  .fb .ftag{font-weight:600}
+  .stepm{font-family:var(--mono);background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 11px;margin-top:7px;overflow-x:auto;font-size:13px}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;width:100%;
+    box-shadow:0 8px 18px -10px var(--approx);margin-top:16px;display:none}
+  .next.show{display:block}
+  /* FRQ */
+  .frq-given{background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+  .frq-given .katex{font-size:1.05em}
+  .frq-given .gl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .dtable{border-collapse:collapse;margin:4px 0 2px;font-family:var(--mono)}
+  .dtable th,.dtable td{border:1px solid var(--line-2);padding:7px 16px;text-align:center;color:var(--ink)}
+  .dtable th{background:var(--panel);font-weight:500;color:var(--muted)}
+  .dtable td{background:var(--panel-2)}
+  .dtable .katex{color:var(--ink)}
+  .frq-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .frq-tabs button{font-size:13px;padding:9px 13px;text-align:center;border-radius:9px}
+  .frq-tabs button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .frq-tabs button.on .katex{color:#16140f}
+  .frq-desc{font-size:13px;color:var(--muted);background:var(--bg);border-radius:9px;padding:9px 13px;margin-bottom:6px}
+  .frq-desc b{color:var(--approx)}
+  .part{border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin-top:12px;background:var(--panel);transition:opacity .25s}
+  .part.locked{opacity:.4;pointer-events:none}
+  .part-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px}
+  .part-h .pl{font-weight:600;font-size:14px}
+  .part-h .pts{font-family:var(--mono);font-size:11.5px;color:var(--approx);flex:none}
+  .part-q{font-size:14px;line-height:1.55;margin-bottom:10px}
+  .part .opts button{font-size:14px;padding:10px}
+  .reveal-sol{margin-top:10px;font-size:13px;line-height:1.6;background:var(--bg);border-radius:9px;padding:11px 13px;display:none}
+  .reveal-sol.show{display:block}
+  .reveal-sol b{color:var(--ink)}
+  .frq-fields{display:flex;flex-direction:column;gap:10px;margin:4px 0 12px}
+  .frq-field{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .frq-flabel{font-size:14px;min-width:54px;color:var(--ink)}
+  .frq-flabel .katex{font-size:1em}
+  .frq-input{font-family:var(--mono);font-size:14px;padding:8px 11px;border:1px solid var(--line);
+    border-radius:8px;background:var(--panel-2);color:var(--ink);min-width:180px;transition:border-color .15s,background .15s}
+  .frq-input:focus{outline:none;border-color:var(--gold)}
+  .frq-input.ok{border-color:var(--conv);background:rgba(63,208,176,.16)}
+  .frq-input.no{border-color:var(--div);background:rgba(224,100,79,.16)}
+  .frq-check{background:var(--ink);color:var(--panel);border-color:var(--ink);font-size:13px;padding:8px 14px}
+  .frq-check:hover{background:#d8d2c6}
+  .frq-check:disabled{opacity:.5}
+  .sol-h{font-weight:600;margin-bottom:6px}
+  .rubric-box{margin-top:12px;border-top:1px dashed var(--line);padding-top:11px}
+  .rubric-h{font-size:12px;color:var(--muted);font-weight:600;margin-bottom:8px}
+  .rb{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.45;margin:6px 0;cursor:pointer}
+  .rb input{margin-top:3px;flex:none;accent-color:var(--conv);width:15px;height:15px}
+  .rb-apply{margin-top:9px;background:var(--conv);color:#fff;border-color:var(--conv);font-size:12.5px;padding:7px 13px}
+  .rb-apply:disabled{opacity:.7}
+  .scoreline{font-family:var(--mono);font-size:13px;color:var(--conv);font-weight:600;margin-top:4px}
+  /* weak spots */
+  .weak{margin-top:14px}
+  .weak-item{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13.5px;
+    padding:9px 0;border-bottom:1px solid var(--line)}
+  .weak-item:last-child{border-bottom:none}
+  .weak-item a{color:var(--approx);text-decoration:none;font-weight:600;font-size:12.5px}
+  .weak-item a:hover{text-decoration:underline}
+  .weak-bar{flex:1;height:7px;background:var(--panel-2);border-radius:4px;overflow:hidden;margin:0 12px;max-width:200px}
+  .weak-fill{height:100%;border-radius:4px}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  .whatsnext{max-width:720px;margin-top:22px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .katex{color:var(--ink)}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html">← Unit 10 Guide</a>
+  <header class="reveal">
+    <h1>Exam <span class="em">Practice</span></h1>
+    <div class="sub">You've learned each tool on its own page. The exam doesn't tell you which one to use —
+      it just hands you a problem. This page mixes everything together: rapid multiple-choice where you
+      decide the approach, and a full free-response problem in the real Question&nbsp;6 mold.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    On the real BC exam, series shows up two ways. <b>Multiple choice</b> — fast, single-answer: which test,
+    what's the radius, which coefficient. And the <b>free-response</b> (almost always Question 6, 9 points,
+    no calculator) — one function, many chained parts that build on each other. This page trains both.
+  </div>
+
+  <h2 class="reveal">Mixed multiple choice</h2>
+  <p class="lead reveal">Twelve problems each run, drawn at random from a pool of 48 spanning the whole unit,
+    <b>unlabeled</b> — figuring out
+    what each one is even asking is half the skill. One attempt each; miss it and you get the full reasoning.</p>
+  <div class="card reveal" id="mcCard">
+    <div class="row" style="margin-bottom:6px">
+      <span class="score" id="mcProgress">Question 1 of 12</span>
+      <span class="score" id="mcScore">Score: 0</span>
+    </div>
+    <div class="qtag" id="mcTag"></div>
+    <div class="qprompt" id="mcPrompt"></div>
+    <div class="qmath" id="mcMath"></div>
+    <div class="opts" id="mcOpts"></div>
+    <div class="fb" id="mcFb"></div>
+    <button class="next" id="mcNext">Next question →</button>
+    <div id="mcDone" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Free-response trainer <span style="font-family:var(--mono);font-size:13px;color:var(--approx);font-weight:400">· Question 6 style</span></h2>
+  <p class="lead reveal">One series, four chained parts — exactly how the real FRQ works. Pick a problem type below;
+    each is worth AP points. Work it, then see the full justified solution. No calculator, just like the exam.</p>
+  <div class="frq-tabs reveal" id="frqTabs"></div>
+  <div class="card reveal" id="frqCard">
+    <div class="frq-desc" id="frqDesc"></div>
+    <div class="frq-given">
+      <div class="gl">Given</div>
+      <div id="frqGiven"></div>
+    </div>
+    <div id="frqParts"></div>
+    <div class="scoreline" id="frqScore" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Where you stand</h2>
+  <p class="lead reveal">Your weak spots from the multiple choice, by topic — and where to go to shore them up.</p>
+  <div class="card reveal" id="weakCard">
+    <div id="weakBody" style="font-size:14px;color:var(--muted)">Finish some multiple-choice questions and your topic breakdown shows up here.</div>
+  </div>
+
+  <div class="whatsnext reveal">
+    Need to review a topic first? Jump back to <a href="series-foundations.html">Foundations</a>,
+    the <a href="convergence-compass.html">Convergence Compass</a>, the <a href="breaking-point.html">Taylor Toolkit</a>,
+    <a href="interval-of-convergence.html">Interval of Convergence</a>, or <a href="error-bounds.html">Error Bounds</a> —
+    or back to the <a href="index.html">Unit 10 Guide</a>.
+  </div>
+
+  <footer class="reveal">Exam Practice · part of the Unit 10 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+function tex(l,f,d){ if(window.katex){try{return katex.renderToString(l,{throwOnError:false,displayMode:!!d});}catch(e){}} return `<span class="tex-fallback">${f!=null?f:l}</span>`; }
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+// ===================== MIXED MC BANK (all verified) =====================
+// Each: topic, prompt, optional math (LaTeX), options [{t,correct}], explain (HTML), and a review link.
+const TOPICS={
+  found:["Series foundations","series-foundations.html"],
+  tests:["Convergence tests","convergence-compass.html"],
+  absc:["Absolute / conditional","convergence-compass.html"],
+  taylor:["Taylor / Maclaurin","breaking-point.html"],
+  ioc:["Interval of convergence","interval-of-convergence.html"],
+  error:["Error bounds","error-bounds.html"]
+};
+const MC=[
+  {topic:"tests", prompt:"Apply the ratio test. What does it tell you about this series?",
+   math:"\\sum_{n=1}^{\\infty}\\frac{n!}{n^{n}}",
+   opts:[{t:"Converges (L = 1/e < 1)",correct:true},{t:"Diverges (L = e > 1)"},{t:"Inconclusive (L = 1)"},{t:"Converges (L = 0)"}],
+   explain:`The ratio is \\(\\frac{(n+1)!}{(n+1)^{n+1}}\\cdot\\frac{n^{n}}{n!}=\\frac{n^{n}}{(n+1)^{n}}=\\left(\\frac{n}{n+1}\\right)^{n}\\). That limit is the classic \\(\\left(1+\\frac1n\\right)^{-n}\\to \\frac{1}{e}\\approx 0.368\\). Since \\(L=\\frac1e\\lt 1\\), it converges. The trap is reading the limit as 1 — it's \\(1/e\\), which takes recognizing the \\(e\\)-limit form.`},
+  {topic:"tests", prompt:"Determine whether the series converges or diverges.",
+   math:"\\sum_{n=2}^{\\infty}\\frac{1}{n\\ln n}",
+   opts:[{t:"Diverges (integral test)",correct:true},{t:"Converges (integral test)"},{t:"Converges (comparison to \\(\\sum 1/n^{2}\\))"},{t:"Diverges (nth-term test)"}],
+   explain:`Use the integral test: \\(\\int_2^{\\infty}\\frac{dx}{x\\ln x}=\\big[\\ln(\\ln x)\\big]_2^{\\infty}=\\infty\\). So it <b>diverges</b>. This is the famous borderline: \\(\\sum\\frac{1}{n(\\ln n)^p}\\) converges only for \\(p\\gt 1\\), and here \\(p=1\\). It looks like it should converge (terms shrink fast), but it doesn't — and the nth-term test is useless since the terms do → 0.`},
+  {topic:"ioc", prompt:"Find the interval of convergence (check both endpoints).",
+   math:"\\sum_{n=1}^{\\infty}\\frac{(x+1)^{n}}{n^{2}\\,4^{n}}",
+   opts:[{t:"[-5, 3]",correct:true},{t:"(-5, 3)"},{t:"(-5, 3]"},{t:"[-5, 3)"}],
+   explain:`Ratio test: \\(\\frac{|x+1|}{4}\\cdot\\frac{n^2}{(n+1)^2}\\to\\frac{|x+1|}{4}\\lt 1\\Rightarrow|x+1|\\lt 4\\), so \\(R=4\\), center \\(-1\\), interior \\((-5,3)\\). <b>Both</b> endpoints land on a \\(p=2\\) series: at \\(x=3\\), \\(\\sum\\frac{1}{n^2}\\) converges; at \\(x=-5\\), \\(\\sum\\frac{(-1)^n}{n^2}\\) converges absolutely. The \\(n^2\\) in the denominator is the tell — both ends are included: <b>[-5, 3]</b>.`},
+  {topic:"taylor", prompt:"What is the coefficient of x⁶ in the Maclaurin series for sin(x²)?",
+   math:"\\sin u = u-\\frac{u^{3}}{3!}+\\frac{u^{5}}{5!}-\\cdots",
+   opts:[{t:"-1/6",correct:true},{t:"1/6"},{t:"-1/120"},{t:"-1/720"}],
+   explain:`Substitute \\(u=x^2\\): \\(\\sin(x^2)=x^2-\\frac{(x^2)^3}{3!}+\\cdots=x^2-\\frac{x^6}{6}+\\cdots\\). The \\(x^6\\) term comes from \\(-\\frac{u^3}{3!}\\) with \\(u^3=x^6\\), giving coefficient \\(-\\frac{1}{3!}=-\\frac16\\). The trap \\(-\\frac{1}{720}\\) comes from using \\(6!\\) instead of recognizing \\(x^6\\) is the <i>cube</i> of \\(x^2\\).`},
+  {topic:"error", prompt:"The third-degree Maclaurin polynomial \\(P_3\\) for \\(e^{x}\\) approximates \\(e^{0.5}\\). By the Lagrange error bound, the error is at most:",
+   math:"R_3 \\le \\frac{\\max|f^{(4)}(c)|}{4!}\\,|x|^{4}",
+   opts:[{t:"\\(e^{0.5}\\cdot(0.5)^{4}/4!\\)",correct:true},{t:"\\((0.5)^{4}/4!\\)"},{t:"\\(e^{0.5}\\cdot(0.5)^{4}/3!\\)"},{t:"\\((0.5)^{5}/5!\\)"}],
+   explain:`For \\(f(x)=e^x\\), every derivative is \\(e^x\\), so \\(f^{(4)}(c)=e^c\\). On \\([0,0.5]\\) the max is \\(e^{0.5}\\). Lagrange gives \\(R_3\\le\\frac{e^{0.5}}{4!}(0.5)^4\\approx 0.0043\\). The key steps: it's the <b>(n+1)th</b> derivative (4th, so \\(4!\\)), and \\(M\\) is the max of that derivative on the interval — not just 1.`},
+  {topic:"absc", prompt:"Which statement is always TRUE?",
+   opts:[{t:"If Σ|aₙ| converges, then Σaₙ converges.",correct:true},{t:"If Σaₙ converges, then Σ|aₙ| converges."},{t:"If aₙ → 0, then Σaₙ converges."},{t:"If Σaₙ converges, then aₙ → 0 is not required."}],
+   explain:`Absolute convergence implies convergence — that's a theorem, so the first statement is always true. The second is false (the alternating harmonic series converges but \\(\\sum\\frac1n\\) doesn't — conditional convergence). The third is the most common error: \\(a_n\\to 0\\) is <i>necessary</i> but not <i>sufficient</i> (harmonic series). The fourth contradicts the nth-term test.`},
+  {topic:"found", prompt:"Find the sum of the series.",
+   math:"\\sum_{n=0}^{\\infty}\\frac{3^{n}+1}{4^{n}}",
+   opts:[{t:"16/3",correct:true},{t:"4"},{t:"7"},{t:"4/3"}],
+   explain:`Split it into two geometric series: \\(\\sum_{n=0}^{\\infty}\\left(\\frac34\\right)^n+\\sum_{n=0}^{\\infty}\\left(\\frac14\\right)^n=\\frac{1}{1-3/4}+\\frac{1}{1-1/4}=4+\\frac43=\\frac{16}{3}\\). The skill is recognizing \\(\\frac{3^n+1}{4^n}=\\left(\\frac34\\right)^n+\\left(\\frac14\\right)^n\\) — one series in disguise as a sum of two. The distractor 4 is just the first piece.`},
+  {topic:"tests", prompt:"Determine whether the series converges or diverges.",
+   math:"\\sum_{n=1}^{\\infty}\\ln\\!\\left(\\frac{n}{n+1}\\right)",
+   opts:[{t:"Diverges (telescoping to −∞)",correct:true},{t:"Converges to 0"},{t:"Converges (alternating)"},{t:"Converges to −ln 2"}],
+   explain:`Rewrite using log rules: \\(\\ln\\frac{n}{n+1}=\\ln n-\\ln(n+1)\\). The partial sum telescopes: \\(S_N=\\ln 1-\\ln(N+1)=-\\ln(N+1)\\to-\\infty\\). So it <b>diverges</b>. The terms → 0, which baits you toward "converges," but the partial sums march off to \\(-\\infty\\).`},
+  {topic:"absc", prompt:"For which value of p does the series converge CONDITIONALLY?",
+   math:"\\sum_{n=1}^{\\infty}\\frac{(-1)^{n}}{n^{p}}",
+   opts:[{t:"p = 1/2",correct:true},{t:"p = 2"},{t:"p = 3"},{t:"p = 0"}],
+   explain:`Conditional means it converges but not absolutely — which needs \\(0\\lt p\\le 1\\). At \\(p=\\frac12\\): the alternating series converges (terms \\(\\frac{1}{\\sqrt n}\\downarrow 0\\)), but \\(\\sum\\frac{1}{\\sqrt n}\\) is a \\(p=\\frac12\\) series that diverges → conditional. For \\(p=2,3\\) it's absolute; for \\(p=0\\) the terms don't → 0 so it diverges.`},
+  {topic:"ioc", prompt:"What is the radius of convergence?",
+   math:"\\sum_{n=1}^{\\infty}\\frac{n^{2}\\,x^{n}}{2^{n}}",
+   opts:[{t:"R = 2",correct:true},{t:"R = 1/2"},{t:"R = 1"},{t:"R = 4"}],
+   explain:`Ratio test: \\(\\left|\\frac{(n+1)^2x^{n+1}}{2^{n+1}}\\cdot\\frac{2^n}{n^2x^n}\\right|=\\frac{|x|}{2}\\left(\\frac{n+1}{n}\\right)^2\\to\\frac{|x|}{2}\\). Set \\(\\lt 1\\): \\(|x|\\lt 2\\), so \\(R=2\\). The \\(n^2\\) factor doesn't affect the radius — \\(\\left(\\frac{n+1}{n}\\right)^2\\to 1\\) — which is the insight being tested.`},
+  {topic:"tests", prompt:"Determine convergence or divergence.",
+   math:"\\sum_{n=1}^{\\infty}\\frac{2+\\sin n}{n^{2}}",
+   opts:[{t:"Converges (direct comparison)",correct:true},{t:"Diverges (oscillating terms)"},{t:"Inconclusive (sin n has no limit)"},{t:"Converges (alternating)"}],
+   explain:`Since \\(-1\\le\\sin n\\le 1\\), the numerator satisfies \\(1\\le 2+\\sin n\\le 3\\). So \\(0\\lt \\frac{2+\\sin n}{n^2}\\le\\frac{3}{n^2}\\), and \\(\\sum\\frac{3}{n^2}\\) converges (p = 2). By direct comparison, it <b>converges</b>. The oscillation of \\(\\sin n\\) is a red herring — you bound it, you don't need it to converge.`},
+  {topic:"taylor", prompt:"The Maclaurin series for f is given below. What is f⁽⁵⁾(0)?",
+   math:"f(x)=\\sum_{n=0}^{\\infty}\\frac{x^{n}}{n+1}",
+   opts:[{t:"20",correct:true},{t:"1/6"},{t:"120"},{t:"1/720"}],
+   explain:`The coefficient of \\(x^5\\) here is \\(\\frac{1}{5+1}=\\frac16\\). But in any Maclaurin series the coefficient of \\(x^n\\) equals \\(\\frac{f^{(n)}(0)}{n!}\\). So \\(\\frac{f^{(5)}(0)}{5!}=\\frac16\\Rightarrow f^{(5)}(0)=\\frac{5!}{6}=\\frac{120}{6}=20\\). The trap \\(\\frac16\\) forgets to multiply back by \\(5!\\) — the coefficient and the derivative differ by a factorial.`}
+  ,{topic:"tests", prompt:"Apply the ratio test. What does it tell you?",
+   math:"\\sum_{n=1}^{\\infty}\\frac{n^{2}}{2^{n}}",
+   opts:[{t:"Converges \\((L=\\tfrac12\\lt 1)\\)",correct:true},{t:"Diverges \\((L=2\\gt 1)\\)"},{t:"Inconclusive \\((L=1)\\)"},{t:"Diverges \\((L=\\infty)\\)"}],
+   explain:`The ratio is \\(\\frac{(n+1)^2}{2^{n+1}}\\cdot\\frac{2^n}{n^2}=\\frac12\\left(\\frac{n+1}{n}\\right)^2\\to\\frac12\\). Since \\(L=\\frac12\\lt 1\\), it converges. The polynomial factor \\(\\left(\\frac{n+1}{n}\\right)^2\\to 1\\) doesn't change the limit — the \\(2^n\\) dominates.`},
+  {topic:"found", prompt:"Find the sum of the series.",
+   math:"\\sum_{n=1}^{\\infty}\\frac{1}{n(n+1)}",
+   opts:[{t:"1",correct:true},{t:"1/2"},{t:"2"},{t:"diverges"}],
+   explain:`Partial fractions: \\(\\frac{1}{n(n+1)}=\\frac1n-\\frac{1}{n+1}\\). The partial sum telescopes: \\(S_N=1-\\frac{1}{N+1}\\to 1\\). A telescoping series — the value is exactly <b>1</b>.`},
+  {topic:"tests", prompt:"Determine whether the series converges or diverges.",
+   math:"\\sum_{n=1}^{\\infty}\\frac{1}{n^{0.999}}",
+   opts:[{t:"Diverges (p-series, p < 1)",correct:true},{t:"Converges (p-series, p > 1)"},{t:"Converges (close enough to p = 1)"},{t:"Inconclusive"}],
+   explain:`This is a p-series with \\(p=0.999\\). Convergence requires \\(p\\gt 1\\) — strictly. Since \\(0.999\\lt 1\\), it <b>diverges</b>, even though it's agonizingly close to the boundary. "Close to 1" is exactly the trap: the cutoff is sharp.`},
+  {topic:"found", prompt:"Find the sum of the series.",
+   math:"\\sum_{n=0}^{\\infty}\\left(-\\tfrac12\\right)^{n}",
+   opts:[{t:"2/3",correct:true},{t:"2"},{t:"1/2"},{t:"-2"}],
+   explain:`Geometric with \\(a=1\\), \\(r=-\\frac12\\). Since \\(|r|\\lt 1\\): sum \\(=\\frac{1}{1-(-1/2)}=\\frac{1}{3/2}=\\frac23\\). The negative ratio is the only wrinkle — the formula \\(\\frac{a}{1-r}\\) handles it directly.`},
+  {topic:"taylor", prompt:"What is the coefficient of \\(x^{3}\\) in the Maclaurin series for \\(\\ln(1+x)\\)?",
+   math:"\\ln(1+x)=x-\\frac{x^{2}}{2}+\\frac{x^{3}}{3}-\\cdots",
+   opts:[{t:"1/3",correct:true},{t:"-1/3"},{t:"1/6"},{t:"-1/2"}],
+   explain:`The series is \\(\\ln(1+x)=\\sum_{n=1}^{\\infty}\\frac{(-1)^{n-1}}{n}x^{n}\\). The \\(x^3\\) term has \\(n=3\\): \\(\\frac{(-1)^{2}}{3}=+\\frac13\\). The signs alternate starting positive, so \\(x^3\\) is positive.`},
+  {topic:"ioc", prompt:"Find the interval of convergence.",
+   math:"\\sum_{n=1}^{\\infty}\\frac{x^{n}}{\\sqrt{n}}",
+   opts:[{t:"[-1, 1)",correct:true},{t:"(-1, 1)"},{t:"(-1, 1]"},{t:"[-1, 1]"}],
+   explain:`Ratio test gives \\(|x|\\lt 1\\), so \\(R=1\\), center 0. At \\(x=-1\\): \\(\\sum\\frac{(-1)^n}{\\sqrt n}\\) converges (alternating). At \\(x=1\\): \\(\\sum\\frac{1}{\\sqrt n}\\) is a \\(p=\\frac12\\) series, diverges. Include the left end only: <b>[-1, 1)</b>.`},
+  {topic:"absc", prompt:"Classify the convergence.",
+   math:"\\sum_{n=1}^{\\infty}\\frac{(-1)^{n}}{2^{n}}",
+   opts:[{t:"Converges absolutely",correct:true},{t:"Converges conditionally"},{t:"Diverges"},{t:"Converges to 1"}],
+   explain:`Take absolute values: \\(\\sum\\frac{1}{2^n}\\) is a geometric series with \\(r=\\frac12\\), which converges. Since the absolute series converges, the original converges <b>absolutely</b> — no need to even check the alternating behavior.`},
+  {topic:"tests", prompt:"Determine convergence or divergence.",
+   math:"\\sum_{n=1}^{\\infty}\\cos\\!\\left(\\tfrac{1}{n}\\right)",
+   opts:[{t:"Diverges (nth-term test)",correct:true},{t:"Converges (terms → 0)"},{t:"Converges (comparison)"},{t:"Inconclusive"}],
+   explain:`As \\(n\\to\\infty\\), \\(\\frac1n\\to 0\\), so \\(\\cos\\frac1n\\to\\cos 0=1\\neq 0\\). The terms don't approach 0, so the series <b>diverges</b> by the nth-term test. The trap is assuming \\(\\frac1n\\to 0\\) inside makes the terms vanish — but the cosine sends them to 1.`},
+  {topic:"error", prompt:"\\(P_2(x)=1-\\frac{x^{2}}{2}\\) is the 2nd-degree Maclaurin polynomial for \\(\\cos x\\). Use it to approximate \\(\\cos(0.2)\\).",
+   opts:[{t:"0.98",correct:true},{t:"0.96"},{t:"1.02"},{t:"0.99"}],
+   explain:`\\(P_2(0.2)=1-\\frac{(0.2)^2}{2}=1-\\frac{0.04}{2}=1-0.02=0.98\\). (The true value \\(\\cos 0.2\\approx 0.98007\\), so the approximation is excellent.)`},
+  {topic:"tests", prompt:"Determine convergence or divergence.",
+   math:"\\sum_{n=1}^{\\infty}\\frac{1}{n^{2}-n+1}",
+   opts:[{t:"Converges (limit comparison to \\(\\sum 1/n^{2}\\))",correct:true},{t:"Diverges (limit comparison to \\(\\sum 1/n\\))"},{t:"Diverges (nth-term test)"},{t:"Inconclusive"}],
+   explain:`For large \\(n\\), \\(\\frac{1}{n^2-n+1}\\) behaves like \\(\\frac{1}{n^2}\\). Limit comparison: \\(\\lim\\frac{1/(n^2-n+1)}{1/n^2}=1\\), finite and positive. Since \\(\\sum\\frac{1}{n^2}\\) converges (p = 2), so does this. <b>Converges.</b>`},
+  {topic:"ioc", prompt:"What is the radius of convergence?",
+   math:"\\sum_{n=0}^{\\infty}\\frac{x^{n}}{n!}",
+   opts:[{t:"R = ∞",correct:true},{t:"R = 1"},{t:"R = 0"},{t:"R = e"}],
+   explain:`Ratio test: \\(\\left|\\frac{x^{n+1}}{(n+1)!}\\cdot\\frac{n!}{x^n}\\right|=\\frac{|x|}{n+1}\\to 0\\) for <i>every</i> \\(x\\). The limit is always \\(\\lt 1\\), so it converges for all real \\(x\\): \\(R=\\infty\\). (This series is \\(e^x\\).)`},
+  {topic:"tests", prompt:"The ratio test gives L = 1 (inconclusive) for which series?",
+   opts:[{t:"\\(\\sum 1/n^{2}\\)",correct:true},{t:"\\(\\sum 2^{n}/n!\\)"},{t:"\\(\\sum n!\\,x^{n}\\)"},{t:"\\(\\sum (1/3)^{n}\\)"}],
+   explain:`The ratio test always gives \\(L=1\\) on a p-series: for \\(\\sum\\frac{1}{n^2}\\), \\(\\left(\\frac{n}{n+1}\\right)^2\\to 1\\). That's why you need a different test (here, p-series) to conclude. The others give clean limits (0, ∞, and \\(\\frac13\\) respectively).`},
+  {topic:"tests", prompt:"Apply the root test. What does it tell you?",
+   math:"\\sum_{n=1}^{\\infty}\\left(\\frac{n}{2n+1}\\right)^{n}",
+   opts:[{t:"Converges \\((L=\\tfrac12)\\)",correct:true},{t:"Diverges \\((L=2)\\)"},{t:"Inconclusive \\((L=1)\\)"},{t:"Diverges (nth-term test)"}],
+   explain:`The \\(n\\)th power signals the root test: \\(\\sqrt[n]{\\left(\\frac{n}{2n+1}\\right)^n}=\\frac{n}{2n+1}\\to\\frac12\\). Since \\(L=\\frac12\\lt 1\\), it <b>converges</b>. The root test is the natural tool whenever the whole term is raised to the \\(n\\).`},
+  {topic:"found", prompt:"Find the sum of the series.",
+   math:"\\sum_{n=1}^{\\infty}\\left(\\frac{1}{n}-\\frac{1}{n+2}\\right)",
+   opts:[{t:"3/2",correct:true},{t:"1"},{t:"1/2"},{t:"2"}],
+   explain:`This telescopes, but with a gap of 2. Writing out terms, everything cancels except the first two: \\(S=\\frac11+\\frac12=\\frac32\\). (Each \\(\\frac1k\\) for \\(k\\ge 3\\) is cancelled by a later \\(-\\frac1k\\).) Sum = <b>3/2</b>.`},
+  {topic:"found", prompt:"This p-series converges. To what value?",
+   math:"\\sum_{n=1}^{\\infty}\\frac{1}{n^{2}}",
+   opts:[{t:"\\(\\pi^{2}/6\\)",correct:true},{t:"\\(\\pi^{2}/4\\)"},{t:"π/2"},{t:"1"}],
+   explain:`This is the famous Basel problem: \\(\\sum_{n=1}^{\\infty}\\frac{1}{n^2}=\\frac{\\pi^2}{6}\\approx 1.645\\). It converges (p = 2 > 1), and its exact value is one worth knowing.`},
+  {topic:"found", prompt:"Find the sum: \\(4-2+1-\\tfrac12+\\cdots\\)",
+   opts:[{t:"8/3",correct:true},{t:"2"},{t:"8"},{t:"4/3"}],
+   explain:`Geometric with first term \\(a=4\\) and ratio \\(r=-\\frac12\\) (each term is \\(-\\frac12\\) the previous). Sum \\(=\\frac{4}{1-(-1/2)}=\\frac{4}{3/2}=\\frac83\\).`},
+  {topic:"taylor", prompt:"What is the coefficient of \\(x^{2}\\) in the Maclaurin series for \\(e^{-x}\\)?",
+   math:"e^{u}=\\sum_{n=0}^{\\infty}\\frac{u^{n}}{n!}",
+   opts:[{t:"1/2",correct:true},{t:"-1/2"},{t:"1"},{t:"-1"}],
+   explain:`Substitute \\(u=-x\\): \\(e^{-x}=\\sum\\frac{(-x)^n}{n!}=\\sum\\frac{(-1)^n x^n}{n!}\\). The \\(x^2\\) term is \\(n=2\\): \\(\\frac{(-1)^2}{2!}=\\frac12\\). The square makes the sign positive — the \\(-1/2\\) trap forgets \\((-1)^2=+1\\).`},
+  {topic:"ioc", prompt:"Find the interval of convergence.",
+   math:"\\sum_{n=1}^{\\infty}\\frac{(x-4)^{n}}{5^{n}}",
+   opts:[{t:"(-1, 9)",correct:true},{t:"[-1, 9]"},{t:"[-1, 9)"},{t:"(-1, 9]"}],
+   explain:`Ratio test: \\(\\frac{|x-4|}{5}\\lt 1\\Rightarrow|x-4|\\lt 5\\), so \\(R=5\\), center 4, interior \\((-1,9)\\). At both endpoints the terms become \\((\\pm 1)^n\\), which don't approach 0 — so both diverge by the nth-term test. Neither endpoint is included: <b>(-1, 9)</b>.`},
+  {topic:"absc", prompt:"Classify the convergence.",
+   math:"\\sum_{n=2}^{\\infty}\\frac{(-1)^{n}\\ln n}{n}",
+   opts:[{t:"Converges conditionally",correct:true},{t:"Converges absolutely"},{t:"Diverges"},{t:"Converges to ln 2"}],
+   explain:`By the alternating series test it converges: \\(\\frac{\\ln n}{n}\\to 0\\) and is eventually decreasing. But \\(\\sum\\frac{\\ln n}{n}\\) diverges (its terms exceed \\(\\frac1n\\) for \\(n\\ge 3\\), and the harmonic series diverges). Converges but not absolutely → <b>conditional</b>.`},
+  {topic:"tests", prompt:"Determine convergence or divergence.",
+   math:"\\sum_{n=1}^{\\infty}\\left(1+\\tfrac{1}{n}\\right)^{n}",
+   opts:[{t:"Diverges (nth-term test)",correct:true},{t:"Converges (root test)"},{t:"Converges (terms → 0)"},{t:"Inconclusive"}],
+   explain:`The terms \\(\\left(1+\\frac1n\\right)^n\\to e\\approx 2.718\\neq 0\\). Since the terms approach \\(e\\), not 0, the series <b>diverges</b> by the nth-term test. Recognizing the famous \\(e\\)-limit is the key — the terms grow toward a nonzero constant.`},
+  {topic:"error", prompt:"\\(P_3(x)=x-\\frac{x^{3}}{6}\\) approximates \\(\\sin x\\). By the Lagrange bound, the error at \\(x=0.5\\) is at most:",
+   opts:[{t:"\\((0.5)^{4}/4!\\)",correct:true},{t:"\\((0.5)^{3}/3!\\)"},{t:"\\((0.5)^{4}/3!\\)"},{t:"\\((0.5)^{5}/5!\\)"}],
+   explain:`For \\(\\sin x\\), all derivatives are \\(\\pm\\sin\\) or \\(\\pm\\cos\\), so \\(|f^{(4)}(c)|\\le 1\\). The Lagrange bound is \\(\\frac{M}{4!}|x|^4\\le\\frac{(0.5)^4}{4!}\\approx 0.0026\\). It's the 4th derivative (degree 3 + 1), giving \\(4!\\) and \\(|x|^4\\).`},
+  {topic:"tests", prompt:"Determine convergence or divergence.",
+   math:"\\sum_{n=2}^{\\infty}\\frac{1}{n-\\ln n}",
+   opts:[{t:"Diverges (comparison to Σ1/n)",correct:true},{t:"Converges (comparison to \\(\\sum 1/n^{2}\\))"},{t:"Converges (ratio test)"},{t:"Inconclusive"}],
+   explain:`Since \\(\\ln n\\gt 0\\), we have \\(n-\\ln n\\lt n\\), so \\(\\frac{1}{n-\\ln n}\\gt\\frac1n\\). The terms are <i>larger</i> than the harmonic series, which diverges — so by direct comparison this <b>diverges</b> too. The \\(-\\ln n\\) only makes it bigger.`},
+  {topic:"taylor", prompt:"Differentiating the series \\(\\sum_{n=0}^{\\infty}x^{n}=\\frac{1}{1-x}\\) term by term gives a series for \\(\\frac{1}{(1-x)^{2}}\\). What is its radius of convergence?",
+   opts:[{t:"R = 1 (unchanged)",correct:true},{t:"R = 2"},{t:"R = 1/2"},{t:"R = ∞"}],
+   explain:`Differentiating a power series term by term gives a new series with the <b>same radius of convergence</b>. The original \\(\\sum x^n\\) has \\(R=1\\), so \\(\\sum n x^{n-1}=\\frac{1}{(1-x)^2}\\) also has \\(R=1\\). (Endpoint behavior can change, but the radius never does.)`},
+  {topic:"absc", prompt:"The alternating series test requires which condition on the terms \\(b_n=|a_n|\\)?",
+   opts:[{t:"\\(b_n\\) decreases to 0",correct:true},{t:"\\(b_n\\to\\infty\\)"},{t:"\\(\\sum b_n\\) converges"},{t:"\\(b_n\\gt 0\\) only"}],
+   explain:`The alternating series test needs two things: the terms \\(b_n=|a_n|\\) must be (eventually) <b>decreasing</b>, and \\(b_n\\to 0\\). If \\(\\sum b_n\\) itself converged, you'd have absolute convergence — a stronger condition the AST doesn't require. Just positivity isn't enough.`}
+  ,{topic:"tests", prompt:"Apply the ratio test. What does it tell you?",
+   math:"\\sum_{n=1}^{\\infty}\\frac{(-1)^{n}\\,n}{3^{n}}",
+   opts:[{t:"Converges absolutely \\((L=\\tfrac13)\\)",correct:true},{t:"Diverges \\((L=3)\\)"},{t:"Converges conditionally"},{t:"Inconclusive \\((L=1)\\)"}],
+   explain:`The ratio test uses absolute values: \\(\\frac{(n+1)/3^{n+1}}{n/3^n}=\\frac13\\cdot\\frac{n+1}{n}\\to\\frac13\\). Since \\(L=\\frac13\\lt 1\\), the series converges <b>absolutely</b> — and absolute convergence is stronger than conditional, so that's the right classification.`},
+  {topic:"tests", prompt:"Determine whether the series converges or diverges.",
+   math:"\\sum_{n=1}^{\\infty}\\frac{1}{n^{3}}",
+   opts:[{t:"Converges (p-series, p = 3)",correct:true},{t:"Diverges (p-series, p < 1)"},{t:"Diverges (harmonic-like)"},{t:"Inconclusive (ratio test)"}],
+   explain:`A p-series with \\(p=3\\gt 1\\), so it <b>converges</b>. (Its value is \\(\\zeta(3)\\approx 1.202\\), but all you need is \\(p\\gt 1\\).)`},
+  {topic:"found", prompt:"Find the sum of the series.",
+   math:"\\sum_{n=2}^{\\infty}\\left(\\tfrac13\\right)^{n}",
+   opts:[{t:"1/6",correct:true},{t:"1/3"},{t:"1/2"},{t:"1/9"}],
+   explain:`Geometric starting at \\(n=2\\): first term \\(a=\\left(\\frac13\\right)^2=\\frac19\\), ratio \\(r=\\frac13\\). Sum \\(=\\frac{1/9}{1-1/3}=\\frac{1/9}{2/3}=\\frac16\\). Watch the starting index — it changes the first term.`},
+  {topic:"taylor", prompt:"What is the coefficient of \\(x^{4}\\) in the Maclaurin series for \\(\\cos x\\)?",
+   math:"\\cos x = 1-\\frac{x^{2}}{2!}+\\frac{x^{4}}{4!}-\\cdots",
+   opts:[{t:"1/24",correct:true},{t:"-1/24"},{t:"1/4"},{t:"-1/2"}],
+   explain:`The \\(x^4\\) term is \\(+\\frac{x^4}{4!}\\), so the coefficient is \\(\\frac{1}{24}\\). The signs alternate \\(+,-,+\\) on the even powers, and \\(x^4\\) lands on a plus.`},
+  {topic:"ioc", prompt:"Find the interval of convergence.",
+   math:"\\sum_{n=1}^{\\infty} n\\,(x-1)^{n}",
+   opts:[{t:"(0, 2)",correct:true},{t:"[0, 2]"},{t:"[0, 2)"},{t:"(0, 2]"}],
+   explain:`Ratio test: \\(\\frac{n+1}{n}|x-1|\\to|x-1|\\lt 1\\), so \\(R=1\\), center 1, interior \\((0,2)\\). At both endpoints the terms are \\(\\pm n\\), which grow without bound (don't → 0), so both diverge by the nth-term test. Neither included: <b>(0, 2)</b>.`},
+  {topic:"absc", prompt:"Classify the convergence.",
+   math:"\\sum_{n=1}^{\\infty}\\frac{\\sin n}{n^{2}}",
+   opts:[{t:"Converges absolutely",correct:true},{t:"Converges conditionally"},{t:"Diverges"},{t:"Inconclusive (sin n oscillates)"}],
+   explain:`Compare absolute values: \\(\\left|\\frac{\\sin n}{n^2}\\right|\\le\\frac{1}{n^2}\\), and \\(\\sum\\frac{1}{n^2}\\) converges. So \\(\\sum\\left|\\frac{\\sin n}{n^2}\\right|\\) converges, meaning the original converges <b>absolutely</b>. The oscillation doesn't matter once you bound it.`},
+  {topic:"tests", prompt:"What does the nth-term (divergence) test tell you about this series?",
+   math:"\\sum_{n=1}^{\\infty}\\frac{1}{2^{n}}",
+   opts:[{t:"Nothing — it's inconclusive (terms → 0)",correct:true},{t:"It converges by the nth-term test"},{t:"It diverges by the nth-term test"},{t:"The test doesn't apply"}],
+   explain:`The terms \\(\\frac{1}{2^n}\\to 0\\), so the nth-term test is <b>inconclusive</b> — it can only prove divergence (when terms don't → 0), never convergence. (This series does converge, but you'd show that with the geometric test, not this one.) This is the most important limitation of the nth-term test.`},
+  {topic:"error", prompt:"\\(P_2\\) for \\(e^{x}\\) about 0 approximates \\(e^{0.1}\\). By the Lagrange bound, the error is at most:",
+   opts:[{t:"\\(e^{0.1}(0.1)^{3}/3!\\)",correct:true},{t:"\\((0.1)^{3}/3!\\)"},{t:"\\(e^{0.1}(0.1)^{2}/2!\\)"},{t:"\\((0.1)^{3}/2!\\)"}],
+   explain:`For \\(e^x\\), \\(f^{(3)}(c)=e^c\\), maximized at \\(e^{0.1}\\) on \\([0,0.1]\\). Degree 2 means the bound uses the 3rd derivative: \\(\\frac{e^{0.1}}{3!}(0.1)^3\\approx 1.8\\times10^{-4}\\). It's \\(n+1=3\\), so \\(3!\\) and \\((0.1)^3\\).`},
+  {topic:"tests", prompt:"Determine convergence or divergence.",
+   math:"\\sum_{n=1}^{\\infty}\\frac{1}{\\sqrt{n^{2}+1}}",
+   opts:[{t:"Diverges (limit comparison to Σ1/n)",correct:true},{t:"Converges (limit comparison to \\(\\sum 1/n^{2}\\))"},{t:"Converges (ratio test)"},{t:"Diverges (nth-term test)"}],
+   explain:`For large \\(n\\), \\(\\frac{1}{\\sqrt{n^2+1}}\\approx\\frac{1}{n}\\). Limit comparison: \\(\\lim\\frac{1/\\sqrt{n^2+1}}{1/n}=1\\), finite and positive. Since \\(\\sum\\frac1n\\) diverges, so does this. The square root over \\(n^2\\) makes it behave like \\(\\frac1n\\), not \\(\\frac{1}{n^2}\\) — that's the trap.`},
+  {topic:"taylor", prompt:"Integrating the series \\(\\sum_{n=0}^{\\infty}x^{n}=\\frac{1}{1-x}\\) term by term gives a series for \\(-\\ln(1-x)\\). What is its radius of convergence?",
+   opts:[{t:"R = 1 (unchanged)",correct:true},{t:"R = 2"},{t:"R = 1/2"},{t:"R = ∞"}],
+   explain:`Integrating a power series term by term leaves the <b>radius of convergence unchanged</b>. The original \\(\\sum x^n\\) has \\(R=1\\), so the integrated series \\(\\sum\\frac{x^{n+1}}{n+1}\\) also has \\(R=1\\). (Only endpoint behavior may differ.)`},
+  {topic:"taylor", prompt:"Using the geometric series, what is the coefficient of \\(x^{2}\\) in \\(\\frac{1}{1-2x}\\)?",
+   math:"\\frac{1}{1-u}=\\sum_{n=0}^{\\infty}u^{n}",
+   opts:[{t:"4",correct:true},{t:"2"},{t:"1"},{t:"8"}],
+   explain:`Substitute \\(u=2x\\): \\(\\frac{1}{1-2x}=\\sum(2x)^n=\\sum 2^n x^n\\). The \\(x^2\\) coefficient is \\(2^2=4\\). The trap (2) forgets the base is \\(2x\\), so the coefficient gets squared along with \\(x\\).`},
+  {topic:"absc", prompt:"Which statement is TRUE?",
+   opts:[{t:"If \\(\\lim a_n\\neq 0\\), then \\(\\sum a_n\\) diverges.",correct:true},{t:"If \\(\\lim a_n=0\\), then \\(\\sum a_n\\) converges."},{t:"If \\(\\sum a_n\\) diverges, then \\(\\lim a_n\\neq 0\\)."},{t:"If \\(a_n\\gt 0\\), then \\(\\sum a_n\\) converges."}],
+   explain:`The nth-term (divergence) test: if the terms fail to approach 0, the series must diverge — that's the first statement, and it's always true. The converse (terms → 0 ⇒ converges) is false (harmonic series). A divergent series can have terms → 0 (harmonic again), so the third is false too.`}
+];
+
+const DRAW_N=12; // questions drawn per run from the larger pool
+let mcOrder=[], mcIdx=0, mcScore=0;
+const topicStats={}; // topic -> {right, total}
+const mcTag=document.getElementById("mcTag"), mcPrompt=document.getElementById("mcPrompt"),
+  mcMath=document.getElementById("mcMath"), mcOpts=document.getElementById("mcOpts"),
+  mcFb=document.getElementById("mcFb"), mcNext=document.getElementById("mcNext"),
+  mcProgress=document.getElementById("mcProgress"), mcScoreEl=document.getElementById("mcScore"),
+  mcDone=document.getElementById("mcDone");
+
+function startMC(){
+  mcOrder=shuffle(MC.map((_,i)=>i)).slice(0,DRAW_N); mcIdx=0; mcScore=0;
+  for(const k in topicStats) delete topicStats[k];
+  mcDone.style.display="none"; mcDone.innerHTML="";
+  mcFb.className="fb"; mcFb.innerHTML="";
+  mcNext.className="next";
+  mcCardShow(); renderMC(); renderWeak();
+}
+function mcCardShow(){ [mcTag,mcPrompt,mcMath,mcOpts].forEach(e=>e.style.display=""); }
+function renderMC(){
+  const q=MC[mcOrder[mcIdx]];
+  mcProgress.textContent=`Question ${mcIdx+1} of ${mcOrder.length}`;
+  mcScoreEl.textContent=`Score: ${mcScore}`;
+  mcTag.textContent="identify the approach";
+  mcPrompt.innerHTML=q.prompt; if(window.katex) renderMathIn(mcPrompt);
+  mcMath.innerHTML=q.math?tex(q.math,q.math,true):"";
+  mcMath.style.display=q.math?"":"none";
+  mcFb.className="fb"; mcFb.innerHTML=""; mcNext.className="next";
+  mcOpts.innerHTML="";
+  const order=shuffle(q.opts.map((o,i)=>i));
+  let done=false;
+  order.forEach(i=>{
+    const o=q.opts[i]; const b=document.createElement("button");
+    b.innerHTML=o.t; if(window.katex && /\\\(/.test(o.t)) renderMathIn(b);
+    b.onclick=()=>{
+      if(done)return; done=true;
+      const right=!!o.correct;
+      const st=topicStats[q.topic]||(topicStats[q.topic]={right:0,total:0});
+      st.total++; if(right){st.right++; mcScore++;}
+      [...mcOpts.children].forEach(btn=>{btn.disabled=true;});
+      // mark
+      [...mcOpts.children].forEach((btn,bi)=>{
+        const oi=order[bi];
+        if(q.opts[oi].correct) btn.classList.add("correct");
+      });
+      if(!right) b.classList.add("wrong");
+      mcScoreEl.textContent=`Score: ${mcScore}`;
+      mcFb.innerHTML=(right?`<span class="ftag" style="color:var(--conv)">✓ Correct.</span> `
+        :`<span class="ftag" style="color:var(--div)">✗ Correct answer marked above.</span><br>`)+q.explain;
+      mcFb.classList.add("show");
+      if(window.katex) renderMathIn(mcFb);
+      mcNext.textContent = (mcIdx>=mcOrder.length-1)?"See results →":"Next question →";
+      mcNext.classList.add("show");
+      renderWeak();
+    };
+    mcOpts.appendChild(b);
+  });
+}
+mcNext.onclick=()=>{
+  if(mcIdx>=mcOrder.length-1){ finishMC(); return; }
+  mcIdx++; renderMC();
+};
+function finishMC(){
+  [mcTag,mcPrompt,mcMath,mcOpts].forEach(e=>e.style.display="none");
+  mcFb.className="fb"; mcNext.className="next";
+  mcProgress.textContent=`Done — ${mcOrder.length} of ${mcOrder.length}`;
+  mcDone.style.display="";
+  mcDone.innerHTML=`<div style="text-align:center;padding:10px 0">
+    <div style="font-family:var(--display);font-size:30px;color:var(--approx);font-weight:600">${mcScore} / ${mcOrder.length}</div>
+    <div style="font-size:14px;color:var(--muted);margin-top:4px">${mcScore===mcOrder.length?"Clean sweep — every approach identified correctly.":mcScore>=mcOrder.length*0.75?"Strong. Check your weak spots below.":"Keep at it — your topic breakdown below shows where to focus."}</div>
+    <button class="next show" id="mcRestart" style="max-width:240px;margin:16px auto 0">↺ Get a new batch</button>
+  </div>`;
+  document.getElementById("mcRestart").onclick=()=>{ startMC(); document.getElementById("mcCard").scrollIntoView({behavior:"smooth",block:"start"}); };
+  renderWeak();
+}
+
+// crude KaTeX re-render for dynamically inserted \(...\) in feedback
+function renderMathIn(el){
+  el.innerHTML = el.innerHTML.replace(/\\\((.+?)\\\)/g,(m,x)=>{
+    // innerHTML read-back encodes <,>,& as entities — decode before KaTeX
+    const decoded=x.replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&amp;/g,"&");
+    try{return katex.renderToString(decoded,{throwOnError:false});}catch(e){return m;}
+  });
+}
+
+// ===================== WEAK SPOTS =====================
+const weakBody=document.getElementById("weakBody");
+function renderWeak(){
+  const entries=Object.entries(topicStats);
+  if(!entries.length){ weakBody.innerHTML=`<span style="color:var(--muted)">Finish some multiple-choice questions and your topic breakdown shows up here.</span>`; return; }
+  // sort weakest first
+  entries.sort((a,b)=> (a[1].right/a[1].total) - (b[1].right/b[1].total));
+  weakBody.innerHTML = `<div class="weak">`+entries.map(([k,st])=>{
+    const pct=Math.round(100*st.right/st.total);
+    const col = pct>=80?"var(--conv)":pct>=50?"var(--gold)":"var(--div)";
+    const [label,link]=TOPICS[k];
+    return `<div class="weak-item">
+      <span style="flex:none;min-width:150px">${label}</span>
+      <span class="weak-bar"><span class="weak-fill" style="width:${pct}%;background:${col}"></span></span>
+      <span class="score" style="flex:none">${st.right}/${st.total}</span>
+      <a href="${link}">review →</a>
+    </div>`;
+  }).join("")+`</div>`;
+}
+
+// ===================== FRQ TRAINER — hybrid: typed answers + self-scored justification =====================
+// Series: Σ (x-3)^n / (n·2^n) about x=3. All answers verified numerically.
+function frqNorm(s){ return (s||"").toLowerCase().replace(/\s+/g,"").replace(/−/g,"-").replace(/·/g,"*").replace(/\{|\}/g,""); }
+const FRQS=[
+ { label:"Ratio test & geometric",
+   desc:"<b>Ratio test → interval → derivative series → geometric closed form → alternating error.</b> The most common Q6 shape.",
+   given:"f(x)=\\sum_{n=1}^{\\infty}\\frac{(x-3)^{n}}{n\\cdot 2^{n}}",
+   givenNote:"This Taylor series about \\(x=3\\) converges to \\(f(x)\\) on its interval of convergence.",
+   givenFall:"f(x) = Σ (x−3)ⁿ / (n·2ⁿ),  about x = 3",
+  parts:[
+    { pl:"Part A", pts:3, topic:"ioc",
+      q:"Use the ratio test to find the <b>interval of convergence</b> of the series for \\(f\\).",
+      fields:[
+        {label:"R=",hint:"radius, e.g. 2",match:s=>["2","r=2"].includes(frqNorm(s))},
+        {label:"\\text{Interval}=",hint:"e.g. [1,5)",match:s=>["[1,5)"].includes(frqNorm(s))}
+      ],
+      sol:`<b>Ratio test:</b> \\(\\displaystyle\\lim_{n\\to\\infty}\\left|\\frac{(x-3)^{n+1}}{(n+1)2^{n+1}}\\cdot\\frac{n\\,2^{n}}{(x-3)^{n}}\\right|=\\frac{|x-3|}{2}\\). Setting \\(\\frac{|x-3|}{2}\\lt 1\\) gives \\(|x-3|\\lt 2\\), so \\(R=2\\) and the interior is \\((1,5)\\).<br><b>Endpoints:</b> at \\(x=1\\), the series is \\(\\sum\\frac{(-1)^{n}}{n}\\), which converges by the alternating series test. At \\(x=5\\), it is \\(\\sum\\frac{1}{n}\\), the harmonic series, which diverges. Interval of convergence: \\([1,5)\\).`,
+      rubric:[
+        "Set up the ratio test and found \\(R=2\\) (interior \\((1,5)\\))",
+        "Justified \\(x=1\\) converges (alternating series test)",
+        "Justified \\(x=5\\) diverges (harmonic) and gave \\([1,5)\\)"
+      ]
+    },
+    { pl:"Part B", pts:2, topic:"taylor",
+      q:"Find the general term of the Taylor series for \\(f'(x)\\), the derivative of \\(f\\), about \\(x=3\\).",
+      fields:[
+        {label:"f'(x)=\\sum\\,", hint:"general term, e.g. (x-3)^(n-1)/2^n",
+         match:s=>{const n=frqNorm(s); return ["(x-3)^(n-1)/2^n","(x-3)^n-1/2^n"].includes(n);}}
+      ],
+      sol:`Differentiate term by term: \\(f(x)=\\sum_{n=1}^{\\infty}\\frac{(x-3)^{n}}{n\\,2^{n}}\\Rightarrow f'(x)=\\sum_{n=1}^{\\infty}\\frac{(x-3)^{n-1}}{2^{n}}\\). The first three nonzero terms are \\(\\frac{1}{2}+\\frac{x-3}{4}+\\frac{(x-3)^{2}}{8}+\\cdots\\), with general term \\(\\dfrac{(x-3)^{n-1}}{2^{n}}\\).`,
+      rubric:[
+        "Differentiated term by term to get general term \\(\\frac{(x-3)^{n-1}}{2^{n}}\\)",
+        "Gave correct first three terms \\(\\frac12+\\frac{x-3}{4}+\\frac{(x-3)^2}{8}\\)"
+      ]
+    },
+    { pl:"Part C", pts:2, topic:"found",
+      q:"The series for \\(f'\\) is geometric. Find a <b>closed form</b> for \\(f'(x)\\) on the interval of convergence.",
+      fields:[
+        {label:"f'(x)=", hint:"e.g. 1/(5-x)",
+         match:s=>{const n=frqNorm(s); return ["1/(5-x)","-1/(x-5)"].includes(n);}}
+      ],
+      sol:`The series \\(f'(x)=\\sum_{n=1}^{\\infty}\\frac{(x-3)^{n-1}}{2^{n}}\\) is geometric with first term \\(a=\\frac{1}{2}\\) and ratio \\(r=\\frac{x-3}{2}\\). So \\(f'(x)=\\dfrac{a}{1-r}=\\dfrac{\\frac12}{1-\\frac{x-3}{2}}=\\dfrac{1}{5-x}\\), valid where \\(|r|\\lt 1\\).`,
+      rubric:[
+        "Identified \\(a=\\frac12\\) and \\(r=\\frac{x-3}{2}\\)",
+        "Used \\(\\frac{a}{1-r}\\) to get \\(\\frac{1}{5-x}\\)"
+      ]
+    },
+    { pl:"Part D", pts:2, topic:"error",
+      q:"At \\(x=1\\), \\(f(1)=\\sum_{n=1}^{\\infty}\\frac{(-1)^{n}}{n}\\). Approximating \\(f(1)\\) with the first three terms, give an <b>upper bound</b> on the error.",
+      fields:[
+        {label:"\\text{error}\\le", hint:"e.g. 1/4",
+         match:s=>["1/4","0.25",".25"].includes(frqNorm(s))}
+      ],
+      sol:`At \\(x=1\\) the series is alternating with terms \\(\\frac{1}{n}\\) decreasing to 0, so the <b>alternating series error bound</b> applies: the error is at most the first omitted term. After three terms, the next term is \\(n=4\\): \\(\\left|\\frac{(-1)^{4}}{4}\\right|=\\frac{1}{4}\\). (The true error \\(\\approx 0.140\\lt \\frac14\\).)`,
+      rubric:[
+        "Recognized the alternating series error bound applies",
+        "Bound = first omitted term \\(=\\frac14\\)"
+      ]
+    }
+  ]
+ },
+ { label:"Lagrange error bound",
+   desc:"<b>Build a Maclaurin series → general term → polynomial approximation → Lagrange error bound.</b> The harder error type.",
+   given:"f(x)=e^{2x}",
+   givenNote:"Consider the Maclaurin series for \\(f(x)=e^{2x}\\).",
+   givenFall:"f(x) = e^(2x)",
+  parts:[
+    { pl:"Part A", pts:2, topic:"taylor",
+      q:"Find the first four nonzero terms of the Maclaurin series for \\(f(x)=e^{2x}\\).",
+      fields:[
+        {label:"\\text{coeff of }x^{3}=", hint:"e.g. 4/3",
+         match:s=>{const n=frqNorm(s); return ["4/3","8/6","1.333","1.3333"].includes(n);}}
+      ],
+      sol:`Use \\(e^{u}=\\sum\\frac{u^n}{n!}\\) with \\(u=2x\\): \\(e^{2x}=\\sum_{n=0}^{\\infty}\\frac{(2x)^n}{n!}=1+2x+2x^2+\\frac{4}{3}x^3+\\cdots\\). The \\(x^3\\) coefficient is \\(\\frac{2^3}{3!}=\\frac{8}{6}=\\frac{4}{3}\\).`,
+      rubric:[
+        "First three terms \\(1+2x+2x^2\\) correct",
+        "Fourth term \\(\\frac{4}{3}x^3\\) correct"
+      ]
+    },
+    { pl:"Part B", pts:2, topic:"taylor",
+      q:"Find the general term of the Maclaurin series for \\(e^{2x}\\).",
+      fields:[
+        {label:"\\sum\\,", hint:"e.g. 2^n x^n / n!",
+         match:s=>{const n=frqNorm(s); return ["2^nx^n/n!","(2x)^n/n!","2^n*x^n/n!"].includes(n);}}
+      ],
+      sol:`From \\(e^{2x}=\\sum\\frac{(2x)^n}{n!}\\), the general term is \\(\\dfrac{(2x)^n}{n!}=\\dfrac{2^n x^n}{n!}\\).`,
+      rubric:[
+        "Recognized substitution \\(u=2x\\) into \\(e^u\\) series",
+        "General term \\(\\frac{2^n x^n}{n!}\\) correct"
+      ]
+    },
+    { pl:"Part C", pts:2, topic:"error",
+      q:"Let \\(P_3\\) be the third-degree Maclaurin polynomial. Use it to approximate \\(f(0.5)=e^{1}\\). (Enter as a fraction.)",
+      fields:[
+        {label:"P_3(0.5)=", hint:"e.g. 8/3",
+         match:s=>{const n=frqNorm(s); return ["8/3","2.667","2.6667"].includes(n);}}
+      ],
+      sol:`\\(P_3(x)=1+2x+2x^2+\\frac43 x^3\\). At \\(x=0.5\\): \\(1+1+0.5+\\frac43\\cdot\\frac18=1+1+\\frac12+\\frac16=\\frac{8}{3}\\approx 2.667\\). (True value \\(e\\approx 2.718\\).)`,
+      rubric:[
+        "Substituted \\(x=0.5\\) into \\(P_3\\)",
+        "Got \\(P_3(0.5)=\\frac{8}{3}\\)"
+      ]
+    },
+    { pl:"Part D", pts:3, topic:"error",
+      q:"Use the Lagrange error bound to bound the error in approximating \\(f(0.5)\\) by \\(P_3\\). (\\(f^{(4)}(x)=16e^{2x}\\); use its max on \\([0,0.5]\\).)",
+      fields:[
+        {label:"\\text{error}\\le", hint:"e.g. e/24",
+         match:s=>{const n=frqNorm(s); return ["e/24","16e/24*(0.5)^4","(16e/24)(1/16)","0.113","0.1133"].includes(n);}}
+      ],
+      sol:`Lagrange: \\(R_3\\le\\frac{M}{4!}|x|^4\\) where \\(M=\\max|f^{(4)}|\\) on \\([0,0.5]\\). Since \\(f^{(4)}(x)=16e^{2x}\\) is increasing, \\(M=16e^{1}=16e\\). So \\(R_3\\le\\frac{16e}{4!}(0.5)^4=\\frac{16e}{24}\\cdot\\frac{1}{16}=\\frac{e}{24}\\approx 0.113\\). (Actual error \\(\\approx 0.052\\).)`,
+      rubric:[
+        "Identified \\(M=16e\\) (max of \\(f^{(4)}\\) on the interval)",
+        "Set up \\(\\frac{M}{4!}(0.5)^4\\)",
+        "Simplified to \\(\\frac{e}{24}\\approx 0.113\\)"
+      ]
+    }
+  ]
+ },
+ { label:"Taylor from a data table",
+   desc:"<b>Build a Taylor polynomial from given derivative values → approximate f and f′ → bound the error.</b> Series from data, not handed to you.",
+   givenHTML:`<table class="dtable"><thead><tr><th>\\(x\\)</th><th>\\(f(x)\\)</th><th>\\(f'(x)\\)</th><th>\\(f''(x)\\)</th><th>\\(f'''(x)\\)</th></tr></thead><tbody><tr><td>\\(2\\)</td><td>\\(3\\)</td><td>\\(-1\\)</td><td>\\(4\\)</td><td>\\(12\\)</td></tr></tbody></table>`,
+   given:"f(2)=3,\\quad f'(2)=-1,\\quad f''(2)=4,\\quad f'''(2)=12",
+   givenNote:"\\(f\\) and its first three derivatives have the values shown at \\(x=2\\).",
+   givenFall:"At x=2:  f=3, f'=-1, f''=4, f'''=12",
+  parts:[
+    { pl:"Part A", pts:3, topic:"taylor",
+      q:"Write the third-degree Taylor polynomial \\(T_3(x)\\) for \\(f\\) about \\(x=2\\). (Enter the coefficient of \\((x-2)^2\\).)",
+      fields:[
+        {label:"\\text{coeff of }(x-2)^2=", hint:"e.g. 2",
+         match:s=>["2"].includes(frqNorm(s))}
+      ],
+      sol:`\\(T_3(x)=f(2)+f'(2)(x-2)+\\frac{f''(2)}{2!}(x-2)^2+\\frac{f'''(2)}{3!}(x-2)^3\\) \\(=3-(x-2)+\\frac{4}{2}(x-2)^2+\\frac{12}{6}(x-2)^3=3-(x-2)+2(x-2)^2+2(x-2)^3\\). The \\((x-2)^2\\) coefficient is \\(\\frac{f''(2)}{2!}=\\frac{4}{2}=2\\).`,
+      rubric:[
+        "Used the Taylor formula with \\(2!\\) and \\(3!\\) in denominators",
+        "Coefficients \\(3,-1\\) for the constant and linear terms",
+        "Coefficient of \\((x-2)^2\\) is \\(2\\) (and \\((x-2)^3\\) is \\(2\\))"
+      ]
+    },
+    { pl:"Part B", pts:2, topic:"taylor",
+      q:"Use \\(T_3\\) to approximate \\(f(2.1)\\).",
+      fields:[
+        {label:"f(2.1)\\approx", hint:"e.g. 2.922",
+         match:s=>{const n=frqNorm(s); return ["2.922","2.9220"].includes(n);}}
+      ],
+      sol:`With \\(x-2=0.1\\): \\(T_3(2.1)=3-0.1+2(0.1)^2+2(0.1)^3=3-0.1+0.02+0.002=2.922\\).`,
+      rubric:[
+        "Substituted \\(x-2=0.1\\) into \\(T_3\\)",
+        "Got \\(f(2.1)\\approx 2.922\\)"
+      ]
+    },
+    { pl:"Part C", pts:2, topic:"taylor",
+      q:"Using \\(T_3'(x)\\), approximate \\(f'(2.1)\\).",
+      fields:[
+        {label:"f'(2.1)\\approx", hint:"e.g. -0.54",
+         match:s=>{const n=frqNorm(s); return ["-0.54","-0.540","-.54"].includes(n);}}
+      ],
+      sol:`\\(T_3'(x)=-1+4(x-2)+6(x-2)^2\\). At \\(x=2.1\\): \\(-1+4(0.1)+6(0.1)^2=-1+0.4+0.06=-0.54\\).`,
+      rubric:[
+        "Differentiated \\(T_3\\) correctly",
+        "Got \\(f'(2.1)\\approx -0.54\\)"
+      ]
+    },
+    { pl:"Part D", pts:2, topic:"error",
+      q:"Given \\(|f^{(4)}(x)|\\le 24\\) on \\([2,2.1]\\), bound the error of the \\(T_3\\) approximation of \\(f(2.1)\\).",
+      fields:[
+        {label:"\\text{error}\\le", hint:"e.g. 0.0001",
+         match:s=>{const n=frqNorm(s); return ["0.0001","1/10000","0.0001","1e-4"].includes(n);}}
+      ],
+      sol:`Lagrange: \\(R_3\\le\\frac{M}{4!}|x-2|^4=\\frac{24}{24}(0.1)^4=(0.1)^4=0.0001\\). The bound is \\(\\frac{1}{10000}\\).`,
+      rubric:[
+        "Used \\(\\frac{M}{4!}|x-2|^4\\) with \\(M=24\\)",
+        "Simplified to \\(0.0001\\)"
+      ]
+    }
+  ]
+ },
+ { label:"Substitution & integration",
+   desc:"<b>Build a series by substitution → radius → integrate term by term → alternating error.</b> Manipulating known series.",
+   given:"g(x)=\\dfrac{1}{1+x^{3}}",
+   givenNote:"Build the Maclaurin series for \\(g\\) from the geometric series.",
+   givenFall:"g(x) = 1/(1+x^3)",
+  parts:[
+    { pl:"Part A", pts:3, topic:"taylor",
+      q:"Find the general term of the Maclaurin series for \\(g(x)=\\frac{1}{1+x^{3}}\\).",
+      fields:[
+        {label:"\\sum\\,", hint:"e.g. (-1)^n x^(3n)",
+         match:s=>{const n=frqNorm(s); return ["(-1)^nx^(3n)","(-1)^nx^3n","(-1)^n*x^(3n)"].includes(n);}}
+      ],
+      sol:`Use \\(\\frac{1}{1-u}=\\sum u^n\\) with \\(u=-x^3\\): \\(\\frac{1}{1+x^3}=\\sum_{n=0}^{\\infty}(-x^3)^n=\\sum_{n=0}^{\\infty}(-1)^n x^{3n}=1-x^3+x^6-\\cdots\\). General term \\((-1)^n x^{3n}\\).`,
+      rubric:[
+        "Recognized the geometric template \\(\\frac{1}{1-u}=\\sum u^n\\)",
+        "Substituted \\(u=-x^3\\) correctly",
+        "General term \\((-1)^n x^{3n}\\) correct"
+      ]
+    },
+    { pl:"Part B", pts:2, topic:"ioc",
+      q:"Find the radius of convergence of this series.",
+      fields:[
+        {label:"R=", hint:"e.g. 1",
+         match:s=>["1","r=1"].includes(frqNorm(s))}
+      ],
+      sol:`The geometric series converges when \\(|u|\\lt 1\\), i.e. \\(|-x^3|\\lt 1\\Rightarrow|x|^3\\lt 1\\Rightarrow|x|\\lt 1\\). So \\(R=1\\).`,
+      rubric:[
+        "Set \\(|-x^3|\\lt 1\\)",
+        "Concluded \\(R=1\\)"
+      ]
+    },
+    { pl:"Part C", pts:2, topic:"taylor",
+      q:"Find the first three nonzero terms of the series for \\(\\int_0^x g(t)\\,dt\\).",
+      fields:[
+        {label:"\\int_0^x g\\,dt=", hint:"e.g. x - x^4/4 + x^7/7",
+         match:s=>{const n=frqNorm(s); return ["x-x^4/4+x^7/7","x-x^4/4+x^7/7-..."].includes(n);}}
+      ],
+      sol:`Integrate term by term: \\(\\int_0^x(1-t^3+t^6-\\cdots)\\,dt=x-\\frac{x^4}{4}+\\frac{x^7}{7}-\\cdots\\) (general term \\(\\frac{(-1)^n x^{3n+1}}{3n+1}\\)).`,
+      rubric:[
+        "Integrated the series term by term",
+        "First three terms \\(x-\\frac{x^4}{4}+\\frac{x^7}{7}\\)"
+      ]
+    },
+    { pl:"Part D", pts:2, topic:"error",
+      q:"At \\(x=1\\), the integral series is \\(\\sum_{n=0}^{\\infty}\\frac{(-1)^n}{3n+1}\\). Approximating with the first three terms, bound the error.",
+      fields:[
+        {label:"\\text{error}\\le", hint:"e.g. 1/10",
+         match:s=>{const n=frqNorm(s); return ["1/10","0.1",".1"].includes(n);}}
+      ],
+      sol:`The series \\(1-\\frac14+\\frac17-\\frac{1}{10}+\\cdots\\) is alternating with terms decreasing to 0. The error after three terms is at most the fourth term (\\(n=3\\)): \\(\\frac{1}{3(3)+1}=\\frac{1}{10}\\).`,
+      rubric:[
+        "Recognized alternating series error bound",
+        "Bound = fourth term \\(=\\frac{1}{10}\\)"
+      ]
+    }
+  ]
+ }
+];
+let frqEarned=0, frqPossible=0, frqActive=0;
+const frqParts=document.getElementById("frqParts"), frqScoreEl=document.getElementById("frqScore");
+function curFRQ(){ return FRQS[frqActive]; }
+function buildFRQTabs(){
+  const box=document.getElementById("frqTabs");
+  box.innerHTML="";
+  FRQS.forEach((f,i)=>{
+    const b=document.createElement("button");
+    b.textContent=f.label;
+    if(i===frqActive) b.classList.add("on");
+    b.onclick=()=>{ frqActive=i; buildFRQTabs(); renderGiven(); buildFRQ();
+      document.getElementById("frqCard").scrollIntoView({behavior:"smooth",block:"start"}); };
+    box.appendChild(b);
+  });
+}
+function renderGiven(){
+  const F=curFRQ();
+  document.getElementById("frqDesc").innerHTML=F.desc;
+  const gv=document.getElementById("frqGiven");
+  const mainHTML = F.givenHTML ? F.givenHTML : tex(F.given,F.givenFall,true);
+  gv.innerHTML = mainHTML+`<div class="given-note" style="font-size:12.5px;color:var(--muted);margin-top:8px">${F.givenNote}</div>`;
+  if(window.katex){ renderMathIn(gv.querySelector(".given-note"));
+    if(F.givenHTML){ gv.querySelectorAll(".dtable th,.dtable td").forEach(renderMathIn); } }
+}
+buildFRQTabs(); renderGiven();
+
+function buildFRQ(){
+  frqParts.innerHTML=""; frqEarned=0; frqPossible=0; frqScoreEl.style.display="none";
+  const old=document.getElementById("frqRetry"); if(old) old.remove();
+  curFRQ().parts.forEach((p,i)=>{
+    frqPossible+=p.pts;
+    const d=document.createElement("div"); d.className="part"+(i===0?"":" locked"); d.dataset.i=i;
+    let fieldsHTML=p.fields.map((f,fi)=>`
+      <div class="frq-field">
+        <span class="frq-flabel">${tex(f.label,f.label,false)}</span>
+        <input type="text" class="frq-input" data-fi="${fi}" placeholder="${f.hint}" autocomplete="off" spellcheck="false" />
+      </div>`).join("");
+    d.innerHTML=`<div class="part-h"><span class="pl">${p.pl}</span><span class="pts">${p.pts} pts</span></div>
+      <div class="part-q">${p.q}</div>
+      <div class="frq-fields">${fieldsHTML}</div>
+      <button class="frq-check" data-i="${i}">Check &amp; show solution</button>
+      <div class="reveal-sol"></div>`;
+    frqParts.appendChild(d);
+  });
+  // render katex in prompts/labels
+  if(window.katex) frqParts.querySelectorAll(".part-q,.frq-flabel").forEach(renderMathIn);
+  frqParts.querySelectorAll(".frq-check").forEach(btn=>{
+    btn.onclick=()=>handleFRQCheck(parseInt(btn.dataset.i),btn);
+  });
+}
+function handleFRQCheck(i,btn){
+  const p=curFRQ().parts[i];
+  const d=frqParts.querySelector(`.part[data-i="${i}"]`);
+  if(d.dataset.done) return;
+  d.dataset.done="1";
+  const inputs=[...d.querySelectorAll(".frq-input")];
+  let allRight=true;
+  inputs.forEach(inp=>{
+    const f=p.fields[parseInt(inp.dataset.fi)];
+    const ok=f.match(inp.value);
+    inp.classList.add(ok?"ok":"no"); inp.disabled=true;
+    if(!ok) allRight=false;
+  });
+  btn.disabled=true;
+  const sol=d.querySelector(".reveal-sol");
+  const rubricHTML = p.rubric.map((r,ri)=>`
+    <label class="rb"><input type="checkbox" class="rb-box" data-i="${i}"> <span>${r}</span></label>`).join("");
+  sol.innerHTML=
+    `<div class="sol-h">${allRight?'<span style="color:var(--conv)">✓ Answer matches.</span>':'<span style="color:var(--div)">Check your answer against the solution.</span>'}</div>`+
+    p.sol+
+    `<div class="rubric-box"><div class="rubric-h">Score your work — check each point you earned (${p.pts} pts total):</div>${rubricHTML}
+      <button class="rb-apply" data-i="${i}" data-pts="${p.pts}">Record ${p.pts==1?'point':'points'}</button></div>`;
+  sol.classList.add("show");
+  if(window.katex){ renderMathIn(sol); }
+  sol.querySelector(".rb-apply").onclick=(e)=>applyRubric(i,e.target);
+}
+function applyRubric(i,btn){
+  const d=frqParts.querySelector(`.part[data-i="${i}"]`);
+  if(d.dataset.scored) return; d.dataset.scored="1";
+  const boxes=[...d.querySelectorAll(".rb-box")];
+  const got=boxes.filter(b=>b.checked).length;
+  const p=curFRQ().parts[i];
+  // each rubric line is worth pts/rubric.length, rounded to whole points like AP
+  const per=p.pts/p.rubric.length;
+  const earned=Math.round(got*per);
+  frqEarned+=earned;
+  boxes.forEach(b=>b.disabled=true); btn.disabled=true;
+  btn.textContent=`Recorded ${earned}/${p.pts}`;
+  const nxt=frqParts.querySelector(`.part[data-i="${i+1}"]`);
+  if(nxt) nxt.classList.remove("locked"); else finishFRQ();
+}
+function finishFRQ(){
+  frqScoreEl.style.display="";
+  frqScoreEl.textContent=`Free-response score: ${frqEarned} / ${frqPossible} points`;
+  const btn=document.createElement("button");
+  btn.id="frqRetry"; btn.className="next show"; btn.style.maxWidth="240px"; btn.style.margin="14px 0 0";
+  btn.textContent="↺ Try the FRQ again"; btn.onclick=buildFRQ;
+  frqScoreEl.after(btn);
+}
+
+// ===================== INIT =====================
+function init(){ startMC(); buildFRQTabs(); renderGiven(); buildFRQ(); }
+init();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){clearInterval(t); renderGiven(); buildFRQ(); renderMC(); } else if(++tries>40)clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*45,360)+'ms';});
+</script>
+</body>
+</html>

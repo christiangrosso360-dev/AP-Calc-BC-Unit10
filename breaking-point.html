@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Taylor Toolkit — Understanding Taylor Series · Unit 10 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23e8e4dc%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%23c8841f%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#0d0c0a; --panel:#1a1813; --panel-2:#211e18; --ink:#ece7dd; --muted:#9a9183;
+    --line:#332e25; --line-2:#453f33; --true:#e8a13c; --approx:#3fd0b0; --gold:#3fd0b0;
+    --conv:#3fd0b0; --div:#e0644f; --faint:#6b6457;
+    --display:'Fraunces',Georgia,serif; --body:'Spline Sans',system-ui,sans-serif;
+    --mono:'Spline Sans Mono',ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:
+      radial-gradient(ellipse 60% 50% at 15% -8%, rgba(63,208,176,.08), transparent 55%),
+      var(--bg);
+    color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;padding:30px 18px;line-height:1.6}
+  .wrap{max-width:1060px;margin:0 auto}
+  .backlink{display:inline-block;font-family:var(--mono);font-size:12.5px;color:var(--muted);
+    text-decoration:none;margin-bottom:18px;padding:5px 11px;border:1px solid var(--line);
+    border-radius:20px;background:var(--panel);transition:border-color .15s,color .15s,transform .15s}
+  .backlink:hover{border-color:var(--gold);color:var(--ink);transform:translateX(-2px)}
+  header{margin-bottom:8px}
+  h1{font-family:var(--display);font-weight:600;font-size:32px;margin:0;letter-spacing:-0.02em;line-height:1.05}
+  h1 .em{color:var(--approx)}
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:620px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:38px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:680px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:760px}
+  .big-idea b{color:var(--approx)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 290px;min-width:250px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px 18px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7);transition:box-shadow .25s}
+  .card:hover{box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 22px 46px -26px rgba(0,0,0,.8)}
+  svg{width:100%;display:block;border-radius:10px}
+  .legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:12px;flex-wrap:wrap}
+  .legend b{display:inline-block;width:18px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+  .legend .dot{width:11px;height:11px;border-radius:50%}
+  .narr{background:var(--panel-2);border:1px solid var(--line);border-left:4px solid var(--approx);border-radius:10px;
+    padding:14px 16px;margin-top:14px;font-size:14.5px;min-height:74px}
+  .narr b{color:var(--ink)}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .funcs{display:flex;flex-wrap:wrap;gap:7px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:8px 12px;font-size:13px;
+    transition:transform .15s cubic-bezier(.2,.7,.2,1),border-color .15s,background .15s,box-shadow .15s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:#16140f;border-color:var(--ink)}
+  .func-btn{font-family:var(--mono)}
+  .addrow{display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap}
+  .add{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;font-size:14px;padding:10px 16px;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .add:hover{filter:brightness(1.06);border-color:var(--approx);box-shadow:0 10px 22px -10px var(--approx)}
+  .deg{font-family:var(--mono);font-size:14px;color:var(--muted);min-width:78px}
+  input[type=range]{width:100%;accent-color:var(--approx);cursor:pointer;margin-top:4px}
+  .crow{display:flex;justify-content:space-between;align-items:baseline}
+  .cval{font-family:var(--mono);font-size:14px}
+  .formula{font-family:var(--mono);font-size:14px;line-height:1.9;background:var(--panel-2);border:1px solid var(--line);
+    border-radius:10px;padding:12px 14px;margin-top:12px;min-height:46px;word-spacing:1px;overflow-wrap:anywhere}
+  .formula sup{font-size:.72em}
+  .err{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:10px}
+  .conv{font-size:13px;margin-top:12px}.conv .tag{font-family:var(--mono);color:var(--approx)}
+  .uses{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
+  .use{flex:1 1 210px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;
+    transition:transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s}
+  .use:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(60,40,10,.5)}
+  .use h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .use p{font-size:13.5px;color:var(--ink);margin:0}
+  footer{color:var(--muted);font-size:12px;margin-top:40px;border-top:1px solid var(--line);padding-top:14px}
+
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .katex{color:var(--ink)}
+  .reveal{opacity:0;animation:riseIn .65s cubic-bezier(.2,.7,.2,1) forwards}
+  .narr,.formula{transition:background .2s}
+  .cval{transition:color .2s}
+  @media (prefers-reduced-motion: reduce){
+    .reveal{animation:none;opacity:1}
+    *{transition:none!important}
+  }
+
+  /* ----- practice quiz ----- */
+  .explainer{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--gold);
+    border-radius:14px;padding:18px 20px;margin-top:14px;max-width:760px}
+  .ex-title{font-family:var(--display);font-weight:600;font-size:17px;margin-bottom:8px}
+  .explainer p{font-size:14px;margin:8px 0;line-height:1.6}
+  .explainer .m{font-family:var(--mono);font-size:.92em;color:var(--ink)}
+  .ex-formula{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px;
+    text-align:center;margin:12px 0}
+  .ex-formula .katex{font-size:1.2em}
+  .fb-eq{text-align:center;overflow-x:auto}
+  .fb-plain{font-size:13.5px;line-height:1.55;margin-top:12px;text-align:left}
+  .fb-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin-top:14px;text-align:left}
+  @media(max-width:560px){.fb-legend{grid-template-columns:1fr}}
+  .leg-item{display:flex;gap:9px;align-items:baseline;font-size:12.5px}
+  .leg-sym{font-family:var(--mono);font-weight:600;flex:none;min-width:54px}
+  .leg-desc{color:var(--ink);line-height:1.4}
+  .ex-list{margin:10px 0 0;padding-left:18px}
+  .ex-list li{font-size:13.5px;line-height:1.55;margin:7px 0}
+  .qcard{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7);margin-top:14px}
+  .modes{display:flex;gap:8px;flex-wrap:wrap}
+  .modes button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:9px 14px;font-size:13px;
+    transition:transform .14s,border-color .14s,background .14s}
+  .modes button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  .modes button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  .qprompt{font-size:14.5px;font-weight:600;margin-top:4px}
+  .series-display{font-family:var(--mono);font-size:18px;background:var(--panel-2);border:1px solid var(--line);
+    border-radius:10px;padding:16px;text-align:center;margin:12px 0;min-height:56px;display:flex;
+    align-items:center;justify-content:center}
+  .series-display .katex{font-size:1.25em}
+  .qopts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.qopts{grid-template-columns:1fr}}
+  .qopts button{font-family:var(--body);cursor:pointer;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:12px 14px;font-size:14px;text-align:center;
+    transition:transform .14s,border-color .14s,background .14s}
+  .qopts button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  .qopts button:active{transform:scale(.99)}
+  .qopts button .katex{font-size:1.05em}
+  .qopts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .qopts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .qopts button:disabled{cursor:default}
+  .qopts button:disabled:hover{transform:none;border-color:var(--line)}
+  .qopts button.correct:disabled:hover{border-color:var(--conv)}
+  .qopts button.wrong:disabled:hover{border-color:var(--div)}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .feedback{margin-top:14px;font-size:14px;min-height:22px}
+  .next{background:var(--approx);color:#fff;border:1px solid var(--approx);border-radius:10px;
+    font-weight:600;font-size:14px;padding:11px 14px;cursor:pointer;
+    box-shadow:0 8px 18px -10px var(--approx);transition:filter .14s}
+  .next:hover{filter:brightness(1.06)}
+  .solbtn{margin-top:12px;background:transparent;border:1px dashed var(--line);color:var(--approx);
+    font-size:13px;font-weight:600;padding:8px 12px;width:100%;text-align:center;cursor:pointer;border-radius:9px}
+  .solbtn:hover{border-color:var(--approx)}
+  .solution.open{margin-top:12px;animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+  .step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:none}
+  .step-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .step-t{font-size:13.5px;line-height:1.5}
+  .step-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;overflow-x:auto}
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  .resetbtn{font-family:var(--body);font-size:12px;color:var(--muted);background:transparent;
+    border:1px solid var(--line);border-radius:20px;padding:4px 11px;cursor:pointer;
+    transition:border-color .15s,color .15s}
+  .resetbtn:hover{border-color:var(--gold);color:var(--ink)}
+  .whatsnext{max-width:640px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  /* keyboard focus visibility (mouse clicks stay clean) */
+  button:focus-visible, a:focus-visible, input:focus-visible{
+    outline:2px solid var(--gold); outline-offset:2px; border-radius:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html">← Unit 10 Guide</a>
+  <header class="reveal">
+    <h1>Taylor <span class="em">Toolkit</span></h1>
+    <div class="sub">A friendly introduction to Taylor &amp; Maclaurin series — for anyone about to take AP Calculus.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    Here's a strange and wonderful fact: <b>almost any curve can be rebuilt using nothing but
+    powers of x</b> — x, x², x³, and so on. A "Taylor series" is the recipe for doing that. You start
+    with a rough guess and keep adding terms, and each term snaps the approximation a little closer
+    to the real thing. This page lets you watch it happen.
+  </div>
+
+  <h2 class="reveal">1 · Build it one term at a time</h2>
+  <p class="lead">Pick a function, then hit <b>Add a term</b> and watch. Read the box under the
+    graph each time — it tells you the <i>job</i> the new term just did.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="plot" viewBox="0 0 660 420" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="legend">
+          <span><b style="background:var(--true)"></b>the real function</span>
+          <span><b style="background:var(--approx)"></b>our approximation</span>
+          <span><b style="background:var(--approx);opacity:.22;height:11px"></b>the error (gap)</span>
+          <span><b style="background:var(--gold)"></b>where it stops working</span>
+        </div>
+        <div class="narr" id="narr"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Choose a function</div>
+        <div class="funcs" id="funcs"></div>
+        <div class="addrow" style="margin-top:16px">
+          <button class="add" id="add">Add a term →</button>
+          <button id="back">← back</button>
+          <button id="play">▶ auto</button>
+        </div>
+        <div class="deg" id="degLabel" style="margin-top:10px"></div>
+        <div class="label" style="margin-top:16px">The polynomial so far</div>
+        <div class="formula" id="formula"></div>
+        <div class="err" id="errOut"></div>
+        <div class="conv" id="conv"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">2 · Moving the center: Maclaurin vs. Taylor</h2>
+  <p class="lead">Here's something you may not have noticed: every approximation above was built around
+    one point — the center at <b>x = 0</b> (the dark dot). Building a series at zero is so common it
+    gets its own name, the <b>Maclaurin series</b>. But the center doesn't <i>have</i> to be zero.
+    Drag the <b>center</b> slider below and watch what happens.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="plot2" viewBox="0 0 660 420" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="legend">
+          <span><b style="background:var(--true)"></b>the real function</span>
+          <span><b style="background:var(--approx)"></b>approximation</span>
+          <span><b style="background:var(--approx);opacity:.22;height:11px"></b>the error (gap)</span>
+          <span><b class="dot" style="background:var(--gold)"></b>center point</span>
+        </div>
+        <div class="narr" id="narr2"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Choose a function</div>
+        <div class="funcs" id="funcs2"></div>
+        <div class="label" style="margin-top:16px">Center point</div>
+        <div class="crow"><span style="font-size:13px;color:var(--muted)">slide me</span>
+          <span class="cval" id="cval">x = 0</span></div>
+        <input type="range" id="center" min="-6" max="6" step="0.1" value="0" />
+        <div class="addrow" style="margin-top:14px">
+          <button class="add" id="add2">Add a term →</button>
+          <button id="back2">← back</button>
+        </div>
+        <div class="deg" id="degLabel2" style="margin-top:10px"></div>
+        <div class="label" style="margin-top:16px">The polynomial so far</div>
+        <div class="formula" id="formula2"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">3 · The secret: each term matches one more thing</h2>
+  <p class="lead">Why does adding terms work so neatly? Because of <b>derivatives</b> — the calculus idea
+    of "how fast something is changing." Each term is tuned so the approximation matches the real
+    function a little more deeply at the center point:</p>
+  <p class="lead">The first term matches the function's <b>height</b>. The next matches its <b>slope</b>
+    (that's the tangent line). The next matches its <b>curvature</b> — how the slope is bending. Keep
+    going and each term matches the next derivative, so the fake curve and the real one agree more and
+    more perfectly right at the center. The powers of x carry that agreement outward to the
+    neighborhood around it.</p>
+
+  <h2 class="reveal">4 · Shortcuts: building new series from ones you know</h2>
+  <p class="lead reveal">Computing derivatives over and over is slow. Once you know a few core series, you can
+    reach a huge number of others with three moves — no new derivatives required. This is its own tested
+    skill, and it starts from one template.</p>
+
+  <div class="explainer reveal">
+    <div class="ex-title">The template everything builds on</div>
+    <p>The geometric series is the master key — memorize it cold:</p>
+    <div class="ex-formula" id="psTemplate"></div>
+    <ul class="ex-list">
+      <li><b>① Substitute.</b> Replace <span class="m">x</span> with another expression to get a new series
+        instantly. Put <span class="m">−x²</span> in for <span class="m">x</span>:
+        <span class="m">1/(1+x²) = Σ(−x²)ⁿ = Σ(−1)ⁿx²ⁿ</span> — no derivatives needed, just substitution.</li>
+      <li><b>② Integrate.</b> Integrate a known series term by term to get another function's series.
+        Integrating <span class="m">1/(1+x²)</span> gives <span class="m">arctan x = Σ(−1)ⁿx²ⁿ⁺¹/(2n+1)</span>;
+        integrating <span class="m">1/(1+x)</span> gives <span class="m">ln(1+x) = Σ(−1)ⁿxⁿ⁺¹/(n+1)</span>.</li>
+      <li><b>③ Differentiate.</b> Differentiate term by term to go the other way. Differentiating
+        <span class="m">1/(1−x) = Σxⁿ</span> gives <span class="m">1/(1−x)² = Σ n·xⁿ⁻¹</span>.</li>
+    </ul>
+    <p style="margin-top:12px">The catch worth remembering: these moves keep the same <b>radius of convergence</b>
+      as the series you started from (the endpoints can change, but the radius doesn't). So if your template
+      works for <span class="m">|x| &lt; 1</span>, so do the series you build from it.</p>
+  </div>
+
+  <h2 class="reveal">5 · Drill it — four ways to practice</h2>
+  <p class="lead reveal">Pick a mode and practice: read off a coefficient, write a full term, build a new
+    series by substitution, or judge where a series converges. Each one shows a full worked solution
+    that <i>derives</i> the answer, not just states it.</p>
+
+  <div class="explainer reveal">
+    <div class="ex-title">The one formula behind all of this</div>
+    <p>Every Maclaurin series is built from a single idea: the coefficient of <span class="m">xⁿ</span> is
+      chosen so the polynomial's <span class="m">n</span>-th derivative matches the function's at
+      <span class="m">x = 0</span>. That gives the formula:</p>
+    <div class="ex-formula" id="exFormula"></div>
+    <p>In words: take the <span class="m">n</span>-th derivative of <span class="m">f</span>, plug in
+      <span class="m">0</span>, and divide by <span class="m">n!</span>. That single rule produces every
+      coefficient — and it explains the patterns you'll see below:</p>
+    <ul class="ex-list">
+      <li><b>Why factorials appear:</b> dividing by <span class="m">n!</span> every time is where the
+        <span class="m">1/n!</span> in eˣ, sin, and cos comes from.</li>
+      <li><b>Why some powers vanish:</b> <span class="m">sin x</span> is <i>odd</i>, so its even
+        derivatives are 0 at the origin — every even power drops out. <span class="m">cos x</span> is
+        <i>even</i>, so the odd powers drop out. A "0 coefficient" is normal, not a mistake.</li>
+      <li><b>Why signs alternate:</b> the derivatives of sine and cosine cycle through
+        <span class="m">+, +, −, −</span>, which flips the sign every other nonzero term.</li>
+      <li><b>Why substitution works:</b> if you already know the series for <span class="m">f(x)</span>,
+        then <span class="m">f(x²)</span> is just that series with <span class="m">x²</span> in place of
+        <span class="m">x</span> — no new derivatives needed. That shortcut is the whole trick.</li>
+    </ul>
+  </div>
+
+  <div class="qcard reveal" style="max-width:640px">
+    <div class="modes" id="modes"></div>
+    <div class="row" style="margin:14px 0 10px">
+      <span class="score" id="tkScore">Score: 0 / 0</span>
+      <span style="display:flex;align-items:center;gap:12px">
+        <span class="score" id="tkStreak"></span>
+        <button class="resetbtn" id="tkReset" title="Reset your score">↺ reset</button>
+      </span>
+    </div>
+    <div class="qprompt" id="tkPrompt"></div>
+    <div class="series-display" id="tkSeries"></div>
+    <div class="qopts" id="tkOpts"></div>
+    <div class="feedback" id="tkFb"></div>
+    <button class="next" id="tkNext" style="margin-top:14px;display:none;width:100%">Next question →</button>
+  </div>
+
+  <div class="whatsnext reveal">
+    Got these down? See where these series actually converge in
+    <a href="interval-of-convergence.html">Interval of Convergence</a>, bound the error of a Taylor
+    polynomial in <a href="error-bounds.html">Error Bounds</a>, or head back to the
+    <a href="index.html">Unit 10 Guide</a>.
+  </div>
+
+  <footer class="reveal">Taylor Toolkit · part of the Unit 10 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+const fact=(n)=>{let f=1;for(let i=2;i<=n;i++)f*=i;return f;};
+const FUNCS={
+  sin:{title:"sin x",f:x=>Math.sin(x),a:n=>n%2===1?((((n-1)/2)%2===0)?1:-1)/fact(n):0,
+    d:(n,a)=>Math.sin(a+n*Math.PI/2),
+    label:n=>n===1?"x":`x<sup>${n}</sup>/${n}!`,dom:[-11,11],yr:[-4,4],R:Infinity,ticks:5,parity:"odd",crange:[-6,6]},
+  cos:{title:"cos x",f:x=>Math.cos(x),a:n=>n%2===0?(((n/2)%2===0)?1:-1)/fact(n):0,
+    d:(n,a)=>Math.cos(a+n*Math.PI/2),
+    label:n=>n===0?"1":`x<sup>${n}</sup>/${n}!`,dom:[-11,11],yr:[-4,4],R:Infinity,ticks:5,parity:"even",crange:[-6,6]},
+  exp:{title:"e^x",f:x=>Math.exp(x),a:n=>1/fact(n),
+    d:(n,a)=>Math.exp(a),
+    label:n=>n===0?"1":n===1?"x":`x<sup>${n}</sup>/${n}!`,dom:[-5,3.2],yr:[-2,14],R:Infinity,ticks:5,crange:[-3,2]},
+  ln:{title:"ln(1+x)",f:x=>x>-1?Math.log(1+x):NaN,a:n=>n===0?0:(((n-1)%2===0)?1:-1)/n,
+    d:(n,a)=>n===0?Math.log(1+a):(((n-1)%2===0)?1:-1)*fact(n-1)/Math.pow(1+a,n),
+    label:n=>n===1?"x":`x<sup>${n}</sup>/${n}`,dom:[-1.4,2.6],yr:[-4,2.2],R:1,ticks:4,crange:[-0.8,2]},
+  geom:{title:"1/(1-x)",f:x=>Math.abs(x-1)<1e-6?NaN:1/(1-x),a:n=>1,
+    d:(n,a)=>fact(n)/Math.pow(1-a,n+1),
+    label:n=>n===0?"1":n===1?"x":`x<sup>${n}</sup>`,dom:[-2.2,2.2],yr:[-4,7],R:1,ticks:5,crange:[-1.5,0.7]}
+};
+const poly=(c,x,N)=>{let s=0;for(let n=0;n<=N;n++){const a=c.a(n);if(a)s+=a*Math.pow(x,n);}return s;};
+const taylor=(c,x,N,a)=>{let s=0;for(let n=0;n<=N;n++)s+=c.d(n,a)/fact(n)*Math.pow(x-a,n);return s;};
+const ord=n=>{const s=["th","st","nd","rd"],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);};
+
+// turn a decimal into a clean fraction {n,d,neg} when one exists with a small-ish denominator; else null
+function toFrac(x){
+  if(!isFinite(x))return null;
+  const neg=x<0; x=Math.abs(x);
+  if(x<1e-12)return{n:0,d:1,neg:false};
+  let h1=1,h0=0,k1=0,k0=1,b=x,guard=0;
+  while(guard++<40){
+    const ai=Math.floor(b);
+    const h2=ai*h1+h0,k2=ai*k1+k0;
+    if(k2>400000)break;
+    h0=h1;h1=h2;k0=k1;k1=k2;
+    if(Math.abs(x-h1/k1)<1e-12)return{n:h1,d:k1,neg};
+    const frac=b-ai; if(frac<1e-12)break; b=1/frac;
+  }
+  return null;
+}
+// draw-on animation for a freshly-appended <path> (animates its stroke into view)
+function drawOn(pathEl,dur=520){
+  try{const len=pathEl.getTotalLength();if(!isFinite(len)||len<=0)return;
+    pathEl.style.strokeDasharray=len;pathEl.style.strokeDashoffset=len;
+    pathEl.animate([{strokeDashoffset:len},{strokeDashoffset:0}],{duration:dur,easing:"cubic-bezier(.3,.7,.2,1)",fill:"forwards"});
+    setTimeout(()=>{pathEl.style.strokeDasharray="";pathEl.style.strokeDashoffset="";},dur+30);
+  }catch(e){}
+}
+function fadeIn(elm,dur=420){try{elm.animate([{opacity:0},{opacity:elm.getAttribute("opacity")||1}],{duration:dur,easing:"ease-out"});}catch(e){}}
+function popIn(elm,dur=380){try{elm.animate([{transform:"scale(0)",opacity:0},{transform:"scale(1)",opacity:1}],{duration:dur,easing:"cubic-bezier(.34,1.56,.64,1)"});}catch(e){}}
+
+const NS="http://www.w3.org/2000/svg",W=660,H=420,pad=46;
+const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+
+// shared: draw grid + axes + optional convergence lines onto an svg, return scalers
+function frame(svg,c,showR){
+  const [x0,x1]=c.dom,[y0,y1]=c.yr;
+  const sx=x=>pad+(x-x0)/(x1-x0)*(W-2*pad), sy=y=>H-pad-(y-y0)/(y1-y0)*(H-2*pad);
+  svg.innerHTML="";
+  for(let i=0;i<=c.ticks;i++){const gx=pad+i/c.ticks*(W-2*pad);
+    svg.appendChild(el("line",{x1:gx,y1:pad,x2:gx,y2:H-pad,stroke:"#2a2620"}));
+    const t=el("text",{x:gx,y:H-pad+16,fill:"#6b6457","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"});
+    t.textContent=(x0+i/c.ticks*(x1-x0)).toFixed(0);svg.appendChild(t);}
+  for(let i=0;i<=4;i++){const gy=H-pad-i/4*(H-2*pad);
+    svg.appendChild(el("line",{x1:pad,y1:gy,x2:W-pad,y2:gy,stroke:"#2a2620"}));
+    const t=el("text",{x:pad-8,y:gy+3,fill:"#6b6457","font-size":10,"text-anchor":"end","font-family":"var(--mono)"});
+    t.textContent=(y0+i/4*(y1-y0)).toFixed(0);svg.appendChild(t);}
+  if(x0<0&&x1>0)svg.appendChild(el("line",{x1:sx(0),y1:pad,x2:sx(0),y2:H-pad,stroke:"#453f33","stroke-width":1.4}));
+  if(y0<0&&y1>0)svg.appendChild(el("line",{x1:pad,y1:sy(0),x2:W-pad,y2:sy(0),stroke:"#453f33","stroke-width":1.4}));
+  if(showR&&isFinite(c.R))[-c.R,c.R].forEach(b=>{if(b>x0&&b<x1)
+    svg.appendChild(el("line",{x1:sx(b),y1:pad,x2:sx(b),y2:H-pad,stroke:"var(--gold)","stroke-width":1.5,"stroke-dasharray":"5 5",opacity:.8}));});
+  return {sx,sy,x0,x1,y0,y1};
+}
+function pathFor(g,fn){let d="",pen=false;const N=420;
+  for(let i=0;i<=N;i++){const x=g.x0+i/N*(g.x1-g.x0),y=fn(x);
+    if(!isFinite(y)||y<g.y0||y>g.y1){pen=false;continue;}d+=(pen?"L":"M")+g.sx(x).toFixed(1)+" "+g.sy(y).toFixed(1)+" ";pen=true;}return d;}
+// filled band between the true curve (fa) and the approximation (fb); breaks where either is invalid
+function bandPath(g,fa,fb){const N=420;let d="",top=[],bot=[];
+  const flush=()=>{if(top.length>1){d+="M"+top.map(p=>p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" L");
+    for(let i=bot.length-1;i>=0;i--)d+=" L"+bot[i][0].toFixed(1)+" "+bot[i][1].toFixed(1);d+=" Z ";}top=[];bot=[];};
+  for(let i=0;i<=N;i++){const x=g.x0+i/N*(g.x1-g.x0),ya=fa(x),yb=fb(x);
+    if(!isFinite(ya)||!isFinite(yb)||ya<g.y0||ya>g.y1||yb<g.y0||yb>g.y1){flush();continue;}
+    top.push([g.sx(x),g.sy(ya)]);bot.push([g.sx(x),g.sy(yb)]);}
+  flush();return d;}
+
+// ---------- SECTION 1 : Maclaurin build ----------
+let cur="sin",degree=0,timer=null;
+const plot=document.getElementById("plot");
+function narration(c,n){
+  if(n>=1&&c.parity&&c.a(n)===0){const skip=c.parity==="odd"?"even":"odd";
+    return `<b>The x<sup>${n}</sup> term turns out to be zero.</b> ${c.title} is an <b>${c.parity}</b> function,
+      so it only uses ${c.parity} powers and skips the ${skip} ones. The curve doesn't change here — just add another term.`;}
+  if(n===0)return `<b>Start with the simplest guess.</b> This first term is a flat line set to the function's
+    height at the center (x = 0). It's exactly right at that one point, and wrong everywhere else. Now let's fix that.`;
+  if(n===1){let s=`<b>Add a slope.</b> The new term tilts our line so it matches how steep the function is at the center.
+    That tilted line is the <b>tangent line</b> — the approximation now agrees on both position <i>and</i> direction.`;
+    if(cur==="sin")s+=` For sine this is the line y = x, the famous <b>sin θ ≈ θ</b> shortcut you'll meet in physics.`;return s;}
+  if(n===2)return `<b>Add a bend.</b> A straight line can't follow a curve for long. This term adds <b>curvature</b>,
+    matching how the slope itself is changing — so the approximation starts to hug the curve instead of flying off straight.`;
+  // For limited-radius functions at higher degree, teach the "breaking point" idea inline.
+  if(isFinite(c.R) && n>=4){
+    return `<b>Watch the edges.</b> Near the center the fit keeps improving — but look outside the
+      gold lines: adding more terms makes it <i>worse</i> there, not better. This series only works
+      within its <b>radius of convergence</b> (here |x| &lt; ${c.R}). Knowing where an approximation
+      breaks is half the skill of using one.`;
+  }
+  if(!isFinite(c.R) && n>=5){
+    return `<b>Sharpen it.</b> Term ${n} matches the ${ord(n)} derivative at the center. This function's
+      series converges <b>everywhere</b> — add enough terms and it matches for <i>any</i> x, with no
+      breaking point. (Not every function is so lucky — try 1/(1−x) to see one that isn't.)`;
+  }
+  return `<b>Sharpen it.</b> Term ${n} tunes the approximation to match the function's ${ord(n)} derivative at the center.
+    Each new term cleans up the biggest leftover error, one level finer. Notice how it stays accurate further from the center now.`;
+}
+function render(animate=true){
+  const c=FUNCS[cur],g=frame(plot,c,true);
+  const band=el("path",{d:bandPath(g,x=>c.f(x),x=>poly(c,x,degree)),fill:"var(--approx)",opacity:.13,stroke:"none"});
+  plot.appendChild(band);
+  plot.appendChild(el("path",{d:pathFor(g,x=>c.f(x)),fill:"none",stroke:"var(--true)","stroke-width":2.6}));
+  const approx=el("path",{d:pathFor(g,x=>poly(c,x,degree)),fill:"none",stroke:"var(--approx)","stroke-width":2.6,"stroke-linecap":"round"});
+  plot.appendChild(approx);
+  plot.appendChild(el("circle",{cx:g.sx(0),cy:g.sy(c.f(0)),r:4,fill:"var(--ink)"}));
+  if(animate){fadeIn(band);drawOn(approx);}
+  const lo=isFinite(c.R)?Math.max(g.x0,-c.R+0.02):g.x0, hi=isFinite(c.R)?Math.min(g.x1,c.R-0.02):g.x1;
+  let me=0;for(let i=0;i<=200;i++){const x=lo+i/200*(hi-lo),e=Math.abs(c.f(x)-poly(c,x,degree));if(isFinite(e))me=Math.max(me,e);}
+  document.getElementById("errOut").textContent=`biggest error in range: ${me.toFixed(4)}`;
+  let html="f(x) ≈ ",first=true;
+  for(let n=0;n<=degree;n++){if(!c.a(n))continue;const sign=c.a(n)>0?"+":"−";
+    html+=first?(sign==="−"?"− ":""):" "+sign+" ";html+=c.label(n);first=false;}
+  if(first)html+="0";
+  document.getElementById("formula").innerHTML=html;
+  document.getElementById("conv").innerHTML=isFinite(c.R)
+    ?`This series only works for <span class="tag">−${c.R} &lt; x &lt; ${c.R}</span> (between the gold lines).`
+    :`This series works for <span class="tag">every value of x</span>.`;
+  document.getElementById("degLabel").textContent=`terms up to degree ${degree}`;
+  document.getElementById("narr").innerHTML=narration(c,degree);
+}
+const funcsBox=document.getElementById("funcs");
+Object.keys(FUNCS).forEach(key=>{const b=document.createElement("button");
+  b.className="func-btn"+(key===cur?" on":"");b.innerHTML=FUNCS[key].title;
+  b.onclick=()=>{cur=key;degree=0;stop();[...funcsBox.children].forEach(c=>c.classList.remove("on"));b.classList.add("on");render();};
+  funcsBox.appendChild(b);});
+document.getElementById("add").onclick=()=>{degree=Math.min(11,degree+1);stop();render();};
+document.getElementById("back").onclick=()=>{degree=Math.max(0,degree-1);stop();render();};
+const playBtn=document.getElementById("play");
+function stop(){if(timer){clearInterval(timer);timer=null;playBtn.textContent="▶ auto";}}
+playBtn.onclick=()=>{if(timer){stop();return;}playBtn.textContent="❚❚ stop";degree=0;render();
+  timer=setInterval(()=>{if(degree>=11){stop();return;}degree++;render();},900);};
+render();
+
+// ---------- SECTION 2 : moving the center (Taylor) ----------
+let cur2="sin",deg2=5,center2=0;
+const plot2=document.getElementById("plot2"),slider=document.getElementById("center");
+function narration2(c,a,n){
+  if(Math.abs(a)<0.05)
+    return `<b>Center at x = 0.</b> This is the special case you built in Section 1 — a Taylor series centered at zero.
+      It has its own name: the <b>Maclaurin series</b>. Now drag the center away from zero…`;
+  return `<b>Center now at x = ${a.toFixed(1)}.</b> Because the center isn't zero anymore, this is a general
+    <b>Taylor series</b>. Notice the approximation is sharpest right around x = ${a.toFixed(1)} — wherever you
+    place the center is where it matches best, then it drifts off as you move away.`;
+}
+function fmt2(c,a,n){
+  let html="f(x) ≈ ",first=true;
+  const xa = Math.abs(a)<0.05 ? "x" : (a>0?`(x − ${a.toFixed(1)})`:`(x + ${Math.abs(a).toFixed(1)})`);
+  for(let k=0;k<=n;k++){
+    const coef=c.d(k,a)/fact(k);
+    if(Math.abs(coef)<1e-9)continue;
+    const body = k===0 ? "" : `${xa}${k>1?`<sup>${k}</sup>`:""}`;
+    const fr=toFrac(coef);
+    let neg,piece;
+    if(fr){ // clean fraction
+      neg=fr.neg; const N=fr.n,D=fr.d;
+      if(k===0)            piece = D===1?`${N}`:`${N}/${D}`;
+      else if(N===1&&D===1)piece = body;
+      else if(N===1&&D>1)  piece = `${body}/${D}`;
+      else if(D===1)       piece = `${N}·${body}`;
+      else                 piece = `${N}·${body}/${D}`;
+    }else{ // decimal fallback
+      neg=coef<0; const mag=Math.abs(coef);
+      const dec=(mag>=1000||mag<0.001)?mag.toExponential(1):mag.toPrecision(3).replace(/\.?0+$/,"");
+      piece = k===0 ? dec : `${dec}·${body}`;
+    }
+    html += first ? (neg?"− ":"") : (neg?" − ":" + ");
+    html += piece; first=false;
+  }
+  if(first)html+="0";
+  return html;
+}
+function render2(animate=true){
+  const c=FUNCS[cur2];
+  const a=Math.max(c.crange[0],Math.min(c.crange[1],center2));
+  const g=frame(plot2,c,false);
+  const band=el("path",{d:bandPath(g,x=>c.f(x),x=>taylor(c,x,deg2,a)),fill:"var(--approx)",opacity:.13,stroke:"none"});
+  plot2.appendChild(band);
+  plot2.appendChild(el("path",{d:pathFor(g,x=>c.f(x)),fill:"none",stroke:"var(--true)","stroke-width":2.6}));
+  const approx=el("path",{d:pathFor(g,x=>taylor(c,x,deg2,a)),fill:"none",stroke:"var(--approx)","stroke-width":2.6,"stroke-linecap":"round"});
+  plot2.appendChild(approx);
+  // center marker (vertical guide + dot at (a, f(a)))
+  const fa=c.f(a);
+  plot2.appendChild(el("line",{x1:g.sx(a),y1:pad,x2:g.sx(a),y2:H-pad,stroke:"var(--gold)","stroke-width":1,"stroke-dasharray":"3 4",opacity:.7}));
+  if(isFinite(fa)&&fa>=g.y0&&fa<=g.y1){
+    const dot=el("circle",{cx:g.sx(a),cy:g.sy(fa),r:6,fill:"var(--gold)",stroke:"#0d0c0a","stroke-width":2,style:"transform-box:fill-box;transform-origin:center"});
+    plot2.appendChild(dot); if(animate)popIn(dot);
+  }
+  if(animate){fadeIn(band);drawOn(approx);}
+  document.getElementById("cval").textContent=`x = ${a.toFixed(1)}`;
+  document.getElementById("degLabel2").textContent=`terms up to degree ${deg2}`;
+  document.getElementById("formula2").innerHTML=fmt2(c,a,deg2);
+  document.getElementById("narr2").innerHTML=narration2(c,a,deg2);
+}
+const funcsBox2=document.getElementById("funcs2");
+Object.keys(FUNCS).forEach(key=>{const b=document.createElement("button");
+  b.className="func-btn"+(key===cur2?" on":"");b.innerHTML=FUNCS[key].title;
+  b.onclick=()=>{cur2=key;deg2=5;const c=FUNCS[key];
+    slider.min=c.crange[0];slider.max=c.crange[1];
+    if(center2<c.crange[0]||center2>c.crange[1])center2=0;
+    slider.value=center2;
+    [...funcsBox2.children].forEach(x=>x.classList.remove("on"));b.classList.add("on");render2();};
+  funcsBox2.appendChild(b);});
+slider.min=FUNCS[cur2].crange[0];slider.max=FUNCS[cur2].crange[1];
+slider.oninput=e=>{center2=parseFloat(e.target.value);render2(false);};
+document.getElementById("add2").onclick=()=>{deg2=Math.min(9,deg2+1);render2();};
+document.getElementById("back2").onclick=()=>{deg2=Math.max(0,deg2-1);render2();};
+render2();
+
+// ============================ PRACTICE QUIZ (3 modes) ============================
+// KaTeX render helper with plain-text fallback (mirrors the Compass page).
+function tex(latex, fallback, display){
+  if(window.katex){ try{ return katex.renderToString(latex,{throwOnError:false,displayMode:!!display}); }catch(e){} }
+  return `<span class="tex-fallback">${fallback!=null?fallback:latex}</span>`;
+}
+// shared variable color-coding scheme (consistent across the guide)
+const VC={coef:"#e0644f", deriv:"#6aa9e0", fact:"#a98cf0", idx:"#e8a13c"};
+const cc=(hex,body)=>`\\textcolor{${hex}}{${body}}`;
+function formulaBlock(latex, fallback, plain, legend){
+  const leg=legend.map(([color,sym,desc])=>`<div class="leg-item"><span class="leg-sym" style="color:${color}">${sym}</span><span class="leg-desc">${desc}</span></div>`).join("");
+  return `<div class="fb-eq">${tex(latex,fallback,true)}</div><div class="fb-plain">${plain}</div><div class="fb-legend">${leg}</div>`;
+}
+
+// Each function's Maclaurin coefficient a_n (coefficient of x^n) as an exact fraction {num,den},
+// plus radius of convergence and a human label. Used to generate questions and solutions.
+const SERIES={
+  sin:{name:"\\sin x", fall:"sin x", R:Infinity, Rlabel:"all real x",
+    coef:n=> n%2===1 ? {num:(((n-1)/2)%2===0?1:-1), den:fact(n)} : {num:0,den:1},
+    dlabel:"the odd powers with factorial denominators, signs alternating",
+    why:"The derivatives of sin x cycle sin → cos → −sin → −cos. At x = 0 those are 0, 1, 0, −1, … — so the even powers vanish and the odd ones alternate in sign."},
+  cos:{name:"\\cos x", fall:"cos x", R:Infinity, Rlabel:"all real x",
+    coef:n=> n%2===0 ? {num:(((n/2)%2===0)?1:-1), den:fact(n)} : {num:0,den:1},
+    dlabel:"the even powers with factorial denominators, signs alternating",
+    why:"The derivatives of cos x cycle cos → −sin → −cos → sin. At x = 0 those are 1, 0, −1, 0, … — so the odd powers vanish and the even ones alternate."},
+  exp:{name:"e^{x}", fall:"e^x", R:Infinity, Rlabel:"all real x",
+    coef:n=> ({num:1, den:fact(n)}),
+    dlabel:"every power with a factorial denominator",
+    why:"Every derivative of eˣ is just eˣ again, and eˣ = 1 at x = 0. So f⁽ⁿ⁾(0) = 1 for all n, leaving 1/n! every time."},
+  ln:{name:"\\ln(1+x)", fall:"ln(1+x)", R:1, Rlabel:"−1 < x ≤ 1  (R = 1)",
+    coef:n=> n===0 ? {num:0,den:1} : {num:((n-1)%2===0?1:-1), den:n},
+    dlabel:"1/n with alternating signs (no factorials)",
+    why:"Differentiating ln(1+x) repeatedly gives (n−1)! / (1+x)ⁿ with alternating signs; dividing by n! collapses the factorial to a clean 1/n."},
+  geo:{name:"\\dfrac{1}{1-x}", fall:"1/(1−x)", R:1, Rlabel:"−1 < x < 1  (R = 1)",
+    coef:n=> ({num:1,den:1}),
+    dlabel:"every coefficient equal to 1",
+    why:"This is the geometric series: 1/(1−x) = 1 + x + x² + … directly, so every coefficient is exactly 1."}
+};
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;};
+function fracTex(f){ // {num,den} -> latex
+  const g=gcd(f.num,f.den); let n=f.num/g, d=f.den/g;
+  if(d<0){n=-n;d=-d;}
+  if(n===0) return "0";
+  if(d===1) return ""+n;
+  const sign=n<0?"-":""; n=Math.abs(n);
+  return `${sign}\\tfrac{${n}}{${d}}`;
+}
+function fracPlain(f){const g=gcd(f.num,f.den);let n=f.num/g,d=f.den/g;if(d<0){n=-n;d=-d;}if(n===0)return"0";return d===1?""+n:`${n}/${d}`;}
+// build the full term coefficient·x^n as latex
+function termTex(f,n){
+  const g=gcd(f.num,f.den); let num=f.num/g, den=f.den/g; if(den<0){num=-num;den=-den;}
+  if(num===0) return "0";
+  const sign=num<0?"-":""; const a=Math.abs(num);
+  const xpow = n===0 ? "" : (n===1?"x":`x^{${n}}`);
+  if(n===0) return `${sign}${den===1?a:`\\tfrac{${a}}{${den}}`}`;
+  if(a===1&&den===1) return `${sign}${xpow}`;
+  if(den===1) return `${sign}${a}${xpow}`;
+  if(a===1) return `${sign}\\tfrac{${xpow}}{${den}}`;
+  return `${sign}\\tfrac{${a}${xpow}}{${den}}`;
+}
+
+// ---- question generators ----
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function uniqueOptions(correct, distractors, k=3){
+  const out=[correct]; const pool=[...distractors];
+  const has=(o)=>out.some(x=>(x.tex??x.label)===(o.tex??o.label));
+  while(out.length<k+1 && pool.length){
+    const d=pool.splice(Math.floor(Math.random()*pool.length),1)[0];
+    if(!has(d)) out.push(d);
+  }
+  // pad if we still came up short (distractor collisions) with simple distinct numerics
+  let padN=2;
+  while(out.length<k+1){
+    const cand={key:"pad"+padN, tex:""+padN, plain:""+padN};
+    if(!has(cand)) out.push(cand);
+    padN++;
+    if(padN>30) break;
+  }
+  for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}
+  return out;
+}
+
+function genCoefficient(){
+  const keys=["sin","cos","exp","ln","geo"]; const k=pick(keys); const s=SERIES[k];
+  // wider pool so questions repeat less
+  let n=pick([2,3,4,5,6,7]); let tries=0;
+  while(s.coef(n).num===0 && tries<8){ n=pick([1,2,3,4,5,6,7,8]); tries++; }
+  const cf=s.coef(n);
+  const correct={key:"c", tex:fracTex(cf), plain:fracPlain(cf), right:true};
+  const ds=[];
+  ds.push({key:"d1",tex:fracTex({num:-cf.num,den:cf.den}),plain:fracPlain({num:-cf.num,den:cf.den})});
+  ds.push({key:"d2",tex:fracTex({num:cf.num===0?1:cf.num,den:fact(n)===n?n+1:n}),plain:"alt"});
+  ds.push({key:"d3",tex:fracTex({num:1,den:fact(n)}),plain:"1/"+fact(n)});
+  ds.push({key:"d4",tex:fracTex({num:cf.num||1,den:(cf.den*2)||2}),plain:"half"});
+  const distinct=ds.filter(d=>d.tex!==correct.tex);
+  const opts=uniqueOptions(correct,distinct,3);
+  // a deeper, method-teaching solution
+  const known={sin:"\\sin x = x - \\tfrac{x^3}{3!} + \\tfrac{x^5}{5!} - \\cdots",
+    cos:"\\cos x = 1 - \\tfrac{x^2}{2!} + \\tfrac{x^4}{4!} - \\cdots",
+    exp:"e^{x} = 1 + x + \\tfrac{x^2}{2!} + \\tfrac{x^3}{3!} + \\cdots",
+    ln:"\\ln(1+x) = x - \\tfrac{x^2}{2} + \\tfrac{x^3}{3} - \\cdots",
+    geo:"\\tfrac{1}{1-x} = 1 + x + x^2 + x^3 + \\cdots"}[k];
+  return {
+    mode:"coefficient",
+    prompt:`What is the coefficient of <b>x<sup>${n}</sup></b> in the Maclaurin series of`,
+    seriesTex:s.name, seriesFall:s.fall,
+    options:opts,
+    steps:[
+      {t:`We want just one number: the multiplier sitting in front of x^${n}. Every Maclaurin coefficient comes from one rule — aₙ = f⁽ⁿ⁾(0)/n! — so we never have to guess.`, m:`a_n=\\dfrac{f^{(n)}(0)}{n!}`},
+      {t:`What does that rule give for ${s.fall}? ${s.why} Following that pattern out, the series looks like this:`, m:known},
+      {t:`Now scan that series for the x^${n} piece and look at the number multiplying it. ${cf.num===0?`There is no x^${n} term at all — the pattern skips it.`:`The x^${n} term carries a factor of ${fracTex(cf)===("1")?"just 1":fracTex(cf)}.`}`, m: cf.num===0? null : `\\text{term}=${termTex(cf,n)}`},
+      {t:`${cf.num===0?`So the coefficient is 0. A zero coefficient is a real, correct answer here — it means that power genuinely doesn't appear, usually because the function is even or odd.`:`Strip off the x^${n} and the coefficient that's left is ${fracPlain(cf)}.`}`}
+    ]
+  };
+}
+
+function genTerm(){
+  const keys=["sin","cos","exp","ln","geo"]; const k=pick(keys); const s=SERIES[k];
+  let n=pick([2,3,4,5,6,7]); let tries=0;
+  while(s.coef(n).num===0 && tries<8){ n=pick([1,2,3,4,5,6,7,8]); tries++; }
+  const cf=s.coef(n);
+  const correct={key:"c", tex:termTex(cf,n), plain:"", right:true};
+  const ds=[
+    {key:"d1",tex:termTex({num:-cf.num,den:cf.den},n)},
+    {key:"d2",tex:termTex(cf,n+1)},
+    {key:"d3",tex:termTex({num:1,den:fact(n)},n)},
+    {key:"d4",tex:termTex(cf, n===1?2:n-1)}
+  ].filter(d=>d.tex!==correct.tex);
+  const opts=uniqueOptions(correct,ds,3);
+  const known={sin:"\\sin x = x - \\tfrac{x^3}{3!} + \\tfrac{x^5}{5!} - \\cdots",
+    cos:"\\cos x = 1 - \\tfrac{x^2}{2!} + \\tfrac{x^4}{4!} - \\cdots",
+    exp:"e^{x} = 1 + x + \\tfrac{x^2}{2!} + \\tfrac{x^3}{3!} + \\cdots",
+    ln:"\\ln(1+x) = x - \\tfrac{x^2}{2} + \\tfrac{x^3}{3} - \\cdots",
+    geo:"\\tfrac{1}{1-x} = 1 + x + x^2 + x^3 + \\cdots"}[k];
+  return {
+    mode:"term",
+    prompt:`What is the <b>x<sup>${n}</sup> term</b> (coefficient and power together) of`,
+    seriesTex:s.name, seriesFall:s.fall,
+    options:opts,
+    steps:[
+      {t:`A "term" is the whole piece — the coefficient AND its power x^${n} together, not just the number. So we need both parts right.`},
+      {t:`First the coefficient. ${s.why} That gives the series:`, m:known},
+      {t:`Find the x^${n} piece in that series. Its coefficient is ${fracPlain(cf)} — now keep x^${n} attached to it:`, m:`${termTex(cf,n)}`},
+      {t:`Two ways people lose points here: dropping the minus sign that the alternating pattern puts there, or writing the wrong power (x^${n+1} or x^${Math.max(0,n-1)} instead of x^${n}). Double-check both.`}
+    ]
+  };
+}
+
+function genRadius(){
+  const keys=["sin","cos","exp","ln","geo"]; const k=pick(keys); const s=SERIES[k];
+  const everywhere = !isFinite(s.R);
+  const correct={key:"c", label: everywhere?"Converges for all x":"Only on an interval (R = 1)", right:true};
+  const other = {key:"o", label: everywhere?"Only on an interval (R = 1)":"Converges for all x"};
+  const opts=uniqueOptions(correct,[other],1); // just two choices here
+  return {
+    mode:"radius",
+    twochoice:true,
+    prompt:`Where does the Maclaurin series of this function converge?`,
+    seriesTex:s.name, seriesFall:s.fall,
+    options:opts,
+    steps:[
+      {t:`"Where does it converge?" means: for which x-values does adding up infinitely many terms give a finite answer instead of blowing up? The tool for this is the ratio test — it compares each term to the one before it.`},
+      {t: everywhere
+        ? `Look at the denominators of ${s.fall}: there's an n! in every one. Factorials explode in size much faster than xⁿ grows, so each term is tiny compared to the last, for any x you pick.`
+        : `Look at the denominators of ${s.fall}: they only grow like n (no factorial). That's much slower, so whether the terms shrink depends on how big x is.`},
+      {t: everywhere
+        ? `The ratio test makes that precise: the ratio of one term to the next heads to 0, which is comfortably below 1, so the series adds up for every x.`
+        : `The ratio test makes that precise: the ratio of one term to the next heads to |x|. The series only adds up when that's below 1 — that is, when |x| < 1.`,
+        m: everywhere ? `L=\\lim_{n\\to\\infty}\\left|\\frac{a_{n+1}}{a_n}\\right|=0<1` : `L=\\lim_{n\\to\\infty}\\left|\\frac{a_{n+1}}{a_n}\\right|=|x|`},
+      {t: everywhere
+        ? `Conclusion: radius of convergence R = ∞ — it works everywhere, with no breaking point.`
+        : `Conclusion: R = 1. Inside |x| < 1 it converges; outside it, piling on more terms actually makes things worse, not better. That boundary is the radius of convergence.`}
+    ]
+  };
+}
+
+// ---- substitution mode: transform a known series into a new one ----
+// Two transform kinds:
+//   sub: replace x with c*x^p   →  base term a_k x^k  becomes  a_k c^k x^(k*p)
+//   mul: multiply by x^m        →  base term a_k x^k  becomes  a_k x^(k+m)
+const SUBS=[
+  {base:"sin", kind:"sub", c:1, p:2, disp:"\\sin(x^2)", fall:"sin(x²)", desc:"replace every x with x²"},
+  {base:"cos", kind:"sub", c:2, p:1, disp:"\\cos(2x)",  fall:"cos(2x)", desc:"replace every x with 2x"},
+  {base:"geo", kind:"sub", c:-1,p:1, disp:"\\dfrac{1}{1+x}", fall:"1/(1+x)", desc:"replace every x with −x"},
+  {base:"exp", kind:"mul", m:1, disp:"x\\,e^{x}", fall:"x·eˣ", desc:"multiply every term by x"},
+  {base:"sin", kind:"mul", m:2, disp:"x^2\\sin x", fall:"x²·sin x", desc:"multiply every term by x²"},
+  {base:"exp", kind:"sub", c:-1,p:1, disp:"e^{-x}", fall:"e^(−x)", desc:"replace every x with −x"}
+];
+// coefficient of x^N in the transformed series, returned as {num,den} or null if absent
+function subCoef(t,N){
+  const s=SERIES[t.base];
+  if(t.kind==="mul"){ const k=N-t.m; if(k<0) return null; return s.coef(k); }
+  // sub: x -> c*x^p ; new power = k*p, so need k = N/p integer
+  if(N % t.p !== 0) return null;
+  const k=N/t.p; const base=s.coef(k);
+  if(base.num===0) return {num:0,den:1};
+  // multiply by c^k
+  return {num: base.num * Math.pow(t.c,k), den: base.den};
+}
+function genSubstitution(){
+  const t=pick(SUBS); const s=SERIES[t.base];
+  // choose a target power N that yields a present, nonzero term
+  let candidates=[];
+  for(let N=1;N<=8;N++){ const c=subCoef(t,N); if(c&&c.num!==0) candidates.push(N); }
+  const N=pick(candidates.length?candidates:[t.kind==="mul"?t.m+1:t.p]);
+  const cf=subCoef(t,N);
+  const correct={key:"c", tex:termTex(cf,N), right:true};
+  const ds=[
+    {key:"d1",tex:termTex({num:-cf.num,den:cf.den},N)},        // sign flip (forgot c^k sign)
+    {key:"d2",tex:termTex(s.coef(t.kind==="mul"?N-t.m:Math.round(N/t.p)), N)}, // forgot to scale by c^k
+    {key:"d3",tex:termTex(cf, t.kind==="mul"?N+1:N+t.p)},      // wrong power
+    {key:"d4",tex:termTex({num:cf.num,den:cf.den*2||2}, N)}    // wrong coefficient
+  ].filter(d=>d.tex!==correct.tex);
+  const opts=uniqueOptions(correct,ds,3);
+  // build the base-series first-terms display for the solution
+  const baseTerms=[];
+  for(let k=0,shown=0;k<=8&&shown<4;k++){ const bc=s.coef(k); if(bc.num!==0){ baseTerms.push(termTex(bc,k)); shown++; } }
+  const baseSeries=baseTerms.join(" + ").replace(/\+ -/g,"-");
+  let mapStep, whyStep;
+  if(t.kind==="mul"){
+    const k=N-t.m;
+    whyStep={t:`We want the x^${N} term. Multiplying every term by x^${t.m} bumps each power up by ${t.m}. So the x^${N} term must come from whatever was x^${k} before — that's the one term to focus on.`};
+    mapStep={t:`Take the x^${k} term of ${s.fall} and multiply it by x^${t.m}. The coefficient stays the same; only the power changes:`,
+             m:`${termTex(s.coef(k),k)} \\;\\xrightarrow{\\;\\times x^{${t.m}}\\;}\\; ${termTex(cf,N)}`};
+  } else {
+    const k=N/t.p;
+    const subDesc = t.c===-1?("-x"+(t.p>1?"^"+t.p:"")):((t.c===1?"":t.c)+"x"+(t.p>1?"^"+t.p:""));
+    whyStep = t.p>1
+      ? {t:`We want the x^${N} term. Replacing x with ${subDesc} turns each x^${k} into (${subDesc})^${k} = (a multiple of) x^${N}, so the x^${N} term comes from the old x^${k} term — that's the one to use.`}
+      : {t:`We want the x^${N} term. Replacing x with ${t.c===-1?"−x":subDesc} keeps every power the same but multiplies each x by ${t.c===-1?"−1":t.c}, so the x^${N} term still comes from the old x^${N} term — just rescaled.`};
+    mapStep={t:`Take the x^${k} term of ${s.fall} and substitute. ${t.c!==1?`Watch the constant: each x picks up a factor of ${t.c}, so x^${k} contributes (${t.c})^${k}, which ${(Math.pow(t.c,k)<0)?"flips the sign":"scales the coefficient"}.`:`The power changes but trace the sign carefully.`}`,
+             m:`${termTex(s.coef(k),k)} \\;\\xrightarrow{\\;x\\to ${subDesc}\\;}\\; ${termTex(cf,N)}`};
+  }
+  return {
+    mode:"substitution",
+    prompt:`Start from the known series for ${s.fall}, then ${t.desc}. What is the <b>x<sup>${N}</sup> term</b> of`,
+    seriesTex:t.disp, seriesFall:t.fall,
+    options:opts,
+    steps:[
+      {t:`The shortcut: don't rebuild from derivatives. Start from the series you already know for ${s.fall} and transform it.`, m:`${s.name}=${baseSeries}+\\cdots`},
+      whyStep,
+      mapStep,
+      {t:`So the x^${N} term of ${t.fall} is:`, m:`${termTex(cf,N)}`}
+    ]
+  };
+}
+
+const GEN={coefficient:genCoefficient, term:genTerm, substitution:genSubstitution, radius:genRadius};
+const MODE_LABELS=[["coefficient","Find the coefficient"],["term","Find the term"],["substitution","Build by substitution"],["radius","Radius of convergence"]];
+
+let tkMode="coefficient", tkScore=0, tkAsked=0, tkStreak=0, tkLocked=false, tkCurrent=null;
+const modesBox=document.getElementById("modes"), tkPrompt=document.getElementById("tkPrompt"),
+  tkSeries=document.getElementById("tkSeries"), tkOpts=document.getElementById("tkOpts"),
+  tkFb=document.getElementById("tkFb"), tkNext=document.getElementById("tkNext"),
+  tkScoreEl=document.getElementById("tkScore"), tkStreakEl=document.getElementById("tkStreak");
+
+MODE_LABELS.forEach(([m,label])=>{
+  const b=document.createElement("button"); b.textContent=label; if(m===tkMode)b.className="on";
+  b.onclick=()=>{ tkMode=m; [...modesBox.children].forEach(c=>c.classList.remove("on")); b.classList.add("on"); newQuestion(); };
+  modesBox.appendChild(b);
+});
+
+function newQuestion(){
+  tkLocked=false; tkFb.innerHTML=""; tkNext.style.display="none";
+  const q=GEN[tkMode](); tkCurrent=q;
+  tkPrompt.innerHTML=q.prompt;
+  tkSeries.innerHTML=tex(q.seriesTex,q.seriesFall,true);
+  tkOpts.className="qopts"; tkOpts.style.gridTemplateColumns = q.twochoice ? "1fr 1fr" : "1fr 1fr";
+  tkOpts.innerHTML="";
+  q.options.forEach(o=>{
+    const b=document.createElement("button");
+    b.innerHTML = o.label!=null ? o.label : tex(o.tex,o.tex,false);
+    b.onclick=()=>answer(b,o,q);
+    tkOpts.appendChild(b);
+  });
+}
+
+function answer(btn,o,q){
+  if(tkLocked)return; tkLocked=true; tkAsked++;
+  [...tkOpts.children].forEach(b=>b.disabled=true);
+  const right=!!o.right;
+  if(right){ tkScore++; tkStreak++; btn.classList.add("correct"); }
+  else{ tkStreak=0; btn.classList.add("wrong");
+    [...tkOpts.children].forEach((b,i)=>{ if(q.options[i].right) b.classList.add("correct"); }); }
+  tkScoreEl.textContent=`Score: ${tkScore} / ${tkAsked}`;
+  tkStreakEl.textContent = tkStreak>=2 ? `🔥 ${tkStreak} in a row` : "";
+  tkFb.innerHTML = right
+    ? `<b style="color:var(--conv)">Correct.</b>`
+    : `<b style="color:var(--div)">Not quite — see the solution.</b>`;
+  // solution toggle
+  if(q.steps&&q.steps.length){
+    const wrap=document.createElement("div");
+    wrap.innerHTML=`<button class="solbtn">▸ Show the full solution</button><div class="solution"></div>`;
+    tkFb.appendChild(wrap);
+    const sb=wrap.querySelector(".solbtn"), body=wrap.querySelector(".solution"); let open=false;
+    sb.onclick=()=>{ open=!open;
+      if(open){ body.innerHTML=q.steps.map((st,i)=>
+        `<div class="step"><div class="step-n">${i+1}</div><div><div class="step-t">${st.t}</div>${st.m?`<div class="step-m">${tex(st.m,st.m,false)}</div>`:""}</div></div>`).join("");
+        body.classList.add("open"); sb.innerHTML="▾ Hide the full solution";
+      } else { body.classList.remove("open"); body.innerHTML=""; sb.innerHTML="▸ Show the full solution"; } };
+  }
+  tkNext.style.display="block";
+}
+tkNext.onclick=newQuestion;
+newQuestion();
+
+// reset score/streak and start fresh
+document.getElementById("tkReset").onclick=()=>{
+  tkScore=0; tkAsked=0; tkStreak=0;
+  tkScoreEl.textContent="Score: 0 / 0"; tkStreakEl.textContent="";
+  newQuestion();
+};
+
+// render the explainer's headline formula — full color-coded treatment
+function renderExplainer(){
+  const elx=document.getElementById("exFormula");
+  if(elx) elx.innerHTML=formulaBlock(
+    `${cc(VC.coef,"a_n")}=\\dfrac{${cc(VC.deriv,"f^{(n)}(0)")}}{${cc(VC.fact,"n!")}}`,
+    "aₙ = f⁽ⁿ⁾(0) / n!",
+    `Each <b style="color:${VC.coef}">coefficient</b> is the function's <b style="color:${VC.deriv}">nth derivative, evaluated at 0</b>, divided by <b style="color:${VC.fact}">n factorial</b>. That single rule generates every term of the series.`,
+    [[VC.coef,"aₙ","the coefficient of xⁿ — what multiplies that power"],
+     [VC.deriv,"f⁽ⁿ⁾(0)","the nth derivative of f, evaluated at the center x = 0"],
+     [VC.fact,"n!","n factorial = n·(n−1)···2·1"]]);
+  // power-series shortcut template
+  const tmpl=document.getElementById("psTemplate");
+  if(tmpl) tmpl.innerHTML=tex("\\frac{1}{1-x}=\\sum_{n=0}^{\\infty}x^{n}=1+x+x^{2}+x^{3}+\\cdots\\quad(|x|<1)","1/(1−x) = Σxⁿ = 1 + x + x² + ⋯ (|x| < 1)",true);
+}
+renderExplainer();
+
+// upgrade math from fallback to typeset once KaTeX arrives
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); newQuestion(); renderExplainer(); } else if(++tries>40) clearInterval(t); },150); }
+
+// staggered load-in cascade
+document.querySelectorAll('.reveal').forEach((node,i)=>{node.style.animationDelay=Math.min(i*45,360)+'ms';});
+</script>
+</body>
+</html>

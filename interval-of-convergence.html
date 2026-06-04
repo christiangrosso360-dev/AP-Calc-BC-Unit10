@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Interval of Convergence — Power Series · Unit 10 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23e8e4dc%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%23c8841f%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#0d0c0a; --panel:#1a1813; --panel-2:#211e18; --ink:#ece7dd; --muted:#9a9183;
+    --line:#332e25; --line-2:#453f33; --true:#3fd0b0; --approx:#e87aa0; --gold:#e87aa0;
+    --conv:#3fd0b0; --div:#e0644f; --faint:#6b6457;
+    --display:'Fraunces',Georgia,serif; --body:'Spline Sans',system-ui,sans-serif;
+    --mono:'Spline Sans Mono',ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:
+      radial-gradient(ellipse 60% 50% at 15% -8%, rgba(232,122,160,.08), transparent 55%),
+      var(--bg);
+    color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;padding:30px 18px;line-height:1.6}
+  .wrap{max-width:1060px;margin:0 auto}
+  .backlink{display:inline-block;font-family:var(--mono);font-size:12.5px;color:var(--muted);
+    text-decoration:none;margin-bottom:18px;padding:5px 11px;border:1px solid var(--line);
+    border-radius:20px;background:var(--panel);transition:border-color .15s,color .15s,transform .15s}
+  .backlink:hover{border-color:var(--gold);color:var(--ink);transform:translateX(-2px)}
+  header{margin-bottom:8px}
+  h1{font-family:var(--display);font-weight:600;font-size:32px;margin:0;letter-spacing:-0.02em;line-height:1.05}
+  h1 .em{color:var(--approx)}
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:660px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:42px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:710px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:790px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:6px}
+  .series-btns button{padding:7px 11px}
+  .tier-head{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);
+    margin:12px 0 2px;font-weight:600}
+  .tier-head:first-child{margin-top:0}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  .sb-name .katex{font-size:1em}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:3px}
+  button.on .sb-sub{color:#6b6457}
+  .nlwrap{margin-top:4px}
+  .interval-statement{font-family:var(--mono);font-size:15px;text-align:center;margin:14px 0 4px;min-height:24px}
+  .interval-statement .katex{font-size:1.1em}
+  .tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px}
+  .tag-conv{background:rgba(63,208,176,.16);color:var(--conv)} .tag-div{background:rgba(224,100,79,.16);color:var(--div)}
+  .ep-row{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+  .ep{flex:1 1 200px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;font-size:12.5px}
+  .ep h4{margin:0 0 4px;font-size:12.5px;font-family:var(--mono)}
+  .ep .v{font-size:11.5px;color:var(--muted);margin-top:3px}
+  .legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:10px;flex-wrap:wrap}
+  .legend b{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+  /* method walkthrough */
+  .steps-card{max-width:820px;margin-top:14px}
+  .formula-hero{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:14px}
+  .fb-eq{text-align:center;overflow-x:auto}
+  .fb-plain{font-size:13.5px;line-height:1.55;margin-top:12px}
+  .fb-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin-top:14px}
+  @media(max-width:560px){.fb-legend{grid-template-columns:1fr}}
+  .leg-item{display:flex;gap:9px;align-items:baseline;font-size:12.5px}
+  .leg-sym{font-family:var(--mono);font-weight:600;flex:none;min-width:58px}
+  .leg-desc{color:var(--ink);line-height:1.4}
+  .mstep{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .mstep:last-child{border-bottom:none}
+  .mstep-n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--panel);
+    font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center}
+  .mstep h3{margin:0 0 4px;font-size:15px;font-family:var(--display)}
+  .mstep p{margin:5px 0;font-size:13.5px}
+  .mstep .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-top:6px;overflow-x:auto}
+  /* practice */
+  .qcard{max-width:640px;margin-top:14px}
+  .modes{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+  .modes button{font-size:13px;padding:8px 13px}
+  .modes button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .qprompt{font-size:14.5px;font-weight:600;margin:10px 0}
+  .series-display{font-family:var(--mono);font-size:18px;background:var(--panel-2);border:1px solid var(--line);
+    border-radius:10px;padding:16px;text-align:center;margin:12px 0;min-height:54px;display:flex;align-items:center;justify-content:center}
+  .qopts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.qopts{grid-template-columns:1fr}}
+  .qopts button{text-align:center;font-size:14px}
+  .qopts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .qopts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .feedback{margin-top:14px;font-size:14px;min-height:22px}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;width:100%;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .solbtn{margin-top:12px;background:transparent;border:1px dashed var(--line);color:var(--approx);font-size:13px;
+    font-weight:600;padding:8px 12px;width:100%;text-align:center;border-radius:9px}
+  .solution.open{margin-top:12px}
+  .step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:none}
+  .step-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .step-t{font-size:13.5px;line-height:1.5}
+  .step-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;overflow-x:auto}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  /* staged walkthrough */
+  .stage{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:12px;background:var(--panel-2);
+    transition:opacity .25s}
+  .stage.locked{opacity:.45;pointer-events:none}
+  .stage-h{font-size:12.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+  .stage-q{font-size:14px;font-weight:600;margin-bottom:10px}
+  .stage-q .katex{font-size:1.02em}
+  .opts2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.opts2{grid-template-columns:1fr}}
+  .opts2 button{text-align:center;font-size:14px}
+  .opts2 button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .opts2 button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .stage-fb{font-size:13px;margin-top:10px;line-height:1.5;color:var(--ink);
+    background:var(--bg);border-radius:8px;padding:9px 12px;display:none}
+  .stage-fb.show{display:block}
+  .radius-in{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+  .radius-in input{font-family:var(--mono);font-size:16px;width:120px;padding:9px 12px;border:1px solid var(--line);
+    border-radius:9px;background:var(--panel-2);color:var(--ink)}
+  .radius-in input:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .radius-in button{padding:9px 16px}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+  .stage-done{color:var(--conv);font-weight:600}
+  .whatsnext{max-width:710px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .katex{color:var(--ink)}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  button:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html">← Unit 10 Guide</a>
+  <header class="reveal">
+    <h1>Interval of <span class="em">Convergence</span></h1>
+    <div class="sub">A power series doesn't converge for every x — only for x-values close enough to its
+      center. This tool shows you that interval, how to find it with the ratio test, and the endpoint
+      check everyone forgets.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    A <b>power series</b> is a polynomial that never stops: <span style="font-family:var(--mono)">Σ aₙ(x−c)ⁿ</span>.
+    Plug in an x close to the center c and it adds up to a number; plug in an x too far away and it blows up.
+    The set of x-values where it converges is an interval centered at c — and finding it is a two-part job:
+    the <b>radius</b> (how far out it works) and the <b>endpoints</b> (which, if any, of the two edges to include).
+  </div>
+
+  <h2 class="reveal">See the interval</h2>
+  <p class="lead reveal">Pick a power series. The number line shows its center, the
+    <span style="color:var(--conv)">converging</span> region, and what happens at each endpoint. Notice
+    that the two ends don't always behave the same way.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="nlwrap"><svg id="nline" viewBox="0 22 660 104" preserveAspectRatio="xMidYMid meet" style="max-height:150px"></svg></div>
+        <div class="legend">
+          <span><b style="background:var(--conv)"></b>converges here</span>
+          <span><b style="background:var(--div)"></b>diverges here</span>
+          <span style="color:var(--gold)">● filled = endpoint included</span>
+        </div>
+        <div class="interval-statement" id="intervalStmt"></div>
+        <div class="ep-row" id="epRow"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Choose a power series</div>
+        <div class="series-btns" id="seriesBtns"></div>
+        <p style="font-size:11.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          These six cover every case. Messier exam-style series are in the practice section below.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">How to find it — the method</h2>
+  <p class="lead reveal">Every interval-of-convergence problem is the same three moves. Here they are applied
+    to the series you've selected above, so the steps track your choice.</p>
+  <div class="formula-hero reveal" id="iocFormula" style="max-width:760px"></div>
+  <div class="card steps-card reveal" id="methodCard"></div>
+
+  <h2 class="reveal">Practice — work a full problem</h2>
+  <p class="lead reveal">This is the real exam skill: grind the ratio-test algebra yourself, type the radius,
+    then reason through the endpoints. Pick a difficulty and work all the way to the interval.</p>
+  <div class="card qcard reveal" id="practiceCard">
+    <div class="row" style="margin-bottom:10px">
+      <div class="modes" id="tierSel"></div>
+      <span class="score" id="score">Solved: 0</span>
+    </div>
+    <div class="series-display" id="pSeries"></div>
+    <div id="stages"></div>
+    <button class="next" id="pNext" style="margin-top:16px;display:none">New problem →</button>
+  </div>
+
+  <div class="whatsnext reveal">
+    This is the ratio test from the <a href="convergence-compass.html">Convergence Compass</a> put to work
+    on power series — and the series here are the <a href="breaking-point.html">Taylor Toolkit's</a> series
+    in disguise. Back to the <a href="index.html">Unit 10 Guide</a>.
+  </div>
+
+  <footer class="reveal">Interval of Convergence · part of the Unit 10 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+function tex(latex,fallback,display){
+  if(window.katex){try{return katex.renderToString(latex,{throwOnError:false,displayMode:!!display});}catch(e){}}
+  return `<span class="tex-fallback">${fallback!=null?fallback:latex}</span>`;
+}
+const VC={ratio:"#e0644f", dist:"#6aa9e0", radius:"#e87aa0", center:"#a98cf0"};
+const cc=(hex,body)=>`\\textcolor{${hex}}{${body}}`;
+function formulaBlock(latex, fallback, plain, legend){
+  const leg=legend.map(([color,sym,desc])=>`<div class="leg-item"><span class="leg-sym" style="color:${color}">${sym}</span><span class="leg-desc">${desc}</span></div>`).join("");
+  return `<div class="fb-eq">${tex(latex,fallback,true)}</div><div class="fb-plain">${plain}</div><div class="fb-legend">${leg}</div>`;
+}
+
+// ===== curated power series — every radius/endpoint case, all verified =====
+// center c, radius R (Infinity or 0 allowed). For finite R: leftConv/rightConv booleans + endpoint reasons.
+const PS={
+  geo:{nameTex:"\\sum_{n=0}^{\\infty} x^n", nameFall:"Σ xⁿ", sub:"geometric",
+    c:0, R:1, leftConv:false, rightConv:false,
+    ratioWork:"\\left|\\frac{x^{n+1}}{x^{n}}\\right|=|x|",
+    Rwork:"|x|<1 \\Rightarrow R=1",
+    leftReason:["At x = −1 the series becomes Σ(−1)ⁿ.","The terms don't shrink to 0, so by the nth-term test it diverges."],
+    rightReason:["At x = 1 the series becomes Σ1 = 1+1+1+⋯.","The terms don't shrink to 0, so it diverges."],
+    interval:"(-1,\\,1)"},
+  harm:{nameTex:"\\sum_{n=1}^{\\infty} \\frac{x^n}{n}", nameFall:"Σ xⁿ/n", sub:"half-open — the classic",
+    c:0, R:1, leftConv:true, rightConv:false,
+    ratioWork:"\\left|\\frac{x^{n+1}/(n+1)}{x^{n}/n}\\right|=|x|\\cdot\\frac{n}{n+1}\\to|x|",
+    Rwork:"|x|<1 \\Rightarrow R=1",
+    leftReason:["At x = −1 the series becomes Σ(−1)ⁿ/n, the alternating harmonic series.","Alternating with terms decreasing to 0 → converges (Alternating Series Test)."],
+    rightReason:["At x = 1 the series becomes Σ1/n, the harmonic series.","That's a p-series with p = 1 → diverges."],
+    interval:"[-1,\\,1)"},
+  psq:{nameTex:"\\sum_{n=1}^{\\infty} \\frac{x^n}{n^2}", nameFall:"Σ xⁿ/n²", sub:"closed both ends",
+    c:0, R:1, leftConv:true, rightConv:true,
+    ratioWork:"\\left|\\frac{x^{n+1}/(n+1)^2}{x^{n}/n^2}\\right|=|x|\\cdot\\frac{n^2}{(n+1)^2}\\to|x|",
+    Rwork:"|x|<1 \\Rightarrow R=1",
+    leftReason:["At x = −1 the series becomes Σ(−1)ⁿ/n².","It converges absolutely (Σ1/n² converges), so it converges."],
+    rightReason:["At x = 1 the series becomes Σ1/n².","That's a p-series with p = 2 > 1 → converges."],
+    interval:"[-1,\\,1]"},
+  exp:{nameTex:"\\sum_{n=0}^{\\infty} \\frac{x^n}{n!}", nameFall:"Σ xⁿ/n!", sub:"converges everywhere",
+    c:0, R:Infinity, leftConv:null, rightConv:null,
+    ratioWork:"\\left|\\frac{x^{n+1}/(n+1)!}{x^{n}/n!}\\right|=\\frac{|x|}{n+1}\\to 0",
+    Rwork:"0<1\\ \\text{for every }x \\Rightarrow R=\\infty",
+    interval:"(-\\infty,\\,\\infty)"},
+  fact:{nameTex:"\\sum_{n=0}^{\\infty} n!\\,x^n", nameFall:"Σ n!·xⁿ", sub:"converges only at the center",
+    c:0, R:0, leftConv:null, rightConv:null,
+    ratioWork:"\\left|\\frac{(n+1)!\\,x^{n+1}}{n!\\,x^{n}}\\right|=(n+1)|x|\\to\\infty",
+    Rwork:"\\to\\infty>1\\ \\text{for any }x\\neq0 \\Rightarrow R=0",
+    interval:"\\{0\\}\\ \\text{(only }x=0)"},
+  shift:{nameTex:"\\sum_{n=1}^{\\infty} \\frac{(x-2)^n}{3^n\\,n}", nameFall:"Σ (x−2)ⁿ/(3ⁿn)", sub:"shifted center, half-open",
+    c:2, R:3, leftConv:true, rightConv:false,
+    ratioWork:"\\left|\\frac{(x-2)^{n+1}/(3^{n+1}(n+1))}{(x-2)^{n}/(3^{n}n)}\\right|=\\frac{|x-2|}{3}\\cdot\\frac{n}{n+1}\\to\\frac{|x-2|}{3}",
+    Rwork:"\\frac{|x-2|}{3}<1 \\Rightarrow |x-2|<3 \\Rightarrow R=3",
+    leftReason:["The center is c = 2 and R = 3, so the left endpoint is x = 2 − 3 = −1.","At x = −1 you get Σ(−1)ⁿ/n, the alternating harmonic → converges."],
+    rightReason:["The right endpoint is x = 2 + 3 = 5.","At x = 5 you get Σ1/n, the harmonic series → diverges."],
+    interval:"[-1,\\,5)"},
+
+  // ===== EXAM-LEVEL tier — messier algebra, all verified numerically =====
+  e1:{tier:"exam", nameTex:"\\sum_{n=1}^{\\infty} \\frac{(x-3)^n}{2^n\\,n}", nameFall:"Σ (x−3)ⁿ/(2ⁿn)", sub:"shifted center · constant^n",
+    c:3, R:2, Rval:2, leftConv:true, rightConv:false,
+    ratioWork:"\\left|\\frac{(x-3)^{n+1}}{2^{n+1}(n+1)}\\cdot\\frac{2^{n}n}{(x-3)^{n}}\\right|=\\frac{|x-3|}{2}\\cdot\\frac{n}{n+1}\\to\\frac{|x-3|}{2}",
+    Rwork:"\\frac{|x-3|}{2}<1 \\Rightarrow |x-3|<2 \\Rightarrow R=2",
+    leftReason:["Center c = 3, R = 2, so left endpoint x = 3 − 2 = 1.","At x = 1: Σ(−1)ⁿ/n, alternating harmonic → converges."],
+    rightReason:["Right endpoint x = 3 + 2 = 5.","At x = 5: Σ1/n, harmonic (p = 1) → diverges."],
+    interval:"[1,\\,5)",
+    ratioSteps:[
+      {q:"Set up |aₙ₊₁ / aₙ|. Flipping the divide, the constants give 2ⁿ/2ⁿ⁺¹. What's that?",
+       opts:["\\frac{1}{2}","2","\\frac{1}{2^n}","2^{n}"], right:0,
+       fb:"2ⁿ⁄2ⁿ⁺¹ = 2^(n−(n+1)) = 2⁻¹ = ½. Subtract exponents on equal bases."},
+      {q:"The n-factors give n/(n+1). As n → ∞, this approaches?",
+       opts:["1","0","\\infty","\\frac{1}{2}"], right:0,
+       fb:"n/(n+1) → 1: the degrees match, so the ratio of leading coefficients (1/1) is the limit."},
+      {q:"Combining, the limit is |x−3|·½·1 = |x−3|/2. Convergence needs this < 1. Solve for the bound on |x−3|:",
+       opts:["|x-3|<2","|x-3|<\\tfrac12","|x-3|<1","|x-3|<4"], right:0,
+       fb:"|x−3|/2 < 1 means |x−3| < 2, so R = 2."}
+    ]},
+  e2:{tier:"exam", nameTex:"\\sum_{n=1}^{\\infty} \\frac{(-1)^n (x+1)^n}{n\\,4^n}", nameFall:"Σ (−1)ⁿ(x+1)ⁿ/(n4ⁿ)", sub:"alternating · constant^n · shifted",
+    c:-1, R:4, Rval:4, leftConv:false, rightConv:true,
+    ratioWork:"\\left|\\frac{(x+1)^{n+1}}{(n+1)4^{n+1}}\\cdot\\frac{n\\,4^{n}}{(x+1)^{n}}\\right|=\\frac{|x+1|}{4}\\cdot\\frac{n}{n+1}\\to\\frac{|x+1|}{4}",
+    Rwork:"\\frac{|x+1|}{4}<1 \\Rightarrow |x+1|<4 \\Rightarrow R=4",
+    leftReason:["Center c = −1, R = 4, so left endpoint x = −1 − 4 = −5.","At x = −5: (x+1) = −4, giving Σ(−1)ⁿ(−4)ⁿ/(n4ⁿ) = Σ1/n → diverges."],
+    rightReason:["Right endpoint x = −1 + 4 = 3.","At x = 3: (x+1) = 4, giving Σ(−1)ⁿ/n → converges (alternating)."],
+    interval:"(-5,\\,3]",
+    ratioSteps:[
+      {q:"The (−1)ⁿ only affects sign; the ratio test takes absolute value, so it drops out. The constants give 4ⁿ/4ⁿ⁺¹ =",
+       opts:["\\frac{1}{4}","4","\\frac{1}{4^n}","-1"], right:0,
+       fb:"4ⁿ⁄4ⁿ⁺¹ = 4⁻¹ = ¼. The (−1)ⁿ vanishes under absolute value."},
+      {q:"With n/(n+1) → 1, the full limit is |x+1|/4. Set < 1 and solve:",
+       opts:["|x+1|<4","|x+1|<\\tfrac14","|x+1|<1","|x-1|<4"], right:0,
+       fb:"|x+1|/4 < 1 ⟹ |x+1| < 4, so R = 4. Note the center is x = −1 (from x+1)."}
+    ]},
+  e3:{tier:"exam", nameTex:"\\sum_{n=1}^{\\infty} \\frac{(x-1)^n}{\\sqrt{n}}", nameFall:"Σ (x−1)ⁿ/√n", sub:"root denominator · p = ½ endpoint",
+    c:1, R:1, Rval:1, leftConv:true, rightConv:false,
+    ratioWork:"\\left|\\frac{(x-1)^{n+1}}{\\sqrt{n+1}}\\cdot\\frac{\\sqrt{n}}{(x-1)^{n}}\\right|=|x-1|\\sqrt{\\frac{n}{n+1}}\\to|x-1|",
+    Rwork:"|x-1|<1 \\Rightarrow R=1",
+    leftReason:["Center c = 1, R = 1, so left endpoint x = 0.","At x = 0: Σ(−1)ⁿ/√n, alternating with 1/√n decreasing to 0 → converges."],
+    rightReason:["Right endpoint x = 2.","At x = 2: Σ1/√n, a p-series with p = ½ < 1 → diverges."],
+    interval:"[0,\\,2)",
+    ratioSteps:[
+      {q:"The root terms give √n / √(n+1) = √(n/(n+1)). As n → ∞ this approaches?",
+       opts:["1","0","\\infty","\\tfrac12"], right:0,
+       fb:"n/(n+1) → 1 and √1 = 1. Roots of a quantity going to 1 also go to 1."},
+      {q:"So the limit is |x−1|. Setting < 1 gives R = 1. The tricky part is the endpoints. At x = 2 you get Σ1/√n — which test decides it?",
+       opts:["p-series, p = ½ → diverges","geometric → converges","alternating → converges","nth-term → diverges"], right:0,
+       fb:"Σ1/√n = Σ1/n^(1/2) is a p-series with p = ½ ≤ 1, so it diverges. Don't mistake 'terms → 0' for convergence."}
+    ]},
+  e4:{tier:"exam", nameTex:"\\sum_{n=0}^{\\infty} \\frac{2^n x^n}{n!}", nameFall:"Σ 2ⁿxⁿ/n!", sub:"factorial beats everything",
+    c:0, R:Infinity, Rval:Infinity, leftConv:null, rightConv:null,
+    ratioWork:"\\left|\\frac{2^{n+1}x^{n+1}}{(n+1)!}\\cdot\\frac{n!}{2^{n}x^{n}}\\right|=\\frac{2|x|}{n+1}\\to 0",
+    Rwork:"0<1\\ \\text{for every }x \\Rightarrow R=\\infty",
+    interval:"(-\\infty,\\,\\infty)",
+    ratioSteps:[
+      {q:"The factorial gives n!/(n+1)! = ?",
+       opts:["\\frac{1}{n+1}","n+1","\\frac{1}{n!}","1"], right:0,
+       fb:"(n+1)! = (n+1)·n!, so n!/(n+1)! = 1/(n+1)."},
+      {q:"With the 2ⁿ⁺¹/2ⁿ = 2, the limit is 2|x|/(n+1). As n → ∞ (x fixed), this is?",
+       opts:["0","\\infty","2|x|","1"], right:0,
+       fb:"The (n+1) in the denominator → ∞, so the whole thing → 0 for any fixed x. Factorials dominate."},
+      {q:"The limit is 0 < 1 for every x. So the radius is?",
+       opts:["R=\\infty","R=2","R=0","R=1"], right:0,
+       fb:"Since it converges for all x with no boundary, R = ∞."}
+    ]},
+  e5:{tier:"exam", nameTex:"\\sum_{n=1}^{\\infty} n\\,x^n", nameFall:"Σ n·xⁿ", sub:"growing coefficient",
+    c:0, R:1, Rval:1, leftConv:false, rightConv:false,
+    ratioWork:"\\left|\\frac{(n+1)x^{n+1}}{n\\,x^{n}}\\right|=|x|\\cdot\\frac{n+1}{n}\\to|x|",
+    Rwork:"|x|<1 \\Rightarrow R=1",
+    leftReason:["Left endpoint x = −1: Σn(−1)ⁿ.","The terms ±n grow without bound, so by the nth-term test → diverges."],
+    rightReason:["Right endpoint x = 1: Σn = 1+2+3+⋯.","Terms → ∞, nth-term test → diverges."],
+    interval:"(-1,\\,1)",
+    ratioSteps:[
+      {q:"The coefficient ratio is (n+1)/n. As n → ∞ it approaches?",
+       opts:["1","0","\\infty","n"], right:0,
+       fb:"(n+1)/n = 1 + 1/n → 1. Same degree top and bottom."},
+      {q:"So the limit is |x|, giving R = 1. At BOTH endpoints x = ±1, the terms are ±n. What do those endpoints do?",
+       opts:["Both diverge (terms → ∞)","Both converge","One converges, one diverges","Can't tell"], right:0,
+       fb:"At x = ±1 the terms are ±n, which don't approach 0 — the nth-term test kills both ends. Interval is open: (−1, 1)."}
+    ]},
+  e6:{tier:"exam", nameTex:"\\sum_{n=1}^{\\infty} \\frac{(x-2)^n}{n^2\\,3^n}", nameFall:"Σ (x−2)ⁿ/(n²3ⁿ)", sub:"shifted · closed both ends",
+    c:2, R:3, Rval:3, leftConv:true, rightConv:true,
+    ratioWork:"\\left|\\frac{(x-2)^{n+1}}{(n+1)^2 3^{n+1}}\\cdot\\frac{n^2 3^{n}}{(x-2)^{n}}\\right|=\\frac{|x-2|}{3}\\cdot\\frac{n^2}{(n+1)^2}\\to\\frac{|x-2|}{3}",
+    Rwork:"\\frac{|x-2|}{3}<1 \\Rightarrow |x-2|<3 \\Rightarrow R=3",
+    leftReason:["Center c = 2, R = 3, so left endpoint x = −1.","At x = −1: Σ(−1)ⁿ/n², converges absolutely (Σ1/n² converges)."],
+    rightReason:["Right endpoint x = 5.","At x = 5: Σ1/n², a p-series with p = 2 > 1 → converges."],
+    interval:"[-1,\\,5]",
+    ratioSteps:[
+      {q:"The constants give 3ⁿ/3ⁿ⁺¹ = ⅓. The n² terms give n²/(n+1)², which → ?",
+       opts:["1","0","\\infty","\\tfrac13"], right:0,
+       fb:"n²/(n+1)² = (n/(n+1))² → 1² = 1."},
+      {q:"Limit is |x−2|/3, so R = 3 about center 2 — endpoints x = −1 and x = 5. At x = 5 you get Σ1/n². That's:",
+       opts:["p-series p = 2 → converges","harmonic → diverges","alternating → converges","geometric → diverges"], right:0,
+       fb:"Σ1/n² is a p-series with p = 2 > 1 → converges. Both endpoints converge here, so the interval is closed: [−1, 5]."}
+    ]}
+};
+// tag the original six as warm-up tier and give them numeric Rval for grading
+["geo","harm","psq","exp","fact","shift"].forEach(k=>{ PS[k].tier="warmup"; PS[k].Rval=PS[k].R; });
+
+let curKey="harm";
+const nline=document.getElementById("nline");
+const W=660,H=150;
+
+function drawNumberLine(){
+  const s=PS[curKey];
+  nline.innerHTML="";
+  const axisY=70, x0=40, x1=W-40, cx=(x0+x1)/2;
+  const finite=isFinite(s.R)&&s.R>0;
+  const half=(x1-x0)/2;
+  const epOffset=finite?half*0.62:0;
+  const leftX=cx-epOffset, rightX=cx+epOffset;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // baseline
+  nline.appendChild(el("line",{x1:x0,y1:axisY,x2:x1,y2:axisY,stroke:"#5a5346","stroke-width":1.5}));
+  nline.appendChild(el("path",{d:`M${x0} ${axisY} l8 -4 l0 8 z`,fill:"#5a5346"}));
+  nline.appendChild(el("path",{d:`M${x1} ${axisY} l-8 -4 l0 8 z`,fill:"#5a5346"}));
+
+  // small helper: a line that "grows" from cx outward to its target via animated x-coords
+  function growBand(toLeft,toRight,color,w,op){
+    const ln=el("line",{x1:cx,y1:axisY,x2:cx,y2:axisY,stroke:color,"stroke-width":w,opacity:op==null?1:op,"stroke-linecap":"round"});
+    nline.appendChild(ln);
+    if(reduce){ ln.setAttribute("x1",toLeft); ln.setAttribute("x2",toRight); return ln; }
+    const a1=el("animate",{attributeName:"x1",from:cx,to:toLeft,dur:"0.6s",fill:"freeze","calcMode":"spline","keySplines":"0.2 0.7 0.2 1","keyTimes":"0;1"});
+    const a2=el("animate",{attributeName:"x2",from:cx,to:toRight,dur:"0.6s",fill:"freeze","calcMode":"spline","keySplines":"0.2 0.7 0.2 1","keyTimes":"0;1"});
+    ln.appendChild(a1); ln.appendChild(a2);
+    return ln;
+  }
+  function fadeIn(node,delay){ if(reduce)return; node.setAttribute("opacity","0");
+    const a=el("animate",{attributeName:"opacity",from:0,to:1,dur:"0.4s",begin:(delay||0)+"s",fill:"freeze"});
+    node.appendChild(a); }
+
+  if(s.R===0){
+    nline.appendChild(el("line",{x1:x0,y1:axisY,x2:x1,y2:axisY,stroke:"var(--div)","stroke-width":5,opacity:.5}));
+    const dot=el("circle",{cx,cy:axisY,r:0,fill:"var(--conv)"}); nline.appendChild(dot);
+    if(reduce){dot.setAttribute("r",6);} else {dot.appendChild(el("animate",{attributeName:"r",from:0,to:6,dur:"0.5s",fill:"freeze","calcMode":"spline","keySplines":"0.2 1.4 0.4 1","keyTimes":"0;1"}));}
+    nline.appendChild(el("text",{x:cx,y:axisY-16,fill:"var(--ink)","font-size":12,"text-anchor":"middle","font-family":"var(--mono)"},"x = "+s.c));
+    nline.appendChild(el("text",{x:cx,y:axisY+26,fill:"var(--conv)","font-size":11,"text-anchor":"middle"},"converges only here"));
+    nline.appendChild(el("text",{x:x0+70,y:axisY+26,fill:"var(--div)","font-size":11,"text-anchor":"middle"},"diverges"));
+    nline.appendChild(el("text",{x:x1-70,y:axisY+26,fill:"var(--div)","font-size":11,"text-anchor":"middle"},"diverges"));
+    return;
+  }
+  if(s.R===Infinity){
+    growBand(x0,x1,"var(--conv)",5,.45);
+    nline.appendChild(el("circle",{cx,cy:axisY,r:5,fill:"var(--ink)"}));
+    nline.appendChild(el("text",{x:cx,y:axisY-16,fill:"var(--ink)","font-size":12,"text-anchor":"middle","font-family":"var(--mono)"},"c = "+s.c));
+    nline.appendChild(el("text",{x:cx,y:axisY+28,fill:"var(--conv)","font-size":11.5,"text-anchor":"middle"},"converges for every x"));
+    return;
+  }
+
+  // finite R: diverging tails first (static), then the converging band grows out from the center
+  nline.appendChild(el("line",{x1:x0,y1:axisY,x2:leftX,y2:axisY,stroke:"var(--div)","stroke-width":5,opacity:.5}));
+  nline.appendChild(el("line",{x1:rightX,y1:axisY,x2:x1,y2:axisY,stroke:"var(--div)","stroke-width":5,opacity:.5}));
+  growBand(leftX,rightX,"var(--conv)",5,1);
+  // radius arrows from center to each endpoint (show R emanating)
+  const rmid=axisY-30;
+  const rad=el("g",{}); nline.appendChild(rad);
+  rad.appendChild(el("line",{x1:cx,y1:rmid,x2:rightX,y2:rmid,stroke:"var(--gold)","stroke-width":1.2,"stroke-dasharray":"3 3"}));
+  rad.appendChild(el("text",{x:(cx+rightX)/2,y:rmid-5,fill:"var(--gold)","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},"R = "+s.R));
+  fadeIn(rad,0.5);
+
+  // center tick
+  nline.appendChild(el("line",{x1:cx,y1:axisY-7,x2:cx,y2:axisY+7,stroke:"var(--ink)","stroke-width":1.5}));
+  nline.appendChild(el("text",{x:cx,y:axisY-14,fill:"var(--ink)","font-size":11.5,"text-anchor":"middle","font-family":"var(--mono)"},"c = "+s.c));
+
+  const epL=s.c-s.R, epR=s.c+s.R;
+  function endpoint(px,included,labelVal){
+    const c2=el("circle",{cx:px,cy:axisY,r:6,fill:included?"var(--conv)":"#0d0c0a",stroke:included?"var(--conv)":"var(--div)","stroke-width":2});
+    nline.appendChild(c2);
+    if(!reduce){ c2.setAttribute("r","0"); c2.appendChild(el("animate",{attributeName:"r",from:0,to:6,dur:"0.4s",begin:"0.55s",fill:"freeze","calcMode":"spline","keySplines":"0.2 1.4 0.4 1","keyTimes":"0;1"})); }
+    const lbl=el("text",{x:px,y:axisY-15,fill:"var(--ink)","font-size":12,"text-anchor":"middle","font-family":"var(--mono)"},"x = "+labelVal);
+    const sub=el("text",{x:px,y:axisY+25,fill:included?"var(--conv)":"var(--div)","font-size":10.5,"text-anchor":"middle"},included?"converges ●":"diverges ○");
+    nline.appendChild(lbl); nline.appendChild(sub);
+    fadeIn(lbl,0.6); fadeIn(sub,0.6);
+  }
+  endpoint(leftX,s.leftConv,epL);
+  endpoint(rightX,s.rightConv,epR);
+  const cl=el("text",{x:(leftX+cx)/2,y:axisY+25,fill:"var(--conv)","font-size":11,"text-anchor":"middle"},"converges");
+  const cr=el("text",{x:(cx+rightX)/2,y:axisY+25,fill:"var(--conv)","font-size":11,"text-anchor":"middle"},"converges");
+  nline.appendChild(cl); nline.appendChild(cr);
+  fadeIn(cl,0.4); fadeIn(cr,0.4);
+}
+
+function renderExplorer(){
+  const s=PS[curKey];
+  drawNumberLine();
+  document.getElementById("intervalStmt").innerHTML =
+    "Interval of convergence: &nbsp;" + tex(s.interval, s.nameFall, false);
+  // endpoint detail cards (only when finite R with real endpoints)
+  const epRow=document.getElementById("epRow");
+  if(isFinite(s.R)&&s.R>0){
+    const epL=s.c-s.R, epR=s.c+s.R;
+    epRow.innerHTML = `
+      <div class="ep"><h4>Left endpoint: x = ${epL}</h4>
+        <span class="tag ${s.leftConv?'tag-conv':'tag-div'}">${s.leftConv?'converges → include':'diverges → exclude'}</span>
+        <div class="v">${s.leftReason?s.leftReason.join(' '):''}</div></div>
+      <div class="ep"><h4>Right endpoint: x = ${epR}</h4>
+        <span class="tag ${s.rightConv?'tag-conv':'tag-div'}">${s.rightConv?'converges → include':'diverges → exclude'}</span>
+        <div class="v">${s.rightReason?s.rightReason.join(' '):''}</div></div>`;
+  } else {
+    epRow.innerHTML = `<div class="ep" style="flex:1 1 100%"><div class="v">${s.R===Infinity?'No endpoints to check — the series converges for all real numbers, so the interval is the whole number line.':'No interval to speak of — the series only converges at its center point, so there are no endpoints.'}</div></div>`;
+  }
+}
+
+// method walkthrough — tracks the selected series
+function renderMethod(){
+  const iocEl=document.getElementById("iocFormula");
+  if(iocEl) iocEl.innerHTML=formulaBlock(
+    `\\lim_{n\\to\\infty}\\left|\\frac{a_{n+1}}{a_n}\\right|=${cc(VC.ratio,"L")}\\,\\cdot\\,\\left|\\,${cc(VC.dist,"x-c")}\\,\\right|\\;<\\;1 \\;\\Rightarrow\\; \\left|\\,${cc(VC.dist,"x-c")}\\,\\right|<${cc(VC.radius,"R")}`,
+    "ratio-test limit < 1 ⟹ |x−c| < R",
+    `Apply the ratio test to the series' terms. The limit comes out as a constant <b style="color:${VC.ratio}">L</b> times the <b style="color:${VC.dist}">distance from the center</b>. Setting that &lt; 1 and solving gives the <b style="color:${VC.radius}">radius R</b> — how far from the center <b style="color:${VC.center}">c</b> the series converges.`,
+    [[VC.dist,"|x − c|","distance from the center c to your x"],
+     [VC.center,"c","the center of the power series"],
+     [VC.radius,"R","radius of convergence — half the interval's width"],
+     [VC.ratio,"L","the constant the ratio test produces (before the |x−c|)"]]);
+  const s=PS[curKey];
+  const card=document.getElementById("methodCard");
+  const epPart = (isFinite(s.R)&&s.R>0)
+    ? `<p>The radius gives an open interval; now test the two endpoints x = ${s.c-s.R} and x = ${s.c+s.R} by plugging each back in. Each becomes an ordinary number series you test on its own.</p>
+       <div class="m">${tex(`x=${s.c-s.R}:\\ \\text{${s.leftConv?'converges':'diverges'}}\\qquad x=${s.c+s.R}:\\ \\text{${s.rightConv?'converges':'diverges'}}`, "endpoints", false)}</div>
+       <p>Include an endpoint only if the series converges there. Result: ${tex(s.interval,s.nameFall,false)}.</p>`
+    : (s.R===Infinity
+        ? `<p>The ratio-test limit is 0 for <i>every</i> x, which is always &lt; 1. There's no boundary to reach, so there are no endpoints — it converges everywhere.</p><div class="m">${tex(s.interval,s.nameFall,false)}</div>`
+        : `<p>The ratio-test limit blows up for any x ≠ 0, so it's never &lt; 1 except at the center itself. The radius is 0 — no endpoints exist.</p><div class="m">${tex(s.interval,s.nameFall,false)}</div>`);
+  card.innerHTML = `
+    <div class="mstep"><div class="mstep-n">1</div><div>
+      <h3>Set up the ratio test</h3>
+      <p>Take the absolute value of the ratio of consecutive terms, aₙ₊₁ over aₙ, and let n → ∞. The x stays in.</p>
+      <div class="m">${tex(s.ratioWork, s.nameFall, false)}</div></div></div>
+    <div class="mstep"><div class="mstep-n">2</div><div>
+      <h3>Solve the limit &lt; 1 for the radius</h3>
+      <p>The series converges (absolutely) where that limit is below 1. Solving for x gives the radius R.</p>
+      <div class="m">${tex(s.Rwork, "R", false)}</div></div></div>
+    <div class="mstep"><div class="mstep-n">3</div><div>
+      <h3>Check the endpoints separately</h3>
+      ${epPart}</div></div>`;
+}
+
+// series picker — a representative spread (full 12 live in the Practice section's tiers)
+const btnBox=document.getElementById("seriesBtns");
+const EXPLORER_KEYS=["harm","psq","geo","exp","fact","e1"];
+const EXPLORER_LABELS={harm:"half-open",psq:"closed both ends",geo:"open both ends",exp:"converges everywhere",fact:"only at the center",e1:"shifted center"};
+EXPLORER_KEYS.forEach(k=>{
+  const s=PS[k]; const b=document.createElement("button"); if(k===curKey)b.className="on";
+  b.innerHTML=`<div class="sb-name">${tex(s.nameTex,s.nameFall,false)}</div><div class="sb-sub">${EXPLORER_LABELS[k]||s.sub}</div>`;
+  b.onclick=()=>{ curKey=k; [...btnBox.children].forEach(c=>c.classList.remove("on")); b.classList.add("on"); renderExplorer(); renderMethod(); };
+  btnBox.appendChild(b);
+});
+
+// ===================== PRACTICE — guided full problem =====================
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const WARM=["geo","harm","psq","exp","fact","shift"], EXAM=["e1","e2","e3","e4","e5","e6"];
+
+let tier="warmup", solved=0, pKey=null;
+const tierSel=document.getElementById("tierSel"), pSeries=document.getElementById("pSeries"),
+  stagesBox=document.getElementById("stages"), pNext=document.getElementById("pNext"),
+  scoreEl=document.getElementById("score");
+
+[["warmup","Warm-up"],["exam","Exam-level"]].forEach(([t,label])=>{
+  const b=document.createElement("button"); b.textContent=label; if(t===tier)b.className="on";
+  b.onclick=()=>{ tier=t; [...tierSel.children].forEach(c=>c.classList.remove("on")); b.classList.add("on"); newProblem(); };
+  tierSel.appendChild(b);
+});
+
+// normalize a typed radius answer and compare to the true value
+function radiusMatches(input, Rval){
+  let t=(input||"").trim().toLowerCase().replace(/\s+/g,"");
+  if(t==="") return false;
+  // infinity forms
+  if(["inf","infinity","\u221e","oo","\u221e"].includes(t) || t.includes("inf") || t==="\u221e"){ return Rval===Infinity; }
+  if(Rval===Infinity) return false;
+  // fraction a/b
+  let m=t.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+  let val;
+  if(m){ val=parseFloat(m[1])/parseFloat(m[2]); }
+  else if(/^-?\d*\.?\d+$/.test(t)){ val=parseFloat(t); }
+  else return false;
+  if(!isFinite(val)) return false;
+  return Math.abs(val-Rval)<1e-9;
+}
+
+function makeStage(title){ const d=document.createElement("div"); d.className="stage locked";
+  d.innerHTML=`<div class="stage-h">${title}</div>`; return d; }
+
+// a single-attempt multiple-choice mini-step.
+// One click locks it: marks right/wrong, reveals the right answer if missed, shows the full
+// explanation, reports correctness to onDone(wasRight), and the flow always advances.
+function mcStep(container, qHTML, opts, rightIdx, explainHTML, onDone){
+  const q=document.createElement("div"); q.className="stage-q"; q.innerHTML=qHTML; container.appendChild(q);
+  const grid=document.createElement("div"); grid.className="opts2"; container.appendChild(grid);
+  const fb=document.createElement("div"); fb.className="stage-fb"; container.appendChild(fb);
+  let done=false;
+  opts.forEach((o,i)=>{
+    const b=document.createElement("button"); b.innerHTML=tex(o,o,false);
+    b.onclick=()=>{
+      if(done) return; done=true;
+      const wasRight = (i===rightIdx);
+      [...grid.children].forEach((x,j)=>{
+        x.disabled=true;
+        if(j===rightIdx) x.classList.add("correct");      // always show the correct one
+        if(j===i && !wasRight) x.classList.add("wrong");   // mark their wrong pick
+      });
+      const head = wasRight
+        ? `<span class="stage-done">✓ Correct.</span> `
+        : `<span style="color:var(--div);font-weight:600">✗ Not quite — the answer is highlighted above.</span><br>`;
+      fb.innerHTML = head + explainHTML;
+      fb.classList.add("show");
+      onDone && onDone(wasRight);
+    };
+    grid.appendChild(b);
+  });
+}
+
+function newProblem(){
+  stagesBox.innerHTML=""; pNext.style.display="none";
+  const keys = tier==="warmup"?WARM:EXAM;
+  pKey=pick(keys); const s=PS[pKey];
+  pSeries.innerHTML=tex(s.nameTex,s.nameFall,true);
+
+  // per-problem tally (single attempt per part)
+  let partsRight=0, partsTotal=0;
+  function tally(wasRight){ partsTotal++; if(wasRight)partsRight++; }
+
+  // ---- STAGE 1: ratio-test algebra (guided steps) ----
+  const st1=makeStage("Step 1 — work the ratio test"); st1.classList.remove("locked"); stagesBox.appendChild(st1);
+  const steps = s.ratioSteps || [{q:"Apply the ratio test |aₙ₊₁/aₙ| and take n → ∞. The result simplifies to which limit?",
+      opts:[s.R===Infinity?"0":(s.R===0?"\\infty":(s.c===0?"|x|":"\\frac{|x-"+s.c+"|}{"+s.R+"}")),"1","|x|^2","n"], right:0,
+      fb:"Take absolute value of the term ratio, simplify the powers and factorials, then let n → ∞. The x stays in; everything else tends to a constant."}];
+  let si=0;
+  function runStep(){
+    if(si>=steps.length){
+      st2.classList.remove("locked"); const ri=document.getElementById("rIn"); if(ri)ri.focus(); return; }
+    const step=steps[si]; const holder=document.createElement("div"); holder.style.marginTop=si>0?"14px":"0";
+    st1.appendChild(holder);
+    mcStep(holder, step.q, step.opts, step.right, step.fb, (wasRight)=>{ tally(wasRight); si++; runStep(); });
+    holder.querySelector('.stage-q').innerHTML=step.q.replace(/\$(.+?)\$/g,(m,x)=>tex(x,x,false));
+  }
+  // STAGE 2 (radius input)
+  const st2=makeStage("Step 2 — type the radius R");
+  st2.innerHTML += `<div class="stage-q">From your simplified limit, set it &lt; 1 and solve. What is R? <span style="font-weight:400;color:var(--muted)">(one attempt)</span></div>
+    <div class="radius-in"><input id="rIn" type="text" placeholder="e.g. 2, 1/2, or inf" autocomplete="off"/>
+    <button id="rCheck">Submit</button></div>
+    <div class="hint">Type a number, a fraction like 1/2, or "inf" for ∞.</div>
+    <div class="stage-fb" id="rFb"></div>`;
+  stagesBox.appendChild(st2);
+  runStep();
+
+  // radius: single attempt, then full derivation either way
+  st2.querySelector("#rCheck").onclick=checkRadius;
+  st2.querySelector("#rIn").addEventListener("keydown",e=>{ if(e.key==="Enter") checkRadius(); });
+  let radiusDone=false;
+  function checkRadius(){
+    if(radiusDone) return; radiusDone=true;
+    const inp=st2.querySelector("#rIn").value;
+    const fb=st2.querySelector("#rFb"); fb.classList.add("show");
+    const right=radiusMatches(inp,s.Rval);
+    tally(right);
+    st2.querySelector("#rIn").disabled=true; st2.querySelector("#rCheck").disabled=true;
+    const Rdisp = s.Rval===Infinity?"∞":s.Rval;
+    const derivation = `<div style="margin-top:8px">Here's the full derivation:</div>
+      <div class="step-m" style="margin-top:6px">${tex(s.ratioWork,s.nameFall,false)}</div>
+      <div class="step-m" style="margin-top:6px">${tex(s.Rwork,"R",false)}</div>`;
+    if(right){
+      fb.innerHTML=`<span class="stage-done">✓ Correct — R = ${Rdisp}.</span>${derivation}`;
+    } else {
+      fb.innerHTML=`<span style="color:var(--div);font-weight:600">✗ Not quite — R = ${Rdisp}.</span>
+        <div style="margin-top:6px">Set your ratio-test limit &lt; 1 and isolate the |x ${s.c<0?"+":"−"} ${Math.abs(s.c)}| part — the number multiplying it is the radius. ${s.Rval===Infinity?"Here the limit is 0 for every x, so it converges everywhere and R = ∞.":s.Rval===0?"Here the limit blows up unless x is the center, so R = 0.":""}</div>${derivation}`;
+    }
+    buildEndpoints();
+  }
+
+  // ---- STAGE 3 + 4: endpoints then interval ----
+  function buildEndpoints(){
+    if(s.R===Infinity || s.R===0){
+      const st=makeStage("Step 3 — state the interval"); st.classList.remove("locked"); stagesBox.appendChild(st);
+      const holder=document.createElement("div"); st.appendChild(holder);
+      const opts=s.R===Infinity
+        ? ["(-\\infty,\\,\\infty)","[-1,\\,1]","\\{0\\}","(-1,\\,1)"]
+        : ["\\{0\\}\\ \\text{(only }x=0)","(-\\infty,\\,\\infty)","[-1,\\,1]","(-1,\\,1)"];
+      const ex = s.R===Infinity
+        ? "Because the ratio-test limit is 0 (always &lt; 1), there's no boundary to reach and no endpoints to test — the series converges for every real x, so the interval is the entire real line."
+        : "Because the ratio-test limit is ∞ for any x ≠ the center, it only converges at the single center point. There's no interval of positive width and no endpoints — just the point itself.";
+      mcStep(holder, s.R===Infinity?"The limit is 0 &lt; 1 for every x. The interval is:":"The series converges only at its center. The interval is:",
+        opts, 0, ex, (wasRight)=>{ tally(wasRight); finish(); });
+      return;
+    }
+    const epL=s.c-s.R, epR=s.c+s.R;
+    const st3=makeStage("Step 3 — test the endpoints"); st3.classList.remove("locked"); stagesBox.appendChild(st3);
+    const hL=document.createElement("div"); st3.appendChild(hL);
+    const exL = `<b>At x = ${epL}:</b> ${s.leftReason.join(" ")} ${s.leftConv?"Because it converges, this endpoint is <b>included</b> — a square bracket.":"Because it diverges, this endpoint is <b>excluded</b> — a round bracket."}`;
+    mcStep(hL, `At the <b>left</b> endpoint x = ${epL}, substitute it in — the series becomes an ordinary number series. Does it converge or diverge? <span style="font-weight:400;color:var(--muted)">(one attempt)</span>`,
+      ["Converges","Diverges"], s.leftConv?0:1, exL, (wasRight)=>{
+        tally(wasRight);
+        const hR=document.createElement("div"); hR.style.marginTop="14px"; st3.appendChild(hR);
+        const exR = `<b>At x = ${epR}:</b> ${s.rightReason.join(" ")} ${s.rightConv?"Because it converges, this endpoint is <b>included</b>.":"Because it diverges, this endpoint is <b>excluded</b>."}`;
+        mcStep(hR, `Now the <b>right</b> endpoint x = ${epR}. Converge or diverge?`,
+          ["Converges","Diverges"], s.rightConv?0:1, exR, (wr)=>{ tally(wr); buildInterval(); });
+      });
+    function buildInterval(){
+      const st4=makeStage("Step 4 — assemble the interval"); st4.classList.remove("locked"); stagesBox.appendChild(st4);
+      const holder=document.createElement("div"); st4.appendChild(holder);
+      const a=epL,b=epR;
+      const cand=shuffle([s.interval, `(${a},\\,${b})`, `[${a},\\,${b}]`, `[${a},\\,${b})`, `(${a},\\,${b}]`]
+        .filter((v,i,arr)=>arr.indexOf(v)===i));
+      let final=[s.interval]; for(const o of cand){ if(o!==s.interval && final.length<4) final.push(o); }
+      final=shuffle(final);
+      const ex = `The radius gives the open interval (${a}, ${b}); the endpoints decide the brackets. Left end x = ${a} ${s.leftConv?"converges → include → [":"diverges → exclude → ("}, right end x = ${b} ${s.rightConv?"converges → include → ]":"diverges → exclude → )"}. So the interval of convergence is ${tex(s.interval,s.nameFall,false)}.`;
+      mcStep(holder, `You found R and tested both ends. Assemble the interval — square bracket for an included (converging) endpoint, round for an excluded (diverging) one:`,
+        final, final.indexOf(s.interval), ex, (wasRight)=>{ tally(wasRight); finish(); });
+    }
+  }
+  function finish(){
+    solved++;
+    scoreEl.textContent=`Solved: ${solved}  ·  this problem: ${partsRight}/${partsTotal} parts`;
+    pNext.style.display="block";
+  }
+}
+pNext.onclick=newProblem;
+
+// init
+renderExplorer(); renderMethod(); newProblem();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){clearInterval(t); renderExplorer(); renderMethod(); newProblem(); [...btnBox.children].forEach((b,i)=>{const k=EXPLORER_KEYS[i]; if(k)b.querySelector('.sb-name').innerHTML=tex(PS[k].nameTex,PS[k].nameFall,false);}); } else if(++tries>40)clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*45,360)+'ms';});
+</script>
+</body>
+</html>

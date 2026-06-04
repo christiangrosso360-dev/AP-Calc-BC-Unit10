@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Error Bounds — Alternating Series &amp; Lagrange · Unit 10 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23e8e4dc%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%23c8841f%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap');
+  :root{
+    --bg:#0d0c0a; --panel:#1a1813; --panel-2:#211e18; --ink:#ece7dd; --muted:#9a9183;
+    --line:#332e25; --line-2:#453f33; --true:#3fd0b0; --approx:#cdb24e; --gold:#cdb24e;
+    --conv:#3fd0b0; --div:#e0644f; --faint:#6b6457;
+    --vM:#e0644f; --vDist:#6aa9e0; --vFact:#a98cf0; --vErr:#cdb24e; --vEst:#3fd0b0;
+    --display:'Fraunces',Georgia,serif; --body:'Spline Sans',system-ui,sans-serif;
+    --mono:'Spline Sans Mono',ui-monospace,Menlo,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(ellipse 60% 50% at 15% -8%, rgba(205,178,78,.08), transparent 55%),var(--bg);
+    color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;padding:30px 18px;line-height:1.6}
+  .wrap{max-width:1060px;margin:0 auto}
+  .backlink{display:inline-block;font-family:var(--mono);font-size:12.5px;color:var(--muted);
+    text-decoration:none;margin-bottom:18px;padding:5px 11px;border:1px solid var(--line);
+    border-radius:20px;background:var(--panel);transition:border-color .15s,color .15s,transform .15s}
+  .backlink:hover{border-color:var(--gold);color:var(--ink);transform:translateX(-2px)}
+  header{margin-bottom:8px}
+  h1{font-family:var(--display);font-weight:600;font-size:32px;margin:0;letter-spacing:-0.02em;line-height:1.05}
+  h1 .em{color:var(--approx)}
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:680px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:42px 0 8px;letter-spacing:-0.01em}
+  h2 .pill{font-family:var(--mono);font-size:11px;font-weight:500;vertical-align:middle;margin-left:8px;
+    padding:3px 9px;border-radius:20px;background:var(--panel);border:1px solid var(--line);color:var(--muted)}
+  p.lead{font-size:15.5px;max-width:720px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:800px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 540px;min-width:300px}
+  .right{flex:1 1 280px;min-width:240px}
+  svg{width:100%;display:block}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  .series-btns{display:flex;flex-direction:column;gap:7px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:3px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .concept-caption{font-size:14px;line-height:1.6;margin-top:16px;max-width:680px}
+  .choose-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.choose-grid{grid-template-columns:1fr}}
+  .choose-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .choose-card.alt{border-top:4px solid var(--conv)}
+  .choose-card.lag{border-top:4px solid var(--approx)}
+  .choose-when{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .choose-trigger{font-size:15px;margin-top:5px;line-height:1.45}
+  .choose-formula{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center;margin:12px 0;overflow-x:auto}
+  .choose-facts{margin:0;font-size:13px}
+  .choose-facts dt{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-top:9px}
+  .choose-facts dd{margin:2px 0 0;line-height:1.45}
+  .diff{display:inline-block;font-size:12px;font-weight:600;padding:2px 10px;border-radius:20px}
+  .diff.easy{background:rgba(63,208,176,.16);color:var(--conv)} .diff.hard{background:rgba(224,100,79,.16);color:var(--div)}
+  .choose-tells,.choose-eg{font-size:12.5px;line-height:1.5;margin-top:11px}
+  .choose-eg{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+  .tells-h,.eg-h,.trap-h{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:3px}
+  .choose-trap{font-size:12.5px;line-height:1.5;margin-top:11px;border-left:3px solid var(--div);padding-left:10px;color:var(--ink)}
+  .choose-eg .mono,.choose-trap .mono{font-family:var(--mono)}
+  .mono{font-family:var(--mono);font-size:.95em}
+  .takeaway{margin-top:14px;font-size:13.5px;border-left:3px solid var(--gold);padding-left:12px;color:var(--ink)}
+  /* method */
+  .steps-card{max-width:840px;margin-top:14px}
+  .mstep{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .mstep:last-child{border-bottom:none}
+  .mstep-n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--panel);
+    font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center}
+  .mstep h3{margin:0 0 4px;font-size:15px;font-family:var(--display)}
+  .mstep p{margin:5px 0;font-size:13.5px}
+  .mstep .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-top:6px;overflow-x:auto}
+  .formula-hero{background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center;margin:10px 0;overflow-x:auto}
+  .fb-eq{text-align:center;overflow-x:auto}
+  .fb-plain{font-size:13.5px;line-height:1.55;margin-top:12px;text-align:left;max-width:680px}
+  .fb-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin-top:14px;text-align:left}
+  @media(max-width:560px){.fb-legend{grid-template-columns:1fr}}
+  .leg-item{display:flex;gap:9px;align-items:baseline;font-size:12.5px}
+  .leg-sym{font-family:var(--mono);font-weight:600;flex:none;min-width:42px}
+  .leg-desc{color:var(--ink);line-height:1.4}
+  /* practice */
+  .qcard{max-width:660px;margin-top:14px}
+  .modes{display:flex;gap:8px;flex-wrap:wrap}
+  .modes button{font-size:13px;padding:8px 13px;text-align:center}
+  .modes button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .series-display{font-family:var(--mono);font-size:16px;background:var(--panel-2);border:1px solid var(--line);
+    border-radius:10px;padding:14px;text-align:center;margin:12px 0;min-height:50px;display:flex;align-items:center;justify-content:center}
+  .series-display .katex{font-size:1.08em}
+  .stage{border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:12px;background:var(--panel-2);transition:opacity .25s}
+  .stage.locked{opacity:.45;pointer-events:none}
+  .stage-h{font-size:12.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+  .stage-q{font-size:14px;font-weight:600;margin-bottom:10px}
+  .opts2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.opts2{grid-template-columns:1fr}}
+  .opts2 button{text-align:center;font-size:14px}
+  .opts2 button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .opts2 button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .stage-fb{font-size:13px;margin-top:10px;line-height:1.55;background:var(--bg);border-radius:8px;padding:10px 12px;display:none}
+  .stage-fb.show{display:block}
+  .step-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;overflow-x:auto}
+  .num-in{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}
+  .num-in input{font-family:var(--mono);font-size:16px;width:150px;padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:var(--panel-2);color:var(--ink)}
+  .num-in input:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .hint{font-size:12px;color:var(--muted);margin-top:6px}
+  .stage-done{color:var(--conv);font-weight:600}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;width:100%;
+    box-shadow:0 8px 18px -10px var(--approx);margin-top:16px;display:none}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  .whatsnext{max-width:720px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .katex{color:var(--ink)}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html">← Unit 10 Guide</a>
+  <header class="reveal">
+    <h1>Error <span class="em">Bounds</span></h1>
+    <div class="sub">When you stop adding terms, how wrong are you? Two tools answer that — the simple
+      alternating-series bound, and the Lagrange bound for Taylor polynomials. This is the back half of
+      the unit, and the part students lose the most points on.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    Every approximation cuts the series off somewhere, leaving a leftover — the <b>remainder</b>. You
+    rarely know it exactly, but you can <b>bound</b> it: prove the error is no bigger than some number.
+    That's what lets you say "this estimate is good to three decimal places" with certainty. Two cases
+    matter on the exam: an <b>alternating series</b> (easy) and a <b>Taylor polynomial</b> (Lagrange — the hard one).
+  </div>
+
+  <h2 class="reveal">Which bound do I use?</h2>
+  <p class="lead reveal">Half the battle is picking the right tool. There are exactly two error bounds in this
+    unit, and which one applies is decided by what you're approximating. Here's the choice, side by side.</p>
+
+  <div class="choose-grid reveal">
+    <div class="choose-card alt">
+      <div class="choose-when">Use this when…</div>
+      <div class="choose-trigger">you're truncating an <b>alternating series</b> (terms flip sign and shrink to 0)</div>
+      <div class="choose-formula" id="cAlt"></div>
+      <div class="choose-tells"><span class="tells-h">How to spot it</span> The series has a (−1)ⁿ factor, the terms get steadily smaller, and you're asked to "estimate" or "approximate" by stopping after some number of terms.</div>
+      <div class="choose-eg"><span class="eg-h">Quick example</span> Approximating ln(1.5) with the series x − x²⁄2 + x³⁄3 − … at x = 0.5, stopping after 4 terms. The bound is just the 5th term: <span class="mono">|0.5⁵⁄5| ≈ 0.0063</span>. Done — no other work.</div>
+      <dl class="choose-facts">
+        <dt>The bound is</dt><dd>the size of the first term you dropped, |a<sub>n+1</sub>|</dd>
+        <dt>Difficulty</dt><dd><span class="diff easy">easy — a gift</span></dd>
+      </dl>
+      <div class="choose-trap"><span class="trap-h">Common trap</span> Using it on a series that isn't actually alternating, or whose terms don't decrease — then the bound doesn't hold. Check the conditions first.</div>
+    </div>
+    <div class="choose-card lag">
+      <div class="choose-when">Use this when…</div>
+      <div class="choose-trigger">you're approximating a function with a <b>Taylor / Maclaurin polynomial</b> of degree n</div>
+      <div class="choose-formula" id="cLag"></div>
+      <div class="choose-tells"><span class="tells-h">How to spot it</span> You're told to use a degree-n polynomial (or the first few terms) to estimate f at some point, and bound the error of <i>that</i> approximation.</div>
+      <div class="choose-eg"><span class="eg-h">Quick example</span> Approximating e<sup>0.2</sup> with a degree-3 Taylor polynomial. Go one past: M = max of the 4th derivative on [0, 0.2] = e<sup>0.2</sup>, and the bound is <span class="mono">M·0.2⁴⁄4! ≈ 8.1×10⁻⁵</span>.</div>
+      <dl class="choose-facts">
+        <dt>The bound is</dt><dd>M·|x−c|<sup>n+1</sup> ⁄ (n+1)! — one term past your polynomial</dd>
+        <dt>Difficulty</dt><dd><span class="diff hard">harder — four moving parts</span></dd>
+      </dl>
+      <div class="choose-trap"><span class="trap-h">Common trap</span> Using degree n instead of n+1. Everything steps up by one: the (n+1)th derivative, the (n+1) power, and (n+1)!. Also: M is the <i>max</i> of the derivative, not its value at one point.</div>
+    </div>
+  </div>
+
+  <div class="big-idea reveal" style="margin-top:16px">
+    Both answer the same question — <b>"if I stop here, how wrong can I be?"</b> — and both give a
+    <i>guarantee</i>, not the exact error: a number your true error is promised not to exceed. You never
+    need the true value to compute either one. The rest of this page breaks down each method, then lets
+    you practice.
+  </div>
+
+  <h2 class="reveal">Method 1 — Alternating Series Error Bound</h2>
+  <p class="lead reveal">The easiest bound in the unit, and a gift when you can use it.</p>
+  <div class="formula-hero reveal" id="altFormula"></div>
+  <div class="card steps-card reveal" id="altMethod"></div>
+
+  <h2 class="reveal">Method 2 — Lagrange Error Bound</h2>
+  <p class="lead reveal">The one everyone dreads — not because it's conceptually hard, but because the
+    formula has four moving parts and it's easy to plug something into the wrong slot. Here's each piece.</p>
+  <div class="formula-hero reveal" id="lagFormula"></div>
+  <div class="card steps-card reveal" id="lagMethod"></div>
+
+  <h2 class="reveal">Practice</h2>
+  <p class="lead reveal">Work a full bound, single attempt per part, with the full reasoning shown when you
+    miss. Switch between the two bounds.</p>
+  <div class="card qcard reveal" id="practiceCard">
+    <div class="row" style="margin-bottom:10px">
+      <div class="modes" id="modeSel"></div>
+      <span class="score" id="score">Solved: 0</span>
+    </div>
+    <div class="series-display" id="pProblem"></div>
+    <div id="stages"></div>
+    <button class="next" id="pNext">New problem →</button>
+  </div>
+
+  <div class="whatsnext reveal">
+    These bounds finish the Taylor story from the <a href="breaking-point.html">Taylor Toolkit</a> and the
+    convergence story from the <a href="convergence-compass.html">Convergence Compass</a>. Back to the
+    <a href="index.html">Unit 10 Guide</a>.
+  </div>
+
+  <footer class="reveal">Error Bounds · part of the Unit 10 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+function tex(l,f,d){ if(window.katex){try{return katex.renderToString(l,{throwOnError:false,displayMode:!!d});}catch(e){}} return `<span class="tex-fallback">${f!=null?f:l}</span>`; }
+// variable color scheme (matches CSS --v* vars), used to color-code symbols inside KaTeX and the legend
+const VC={M:"#e0644f", dist:"#6aa9e0", fact:"#a98cf0", err:"#cdb24e", est:"#3fd0b0", term:"#6aa9e0"};
+const cc=(hex,body)=>`\\textcolor{${hex}}{${body}}`;
+// build a digestible formula block: color-coded equation + plain-language line + color-matched legend
+function formulaBlock(latex, fallback, plain, legend){
+  const leg = legend.map(([color,sym,desc])=>
+    `<div class="leg-item"><span class="leg-sym" style="color:${color}">${sym}</span><span class="leg-desc">${desc}</span></div>`).join("");
+  return `<div class="fb-eq">${tex(latex,fallback,true)}</div>`
+    + `<div class="fb-plain">${plain}</div>`
+    + `<div class="fb-legend">${leg}</div>`;
+}
+const fact=n=>{let f=1;for(let i=2;i<=n;i++)f*=i;return f;};
+// clean, readable number formatting — plain decimals when sensible, tidy ×10⁻ⁿ when tiny.
+function fmt(v){
+  if(v===0) return "0";
+  const a=Math.abs(v);
+  if(a>=0.001 && a<100000){
+    // plain decimal with ~4 significant figures, trailing zeros trimmed
+    let s=v.toPrecision(4);
+    if(s.indexOf(".")>=0) s=s.replace(/\.?0+$/,"");
+    return s;
+  }
+  // tiny or huge: scientific, but rendered as m × 10^k (clean superscript)
+  const exp=Math.floor(Math.log10(a));
+  const mant=v/Math.pow(10,exp);
+  let m=mant.toPrecision(3); if(m.indexOf(".")>=0) m=m.replace(/\.?0+$/,"");
+  return `${m}×10${supscript(exp)}`;
+}
+function supscript(n){ const map={"-":"⁻","0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹"};
+  return String(n).split("").map(c=>map[c]||c).join(""); }
+
+// ===== static concept diagram: what an error bound is =====
+// Deliberately uses round, legible numbers (not real series values, which cluster too tightly).
+// ===== which-bound comparison: render the two formulas =====
+function renderChoose(){
+  const ca=document.getElementById("cAlt"); if(ca) ca.innerHTML=tex(`\\left|\\,${cc(VC.err,"S")}-${cc(VC.est,"S_n")}\\,\\right|\\le\\left|\\,${cc(VC.term,"a_{n+1}")}\\,\\right|`,"|S − Sₙ| ≤ |a_{n+1}|",true);
+  const cl=document.getElementById("cLag"); if(cl) cl.innerHTML=tex(`\\left|\\,${cc(VC.err,"R_n")}\\,\\right|\\le\\frac{${cc(VC.M,"M")}\\,\\left|\\,${cc(VC.dist,"x-c")}\\,\\right|^{n+1}}{${cc(VC.fact,"(n+1)!")}}`,"|Rₙ| ≤ M|x−c|^(n+1)/(n+1)!",true);
+}
+
+// ===== method walkthroughs =====
+function renderMethods(){
+  document.getElementById("altFormula").innerHTML=formulaBlock(
+    `\\left|\\,${cc(VC.err,"S")}-${cc(VC.est,"S_n")}\\,\\right|\\;\\le\\;\\left|\\,${cc(VC.term,"a_{n+1}")}\\,\\right|`,
+    "|S − Sₙ| ≤ |a_{n+1}|",
+    `The <b style="color:${VC.err}">true sum</b> differs from your <b style="color:${VC.est}">partial sum</b> by no more than the size of the <b style="color:${VC.term}">first term you left out</b>.`,
+    [[VC.err,"S","the true sum (the exact value)"],
+     [VC.est,"Sₙ","your partial sum — what you added up through term n"],
+     [VC.term,"aₙ₊₁","the first term you did NOT include"]]);
+  document.getElementById("altMethod").innerHTML=`
+    <div class="mstep"><div class="mstep-n">1</div><div><h3>Confirm it's an alternating series</h3>
+      <p>The signs must alternate, and the term sizes must decrease to 0. Only then does the bound apply.</p></div></div>
+    <div class="mstep"><div class="mstep-n">2</div><div><h3>Find the first term you did <i>not</i> include</h3>
+      <p>If you summed through term n, the next one is aₙ₊₁. Its absolute value is your error bound — no other work needed.</p>
+      <div class="m">${tex("\\text{error after }S_n \\;\\le\\; |a_{n+1}|","error ≤ |a_{n+1}|",false)}</div></div></div>
+    <div class="mstep"><div class="mstep-n">3</div><div><h3>That's it</h3>
+      <p>The true sum is trapped between consecutive partial sums, so stopping at Sₙ means you're off by less than the next step. To guarantee accuracy to some tolerance, pick n so that |aₙ₊₁| is below it.</p></div></div>`;
+
+  document.getElementById("lagFormula").innerHTML=formulaBlock(
+    `\\left|\\,${cc(VC.err,"R_n")}\\,\\right|\\;\\le\\;\\frac{${cc(VC.M,"M")}\\,\\left|\\,${cc(VC.dist,"x-c")}\\,\\right|^{\\,n+1}}{${cc(VC.fact,"(n+1)!")}}`,
+    "|Rₙ| ≤ M·|x−c|^(n+1) / (n+1)!",
+    `The <b style="color:${VC.err}">leftover error</b> is at most the <b style="color:${VC.M}">biggest the next derivative gets</b>, times the <b style="color:${VC.dist}">distance</b> raised to the next power, divided by that <b style="color:${VC.fact}">factorial</b>.`,
+    [[VC.err,"Rₙ","the remainder — the error left after a degree-n polynomial"],
+     [VC.M,"M","the maximum of |f⁽ⁿ⁺¹⁾| on the interval from c to x"],
+     [VC.dist,"|x − c|","distance from the center c to the point x you're approximating"],
+     [VC.fact,"(n+1)!","factorial of one past your degree"]]);
+  document.getElementById("lagMethod").innerHTML=`
+    <div class="mstep"><div class="mstep-n">1</div><div><h3>n+1 — go one degree past your polynomial</h3>
+      <p>If you used a degree-n Taylor polynomial, the bound uses the <b>(n+1)</b>th derivative and the <b>(n+1)</b>th power. The remainder behaves like the first term you dropped.</p>
+      <div class="m">${tex("\\text{degree }n \\;\\Rightarrow\\; \\text{use } f^{(n+1)},\\ (x-c)^{n+1},\\ (n+1)!","deg n → f^(n+1), (x−c)^(n+1), (n+1)!",false)}</div></div></div>
+    <div class="mstep"><div class="mstep-n">2</div><div><h3>M — the max of the (n+1)th derivative</h3>
+      <p>M is the largest value of |f⁽ⁿ⁺¹⁾| on the interval between the center c and your x. For sine and cosine this is easy: every derivative is ±sin or ±cos, so |f⁽ⁿ⁺¹⁾| ≤ 1. You want an <i>upper</i> bound, so overestimating M is safe.</p>
+      <div class="m">${tex("M=\\max_{t\\in[c,x]} \\left|f^{(n+1)}(t)\\right|","M = max |f^(n+1)| on [c,x]",false)}</div></div></div>
+    <div class="mstep"><div class="mstep-n">3</div><div><h3>|x − c| — how far you're extrapolating</h3>
+      <p>The distance from the center to the point you're approximating, raised to the (n+1) power. Closer to the center ⇒ dramatically smaller error.</p></div></div>
+    <div class="mstep"><div class="mstep-n">4</div><div><h3>Divide by (n+1)! and you have the bound</h3>
+      <p>Put the three pieces together. The result is a number you're <i>guaranteed</i> not to exceed — usually far larger than the real error, which is fine; it's a safety guarantee, not the exact error.</p></div></div>`;
+}
+
+// ===== PRACTICE =====
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function approxEq(input,val,tol){ let t=(input||"").trim().toLowerCase().replace(/\s+/g,"");
+  if(t==="")return false;
+  let m=t.match(/^(-?\d*\.?\d+)\/(-?\d*\.?\d+)$/); let v;
+  if(m)v=parseFloat(m[1])/parseFloat(m[2]); else if(/^-?\d*\.?\d+$/.test(t))v=parseFloat(t); else return false;
+  if(!isFinite(v))return false; return Math.abs(v-val)<=(tol||Math.abs(val)*0.02+1e-9);
+}
+
+// alternating-bound practice problems
+const ALT_PROBS=[
+  {disp:"\\sum_{n=1}^{\\infty}\\frac{(-1)^{n+1}}{n}",fall:"Σ(−1)ⁿ⁺¹/n",through:4,
+    nextTerm:"\\frac{1}{5}",nextVal:0.2,
+    why:"You summed through n = 4 (the term 1/4). The first omitted term is n = 5: (−1)⁶/5 = 1/5. Its absolute value, 1/5 = 0.2, is the bound."},
+  {disp:"\\sum_{n=1}^{\\infty}\\frac{(-1)^{n+1}}{2n-1}",fall:"Σ(−1)ⁿ⁺¹/(2n−1)",through:3,
+    nextTerm:"\\frac{1}{7}",nextVal:1/7,
+    why:"Through n = 3 the last term is 1/5. The next, n = 4, is (−1)⁵/(2·4−1) = −1/7, absolute value 1/7 ≈ 0.143."},
+  {disp:"\\sum_{n=0}^{\\infty}\\frac{(-1)^{n}}{n!}",fall:"Σ(−1)ⁿ/n!",through:4,
+    nextTerm:"\\frac{1}{120}",nextVal:1/120,
+    why:"Through n = 4 (term 1/4! = 1/24). The next is n = 5: (−1)⁵/5! = −1/120, absolute value 1/120 ≈ 0.0083."},
+  {disp:"\\sum_{n=1}^{\\infty}\\frac{(-1)^{n+1}}{n^2}",fall:"Σ(−1)ⁿ⁺¹/n²",through:3,
+    nextTerm:"\\frac{1}{16}",nextVal:1/16,
+    why:"Through n = 3 (term 1/9). The next, n = 4, is (−1)⁵/16 = −1/16, absolute value 1/16 = 0.0625."}
+];
+// Lagrange practice problems (verified)
+const LAG_PROBS=[
+  {fn:"e^x",disp:"f(x)=e^{x}\\text{, approximate }e^{0.1}\\text{, degree }2\\text{ about }0",
+   n:2,c:0,x:0.1,M:Math.exp(0.1),Mtex:"e^{0.1}\\approx1.105",Mwhy:"f⁗ = eˣ; on [0, 0.1] its max is e^0.1 ≈ 1.105 (eˣ is increasing).",
+   power:"|0.1-0|^{3}=0.001",factorial:"3!=6",
+   boundVal:Math.exp(0.1)*Math.pow(0.1,3)/6,
+   boundTex:"\\frac{1.105\\cdot(0.1)^3}{3!}"},
+  {fn:"sin x",disp:"f(x)=\\sin x\\text{, approximate }\\sin(0.2)\\text{, degree }3\\text{ about }0",
+   n:3,c:0,x:0.2,M:1,Mtex:"M=1",Mwhy:"f⁗ = sin x; |sin| ≤ 1 everywhere, so the safe max is M = 1.",
+   power:"|0.2-0|^{4}=0.0016",factorial:"4!=24",
+   boundVal:1*Math.pow(0.2,4)/24,
+   boundTex:"\\frac{1\\cdot(0.2)^4}{4!}"},
+  {fn:"cos x",disp:"f(x)=\\cos x\\text{, approximate }\\cos(0.5)\\text{, degree }2\\text{ about }0",
+   n:2,c:0,x:0.5,M:1,Mtex:"M=1",Mwhy:"f''' = sin x; |sin| ≤ 1, so M = 1 is a safe upper bound.",
+   power:"|0.5-0|^{3}=0.125",factorial:"3!=6",
+   boundVal:1*Math.pow(0.5,3)/6,
+   boundTex:"\\frac{1\\cdot(0.5)^3}{3!}"},
+  {fn:"e^x",disp:"f(x)=e^{x}\\text{, approximate }e^{0.2}\\text{, degree }3\\text{ about }0",
+   n:3,c:0,x:0.2,M:Math.exp(0.2),Mtex:"e^{0.2}\\approx1.221",Mwhy:"Degree 3 means the bound uses the 4th derivative. For eˣ every derivative is eˣ, and its max on [0, 0.2] is e^0.2 ≈ 1.221 (increasing).",
+   power:"|0.2-0|^{4}=0.0016",factorial:"4!=24",
+   boundVal:Math.exp(0.2)*Math.pow(0.2,4)/24,
+   boundTex:"\\frac{1.221\\cdot(0.2)^4}{4!}"}
+];
+
+let mode="alt", solved=0;
+const modeSel=document.getElementById("modeSel"), pProblem=document.getElementById("pProblem"),
+  stagesBox=document.getElementById("stages"), pNext=document.getElementById("pNext"), scoreEl=document.getElementById("score");
+[["alt","Alternating bound"],["lag","Lagrange bound"]].forEach(([m,label])=>{
+  const b=document.createElement("button"); b.textContent=label; if(m===mode)b.className="on";
+  b.onclick=()=>{ mode=m; [...modeSel.children].forEach(c=>c.classList.remove("on")); b.classList.add("on"); newProblem(); };
+  modeSel.appendChild(b);
+});
+
+function makeStage(title){const d=document.createElement("div");d.className="stage locked";d.innerHTML=`<div class="stage-h">${title}</div>`;return d;}
+function mcStep(container,qHTML,opts,rightIdx,explainHTML,onDone){
+  const q=document.createElement("div");q.className="stage-q";q.innerHTML=qHTML;container.appendChild(q);
+  const grid=document.createElement("div");grid.className="opts2";container.appendChild(grid);
+  const fb=document.createElement("div");fb.className="stage-fb";container.appendChild(fb);
+  let done=false;
+  opts.forEach((o,i)=>{const b=document.createElement("button");b.innerHTML=tex(o,o,false);
+    b.onclick=()=>{ if(done)return; done=true; const wr=(i===rightIdx);
+      [...grid.children].forEach((x,j)=>{x.disabled=true; if(j===rightIdx)x.classList.add("correct"); if(j===i&&!wr)x.classList.add("wrong");});
+      fb.innerHTML=(wr?`<span class="stage-done">✓ Correct.</span> `:`<span style="color:var(--div);font-weight:600">✗ Not quite — correct answer highlighted.</span><br>`)+explainHTML;
+      fb.classList.add("show"); onDone&&onDone(wr); };
+    grid.appendChild(b);});
+}
+
+function newProblem(){
+  stagesBox.innerHTML=""; pNext.style.display="none";
+  let partsRight=0,partsTotal=0; const tally=w=>{partsTotal++;if(w)partsRight++;};
+  function finish(){ solved++; scoreEl.textContent=`Solved: ${solved}  ·  this problem: ${partsRight}/${partsTotal} parts`; pNext.style.display="block"; }
+
+  if(mode==="alt"){
+    const p=pick(ALT_PROBS);
+    pProblem.innerHTML=tex(p.disp,p.fall,true)+`<div style="font-size:12px;color:var(--muted);margin-top:8px;width:100%">Summed through n = ${p.through}. Bound the error.</div>`;
+    const st1=makeStage("Step 1 — which term is the bound?"); st1.classList.remove("locked"); stagesBox.appendChild(st1);
+    const h1=document.createElement("div"); st1.appendChild(h1);
+    const wrongs=shuffle([`\\frac{1}{${p.through}}`,`a_{${p.through}}`,`\\frac{1}{${p.through+2}}`]).slice(0,3);
+    const opts=shuffle([`|a_{${p.through+1}}|`,...wrongs]);
+    mcStep(h1, `You summed through term n = ${p.through}. The alternating error bound equals the absolute value of which term?`,
+      opts, opts.indexOf(`|a_{${p.through+1}}|`),
+      `The bound is the first <i>omitted</i> term — the very next one, a<sub>${p.through+1}</sub>. You summed through ${p.through}, so the next index is ${p.through+1}.`,
+      w=>{ tally(w);
+        const st2=makeStage("Step 2 — evaluate it"); st2.classList.remove("locked"); stagesBox.appendChild(st2);
+        st2.innerHTML+=`<div class="stage-q">Compute |a<sub>${p.through+1}</sub>| — that number is your error bound. <span style="font-weight:400;color:var(--muted)">(one attempt)</span></div>
+          <div class="num-in"><input id="aIn" type="text" placeholder="decimal or fraction" autocomplete="off"/><button id="aCheck">Submit</button></div>
+          <div class="hint">e.g. 0.2 or 1/5</div><div class="stage-fb" id="aFb"></div>`;
+        let done=false;
+        const check=()=>{ if(done)return; done=true; const fb=st2.querySelector("#aFb"); fb.classList.add("show");
+          const right=approxEq(st2.querySelector("#aIn").value,p.nextVal,Math.abs(p.nextVal)*0.03+1e-9); tally(right);
+          st2.querySelector("#aIn").disabled=true; st2.querySelector("#aCheck").disabled=true;
+          fb.innerHTML=(right?`<span class="stage-done">✓ Correct.</span> `:`<span style="color:var(--div);font-weight:600">✗ The bound is ${fmt(p.nextVal)}.</span> `)
+            +`${p.why}<div class="step-m" style="margin-top:6px">${tex("\\text{bound}="+p.nextTerm+"="+fmt(p.nextVal),"bound",false)}</div>`;
+          finish();
+        };
+        st2.querySelector("#aCheck").onclick=check; st2.querySelector("#aIn").addEventListener("keydown",e=>{if(e.key==="Enter")check();});
+      });
+  } else {
+    const p=pick(LAG_PROBS);
+    pProblem.innerHTML=tex(p.disp,"Lagrange problem",true);
+    // Step 1: which derivative order
+    const st1=makeStage("Step 1 — which derivative & power?"); st1.classList.remove("locked"); stagesBox.appendChild(st1);
+    const h1=document.createElement("div"); st1.appendChild(h1);
+    const o1=shuffle([`f^{(${p.n+1})},\\ (x-c)^{${p.n+1}},\\ (${p.n+1})!`,`f^{(${p.n})},\\ (x-c)^{${p.n}},\\ ${p.n}!`,`f^{(${p.n+2})},\\ (x-c)^{${p.n+2}},\\ (${p.n+2})!`,`f^{(${p.n+1})},\\ (x-c)^{${p.n}},\\ ${p.n}!`]);
+    mcStep(h1, `This is a degree-${p.n} Taylor polynomial. Which pieces does the Lagrange bound use?`,
+      o1, o1.indexOf(`f^{(${p.n+1})},\\ (x-c)^{${p.n+1}},\\ (${p.n+1})!`),
+      `Everything goes one past the degree: the <b>${p.n+1}</b>th derivative, the <b>(${p.n+1})</b>th power of |x−c|, and <b>(${p.n+1})!</b>. The remainder behaves like the first dropped term.`,
+      w=>{ tally(w);
+        // Step 2: M
+        const st2=makeStage("Step 2 — find M"); st2.classList.remove("locked"); stagesBox.appendChild(st2);
+        const h2=document.createElement("div"); st2.appendChild(h2);
+        const o2=shuffle([p.Mtex,"0","\\infty","x"]);
+        mcStep(h2, `M is the max of |f⁽${p.n+1}⁾| on the interval. For ${p.fn}, what is M?`,
+          o2, o2.indexOf(p.Mtex), p.Mwhy,
+          w2=>{ tally(w2);
+            // Step 3: assemble & compute (free input)
+            const st3=makeStage("Step 3 — assemble and compute the bound"); st3.classList.remove("locked"); stagesBox.appendChild(st3);
+            st3.innerHTML+=`<div class="stage-q">Put it together: M·|x−c|^${p.n+1} / (${p.n+1})!. Compute the bound. <span style="font-weight:400;color:var(--muted)">(one attempt)</span></div>
+              <div class="step-m">${tex(p.boundTex,"bound",false)}</div>
+              <div class="num-in"><input id="bIn" type="text" placeholder="decimal" autocomplete="off"/><button id="bCheck">Submit</button></div>
+              <div class="hint">round to ~4 significant figures, e.g. ${fmt(p.boundVal)}</div><div class="stage-fb" id="bFb"></div>`;
+            let done=false;
+            const check=()=>{ if(done)return; done=true; const fb=st3.querySelector("#bFb"); fb.classList.add("show");
+              const right=approxEq(st3.querySelector("#bIn").value,p.boundVal,Math.abs(p.boundVal)*0.05+1e-12); tally(right);
+              st3.querySelector("#bIn").disabled=true; st3.querySelector("#bCheck").disabled=true;
+              fb.innerHTML=(right?`<span class="stage-done">✓ Correct.</span> `:`<span style="color:var(--div);font-weight:600">✗ The bound is ${fmt(p.boundVal)}.</span> `)
+                +`Multiply M by |x−c|^${p.n+1}, then divide by (${p.n+1})!.<div class="step-m" style="margin-top:6px">${tex(p.boundTex+"="+fmt(p.boundVal),"bound",false)}</div>This is the guaranteed ceiling on the error — the real error is smaller.`;
+              finish();
+            };
+            st3.querySelector("#bCheck").onclick=check; st3.querySelector("#bIn").addEventListener("keydown",e=>{if(e.key==="Enter")check();});
+          });
+      });
+  }
+}
+pNext.onclick=newProblem;
+
+// init
+renderMethods(); renderChoose(); newProblem();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){clearInterval(t); renderMethods(); renderChoose(); newProblem(); } else if(++tries>40)clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*45,360)+'ms';});
+</script>
+</body>
+</html>
