@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
 <style>
   /* page accent: gold. base palette/fonts/chrome from styles.css */
   /* page accent: gold. base palette/fonts/chrome from styles.css */
@@ -215,10 +216,8 @@
 <script>
 const NS="http://www.w3.org/2000/svg";
 const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
-function tex(l,f,d){ if(window.katex){try{return katex.renderToString(l,{throwOnError:false,displayMode:!!d});}catch(e){}} return `<span class="tex-fallback">${f!=null?f:l}</span>`; }
 // variable color scheme (matches CSS --v* vars), used to color-code symbols inside KaTeX and the legend
 const VC={M:"#e0644f", dist:"#6aa9e0", fact:"#a98cf0", err:"#cdb24e", est:"#3fd0b0", term:"#6aa9e0"};
-const cc=(hex,body)=>`\\textcolor{${hex}}{${body}}`;
 // build a digestible formula block: color-coded equation + plain-language line + color-matched legend
 function formulaBlock(latex, fallback, plain, legend){
   const leg = legend.map(([color,sym,desc])=>

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
 <style>
   /* page accent: amber. base palette/fonts/chrome come from styles.css */
   :root{ --approx:#e8a13c; --gold:#e8a13c; --true:#3fd0b0;
@@ -193,12 +194,7 @@
 <script>
 const NS="http://www.w3.org/2000/svg";
 const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
-function tex(latex,fallback,display){
-  if(window.katex){try{return katex.renderToString(latex,{throwOnError:false,displayMode:!!display});}catch(e){}}
-  return `<span class="tex-fallback">${fallback!=null?fallback:latex}</span>`;
-}
 const VC={sum:"#e8a13c", term:"#6aa9e0", limit:"#3fd0b0"};
-const cc=(hex,body)=>`\\textcolor{${hex}}{${body}}`;
 
 // ---- series definitions ----
 // term(n) for n>=1; limit (or null if diverges); whyTitle/whySteps explain WHERE the limit comes from

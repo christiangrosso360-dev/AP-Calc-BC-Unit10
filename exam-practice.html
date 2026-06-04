@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
 <style>
   /* page accent: cyan. base palette/fonts/chrome from styles.css */
   :root{ --approx:#46c8d8; --gold:#46c8d8; --true:#3fd0b0;
@@ -180,7 +181,6 @@
 </div>
 
 <script>
-function tex(l,f,d){ if(window.katex){try{return katex.renderToString(l,{throwOnError:false,displayMode:!!d});}catch(e){}} return `<span class="tex-fallback">${f!=null?f:l}</span>`; }
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 
 // ===================== MIXED MC BANK (all verified) =====================

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
 <style>
   /* page accent: violet. base palette/fonts/chrome from styles.css */
   :root{ --approx:#a98cf0; --gold:#a98cf0; --true:#3fd0b0;
@@ -246,15 +247,7 @@ const sup=s=>`<sup>${s}</sup>`, sub=s=>`<sub>${s}</sub>`;
 
 // Render a LaTeX string to an HTML string via KaTeX, with a readable plain-text fallback
 // if KaTeX hasn't loaded (e.g. no internet). `display` makes it a centered block.
-function tex(latex, fallback, display){
-  if(window.katex){
-    try{ return katex.renderToString(latex,{throwOnError:false,displayMode:!!display}); }
-    catch(e){ /* fall through */ }
-  }
-  return `<span class="tex-fallback">${fallback!=null?fallback:latex}</span>`;
-}
 const VC={ratio:"#e0644f", lim:"#e8a13c", verdict:"#a98cf0"};
-const cc=(hex,body)=>`\\textcolor{${hex}}{${body}}`;
 function formulaBlock(latex, fallback, plain, legend){
   const leg=legend.map(([color,sym,desc])=>`<div class="leg-item"><span class="leg-sym" style="color:${color}">${sym}</span><span class="leg-desc">${desc}</span></div>`).join("");
   return `<div class="fb-eq">${tex(latex,fallback,true)}</div><div class="fb-plain">${plain}</div><div class="fb-legend">${leg}</div>`;

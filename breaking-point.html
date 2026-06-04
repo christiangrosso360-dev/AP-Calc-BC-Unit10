@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
 <style>
   /* page accent: teal. base palette/fonts/chrome from styles.css */
   :root{ --approx:#3fd0b0; --gold:#3fd0b0; --true:#e8a13c;
@@ -548,13 +549,8 @@ render2();
 
 // ============================ PRACTICE QUIZ (3 modes) ============================
 // KaTeX render helper with plain-text fallback (mirrors the Compass page).
-function tex(latex, fallback, display){
-  if(window.katex){ try{ return katex.renderToString(latex,{throwOnError:false,displayMode:!!display}); }catch(e){} }
-  return `<span class="tex-fallback">${fallback!=null?fallback:latex}</span>`;
-}
 // shared variable color-coding scheme (consistent across the guide)
 const VC={coef:"#e0644f", deriv:"#6aa9e0", fact:"#a98cf0", idx:"#e8a13c"};
-const cc=(hex,body)=>`\\textcolor{${hex}}{${body}}`;
 function formulaBlock(latex, fallback, plain, legend){
   const leg=legend.map(([color,sym,desc])=>`<div class="leg-item"><span class="leg-sym" style="color:${color}">${sym}</span><span class="leg-desc">${desc}</span></div>`).join("");
   return `<div class="fb-eq">${tex(latex,fallback,true)}</div><div class="fb-plain">${plain}</div><div class="fb-legend">${leg}</div>`;
