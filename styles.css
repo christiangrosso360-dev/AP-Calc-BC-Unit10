@@ -1,0 +1,42 @@
+/* ============================================================
+   shared base styles — Unit 10 guide (tool pages)
+   The universal dark palette, fonts, and core chrome.
+   Each page sets its own accent in a small :root override AFTER
+   linking this file:  --approx, --gold, --true, --glow, --wrap-max
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Spline+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap');
+
+:root{
+  /* universal dark palette (same on every page) */
+  --bg:#0d0c0a; --panel:#1a1813; --panel-2:#211e18; --ink:#ece7dd; --muted:#9a9183;
+  --line:#332e25; --line-2:#453f33; --conv:#3fd0b0; --div:#e0644f; --faint:#6b6457;
+  /* fonts */
+  --display:'Fraunces',Georgia,serif; --body:'Spline Sans',system-ui,sans-serif;
+  --mono:'Spline Sans Mono',ui-monospace,Menlo,monospace;
+  /* per-page accents have sensible fallbacks; pages override these */
+  --approx:#e8a13c; --gold:#e8a13c; --true:#3fd0b0;
+  --glow:rgba(232,161,60,.08);   /* hero glow tint, per page */
+  --wrap-max:1060px;             /* content column width, per page */
+}
+
+*{box-sizing:border-box}
+
+body{margin:0;
+  background:radial-gradient(ellipse 60% 50% at 15% -8%, var(--glow), transparent 55%), var(--bg);
+  color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased;
+  padding:30px 18px;line-height:1.6}
+
+.wrap{max-width:var(--wrap-max);margin:0 auto}
+
+.backlink{display:inline-block;font-family:var(--mono);font-size:12.5px;color:var(--muted);
+  text-decoration:none;margin-bottom:18px;padding:5px 11px;border:1px solid var(--line);
+  border-radius:20px;background:var(--panel);transition:border-color .15s,color .15s,transform .15s}
+.backlink:hover{border-color:var(--gold);color:var(--ink);transform:translateX(-2px)}
+
+header{margin-bottom:8px}
+h1{font-family:var(--display);font-weight:600;font-size:32px;margin:0;letter-spacing:-0.02em;line-height:1.05}
+h1 .em{color:var(--approx)}
+
+/* math renders in the light ink color on the dark background */
+.katex{color:var(--ink)}
