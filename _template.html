@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<!-- ============================================================
+     PAGE TEMPLATE — copy this file, rename it, and fill in the
+     spots marked  [[ ... ]]  and the CONTENT section below.
+     The shared look & helpers come from styles.css + helpers.js,
+     so you only write the parts unique to this page.
+     ============================================================ -->
+
+<!-- [[PAGE TITLE]] — shows in the browser tab. Keep the " · Unit 10 Guide" suffix. -->
+<title>[[PAGE TITLE]] · Unit 10 Guide</title>
+
+<!-- favicon: a small Σ tile in this page's accent. Change the fill colors
+     to match your accent if you like (see the :root accent below). -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%231a1813%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%23e8a13c%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
+
+<!-- KaTeX (math rendering) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+
+<!-- shared base styles + shared JS helpers (tex(), cc()) -->
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+
+<style>
+  /* ---- PER-PAGE ACCENT ----
+     Pick this page's accent color. --approx and --gold are usually the same.
+     --true is a secondary curve color (often teal). --glow is the faint hero
+     tint (use the accent's rgb at ~.08). --wrap-max is the content width.
+     Example accents used elsewhere: amber #e8a13c, violet #a98cf0,
+     teal #3fd0b0, rose #e87aa0, gold #cdb24e, cyan #46c8d8. */
+  :root{ --approx:[[ACCENT_HEX]]; --gold:[[ACCENT_HEX]]; --true:#3fd0b0;
+         --glow:rgba([[ACCENT_RGB]],.08); --wrap-max:1060px; }
+
+  /* ---- COMMON COMPONENT STYLES (standardized; reuse as-is) ---- */
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+
+  /* ---- ENTRANCE ANIMATION (calm fade-up; reduced-motion safe) ---- */
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  a:focus-visible{outline:2px solid var(--approx);outline-offset:3px;border-radius:6px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+
+  /* ---- PAGE-SPECIFIC STYLES ----
+     Add any styles unique to THIS page's tools/components below. -->
+  /* (your page-specific CSS here) */
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- back to the hub (leave as-is) -->
+  <a class="backlink" href="index.html">← Unit 10 Guide</a>
+
+  <header class="reveal">
+    <!-- [[H1]] — the page title. The <span class="em"> bit gets the accent color. -->
+    <h1>[[TITLE WORD]] <span class="em">[[ACCENT WORD]]</span></h1>
+    <div class="sub">[[ONE-LINE DESCRIPTION OF THIS PAGE]]</div>
+  </header>
+
+  <!-- ============================================================
+       CONTENT — everything unique to this page goes here.
+       Add .reveal to top-level blocks for the staggered fade-in.
+       Use <h2 class="reveal">...</h2> for section headings.
+       ============================================================ -->
+
+  <!-- EXAMPLE block (delete and replace with your real content):
+  <h2 class="reveal">Section heading</h2>
+  <p class="lead reveal">Intro sentence for the section.</p>
+  <div class="big-idea reveal">
+    <b>Key idea.</b> Explanation text. Inline math goes in via JS using tex(),
+    or write KaTeX-able spans your script renders.
+  </div>
+  -->
+
+  <!-- [[YOUR CONTENT HERE]] -->
+
+  <footer class="reveal">[[PAGE NAME]] · part of the Unit 10 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+/* ============================================================
+   PAGE SCRIPT — your page's interactive logic goes here.
+   tex(latex, fallback, display) and cc(hex, body) are already
+   available from helpers.js — no need to redefine them.
+   ============================================================ */
+
+/* SVG element helper (handy if this page draws diagrams; delete if unused) */
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+
+/* color-code palette for this page's formulas (edit/delete as needed) */
+// const VC={ /* name:"#hex", ... */ };
+
+/* --- your render functions and interactivity --- */
+// function render(){ ... }
+
+
+/* ---- BOOTSTRAP (runs on load) ----
+   1) call your initial render function(s)
+   2) if KaTeX hasn't loaded yet, retry briefly so formulas fill in
+   3) stagger the .reveal entrance animation
+   Replace renderAll() with your actual initial render call(s). */
+function renderAll(){ /* call your render fns here, e.g. render(); */ }
+
+renderAll();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){clearInterval(t); renderAll();} else if(++tries>40)clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*45,360)+'ms';});
+</script>
+</body>
+</html>
