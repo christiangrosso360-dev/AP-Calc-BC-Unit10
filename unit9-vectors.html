@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vector-Valued Functions — position, velocity, acceleration · Unit 9</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230d1417%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2219%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%233fb6d8%22%3E%E2%83%97v%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{
+    --cyan:#3fb6d8; --cyan-glow:#6dd4ef; --cyan-deep:#2a8fad;
+    --approx:#3fb6d8; --accent:#3fb6d8;
+    --amber:#e8a13c; --amber-glow:#f4bb63; --rose:#e0644f;
+    --bg:#0b0e10; --panel:#141b1f; --panel-2:#1a2329;
+    --ink:#e7eef2; --muted:#8fa2ac; --faint:#5f7480;
+    --line:#26323a; --line-2:#33444e;
+    --wrap-max:900px;
+  }
+  body{background:var(--bg)}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(ellipse 60% 45% at 82% 0%, rgba(63,182,216,.08), transparent 60%);}
+  .wrap{position:relative;z-index:1}
+  .sub{color:var(--muted);font-size:15.5px;margin-top:10px;max-width:720px;line-height:1.6}
+  h2{font-family:var(--display);font-weight:600;font-size:24px;margin:58px 0 6px;letter-spacing:-0.015em;color:var(--ink)}
+  h2 .n{color:var(--cyan);font-variant-numeric:tabular-nums}
+  h3{font-family:var(--display);font-weight:600;font-size:18px;margin:30px 0 4px;color:var(--ink)}
+  p{font-size:15px;color:var(--muted);max-width:730px;line-height:1.78;margin:14px 0}
+  p.lead{font-size:16px;color:var(--ink);max-width:730px}
+  p b{color:var(--ink);font-weight:600}
+  .mono{font-family:var(--mono);color:var(--ink)}
+  .em-text{color:var(--cyan);font-weight:600}
+  .vel-c{color:var(--cyan-glow);font-weight:600}
+  .acc-c{color:var(--amber-glow);font-weight:600}
+  a.inl{color:var(--cyan);text-decoration:none;border-bottom:1px dashed var(--line-2)}
+  a.inl:hover{border-color:var(--cyan)}
+
+  .eq{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:24px 22px;margin:22px 0;text-align:center;overflow-x:auto;overflow-y:hidden;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .eq .katex,.eq .katex-display{color:var(--ink)} .eq .katex{font-size:1.3em} .eq .katex-display{margin:0}
+  .eq .cap{font-size:12.5px;color:var(--muted);margin-top:12px;font-family:var(--mono);letter-spacing:.02em}
+
+  /* the motion visual */
+  .stage{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .plot{width:100%;background:#0a0f12;border:1px solid var(--line);border-radius:11px}
+  .plot canvas{width:100%;height:auto;display:block;border-radius:11px}
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:14px}
+  .play{font-family:var(--mono);font-size:12px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-2);border-radius:9px;padding:8px 15px;cursor:pointer;transition:border-color .2s}
+  .play:hover{border-color:var(--cyan)}
+  .slider-row{display:flex;align-items:center;gap:12px;flex:1;min-width:220px}
+  .slider-row label{font-family:var(--mono);font-size:11.5px;color:var(--faint);white-space:nowrap}
+  input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:3px;background:var(--line-2);outline:none;min-width:120px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 8px rgba(63,182,216,.6)}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:var(--cyan);cursor:pointer}
+  .legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;font-family:var(--mono);font-size:12px}
+  .legend .k{display:flex;align-items:center;gap:7px;color:var(--muted)}
+  .legend .swatch{width:22px;height:3px;border-radius:2px}
+  .readout{display:flex;flex-wrap:wrap;gap:18px;margin-top:12px;font-family:var(--mono);font-size:12.5px}
+  .readout .item{color:var(--muted)} .readout .item b{color:var(--ink);font-weight:600}
+  .readout .rv b{color:var(--cyan-glow)} .readout .ra b{color:var(--amber-glow)} .readout .rs b{color:var(--ink)}
+
+  /* predict mode */
+  .predict-btn{font-family:var(--mono);font-size:12px;background:var(--panel-2);color:var(--cyan);border:1px solid rgba(63,182,216,.4);border-radius:9px;padding:8px 15px;cursor:pointer;transition:background .2s,color .2s}
+  .predict-btn:hover{background:rgba(63,182,216,.1)}
+  .predict-btn.on{background:var(--cyan);color:#0b1417;font-weight:600;border-color:var(--cyan)}
+  .predict-panel{display:none;margin-top:14px;border-top:1px solid var(--line);padding-top:16px}
+  .predict-panel.show{display:block}
+  .pp-prompt{font-size:14px;color:var(--ink);margin-bottom:14px;line-height:1.5}
+  .pp-prompt b{color:var(--cyan-glow)}
+  .pp-step{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:10px}
+  .pp-cols{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .compass{display:grid;grid-template-columns:repeat(3,34px);grid-template-rows:repeat(3,34px);gap:5px}
+  .compass button{background:var(--bg);border:1px solid var(--line-2);border-radius:7px;color:var(--muted);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,background .15s,color .15s;padding:0}
+  .compass button:hover:not(:disabled){border-color:var(--cyan);color:var(--cyan-glow)}
+  .compass button.center{visibility:hidden}
+  .compass button.picked{background:var(--cyan);color:#0b1417;border-color:var(--cyan)}
+  .compass button.correct-pick{background:rgba(63,208,176,.2);border-color:var(--conv,#3fd0b0);color:#cfeee6}
+  .compass button.wrong-pick{background:rgba(224,100,79,.18);border-color:var(--rose);color:#f0c9c1}
+  .compass button.show-answer{box-shadow:0 0 0 2px var(--conv,#3fd0b0) inset}
+  .compass button:disabled{cursor:default}
+  .pp-col-label{font-family:var(--mono);font-size:11px;margin-bottom:8px;letter-spacing:.05em}
+  .pp-col-label.vel{color:var(--cyan-glow)} .pp-col-label.acc{color:var(--amber-glow)}
+  .pp-result{margin-top:14px;font-size:13.5px;line-height:1.6;color:var(--muted);display:none}
+  .pp-result.show{display:block}
+  .pp-result b{color:var(--ink)}
+  .pp-result .ok{color:var(--conv,#3fd0b0);font-weight:600} .pp-result .no{color:var(--rose);font-weight:600}
+  .pp-actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .pp-actions button{font-family:var(--mono);font-size:12px;border-radius:8px;padding:8px 15px;cursor:pointer;border:1px solid var(--line-2);background:var(--panel-2);color:var(--ink);transition:border-color .2s,opacity .2s}
+  .pp-actions button:hover:not(:disabled){border-color:var(--cyan)}
+  .pp-actions button.primary{background:var(--cyan);color:#0b1417;font-weight:600;border-color:var(--cyan)}
+  .pp-actions button:disabled{opacity:.4;cursor:default}
+  .pp-score{font-family:var(--mono);font-size:11.5px;color:var(--faint);align-self:center;margin-left:auto}
+
+  .note{background:rgba(63,182,216,.06);border:1px solid rgba(63,182,216,.22);border-radius:12px;padding:14px 18px;margin:22px 0}
+  .note .nh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+  .note p{margin:0;font-size:13.5px;color:var(--muted)}.note p b{color:var(--ink)}
+
+  .trap{background:rgba(224,100,79,.06);border-left:2px solid var(--rose);border-radius:0 10px 10px 0;padding:13px 18px;margin:22px 0}
+  .trap .th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+  .trap p{margin:0;font-size:13.5px;color:var(--muted)}.trap p b{color:var(--ink)}
+
+  /* the three-way motion comparison */
+  .triple{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:22px 0}
+  .triple .cell{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .triple .ct{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+  .triple .cell.speed .ct{color:var(--cyan)} .triple .cell.disp .ct{color:var(--amber-glow)} .triple .cell.dist .ct{color:#b48ce0}
+  .triple .cd{font-size:12.5px;color:var(--muted);line-height:1.55}.triple .cd b{color:var(--ink)}
+  .triple .ctag{font-family:var(--mono);font-size:10px;color:var(--faint);margin-top:8px}
+  @media(max-width:680px){.triple{grid-template-columns:1fr}}
+
+  .work{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:22px 0}
+  .work .wtag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin:16px 0 0}
+  .work .step{font-size:14px;color:var(--muted);line-height:1.7;margin:10px 0}
+  .work .step b{color:var(--ink)}
+  .work .ans{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:13px;color:var(--cyan-glow);border:1px solid rgba(63,182,216,.3);border-radius:8px;padding:5px 12px;background:rgba(63,182,216,.05)}
+
+  .quiz{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-top:22px}
+  .qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .qcount{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  .qprompt{font-size:15.5px;color:var(--ink);margin:10px 0 16px;line-height:1.6}
+  .qopts{display:flex;flex-direction:column;gap:9px}
+  .qopts button{text-align:left;font-family:var(--body);font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line-2);border-radius:10px;padding:12px 15px;cursor:pointer;transition:border-color .2s,background .2s}
+  .qopts button:hover:not(:disabled){border-color:var(--cyan)}
+  .qopts button:disabled{cursor:default}
+  .qopts button.correct{background:rgba(63,208,176,.14);border-color:var(--conv,#3fd0b0);color:#cfeee6}
+  .qopts button.wrong{background:rgba(224,100,79,.12);border-color:var(--rose);color:#f0c9c1}
+  .qfb{margin-top:14px;font-size:13.5px;line-height:1.6;color:var(--muted);display:none}
+  .qfb.show{display:block}
+  .qfb b{color:var(--ink)}
+  .qfb .verdict{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+  .qfb .verdict.r{color:var(--conv,#3fd0b0)} .qfb .verdict.w{color:var(--rose)}
+  .qnav{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+  .qnav button{font-family:var(--mono);font-size:12.5px;background:var(--cyan);color:#0b1417;font-weight:600;border:none;border-radius:9px;padding:10px 18px;cursor:pointer;transition:transform .2s,opacity .2s}
+  .qnav button:disabled{opacity:.4;cursor:default}
+  .qnav button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line-2)}
+  .qdone{text-align:center;padding:10px 0}
+  .qdone .score{font-family:var(--display);font-size:34px;color:var(--cyan);font-weight:600}
+  .qdone p{margin:6px 0 14px}
+
+  .fnav{display:flex;justify-content:space-between;gap:14px;margin-top:60px;flex-wrap:wrap}
+  .fnav a{flex:1;min-width:200px;text-decoration:none;border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:linear-gradient(160deg,var(--panel-2),var(--panel));transition:border-color .3s,transform .3s}
+  .fnav a:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .fnav .d{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+  .fnav .ti{font-family:var(--display);font-size:17px;color:var(--ink);font-weight:600}
+  .fnav .next{text-align:right}
+
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .55s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit9.html">← Unit 9</a>
+  <header class="reveal">
+    <h1>Vector-Valued <span class="em">Functions</span></h1>
+    <div class="sub">A particle moving through the plane has a position that changes with time. Bundle its
+      two coordinates into one object — a <b>position vector</b> \(\vec r(t)\) — and the whole toolkit of
+      calculus carries over, one component at a time. <span class="em-text">Position → velocity →
+      acceleration, each a single derivative apart.</span></div>
+  </header>
+
+  <!-- ===================== §1 SETUP ===================== -->
+  <h2><span class="n">1.</span> A position that changes with time</h2>
+  <p class="lead">A vector-valued function takes a number <span class="mono">t</span> (time) and returns
+    a <i>vector</i> — the arrow from the origin to where the particle is at that instant:</p>
+
+  <div class="eq reveal" id="eqDef"></div>
+
+  <p>That's it — it's the parametric equations from the last lesson, just written as one object instead
+    of two. <span class="em-text">Everything happens component-wise:</span> whatever you'd do to
+    <span class="mono">x(t)</span> and <span class="mono">y(t)</span> separately, you do to the vector.
+    Differentiation, integration — all of it splits cleanly into the two components.</p>
+
+  <div class="note reveal">
+    <div class="nh">Why bother with vectors?</div>
+    <p>Two reasons. First, it's <b>compact</b> — one symbol \(\vec r(t)\) instead of two equations.
+      Second, the derivative of a position vector is itself a vector with a <b>direction</b>, which turns
+      out to be exactly the direction the particle is moving. That geometric meaning is the whole point.</p>
+  </div>
+
+  <!-- ===================== §2 VELOCITY & ACCELERATION + VISUAL ===================== -->
+  <h2><span class="n">2.</span> Velocity and acceleration</h2>
+  <p>Differentiate the position vector component-by-component and you get the <span class="vel-c">velocity
+    vector</span> — it points in the direction of motion (tangent to the path) and its length is the speed:</p>
+
+  <div class="eq reveal" id="eqVel"></div>
+
+  <p>Differentiate again for the <span class="acc-c">acceleration vector</span> — it points toward the
+    inside of the curve (the concave side) and tells you how the velocity is changing:</p>
+
+  <div class="eq reveal" id="eqAcc"></div>
+
+  <p>Watch it happen. The particle below moves along an ellipse. The <span class="vel-c">cyan arrow</span>
+    is velocity — see how it always points along the path and stretches where the particle speeds up. The
+    <span class="acc-c">amber arrow</span> is acceleration — see how it always leans toward the inside of
+    the curve, bending the path.</p>
+
+  <div class="stage reveal">
+    <div class="plot"><canvas id="motionCv" width="860" height="460"></canvas></div>
+    <div class="controls">
+      <button class="play" id="playBtn">▶ Play</button>
+      <div class="slider-row">
+        <label>t =</label>
+        <input type="range" id="tSlider" min="0" max="1000" value="0" />
+        <span class="mono" id="tVal" style="color:var(--cyan-glow);min-width:54px">t = 0.00</span>
+      </div>
+      <button class="predict-btn" id="predictBtn">🎯 Predict mode</button>
+    </div>
+
+    <!-- predict mode panel -->
+    <div class="predict-panel" id="predictPanel">
+      <div class="pp-prompt" id="ppPrompt"></div>
+      <div class="pp-step" id="ppStep">Step 1 — click the direction of velocity</div>
+      <div class="pp-cols">
+        <div>
+          <div class="pp-col-label vel">velocity v</div>
+          <div class="compass" id="compassV"></div>
+        </div>
+        <div>
+          <div class="pp-col-label acc">acceleration a</div>
+          <div class="compass" id="compassA"></div>
+        </div>
+      </div>
+      <div class="pp-result" id="ppResult"></div>
+      <div class="pp-actions">
+        <button class="primary" id="ppReveal" disabled>Reveal</button>
+        <button id="ppNext" disabled>Next spot →</button>
+        <span class="pp-score" id="ppScore"></span>
+      </div>
+    </div>
+    <div class="legend">
+      <span class="k"><span class="swatch" style="background:var(--cyan-glow)"></span> velocity \(\vec v\) (tangent)</span>
+      <span class="k"><span class="swatch" style="background:var(--amber-glow)"></span> acceleration \(\vec a\) (toward concave)</span>
+    </div>
+    <div class="readout">
+      <span class="item">position <b id="roPos">(2.00, 0.00)</b></span>
+      <span class="item rv">v = <b id="roV">⟨0.00, 1.00⟩</b></span>
+      <span class="item ra">a = <b id="roA">⟨−2.00, 0.00⟩</b></span>
+      <span class="item rs">speed |v| = <b id="roSpeed">1.00</b></span>
+    </div>
+  </div>
+
+  <div class="note reveal">
+    <div class="nh">How to read the two arrows</div>
+    <p>&bull; <b>Direction</b> — <span class="vel-c">velocity</span> always points the way the particle is
+      <i>currently</i> moving (tangent to the path). <span class="acc-c">Acceleration</span> points toward
+      the side the path is <i>curving</i> into — the concave side.<br>
+      &bull; <b>Length</b> — each arrow is scaled to its magnitude, so a longer
+      <span class="vel-c">velocity</span> means faster, and a longer <span class="acc-c">acceleration</span>
+      means the velocity is changing more sharply (a tighter bend).<br>
+      &bull; <b>The counterintuitive part</b> — the particle <i>never</i> moves in the
+      <span class="acc-c">acceleration</span> direction. Acceleration doesn't push the particle along; it
+      <i>turns</i> the velocity. That sideways pull is exactly what keeps the particle on a curved path
+      instead of flying off straight.</p>
+  </div>
+
+  <p>Notice the two arrows are <b>independent</b>: near the flat ends of the ellipse the particle moves
+    slowly (short velocity) but curves sharply (long acceleration); along the long sides it's the
+    opposite. Velocity is about <i>how fast and which way</i>; acceleration is about <i>how that's
+    changing</i>.</p>
+
+  <div class="note reveal">
+    <div class="nh">Test yourself</div>
+    <p>Think you've got it? Hit <b>🎯 Predict mode</b> on the visual above. The arrows hide, the particle
+      jumps to a spot on the ellipse, and you call which way <span class="vel-c">velocity</span> and
+      <span class="acc-c">acceleration</span> point — then reveal to check. Predicting before you see the
+      answer is what makes it stick.</p>
+  </div>
+
+  <!-- ===================== §3 INTEGRATE BACK ===================== -->
+  <h2><span class="n">3.</span> Going backward: integrate to recover position</h2>
+  <p>If you're <i>given</i> velocity and want position, integrate — again component-by-component. But an
+    antiderivative always carries a constant, and here the constant is a <b>vector</b>
+    \(\vec C=\langle C_1, C_2\rangle\):</p>
+
+  <div class="eq reveal" id="eqInt"></div>
+
+  <p>To pin down that constant you need an <b>initial condition</b> — a known position at some time,
+    usually \(\vec r(0)\). Plug it in, solve for \(C_1\) and \(C_2\), and you have the exact position
+    function. The same logic takes you from acceleration back to velocity.</p>
+
+  <div class="trap reveal">
+    <div class="th">Don't drop the initial condition</div>
+    <p>Integrating velocity gives position <b>only up to a constant vector</b>. Without an initial
+      condition like \(\vec r(0)=\langle 1,4\rangle\) you can't find a unique position — leaving off
+      \(+\vec C\) (or never solving for it) is a guaranteed lost point.</p>
+  </div>
+
+  <!-- ===================== §4 MOTION: SPEED / DISPLACEMENT / DISTANCE ===================== -->
+  <h2><span class="n">4.</span> Speed, displacement, and distance</h2>
+  <p>This is where the points are won or lost. Three different questions about motion, three different
+    answers — and they are <b>not</b> interchangeable. (You met displacement vs. distance in 1-D back in
+    <a class="inl" href="unit8.html">Unit 8</a>; this is the same idea in two dimensions.)</p>
+
+  <div class="triple reveal">
+    <div class="cell speed">
+      <div class="ct">Speed</div>
+      <div class="cd"><b>How fast, right now.</b> The magnitude of velocity — a single number, never negative.</div>
+      <div class="ctag">|v| = √(x′² + y′²)</div>
+    </div>
+    <div class="cell disp">
+      <div class="ct">Displacement</div>
+      <div class="cd"><b>Net change in position.</b> A vector. Integrate velocity over the interval. Can be small even after a long trip.</div>
+      <div class="ctag">∫ₐᵇ v dt</div>
+    </div>
+    <div class="cell dist">
+      <div class="ct">Total distance</div>
+      <div class="cd"><b>Length of the path actually traveled.</b> A number. Integrate the <i>speed</i>.</div>
+      <div class="ctag">∫ₐᵇ |v| dt</div>
+    </div>
+  </div>
+
+  <div class="eq reveal" id="eqSpeed"></div>
+  <div class="eq reveal" id="eqDist"></div>
+
+  <p>The distance integral is the one the AP exam asks for most — and it's almost always evaluated on a
+    calculator, because \(\sqrt{(x')^2+(y')^2}\) rarely has a clean antiderivative. <b>Total distance is
+    always ≥ the magnitude of displacement</b> (a straight line is the shortest path between two points),
+    which is a handy sanity check.</p>
+
+  <div class="trap reveal">
+    <div class="th">Speed is a magnitude, not a component</div>
+    <p>Speed is \(|\vec v|=\sqrt{(x')^2+(y')^2}\) — <b>not</b> \(x'\), not \(y'\), and not \(x'+y'\). And
+      total distance integrates that whole square root, \(\int|\vec v|\,dt\), <b>not</b> the components
+      separately. Mixing up displacement \(\big(\int\vec v\,dt\big)\) with distance
+      \(\big(\int|\vec v|\,dt\big)\) is the single most common motion error.</p>
+  </div>
+
+  <!-- ===================== §5 WORKED EXAMPLES ===================== -->
+  <h2><span class="n">5.</span> Worked examples</h2>
+
+  <div class="work reveal">
+    <div class="wtag">Example 1 · velocity, acceleration, speed</div>
+    <p class="step">A particle's position is \(\vec r(t)=\langle t^2,\ t^3-3t\rangle\). Find its velocity,
+      acceleration, and speed at \(t=2\).</p>
+    <p class="step"><b>Differentiate each component.</b> <span id="w1a"></span></p>
+    <p class="step"><b>Evaluate at \(t=2\).</b> \(\vec v(2)=\langle 4,\ 9\rangle\) and
+      \(\vec a(2)=\langle 2,\ 12\rangle\). Speed is the magnitude of velocity:
+      <span id="w1b"></span> <span class="ans">v=⟨4,9⟩, a=⟨2,12⟩, speed=√97≈9.85</span></p>
+  </div>
+
+  <div class="work reveal">
+    <div class="wtag">Example 2 · integrate with an initial condition</div>
+    <p class="step">A particle has velocity \(\vec v(t)=\langle 2t,\ \cos t\rangle\) and starts at
+      \(\vec r(0)=\langle 1,\ 4\rangle\). Find its position \(\vec r(t)\).</p>
+    <p class="step"><b>Integrate each component.</b> \(\int 2t\,dt=t^2+C_1\) and
+      \(\int\cos t\,dt=\sin t+C_2\).</p>
+    <p class="step"><b>Use \(\vec r(0)=\langle 1,4\rangle\).</b> At \(t=0\): \(x(0)=0+C_1=1\Rightarrow C_1=1\);
+      \(y(0)=\sin 0+C_2=4\Rightarrow C_2=4\). So <span id="w2a"></span>
+      <span class="ans">r(t)=⟨t²+1, sin t + 4⟩</span></p>
+  </div>
+
+  <div class="work reveal">
+    <div class="wtag">Example 3 · total distance traveled</div>
+    <p class="step">A particle moves with velocity \(\vec v(t)=\langle 3t^2,\ 2t\rangle\) for
+      \(0\le t\le 2\). How far does it travel?</p>
+    <p class="step"><b>Distance integrates speed.</b> <span id="w3a"></span></p>
+    <p class="step"><b>Factor and substitute.</b> \(\sqrt{9t^4+4t^2}=t\sqrt{9t^2+4}\) (since \(t\ge 0\)).
+      With \(u=9t^2+4\): <span id="w3b"></span></p>
+    <p class="step"><b>Compare to displacement.</b> Displacement \(=\int_0^2\vec v\,dt=\langle 8,4\rangle\),
+      whose magnitude is \(\sqrt{80}\approx 8.94\) — less than the distance 9.07, exactly as it must be.
+      <span class="ans">distance ≈ 9.07</span></p>
+  </div>
+
+  <!-- ===================== §6 DRILL ===================== -->
+  <h2><span class="n">6.</span> Quick drill</h2>
+  <p>Five questions on velocity, acceleration, integrating back, and the speed/displacement/distance
+    distinction.</p>
+
+  <div class="quiz reveal" id="quiz">
+    <div class="qhead">
+      <span class="qcount" id="qCount">Question 1 of 5</span>
+      <span class="qcount" id="qScore">Score: 0</span>
+    </div>
+    <div class="qprompt" id="qPrompt"></div>
+    <div class="qopts" id="qOpts"></div>
+    <div class="qfb" id="qFb"></div>
+    <div class="qnav">
+      <button class="ghost" id="qReset">↺ Restart</button>
+      <button id="qNext" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- ===================== FORWARD NAV ===================== -->
+  <div class="fnav reveal">
+    <a href="unit9-parametric.html">
+      <div class="d">← Previous</div>
+      <div class="ti">Parametric Equations</div>
+    </a>
+    <a href="unit9-polar-graphing.html" class="next">
+      <div class="d">Next →</div>
+      <div class="ti">Polar Graphing</div>
+    </a>
+  </div>
+
+  <footer style="color:var(--muted);font-size:12.5px;margin:46px 0 30px;border-top:1px solid var(--line);padding-top:16px">
+    Vector-Valued Functions · Topics 9.4–9.6 · Unit 9 · part of the Visual AP Calculus guide.
+  </footer>
+</div>
+
+<script>
+/* ===================== rendered equations ===================== */
+function renderEqs(){
+  const R=String.raw;
+  const put=(id,t,fb,display)=>{const e=document.getElementById(id);if(e)e.innerHTML=tex(t,fb||t,display!==false);};
+  put('eqDef', R`\vec r(t)=\langle\, x(t),\ y(t)\,\rangle`, "r(t) = ⟨x(t), y(t)⟩");
+  put('eqVel', R`\vec v(t)=\vec r\,'(t)=\big\langle\, x'(t),\ y'(t)\,\big\rangle`, "v(t) = r'(t) = ⟨x'(t), y'(t)⟩");
+  put('eqAcc', R`\vec a(t)=\vec v\,'(t)=\vec r\,''(t)=\big\langle\, x''(t),\ y''(t)\,\big\rangle`, "a(t) = v'(t) = r''(t) = ⟨x''(t), y''(t)⟩");
+  put('eqInt', R`\vec r(t)=\int \vec v(t)\,dt=\Big\langle \textstyle\int x'(t)\,dt,\ \int y'(t)\,dt\Big\rangle+\vec C`, "r(t) = ∫v dt = ⟨∫x' dt, ∫y' dt⟩ + C");
+  put('eqSpeed', R`\text{speed}=|\vec v(t)|=\sqrt{\big(x'(t)\big)^2+\big(y'(t)\big)^2}`, "speed = |v| = √(x'² + y'²)");
+  put('eqDist', R`\text{distance}=\int_a^b |\vec v(t)|\,dt=\int_a^b\sqrt{\big(x'(t)\big)^2+\big(y'(t)\big)^2}\;dt`, "distance = ∫|v| dt = ∫√(x'²+y'²) dt");
+  // worked-example inline bits
+  put('w1a', R`\vec v(t)=\langle 2t,\ 3t^2-3\rangle,\qquad \vec a(t)=\langle 2,\ 6t\rangle.`, "v=⟨2t, 3t²−3⟩, a=⟨2, 6t⟩", false);
+  put('w1b', R`|\vec v(2)|=\sqrt{4^2+9^2}=\sqrt{97}\approx 9.85.`, "|v(2)|=√(16+81)=√97≈9.85", false);
+  put('w2a', R`\vec r(t)=\langle\, t^2+1,\ \sin t+4\,\rangle.`, "r(t)=⟨t²+1, sin t + 4⟩", false);
+  put('w3a', R`\text{distance}=\int_0^2\sqrt{(3t^2)^2+(2t)^2}\,dt=\int_0^2\sqrt{9t^4+4t^2}\,dt.`, "∫₀² √((3t²)²+(2t)²) dt", false);
+  put('w3b', R`\tfrac{1}{18}\!\int_4^{40}\!\sqrt{u}\,du=\tfrac{1}{27}\big(40^{3/2}-8\big)\approx 9.07.`, "(1/18)∫₄⁴⁰√u du = (1/27)(40^{3/2}−8) ≈ 9.07", false);
+}
+
+/* ===================== §2 motion visual: ellipse with v & a arrows ===================== */
+(function(){
+  const cv=document.getElementById('motionCv'); if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const W=cv.width, H=cv.height;
+  // ellipse r(t)=<2cos t, sin t>, t in [0,2π]
+  const TMAX=2*Math.PI;
+  const x=t=>2*Math.cos(t), y=t=>Math.sin(t);
+  const vx=t=>-2*Math.sin(t), vy=t=>Math.cos(t);
+  const ax=t=>-2*Math.cos(t), ay=t=>-Math.sin(t);
+
+  // world frame: x in [-2.6,2.6], y in [-1.8,1.8]
+  const fx={min:-2.7,max:2.7}, fy={min:-1.9,max:1.9};
+  function toPx(wx,wy){
+    const px=46 + (wx-fx.min)/(fx.max-fx.min)*(W-92);
+    const py=H-26 - (wy-fy.min)/(fy.max-fy.min)*(H-52);
+    return [px,py];
+  }
+  // scale factors (px per world unit)
+  const sx=(W-92)/(fx.max-fx.min), sy=(H-52)/(fy.max-fy.min);
+
+  const slider=document.getElementById('tSlider'), tValEl=document.getElementById('tVal');
+  const roPos=document.getElementById('roPos'), roV=document.getElementById('roV'),
+        roA=document.getElementById('roA'), roSpeed=document.getElementById('roSpeed');
+  let playing=false, raf=null;
+
+  function arrow(px,py,dxw,dyw,color,scale){
+    // dxw,dyw are world-space vector components; convert to canvas px with a display scale
+    let ex=px + dxw*sx*scale;
+    let ey=py - dyw*sy*scale;
+    ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=2.6; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(ex,ey); ctx.stroke();
+    // arrowhead
+    const ang=Math.atan2(ey-py, ex-px), hl=10;
+    ctx.beginPath(); ctx.moveTo(ex,ey);
+    ctx.lineTo(ex-hl*Math.cos(ang-0.4), ey-hl*Math.sin(ang-0.4));
+    ctx.lineTo(ex-hl*Math.cos(ang+0.4), ey-hl*Math.sin(ang+0.4));
+    ctx.closePath(); ctx.fill();
+  }
+
+  function draw(tFrac){
+    const t=tFrac*TMAX;
+    ctx.clearRect(0,0,W,H);
+
+    // axes
+    ctx.strokeStyle='rgba(143,162,172,0.16)'; ctx.lineWidth=1;
+    let [x0,y0]=toPx(fx.min,0),[x1,y1]=toPx(fx.max,0);
+    ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();
+    [x0,y0]=toPx(0,fy.min);[x1,y1]=toPx(0,fy.max);
+    ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke();
+
+    // full ellipse path (faint)
+    ctx.strokeStyle='rgba(63,182,216,0.22)'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    for(let i=0;i<=400;i++){const tt=(i/400)*TMAX;const[px,py]=toPx(x(tt),y(tt));i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}
+    ctx.closePath(); ctx.stroke();
+
+    // traced-so-far (bright)
+    ctx.strokeStyle='rgba(63,182,216,0.8)'; ctx.lineWidth=2.4;
+    ctx.beginPath();
+    const drawn=Math.max(1,Math.floor(tFrac*400));
+    for(let i=0;i<=drawn;i++){const tt=(i/400)*TMAX;const[px,py]=toPx(x(tt),y(tt));i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);}
+    ctx.stroke();
+
+    // current point
+    const [hx,hy]=toPx(x(t),y(t));
+
+    // arrows — hidden in predict mode until revealed
+    if(!window.__vecPredict || window.__vecPredict.revealed){
+      // acceleration arrow (amber) — draw first so velocity sits on top
+      arrow(hx,hy, ax(t), ay(t), 'rgba(244,187,99,0.95)', 0.5);
+      // velocity arrow (cyan)
+      arrow(hx,hy, vx(t), vy(t), 'rgba(109,212,239,0.98)', 0.5);
+    }
+
+    // point
+    ctx.beginPath(); ctx.arc(hx,hy,5.5,0,Math.PI*2);
+    ctx.fillStyle='#eaf6fb'; ctx.fill();
+    ctx.beginPath(); ctx.arc(hx,hy,5.5,0,Math.PI*2);
+    ctx.strokeStyle='rgba(11,20,23,0.9)'; ctx.lineWidth=1.5; ctx.stroke();
+
+    // readouts — blanked in predict mode (don't give away the answer) until revealed
+    const fmt=(a,b)=>'⟨'+a.toFixed(2)+', '+b.toFixed(2)+'⟩';
+    tValEl.textContent='t = '+t.toFixed(2);
+    roPos.textContent='('+x(t).toFixed(2)+', '+y(t).toFixed(2)+')';
+    if(!window.__vecPredict || window.__vecPredict.revealed){
+      roV.textContent=fmt(vx(t),vy(t));
+      roA.textContent=fmt(ax(t),ay(t));
+      roSpeed.textContent=Math.hypot(vx(t),vy(t)).toFixed(2);
+    } else {
+      roV.textContent='?'; roA.textContent='?'; roSpeed.textContent='?';
+    }
+  }
+  // expose for predict controller
+  window.__vecDraw=draw;
+  window.__vecFns={x,y,vx,vy,ax,ay,TMAX};
+
+  function step(){
+    if(!playing) return;
+    let v=+slider.value + 2.2;
+    if(v>=1000){ v=1000; playing=false; document.getElementById('playBtn').textContent='▶ Play'; }
+    slider.value=v; draw(v/1000);
+    if(playing) raf=requestAnimationFrame(step);
+  }
+  document.getElementById('playBtn').addEventListener('click',function(){
+    if(window.__vecPredict && window.__vecPredict.active) return;  // disabled during predict
+    if(playing){ playing=false; this.textContent='▶ Play'; if(raf)cancelAnimationFrame(raf); return; }
+    if(+slider.value>=1000) slider.value=0;
+    playing=true; this.textContent='❚❚ Pause'; raf=requestAnimationFrame(step);
+  });
+  slider.addEventListener('input',function(){
+    if(window.__vecPredict && window.__vecPredict.active){  // lock slider to the spot during predict
+      return;
+    }
+    if(playing){ playing=false; document.getElementById('playBtn').textContent='▶ Play'; if(raf)cancelAnimationFrame(raf); }
+    draw(this.value/1000);
+  });
+
+  draw(0);
+})();
+
+/* ===================== §2 predict-mode controller ===================== */
+(function(){
+  const panel=document.getElementById('predictPanel');
+  const btn=document.getElementById('predictBtn');
+  if(!panel||!btn||!window.__vecFns) return;
+  const F=window.__vecFns;
+  const slider=document.getElementById('tSlider'), playBtn=document.getElementById('playBtn');
+
+  // 8 compass directions: name -> unit angle (math convention, CCW from +x, degrees)
+  const DIRS=[
+    {n:'NW',deg:135,sym:'↖',r:0,c:0},{n:'N',deg:90,sym:'↑',r:0,c:1},{n:'NE',deg:45,sym:'↗',r:0,c:2},
+    {n:'W',deg:180,sym:'←',r:1,c:0},{n:'center',deg:null,sym:'',r:1,c:1},{n:'E',deg:0,sym:'→',r:1,c:2},
+    {n:'SW',deg:225,sym:'↙',r:2,c:0},{n:'S',deg:270,sym:'↓',r:2,c:1},{n:'SE',deg:315,sym:'↘',r:2,c:2}
+  ];
+  // curated spots = the 4 vertices: t, true velocity dir, true accel dir, teaching note
+  const SPOTS=[
+    {t:0,        posName:'the right end (2, 0)',  vDir:'N', aDir:'W', why:'Moving straight up the right side, the particle turns left — toward the center.'},
+    {t:Math.PI/2,posName:'the top (0, 1)',        vDir:'W', aDir:'S', why:'Moving left across the top, it turns downward — again toward the center.'},
+    {t:Math.PI,  posName:'the left end (−2, 0)',  vDir:'S', aDir:'E', why:'Moving straight down the left side, it turns right — toward the center.'},
+    {t:3*Math.PI/2,posName:'the bottom (0, −1)',  vDir:'E', aDir:'N', why:'Moving right along the bottom, it turns upward — toward the center once more.'}
+  ];
+
+  let active=false, spotIdx=0, pickV=null, pickA=null, revealed=false, score=0, answered=0;
+
+  function buildCompass(el, which){
+    el.innerHTML='';
+    DIRS.forEach(d=>{
+      const b=document.createElement('button');
+      b.textContent=d.sym;
+      b.style.gridRow=d.r+1; b.style.gridColumn=d.c+1;
+      if(d.n==='center'){ b.className='center'; b.disabled=true; }
+      else { b.dataset.dir=d.n; b.addEventListener('click',()=>pick(which,d.n,el)); }
+      el.appendChild(b);
+    });
+  }
+  function pick(which,dir,el){
+    if(revealed) return;
+    if(which==='v') pickV=dir; else pickA=dir;
+    el.querySelectorAll('button').forEach(b=>b.classList.toggle('picked', b.dataset.dir===dir));
+    // advance the step hint
+    if(pickV && !pickA){ document.getElementById('ppStep').textContent='Step 2 — now click the direction of acceleration'; }
+    document.getElementById('ppReveal').disabled = !(pickV && pickA);
+  }
+  function loadSpot(){
+    const s=SPOTS[spotIdx];
+    pickV=null; pickA=null; revealed=false;
+    window.__vecPredict={active:true, revealed:false};
+    // move particle to the spot
+    slider.value = (s.t / F.TMAX) * 1000;
+    window.__vecDraw(slider.value/1000);
+    document.getElementById('ppPrompt').innerHTML='The particle is at <b>'+s.posName+'</b>, moving counter-clockwise. Predict the two arrows.';
+    document.getElementById('ppStep').textContent='Step 1 — click the direction of velocity';
+    buildCompass(document.getElementById('compassV'),'v');
+    buildCompass(document.getElementById('compassA'),'a');
+    document.getElementById('ppResult').className='pp-result';
+    document.getElementById('ppResult').innerHTML='';
+    document.getElementById('ppReveal').disabled=true;
+    document.getElementById('ppNext').disabled=true;
+  }
+  function reveal(){
+    if(revealed || !pickV || !pickA) return;
+    revealed=true;
+    const s=SPOTS[spotIdx];
+    window.__vecPredict={active:true, revealed:true};
+    window.__vecDraw(slider.value/1000);   // redraw with arrows now shown
+    // mark compass picks
+    const markCompass=(el,pick,truth)=>{
+      el.querySelectorAll('button').forEach(b=>{
+        b.disabled=true;
+        if(b.dataset.dir===truth) b.classList.add('show-answer');
+        if(b.dataset.dir===pick) b.classList.add(pick===truth?'correct-pick':'wrong-pick');
+      });
+    };
+    markCompass(document.getElementById('compassV'),pickV,s.vDir);
+    markCompass(document.getElementById('compassA'),pickA,s.aDir);
+    const vOk=pickV===s.vDir, aOk=pickA===s.aDir;
+    if(vOk&&aOk) score++;
+    answered++;
+    const tag=(ok)=>ok?'<span class="ok">✓</span>':'<span class="no">✗</span>';
+    document.getElementById('ppResult').innerHTML=
+      tag(vOk)+' <b>Velocity</b> points <b>'+s.vDir+'</b> (tangent, the way it\u2019s moving). '+
+      tag(aOk)+' <b>Acceleration</b> points <b>'+s.aDir+'</b> (toward the center). <br>'+s.why+
+      ' Notice velocity and acceleration are <b>perpendicular</b> here — true at every vertex.';
+    document.getElementById('ppResult').className='pp-result show';
+    document.getElementById('ppScore').textContent='Score: '+score+' / '+answered;
+    document.getElementById('ppReveal').disabled=true;
+    document.getElementById('ppNext').disabled=false;
+  }
+  function nextSpot(){ spotIdx=(spotIdx+1)%SPOTS.length; loadSpot(); }
+
+  btn.addEventListener('click',function(){
+    active=!active;
+    btn.classList.toggle('on',active);
+    panel.classList.toggle('show',active);
+    if(active){
+      // stop play, enter predict
+      if(playBtn && playBtn.textContent.indexOf('Pause')>-1) playBtn.click();
+      btn.textContent='✕ Exit predict';
+      spotIdx=0; score=0; answered=0;
+      document.getElementById('ppScore').textContent='';
+      loadSpot();
+    } else {
+      btn.textContent='🎯 Predict mode';
+      window.__vecPredict=null;
+      window.__vecDraw(slider.value/1000);  // restore full explore view
+    }
+  });
+  document.getElementById('ppReveal').addEventListener('click',reveal);
+  document.getElementById('ppNext').addEventListener('click',nextSpot);
+})();
+
+/* ===================== §6 quiz ===================== */
+(function(){
+  const QUESTIONS=[
+    {
+      p:String.raw`If \(\vec r(t)=\langle t^3,\ \sin t\rangle\), what is the velocity \(\vec v(t)\)?`,
+      opts:[String.raw`\(\langle 3t^2,\ \cos t\rangle\)`,String.raw`\(\langle 3t^2,\ -\cos t\rangle\)`,String.raw`\(\langle t^3,\ \cos t\rangle\)`,String.raw`\(\langle 6t,\ -\sin t\rangle\)`],
+      correct:0,
+      fb:String.raw`Differentiate each component: \(\frac{d}{dt}t^3=3t^2\) and \(\frac{d}{dt}\sin t=\cos t\). So \(\vec v=\langle 3t^2,\ \cos t\rangle\). (The last option is the acceleration \(\vec a=\langle 6t,\ -\sin t\rangle\) — one derivative too far.)`
+    },
+    {
+      p:String.raw`A particle has velocity \(\vec v(t)=\langle 4t,\ 3\rangle\). What is its speed at \(t=2\)?`,
+      opts:[String.raw`\(\sqrt{8^2+3^2}=\sqrt{73}\)`,String.raw`\(8+3=11\)`,String.raw`\(\langle 8,\ 3\rangle\)`,String.raw`\(\sqrt{4^2+3^2}=5\)`],
+      correct:0,
+      fb:String.raw`Speed is the magnitude of velocity: \(|\vec v|=\sqrt{(4t)^2+3^2}\). At \(t=2\), \(\vec v=\langle 8,3\rangle\), so speed \(=\sqrt{8^2+3^2}=\sqrt{73}\). Speed is a single number (not a vector), and it's the square root of the sum of squares — not the sum of the components.`
+    },
+    {
+      p:String.raw`To find a particle's position from its velocity \(\vec v(t)\), you must:`,
+      opts:[String.raw`Integrate each component and add a constant vector, then use an initial condition`,String.raw`Differentiate each component of \(\vec v\)`,String.raw`Take the magnitude \(|\vec v|\)`,String.raw`Integrate \(|\vec v|\) over the interval`],
+      correct:0,
+      fb:String.raw`Position is the antiderivative of velocity: \(\vec r(t)=\int\vec v\,dt+\vec C\). The constant vector \(\vec C\) is found from an initial condition like \(\vec r(0)\). Differentiating would give acceleration; \(\int|\vec v|\,dt\) gives total distance, not position.`
+    },
+    {
+      p:String.raw`Which integral gives the total distance traveled on \(a\le t\le b\)?`,
+      opts:[String.raw`\(\int_a^b |\vec v(t)|\,dt=\int_a^b\sqrt{(x')^2+(y')^2}\,dt\)`,String.raw`\(\int_a^b \vec v(t)\,dt\)`,String.raw`\(\int_a^b \vec a(t)\,dt\)`,String.raw`\(\big|\int_a^b \vec v(t)\,dt\big|\)`],
+      correct:0,
+      fb:String.raw`Total distance integrates the speed: \(\int_a^b|\vec v|\,dt\). Option 2 (\(\int\vec v\,dt\)) is displacement — a vector. Option 4 is the magnitude of displacement. Distance ≥ |displacement| always, because the path is at least as long as the straight line between endpoints.`
+    },
+    {
+      p:String.raw`A particle's displacement over \([0,2]\) is \(\langle 8,4\rangle\) and its total distance is \(9.1\). Is this possible?`,
+      opts:[String.raw`Yes — distance \(9.1\ge|\langle 8,4\rangle|=\sqrt{80}\approx 8.94\)`,String.raw`No — distance must equal \(\sqrt{80}\)`,String.raw`No — distance must be less than displacement`,String.raw`Only if the particle moves in a straight line`],
+      correct:0,
+      fb:String.raw`Total distance is always ≥ the magnitude of displacement, since the actual path can't be shorter than the straight-line net change. Here \(|\langle 8,4\rangle|=\sqrt{80}\approx 8.94\) and \(9.1\ge 8.94\), so it's consistent. They'd be equal only for straight-line motion.`
+    }
+  ];
+  let idx=0, score=0, answered=false;
+  const promptEl=document.getElementById('qPrompt'), optsEl=document.getElementById('qOpts'),
+        fbEl=document.getElementById('qFb'), countEl=document.getElementById('qCount'),
+        scoreEl=document.getElementById('qScore'), nextBtn=document.getElementById('qNext'),
+        resetBtn=document.getElementById('qReset');
+
+  function mathify(s){
+    if(!window.katex) return s;
+    return s.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return katex.renderToString(t,{throwOnError:false});}catch(e){return m;}});
+  }
+  function render(){
+    if(idx>=QUESTIONS.length){ renderDone(); return; }
+    answered=false;
+    const q=QUESTIONS[idx];
+    countEl.textContent='Question '+(idx+1)+' of '+QUESTIONS.length;
+    scoreEl.textContent='Score: '+score;
+    promptEl.innerHTML=mathify(q.p);
+    optsEl.innerHTML=''; fbEl.className='qfb'; fbEl.innerHTML=''; nextBtn.disabled=true;
+    q.opts.forEach((o,i)=>{const b=document.createElement('button');b.innerHTML=mathify(o);b.addEventListener('click',()=>choose(i,b));optsEl.appendChild(b);});
+  }
+  function choose(i,btn){
+    if(answered) return; answered=true;
+    const q=QUESTIONS[idx]; const all=optsEl.querySelectorAll('button');
+    all.forEach((b,j)=>{ b.disabled=true; if(j===q.correct)b.classList.add('correct'); });
+    if(i===q.correct){ score++; scoreEl.textContent='Score: '+score; fbEl.innerHTML='<span class="verdict r">✓ Correct</span><br>'+mathify(q.fb); }
+    else { btn.classList.add('wrong'); fbEl.innerHTML='<span class="verdict w">✗ Not quite</span><br>'+mathify(q.fb); }
+    fbEl.className='qfb show'; nextBtn.disabled=false;
+  }
+  function renderDone(){
+    document.getElementById('quiz').innerHTML=
+      '<div class="qdone"><div class="score">'+score+' / '+QUESTIONS.length+'</div>'+
+      '<p>'+(score===QUESTIONS.length?'Perfect — velocity, acceleration, and the distance/displacement split are locked in.':
+              score>=3?'Solid. Re-check the ones you missed, especially speed = |v| and distance = ∫|v| dt.':
+              'Worth another pass — re-read §2 and §4, then try again.')+'</p>'+
+      '<button style="font-family:var(--mono);font-size:12.5px;background:var(--cyan);color:#0b1417;font-weight:600;border:none;border-radius:9px;padding:10px 20px;cursor:pointer" onclick="location.reload()">↺ Try again</button></div>';
+  }
+  nextBtn.addEventListener('click',()=>{ if(!answered)return; idx++; render(); });
+  resetBtn.addEventListener('click',()=>{ idx=0;score=0;answered=false; document.getElementById('quiz').style.opacity=1; render(); });
+  render();
+  if(!window.katex){let _kt=0;const _ki=setInterval(function(){if(window.katex){clearInterval(_ki);if(!answered)render();}else if(++_kt>80)clearInterval(_ki);},100);}
+})();
+
+/* ===================== inline math in prose/examples ===================== */
+function mathifyInline(){
+  if(!window.katex) return;
+  document.querySelectorAll('h2, h3, p, .step, .note p, .trap p, .sub, .legend .k').forEach(node=>{
+    if(node.dataset.mdone) return;
+    if(node.innerHTML.indexOf('\\(')===-1){ node.dataset.mdone="1"; return; }
+    node.innerHTML=node.innerHTML.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return katex.renderToString(t,{throwOnError:false});}catch(e){return m;}});
+    node.dataset.mdone="1";
+  });
+}
+
+/* ===================== boot ===================== */
+function boot(){ renderEqs(); mathifyInline(); }
+boot();
+if(window.addEventListener){ window.addEventListener('load',boot); document.addEventListener('DOMContentLoaded',boot); }
+if(!window.katex){let tries=0;const t=setInterval(()=>{if(window.katex){clearInterval(t);renderEqs();mathifyInline();}else if(++tries>80)clearInterval(t);},100);}
+</script>
+</body>
+</html>

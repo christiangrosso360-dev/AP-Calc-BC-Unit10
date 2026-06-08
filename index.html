@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Infinite Series, Made Visual · Unit 10 Guide</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%2316140f%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%23e8a13c%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%2316140f%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%23a98cf0%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Spline+Sans:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap');
   @property --lift{syntax:'<length>';inherits:false;initial-value:0px;}
@@ -12,7 +12,7 @@
     --void:#0d0c0a; --ink-1:#16140f; --panel:#1a1813; --panel-2:#211e18;
     --line:#332e25; --line-2:#453f33;
     --text:#ece7dd; --muted:#9a9183; --faint:#6b6457;
-    --amber:#e8a13c; --amber-glow:#f0b860; --teal:#3fd0b0; --teal-deep:#1f9d82;
+    --amber:#a98cf0; --amber-glow:#c4adff; --teal:#7d5fd0; --teal-deep:#5a3fb0;
     --crimson:#e0644f;
     --display:'Fraunces',Georgia,serif; --body:'Spline Sans',system-ui,sans-serif;
     --mono:'Spline Sans Mono',ui-monospace,Menlo,monospace;
@@ -23,7 +23,7 @@
     -webkit-font-smoothing:antialiased;line-height:1.6;overflow-x:hidden}
   body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(ellipse 70% 50% at 75% 0%, rgba(232,161,60,.10), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 75% 0%, rgba(169,140,240,.10), transparent 60%),
       radial-gradient(ellipse 60% 50% at 10% 15%, rgba(63,208,176,.07), transparent 55%);}
   body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.035;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
@@ -45,7 +45,7 @@
   h1 .em{font-style:italic;font-weight:500;position:relative;
     background:linear-gradient(105deg,var(--amber) 20%,var(--amber-glow) 50%,var(--teal) 95%);
     -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-    filter:drop-shadow(0 0 26px rgba(232,161,60,.35))}
+    filter:drop-shadow(0 0 26px rgba(169,140,240,.35))}
   .lede{font-size:clamp(17px,1.9vw,21px);color:var(--muted);max-width:560px;margin:36px 0 0;
     line-height:1.55;opacity:0;animation:fadeUp 1s ease .7s forwards}
   .lede b{color:var(--text);font-weight:500}
@@ -76,13 +76,13 @@
   .card.c5{grid-column:span 6} .card.c6{grid-column:span 6}
   @media(max-width:820px){ .grid{grid-template-columns:1fr} .card{grid-column:1/-1!important;min-height:260px} }
   /* per-card accent: --ac solid, --acr the rgb triplet for glows */
-  .card{--ac:#e8a13c;--acr:232,161,60}
-  .card.c1{--ac:#e8a13c;--acr:232,161,60}        /* amber */
+  .card{--ac:#a98cf0;--acr:169,140,240}
+  .card.c1{--ac:#a98cf0;--acr:169,140,240}        /* violet */
   .card.c2{--ac:#a98cf0;--acr:169,140,240}        /* violet */
-  .card.c3{--ac:#3fd0b0;--acr:63,208,176}         /* teal */
-  .card.c4{--ac:#e87aa0;--acr:232,122,160}        /* rose */
-  .card.c5{--ac:#cdb24e;--acr:205,178,78}         /* gold */
-  .card.c6{--ac:#46c8d8;--acr:70,200,216}         /* cyan (capstone) */
+  .card.c3{--ac:#a98cf0;--acr:169,140,240}         /* violet */
+  .card.c4{--ac:#a98cf0;--acr:169,140,240}        /* violet */
+  .card.c5{--ac:#a98cf0;--acr:169,140,240}         /* violet */
+  .card.c6{--ac:#a98cf0;--acr:169,140,240}         /* violet (capstone) */
   .card::before{content:"";position:absolute;inset:0;z-index:0;opacity:0;transition:opacity .55s;
     background:radial-gradient(circle at 50% -5%, rgba(var(--acr),.28), rgba(var(--acr),.06) 38%, transparent 70%)}
   .card:hover{--lift:-9px;border-color:rgba(var(--acr),.45);
@@ -112,6 +112,19 @@
   .card:hover .go .arr{transform:translateX(7px)}
 
 
+
+  /* cheat-sheet link (companion to capstone) */
+  .sheet-link{position:relative;z-index:1;display:flex;align-items:center;gap:16px;margin-top:18px;text-decoration:none;color:inherit;
+    border:1px solid var(--line-2);border-radius:14px;padding:16px 22px;
+    background:linear-gradient(160deg,var(--panel-2),var(--panel));
+    transition:border-color .35s,transform .35s cubic-bezier(.16,.8,.3,1),box-shadow .35s}
+  .sheet-link:hover{border-color:rgba(169,140,240,.5);transform:translateY(-3px);
+    box-shadow:0 20px 44px -32px rgba(0,0,0,.9), 0 0 38px -22px rgba(169,140,240,.42)}
+  .sl-icon{font-size:22px;color:var(--amber);flex-shrink:0;line-height:1}
+  .sl-text{flex:1;font-size:14px;color:var(--muted);line-height:1.5}
+  .sl-text b{color:var(--text);font-family:var(--display);font-weight:600;font-size:16px}
+  .sl-arr{color:var(--amber);font-family:var(--mono);font-size:15px;flex-shrink:0;transition:transform .35s cubic-bezier(.16,.8,.3,1)}
+  .sheet-link:hover .sl-arr{transform:translateX(6px)}
 
   .outro{border-top:1px solid var(--line);margin-top:34px;padding:44px 0 30px;
     display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;align-items:flex-end}
@@ -276,6 +289,12 @@
 
   </div>
 
+  <a class="sheet-link" href="unit10-cheatsheet.html">
+    <span class="sl-icon" aria-hidden="true">&#9776;</span>
+    <span class="sl-text"><b>Cheat Sheet</b> &mdash; every test, every series, and the "which test?" logic on one printable page</span>
+    <span class="sl-arr" aria-hidden="true">&#8594;</span>
+  </a>
+
   <div class="outro">
     <div class="outro-note">
       <h3>The full unit, <span class="em">plus exam practice</span></h3>
@@ -329,7 +348,7 @@
         const x = 30 + k*step, y = s.baseY - sum;
         if(k===0) ctx.moveTo(x,y); else if(k<=visible) ctx.lineTo(x,y);
       }
-      ctx.strokeStyle = `rgba(232,161,60,${0.11+0.10*prog})`;
+      ctx.strokeStyle = `rgba(169,140,240,${0.11+0.10*prog})`;
       ctx.lineWidth = 1.6; ctx.stroke();
       ctx.beginPath(); ctx.setLineDash([3,7]);
       ctx.moveTo(30, limitY); ctx.lineTo(W-30, limitY);

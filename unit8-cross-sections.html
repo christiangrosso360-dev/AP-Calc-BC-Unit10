@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Volumes with Cross Sections — the shape cheat sheet · Unit 8</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%2316140f%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2220%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%2340c98a%22%3EV%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{ --emerald:#40c98a; --emerald-glow:#5fe0a4; --amber:#e8a13c; --violet:#a892f0; --rose:#e0644f;
+         --glow:rgba(64,201,138,.08); --wrap-max:880px; }
+  .sub{color:var(--muted);font-size:15.5px;margin-top:10px;max-width:700px;line-height:1.6}
+  h2{font-family:var(--display);font-weight:600;font-size:24px;margin:56px 0 6px;letter-spacing:-0.015em}
+  h2 .n{color:var(--emerald);font-variant-numeric:tabular-nums}
+  p{font-size:15px;color:var(--muted);max-width:720px;line-height:1.78;margin:14px 0}
+  p.lead{font-size:16px;color:var(--ink);max-width:720px}
+  p b{color:var(--ink);font-weight:600}
+  .em-text{color:var(--emerald);font-weight:600}
+  .mono{font-family:var(--mono);color:var(--ink)}
+
+  .eq{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);
+    border-radius:14px;padding:22px;margin:20px 0;text-align:center;overflow-x:auto;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .eq .katex,.eq .katex-display{color:var(--ink)}
+
+  /* setup procedure steps */
+  .proc{margin:20px 0;max-width:720px;counter-reset:pc}
+  .proc-step{display:flex;gap:13px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+  .proc-step:last-child{border-bottom:none}
+  .proc-step .pn{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(64,201,138,.14);border:1px solid rgba(64,201,138,.4);color:var(--emerald);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .proc-step .pb{flex:1;font-size:14px;color:var(--muted);line-height:1.6}
+  .proc-step .pb b{color:var(--ink)}
+
+  /* the anchor diagram */
+  .anchor{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:18px}
+  .anchor svg{width:100%;max-width:560px;height:auto}
+
+  /* cheat sheet cards */
+  .sheet{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:20px}
+  .card{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset;display:flex;flex-direction:column}
+  .card.accent-sq{border-top:2px solid var(--emerald)}
+  .card.accent-rect{border-top:2px solid var(--amber)}
+  .card.accent-semi{border-top:2px solid var(--violet)}
+  .card.accent-equi{border-top:2px solid var(--emerald-glow)}
+  .card.accent-isos{border-top:2px solid var(--rose)}
+  .card-head{display:flex;align-items:center;gap:11px;margin-bottom:16px}
+  .card-head svg{width:46px;height:40px;flex-shrink:0}
+  .card-title{font-family:var(--display);font-size:16.5px;font-weight:600;color:var(--ink);line-height:1.2}
+  .card-formula{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:16px 12px;text-align:center;margin-bottom:13px}
+  .card-formula .katex{font-size:1.15em}
+  .card-note{font-size:12.5px;color:var(--muted);line-height:1.55;margin-bottom:14px;flex:1}
+  .card-note b{color:var(--ink)}
+  .derive-btn{font-family:var(--mono);font-size:11px;background:var(--bg);color:var(--emerald);border:1px solid rgba(64,201,138,.4);border-radius:8px;padding:7px 11px;cursor:pointer;transition:all .15s;align-self:flex-start}
+  .derive-btn:hover{background:rgba(64,201,138,.1)}
+  .derive-box{margin-top:12px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:0 13px;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .35s ease}
+  .derive-box.open{max-height:420px;padding:13px}
+  .dstep{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--muted);line-height:1.5}
+  .dstep:last-child{border-bottom:none}
+  .dstep .dn{flex-shrink:0;width:19px;height:19px;border-radius:50%;background:rgba(64,201,138,.14);color:var(--emerald);font-family:var(--mono);font-size:10px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .card-vol{margin-top:11px;font-family:var(--mono);font-size:12px;color:var(--amber);padding-top:10px;border-top:1px dashed var(--line-2)}
+  .card-summary{background:linear-gradient(160deg,rgba(232,161,60,.10),rgba(64,201,138,.06));border:1px dashed var(--line-2);border-radius:16px;padding:20px;display:flex;flex-direction:column}
+  .sum-tag{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+  .sum-head{font-family:var(--display);font-size:18px;font-weight:600;color:var(--ink);line-height:1.2;margin-bottom:10px}
+  .sum-body{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:13px}
+  .sum-body b{color:var(--ink)}
+  .sum-list{display:flex;flex-direction:column;gap:7px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .sum-list>div{display:flex;align-items:center;gap:8px}
+  .sum-list .katex{color:var(--ink)}
+
+  .sharednote{border-left:3px solid var(--amber);background:rgba(232,161,60,.06);border-radius:0 12px 12px 0;padding:16px 20px;margin:24px 0;font-size:14.5px;line-height:1.7;color:var(--ink);max-width:720px}
+  .sharednote b{color:var(--amber)}
+
+  /* derivation steps in section 1 */
+  .deriv{margin:18px 0;max-width:720px}
+  .dv-step{display:flex;gap:13px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+  .dv-step:last-child{border-bottom:none}
+  .dv-n{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(64,201,138,.14);border:1px solid rgba(64,201,138,.4);color:var(--emerald);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .dv-b{flex:1;font-size:14px;color:var(--muted);line-height:1.6}
+  .dv-m{margin-top:9px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 13px;overflow-x:auto}
+  .dv-m .katex{color:var(--ink)}
+
+  /* worked example */
+  .worked{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px;margin:18px 0;max-width:720px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .worked-prob{font-size:14.5px;color:var(--ink);line-height:1.65;padding-bottom:14px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+  .worked-prob b{color:var(--emerald)}
+  .worked-prob .mono{color:var(--emerald-glow)}
+  .wstep{display:flex;gap:13px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line)}
+  .wn{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--bg);border:1px solid rgba(64,201,138,.4);color:var(--emerald);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .wb{flex:1;font-size:14px;color:var(--muted);line-height:1.6}
+  .wb b{color:var(--ink)}
+  .wm{margin-top:9px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:9px 13px;overflow-x:auto}
+  .wm .katex{color:var(--ink)}
+  .worked-ans{margin-top:16px;font-family:var(--display);font-size:19px;color:var(--ink);text-align:center;padding:13px;background:rgba(64,201,138,.08);border-radius:10px}
+  .worked-ans b{color:var(--emerald)}
+  .worked-aside{margin-top:12px;font-size:13px;color:var(--muted);line-height:1.6;font-style:italic}
+  .worked-aside b{color:var(--ink);font-style:normal}
+  .worked-aside .katex{color:var(--ink)}
+  h3.worked-sub{font-family:var(--display);font-weight:600;font-size:18px;margin:32px 0 4px;color:var(--ink)}
+
+  /* traps */
+  .trap{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-left:3px solid var(--rose);border-radius:0 14px 14px 0;padding:18px 20px;margin:18px 0;max-width:720px}
+  .trap-q{font-size:14.5px;color:var(--ink);font-weight:600;margin-bottom:10px}
+  .trap-reveal{font-family:var(--mono);font-size:12px;background:var(--bg);color:var(--rose);border:1px solid rgba(224,100,79,.4);border-radius:8px;padding:7px 11px;cursor:pointer;transition:all .15s}
+  .trap-reveal:hover{background:rgba(224,100,79,.1)}
+  .trap-a{font-size:14px;color:var(--muted);line-height:1.65;margin-top:14px;display:none}
+  .trap-a.show{display:block}
+  .trap-a b{color:var(--ink)}
+  .trap-ans{font-size:15px;color:var(--ink);margin-bottom:10px}
+  .trap-ans b{color:var(--rose)}
+  .trap-result{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:10px 14px;margin-bottom:10px;text-align:center}
+  .trap-result .katex{color:var(--ink)}
+  .trap-tell{font-size:13px;color:var(--muted);font-style:italic;border-left:2px solid var(--line-2);padding-left:11px}
+  .trap-tell b{color:var(--ink);font-style:normal}
+
+  /* quiz (same engine as other pages) */
+  .quiz{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:24px;margin-top:22px;max-width:680px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .qtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .qscore{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .qreset{font-family:var(--mono);font-size:11px;background:none;border:1px solid var(--line-2);color:var(--muted);border-radius:7px;padding:5px 10px;cursor:pointer}
+  .qreset:hover{border-color:var(--emerald);color:var(--ink)}
+  .qprompt{font-size:15.5px;color:var(--ink);line-height:1.6;margin-bottom:8px}
+  .qctx{font-size:13.5px;color:var(--muted);margin-bottom:14px}
+  .qopts{display:flex;flex-direction:column;gap:9px}
+  .qopts button{font-family:var(--body);font-size:14.5px;text-align:left;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px 15px;cursor:pointer;transition:border-color .15s,background .15s}
+  .qopts button:hover:not(:disabled){border-color:var(--emerald)}
+  .qopts button:disabled{cursor:default}
+  .qopts button.correct{background:rgba(64,201,138,.16);border-color:var(--emerald);color:var(--emerald);font-weight:600}
+  .qopts button.wrong{background:rgba(224,100,79,.16);border-color:var(--rose);color:var(--rose)}
+  .qfb{margin-top:14px;font-size:14px;line-height:1.65;color:var(--muted);min-height:1px}
+  .fb-intro{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+  .fb-intro b{color:var(--emerald)}
+  .fb-step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .fb-step:last-of-type{border-bottom:none}
+  .fb-step-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--bg);color:var(--emerald);border:1px solid rgba(64,201,138,.4);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .fb-step-body{flex:1}
+  .fb-step-t{font-size:13.5px;color:var(--muted);line-height:1.5}
+  .fb-step-m{margin-top:7px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 12px;overflow-x:auto}
+  .fb-key{margin-top:13px;font-size:13.5px;color:var(--ink);background:rgba(64,201,138,.07);border-left:2px solid var(--emerald);border-radius:0 8px 8px 0;padding:10px 14px;line-height:1.55}
+  .qnext{margin-top:16px;width:100%;font-family:var(--mono);font-size:13px;font-weight:600;background:var(--emerald);color:#16140f;border:none;border-radius:10px;padding:12px;cursor:pointer;display:none}
+  .qdone{text-align:center;padding:10px}
+  .qdone .big{font-family:var(--display);font-size:32px;font-weight:600;color:var(--emerald)}
+  .tex-fallback{font-family:var(--mono);font-size:14px;color:var(--ink)}
+
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  .whatsnext{margin-top:30px;font-size:14px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;max-width:720px}
+  .whatsnext a{color:var(--emerald);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:54px;border-top:1px solid var(--line);padding-top:14px}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit8.html">← Unit 8</a>
+  <header class="reveal">
+    <h1>Volumes with <span class="em">Cross Sections</span></h1>
+    <div class="sub">The concept is easy: stack up slices to build a solid. The part that actually trips people up is
+      remembering each shape's area formula — and knowing when to use it. So this page is built as a cheat sheet you
+      can actually keep.</div>
+  </header>
+
+  <!-- ===== 1 · METHOD ===== -->
+  <h2 class="reveal"><span class="n">1</span> · The method: stack the slices</h2>
+  <p class="lead reveal">Take a flat 2D region and slice it into thin strips. On each strip, stand up a known shape —
+    a square, a triangle, a semicircle. Each shape is a <b>cross section</b>, and its area depends on the strip's
+    length. Add up all those areas across the region and you get the solid's volume.</p>
+  <p class="reveal">That "add up the areas" is exactly an integral. If each cross section sits at position
+    <span class="mono">x</span> and has area <span class="mono">A(x)</span>, the volume is:</p>
+  <div class="eq reveal" id="volEq"></div>
+  <p class="reveal">The whole game is writing <b>A(x)</b> correctly — and that has just two parts: the slice's
+    <b>length s</b> (straight from the region, the same top − bottom you already do for area), and the shape's
+    <b>area formula</b> in terms of s. Here's the procedure every problem follows:</p>
+  <div class="proc reveal">
+    <div class="proc-step"><div class="pn">1</div><div class="pb"><b>Find the bounds.</b> Set the curves equal — the intersection points are your limits of integration. (Same as area between curves.)</div></div>
+    <div class="proc-step"><div class="pn">2</div><div class="pb"><b>Find the slice length s.</b> At a given x, it's the gap across the region: <span class="mono">top − bottom</span> (or right − left if slicing in y).</div></div>
+    <div class="proc-step"><div class="pn">3</div><div class="pb"><b>Write A(x).</b> Plug s into the cross section's area formula — this is the step that decides everything. Get it wrong and the rest collapses.</div></div>
+    <div class="proc-step"><div class="pn">4</div><div class="pb"><b>Integrate A(x)</b> over the bounds. That's the volume.</div></div>
+  </div>
+  <div class="anchor reveal">
+    <svg id="anchorSvg" viewBox="0 0 560 220" aria-label="region, one slice, the shape standing on it"></svg>
+  </div>
+
+  <!-- ===== 2 · CHEAT SHEET ===== -->
+  <h2 class="reveal"><span class="n">2</span> · The shape cheat sheet</h2>
+  <p class="lead reveal">All the area formulas in one place — keyed to the slice length <b>s</b>. Don't just memorize
+    them; hit <b>"derive it"</b> on any card to rebuild the formula from scratch, so you can always reconstruct it on
+    the exam. Every volume shown uses the <i>same</i> base region (y = 1 − x² over the x-axis) so you can see the one
+    thing that changes: the constant out front.</p>
+  <div class="sheet reveal" id="sheet"></div>
+  <p class="reveal" style="font-size:13.5px;color:var(--muted);max-width:720px">Every volume above is just a constant times the <i>same</i> integral, <span class="mono">∫(1−x²)² dx = 16/15</span> — because the base region and slice length s never change. Hit <b>derive it</b> on any card to see its full setup.</p>
+
+  <!-- ===== 3 · WORKED EXAMPLE ===== -->
+  <h2 class="reveal"><span class="n">3</span> · A worked example, start to finish</h2>
+  <p class="lead reveal">The procedure on real curves. Watch the four steps — bounds, slice length, area, integrate — turn a region into a number.</p>
+
+  <div class="worked reveal">
+    <div class="worked-prob"><b>Problem.</b> The base of a solid is the region under <span class="mono">y = √x</span> from
+      <span class="mono">x = 0</span> to <span class="mono">x = 4</span>. Cross sections perpendicular to the
+      x-axis are <b>squares</b>. Find the volume.</div>
+    <div class="wstep"><div class="wn">1</div><div class="wb"><b>Bounds.</b> The region runs from x = 0 to x = 4 — those are the limits.<div class="wm" id="wm0"></div></div></div>
+    <div class="wstep"><div class="wn">2</div><div class="wb"><b>Slice length.</b> At each x, the region reaches from the x-axis up to the curve: s = top − bottom.<div class="wm" id="wm1"></div></div></div>
+    <div class="wstep"><div class="wn">3</div><div class="wb"><b>Area.</b> Squares, so A = s² — and the √ disappears, which is why this one's clean.<div class="wm" id="wm2"></div></div></div>
+    <div class="wstep"><div class="wn">4</div><div class="wb"><b>Integrate.</b> Antidifferentiate and evaluate.<div class="wm" id="wm3"></div></div></div>
+    <div class="worked-ans">Volume = <b>8</b> cubic units.</div>
+    <div class="worked-aside">Swap to <b>semicircles</b> on the same base and only the constant changes:
+      <span id="wmAside"></span> — the cheat-sheet pattern in action.</div>
+  </div>
+
+  <h3 class="worked-sub reveal">When the slices are perpendicular to the <span class="em-text">y-axis</span></h3>
+  <p class="reveal" style="max-width:720px">If the problem stacks slices along the y-axis instead, nothing about the
+    method changes — you just write everything in terms of <b>y</b> and integrate <span class="mono">dy</span>.</p>
+  <div class="worked reveal">
+    <div class="worked-prob"><b>Problem.</b> The base is bounded by the <span class="mono">y-axis</span> and
+      <span class="mono">x = y²</span> for <span class="mono">0 ≤ y ≤ 2</span>. Cross sections perpendicular to the
+      <b>y-axis</b> are <b>squares</b>. Find the volume.</div>
+    <div class="wstep"><div class="wn">1</div><div class="wb"><b>Pick the variable.</b> Slices ⊥ to the y-axis stack along y — so integrate <span class="mono">dy</span>, with everything in terms of y.<div class="wm" id="wy0"></div></div></div>
+    <div class="wstep"><div class="wn">2</div><div class="wb"><b>Slice length.</b> At height y, the region reaches from the y-axis (x = 0) out to x = y²: s = right − left.<div class="wm" id="wy1"></div></div></div>
+    <div class="wstep"><div class="wn">3</div><div class="wb"><b>Area.</b> Squares again, so A = s².<div class="wm" id="wy2"></div></div></div>
+    <div class="wstep"><div class="wn">4</div><div class="wb"><b>Integrate</b> over the y-bounds.<div class="wm" id="wy3"></div></div></div>
+    <div class="worked-ans">Volume = <b>32/5</b> cubic units.</div>
+    <div class="worked-aside">Same four steps — only the variable switched from x to y. <b>That's the whole dx-vs-dy decision.</b></div>
+  </div>
+
+  <!-- ===== 4 · TRAPS ===== -->
+  <h2 class="reveal"><span class="n">4</span> · The traps that cost points</h2>
+  <p class="lead reveal">Almost every lost point on this topic comes from three specific mix-ups. Test yourself on each
+    before peeking.</p>
+
+  <div class="trap reveal">
+    <div class="trap-q">① A semicircle's flat side spans the region — is that length the radius or the diameter?</div>
+    <button class="trap-reveal" data-trap="0">Reveal</button>
+    <div class="trap-a" id="trap0">
+      <div class="trap-ans"><b>Diameter.</b> The slice spans all the way across, so the radius is half: r = s/2.</div>
+      <div class="trap-result" id="trapR0"></div>
+      <div class="trap-tell"><b>The tell:</b> no /8 means you forgot to halve the diameter.</div>
+    </div>
+  </div>
+
+  <div class="trap reveal">
+    <div class="trap-q">② "Isosceles right triangle" — is the region's slice the leg or the hypotenuse?</div>
+    <button class="trap-reveal" data-trap="1">Reveal</button>
+    <div class="trap-a" id="trap1">
+      <div class="trap-ans"><b>Depends — read it.</b> The slice is either a leg or the hypotenuse:</div>
+      <div class="trap-result" id="trapR1a"></div>
+      <div class="trap-result" id="trapR1b"></div>
+      <div class="trap-tell"><b>The tell:</b> same shape, different constant — check which side the region gives you.</div>
+    </div>
+  </div>
+
+  <div class="trap reveal">
+    <div class="trap-q">③ The slices are perpendicular to the y-axis. Do you still integrate dx?</div>
+    <button class="trap-reveal" data-trap="2">Reveal</button>
+    <div class="trap-a" id="trap2">
+      <div class="trap-ans"><b>No — integrate dy.</b> Slices ⊥ to the y-axis stack along y.</div>
+      <div class="trap-result" id="trapR2"></div>
+      <div class="trap-tell"><b>The tell:</b> write s as right − left in terms of y. Same dx-vs-dy call as area between curves.</div>
+    </div>
+  </div>
+
+  <!-- ===== 4 · DRILL ===== -->
+  <h2 class="reveal"><span class="n">5</span> · Drill it — set up the volume</h2>
+  <p class="lead reveal">Six questions on picking the right formula, dodging the traps, and setting up the integral —
+    the parts that actually get tested. Full worked solution after each.</p>
+  <div class="quiz reveal" id="quiz">
+    <div class="qtop"><span class="qscore" id="qScore">Score: 0 / 0</span><button class="qreset" id="qReset">↺ restart</button></div>
+    <div id="qBody">
+      <div class="qprompt" id="qPrompt"></div>
+      <div class="qctx" id="qCtx"></div>
+      <div class="qopts" id="qOpts"></div>
+      <div class="qfb" id="qFb"></div>
+      <button class="qnext" id="qNext">Next →</button>
+    </div>
+  </div>
+
+  <div class="whatsnext reveal">
+    Next comes the other way to build a solid: spin a region around an axis instead of stacking shapes on it —
+    <a href="unit8-solids.html">solids of revolution</a>. Back to <a href="unit8.html">Unit 8</a>.
+  </div>
+  <footer class="reveal">Volumes with Cross Sections · Topics 8.7–8.8 · Unit 8 · part of the Visual AP Calculus guide.</footer>
+</div>
+
+<script>
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const EM="#40c98a",EMG="#5fe0a4",AM="#e8a13c",VIO="#a892f0",ROSE="#e0644f",MUT="#9a9183",LINE="#332e25",INK="#ece7dd",FAINT="#6b6457",BG="#0d0c0a";
+
+function renderEqs(){
+  document.getElementById('volEq').innerHTML=tex(String.raw`V=\int_a^b \textcolor{${EM}}{A(x)}\,dx`,"V = \u222b\u2090\u1d47 A(x) dx",true);
+  var r0=document.getElementById('trapR0'); if(r0) r0.innerHTML=tex(String.raw`A=\tfrac12\pi\left(\tfrac{s}{2}\right)^2=\tfrac{\pi}{8}s^2`,"A = (\u03c0/8)s\u00b2",false);
+  var r1a=document.getElementById('trapR1a'); if(r1a) r1a.innerHTML=tex(String.raw`\text{leg}=s:\quad A=\tfrac12 s^2`,"leg = s: A = \u00bds\u00b2",false);
+  var r1b=document.getElementById('trapR1b'); if(r1b) r1b.innerHTML=tex(String.raw`\text{hyp}=s:\quad A=\tfrac14 s^2`,"hyp = s: A = \u00bcs\u00b2",false);
+  var r2=document.getElementById('trapR2'); if(r2) r2.innerHTML=tex(String.raw`V=\int_c^d A(y)\,dy`,"V = \u222b A(y) dy",false);
+  // worked example (x-slice)
+  var w0=document.getElementById('wm0'); if(w0) w0.innerHTML=tex(String.raw`0 \le x \le 4`,"0 \u2264 x \u2264 4",false);
+  var w1=document.getElementById('wm1'); if(w1) w1.innerHTML=tex(String.raw`s=\sqrt{x}-0=\sqrt{x}`,"s = \u221ax",false);
+  var w2=document.getElementById('wm2'); if(w2) w2.innerHTML=tex(String.raw`A=s^2=(\sqrt{x})^2=x`,"A = (\u221ax)\u00b2 = x",false);
+  var w3=document.getElementById('wm3'); if(w3) w3.innerHTML=tex(String.raw`V=\int_0^4 x\,dx=\left[\tfrac{x^2}{2}\right]_0^4=8`,"V = \u222b\u2080\u2074 x dx = 8",true);
+  var wa=document.getElementById('wmAside'); if(wa) wa.innerHTML=tex(String.raw`V=\tfrac{\pi}{8}\int_0^4 x\,dx=\pi`,"V = (\u03c0/8)(8) = \u03c0",false);
+  // worked example (y-slice)
+  var y0=document.getElementById('wy0'); if(y0) y0.innerHTML=tex(String.raw`V=\int A(y)\,dy`,"V = \u222b A(y) dy",false);
+  var y1=document.getElementById('wy1'); if(y1) y1.innerHTML=tex(String.raw`s=y^2-0=y^2`,"s = y\u00b2",false);
+  var y2=document.getElementById('wy2'); if(y2) y2.innerHTML=tex(String.raw`A=s^2=(y^2)^2=y^4`,"A = (y\u00b2)\u00b2 = y\u2074",false);
+  var y3=document.getElementById('wy3'); if(y3) y3.innerHTML=tex(String.raw`V=\int_0^2 y^4\,dy=\left[\tfrac{y^5}{5}\right]_0^2=\tfrac{32}{5}`,"V = \u222b\u2080\u00b2 y\u2074 dy = 32/5",true);
+}
+
+/* ===== anchor diagram: region -> one slice -> shape standing ===== */
+(function(){
+  const svg=document.getElementById('anchorSvg'); if(!svg) return;
+  const LX=x=>40+(x+1)/2*200, LY=y=>150-y*95;
+  // region y=1-x^2
+  svg.appendChild(el("text",{x:140,y:24,fill:MUT,"font-size":11,"text-anchor":"middle","font-family":"var(--mono)"},"the base region"));
+  svg.appendChild(el("line",{x1:LX(-1.1),y1:LY(0),x2:LX(1.1),y2:LY(0),stroke:MUT,"stroke-width":1.2}));
+  let d="M "+LX(-1)+" "+LY(0); for(let x=-1;x<=1;x+=0.02)d+=" L "+LX(x)+" "+LY(1-x*x); d+=" L "+LX(1)+" "+LY(0)+" Z";
+  svg.appendChild(el("path",{d,fill:"rgba(64,201,138,.12)"}));
+  let c="M "+LX(-1)+" "+LY(0); for(let x=-1;x<=1;x+=0.02)c+=" L "+LX(x)+" "+LY(1-x*x);
+  svg.appendChild(el("path",{d:c,fill:"none",stroke:EM,"stroke-width":2.2}));
+  // one slice at x=0.3
+  const xs=0.3, ss=1-xs*xs;
+  svg.appendChild(el("line",{x1:LX(xs),y1:LY(0),x2:LX(xs),y2:LY(ss),stroke:AM,"stroke-width":3.5,"stroke-linecap":"round"}));
+  svg.appendChild(el("text",{x:LX(xs)+7,y:LY(ss/2),fill:AM,"font-size":12,"font-weight":"600","font-family":"var(--mono)"},"s"));
+  // arrow
+  svg.appendChild(el("line",{x1:285,y1:110,x2:330,y2:110,stroke:FAINT,"stroke-width":2}));
+  svg.appendChild(el("polygon",{points:"330,104 343,110 330,116",fill:FAINT}));
+  svg.appendChild(el("text",{x:312,y:99,fill:FAINT,"font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},"stand a"));
+  svg.appendChild(el("text",{x:312,y:128,fill:FAINT,"font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},"shape up"));
+  // square standing (the cross section)
+  svg.appendChild(el("text",{x:455,y:24,fill:MUT,"font-size":11,"text-anchor":"middle","font-family":"var(--mono)"},"the cross section"));
+  const bx=410, by=150, sp=88;
+  svg.appendChild(el("polygon",{points:`${bx},${by} ${bx+sp},${by} ${bx+sp},${by-sp} ${bx},${by-sp}`,fill:"rgba(64,201,138,.2)",stroke:EM,"stroke-width":2.4}));
+  svg.appendChild(el("line",{x1:bx,y1:by,x2:bx+sp,y2:by,stroke:AM,"stroke-width":4,"stroke-linecap":"round"}));
+  svg.appendChild(el("text",{x:bx+sp/2,y:by+16,fill:AM,"font-size":11,"text-anchor":"middle","font-family":"var(--mono)"},"base = s"));
+  svg.appendChild(el("text",{x:bx+sp/2,y:by-sp/2+4,fill:EM,"font-size":12,"text-anchor":"middle","font-family":"var(--mono)"},"A = s²"));
+})();
+
+/* ===== cheat sheet cards ===== */
+const SHAPES=[
+  { key:'sq', cls:'accent-sq', title:'Square', accent:EM,
+    draw:(svg)=>{const b=44,by=42,x=8;svg.appendChild(el("polygon",{points:`${x},${by} ${x+b},${by} ${x+b},${by-b} ${x},${by-b}`,fill:"rgba(64,201,138,.2)",stroke:EM,"stroke-width":2}));svg.appendChild(el("line",{x1:x,y1:by,x2:x+b,y2:by,stroke:AM,"stroke-width":2.5}));},
+    formula:String.raw`A=s^2`, note:"Side of the square = the slice length s.",
+    derive:[{n:1,t:"Each side of the square equals the slice length.",m:String.raw`\text{side}=s`},{n:2,t:"Square it for the area, then drop it into the volume integral.",m:String.raw`V=\int s^2\,dx`}],
+    vol:String.raw`V=\tfrac{16}{15}` },
+  { key:'rect', cls:'accent-rect', title:'Rectangle', accent:AM,
+    draw:(svg)=>{const b=44,h=30,by=42,x=8;svg.appendChild(el("polygon",{points:`${x},${by} ${x+b},${by} ${x+b},${by-h} ${x},${by-h}`,fill:"rgba(232,161,60,.2)",stroke:AM,"stroke-width":2}));svg.appendChild(el("line",{x1:x,y1:by,x2:x+b,y2:by,stroke:AM,"stroke-width":2.5}));},
+    formula:String.raw`A=2s^2`, note:"Here the height is <b>twice the base</b> (h = 2s). The multiplier changes per problem — read it carefully.",
+    derive:[{n:1,t:"Base is the slice length; the problem gives the height, e.g. twice the base.",m:String.raw`\text{base}=s,\ \text{height}=2s`},{n:2,t:"Area is base × height = s·(2s) = 2s²; drop it into the volume integral.",m:String.raw`V=\int 2s^2\,dx`}],
+    vol:String.raw`V=2\cdot\tfrac{16}{15}=\tfrac{32}{15}` },
+  { key:'semi', cls:'accent-semi', title:'Semicircle', accent:VIO,
+    draw:(svg)=>{const r=22,cx=30,by=42;svg.appendChild(el("path",{d:`M ${cx-r} ${by} A ${r} ${r} 0 0 1 ${cx+r} ${by} Z`,fill:"rgba(168,146,240,.2)",stroke:VIO,"stroke-width":2}));svg.appendChild(el("line",{x1:cx-r,y1:by,x2:cx+r,y2:by,stroke:AM,"stroke-width":2.5}));},
+    formula:String.raw`A=\tfrac{\pi}{8}s^2`, note:"The slice is the <b>diameter</b>, so r = s/2. Forgetting to halve is the #1 trap.",
+    derive:[{n:1,t:"The slice length is the diameter, so the radius is half.",m:String.raw`r=\tfrac{s}{2}`},{n:2,t:"Half a circle, with r = s/2 substituted.",m:String.raw`A=\tfrac{1}{2}\pi\left(\tfrac{s}{2}\right)^2=\tfrac{\pi}{8}s^2`},{n:3,t:"Drop that area into the volume integral.",m:String.raw`V=\int \tfrac{\pi}{8}s^2\,dx`}],
+    vol:String.raw`V=\tfrac{\pi}{8}\cdot\tfrac{16}{15}=\tfrac{2\pi}{15}` },
+  { key:'equi', cls:'accent-equi', title:'Equilateral triangle', accent:EMG,
+    draw:(svg)=>{const b=44,h=38,by=42,x=8;svg.appendChild(el("polygon",{points:`${x},${by} ${x+b},${by} ${x+b/2},${by-h}`,fill:"rgba(95,224,164,.2)",stroke:EMG,"stroke-width":2}));svg.appendChild(el("line",{x1:x,y1:by,x2:x+b,y2:by,stroke:AM,"stroke-width":2.5}));},
+    formula:String.raw`A=\tfrac{\sqrt3}{4}s^2`, note:"All sides = s. Height is (√3/2)s.",
+    derive:[{n:1,t:"Side = slice length s; the height of an equilateral triangle is (√3/2)s.",m:String.raw`h=\tfrac{\sqrt3}{2}s`},{n:2,t:"Area is ½·base·height.",m:String.raw`A=\tfrac{1}{2}\cdot s\cdot\tfrac{\sqrt3}{2}s=\tfrac{\sqrt3}{4}s^2`},{n:3,t:"Drop that area into the volume integral.",m:String.raw`V=\int \tfrac{\sqrt3}{4}s^2\,dx`}],
+    vol:String.raw`V=\tfrac{\sqrt3}{4}\cdot\tfrac{16}{15}=\tfrac{4\sqrt3}{15}` },
+  { key:'isos', cls:'accent-isos', title:'Isosceles right triangle', accent:ROSE,
+    draw:(svg)=>{const b=44,by=42,x=8;svg.appendChild(el("polygon",{points:`${x},${by} ${x+b},${by} ${x},${by-b}`,fill:"rgba(224,100,79,.2)",stroke:ROSE,"stroke-width":2}));svg.appendChild(el("line",{x1:x,y1:by,x2:x+b,y2:by,stroke:AM,"stroke-width":2.5}));},
+    formula:String.raw`A=\tfrac12 s^2\ \text{or}\ \tfrac14 s^2`, note:"<b>Leg = s</b> → ½s². <b>Hypotenuse = s</b> → ¼s². Read which one!",
+    derive:[{n:1,t:"If the slice is a leg: both legs are s, so A = ½s². Integrate it.",m:String.raw`V=\int \tfrac12 s^2\,dx`},{n:2,t:"If the slice is the hypotenuse: legs are s/√2, so A = ¼s². Integrate it.",m:String.raw`V=\int \tfrac14 s^2\,dx`}],
+    vol:String.raw`V=\tfrac12\cdot\tfrac{16}{15}=\tfrac{8}{15}\ (\text{leg})` }
+];
+
+function buildSheet(){
+  const wrap=document.getElementById('sheet'); if(!wrap) return;
+  wrap.innerHTML="";   // idempotent: clear before building so re-runs don't duplicate
+  SHAPES.forEach((sp,i)=>{
+    const card=document.createElement('div'); card.className='card '+sp.cls;
+    const head=document.createElement('div'); head.className='card-head';
+    const isvg=document.createElementNS(NS,'svg'); isvg.setAttribute('viewBox','0 0 60 50'); isvg.setAttribute('class','card-icon');
+    sp.draw(isvg); head.appendChild(isvg);
+    const ttl=document.createElement('div'); ttl.className='card-title'; ttl.textContent=sp.title; head.appendChild(ttl);
+    card.appendChild(head);
+    const fm=document.createElement('div'); fm.className='card-formula'; fm.innerHTML=tex(sp.formula,sp.formula,false); card.appendChild(fm);
+    const nt=document.createElement('div'); nt.className='card-note'; nt.innerHTML=sp.note; card.appendChild(nt);
+    const btn=document.createElement('button'); btn.className='derive-btn'; btn.textContent='derive it ▸';
+    card.appendChild(btn);
+    const box=document.createElement('div'); box.className='derive-box';
+    sp.derive.forEach(ds=>{ const row=document.createElement('div'); row.className='dstep';
+      row.innerHTML="<div class='dn'>"+ds.n+"</div><div>"+ds.t+"<div style='margin-top:5px'>"+tex(ds.m,ds.m,false)+"</div></div>"; box.appendChild(row); });
+    const vol=document.createElement('div'); vol.className='card-vol'; vol.innerHTML="on the shared region y=1−x²: &nbsp;"+tex(sp.vol,sp.vol,false); box.appendChild(vol);
+    card.appendChild(box);
+    btn.addEventListener('click',()=>{ const open=box.classList.toggle('open'); btn.textContent=open?'hide ▾':'derive it ▸'; });
+    wrap.appendChild(card);
+  });
+  // 6th tile: the takeaway / pattern recap (fills the grid, ties off the section)
+  const sum=document.createElement('div'); sum.className='card card-summary';
+  sum.innerHTML="<div class='sum-tag'>the pattern</div>"
+    +"<div class='sum-head'>Same s, swap the constant</div>"
+    +"<div class='sum-body'>Every shape uses the <b>same slice length s</b> from the region. Only the constant out front changes:</div>"
+    +"<div class='sum-list'>"
+    +"<div><span style='color:"+EM+"'>■</span> square &nbsp;"+tex(String.raw`s^2`,"s\u00b2",false)+"</div>"
+    +"<div><span style='color:"+AM+"'>■</span> rectangle &nbsp;"+tex(String.raw`2s^2`,"2s\u00b2",false)+"</div>"
+    +"<div><span style='color:"+VIO+"'>■</span> semicircle &nbsp;"+tex(String.raw`\tfrac{\pi}{8}s^2`,"(\u03c0/8)s\u00b2",false)+"</div>"
+    +"<div><span style='color:"+EMG+"'>■</span> equilateral &nbsp;"+tex(String.raw`\tfrac{\sqrt3}{4}s^2`,"(\u221a3/4)s\u00b2",false)+"</div>"
+    +"<div><span style='color:"+ROSE+"'>■</span> isos. right &nbsp;"+tex(String.raw`\tfrac12 s^2`,"\u00bds\u00b2",false)+"</div>"
+    +"</div>";
+  wrap.appendChild(sum);
+}
+
+/* ===== traps ===== */
+document.querySelectorAll('.trap-reveal').forEach(b=>b.addEventListener('click',()=>{
+  const a=document.getElementById('trap'+b.dataset.trap); const shown=a.classList.toggle('show'); b.textContent=shown?'Hide':'Reveal';
+}));
+
+/* ===== quiz ===== */
+const QUIZ=[
+  {p:"Cross sections perpendicular to the x-axis are <b>squares</b>. The slice length is s. What is the area of one slice?",
+   ctx:"Just the square's area formula in terms of s.",
+   opts:["\\(s^2\\)","\\(2s^2\\)","\\(\\tfrac12 s^2\\)","\\(\\pi s^2\\)"],correct:0,
+   intro:"<b>Square:</b> the simplest one — the slice length is the side.",
+   steps:[{t:"Each side of the square equals the slice length.",m:"\\text{side}=s"},{t:"Area of a square.",m:"A=s^2"}],
+   key:"Square cross section → A = s². The whole base region just feeds you s."},
+
+  {p:"Cross sections are <b>semicircles</b> whose flat side spans the region (length s). What is the area of one slice?",
+   ctx:"Watch what s represents here.",
+   opts:["\\(\\tfrac{\\pi}{8}s^2\\)","\\(\\tfrac{\\pi}{2}s^2\\)","\\(\\pi s^2\\)","\\(\\tfrac{\\pi}{4}s^2\\)"],correct:0,
+   intro:"<b>Semicircle trap:</b> the slice is the diameter, not the radius.",
+   steps:[{t:"The flat side spans the whole region, so it's the diameter. Radius is half.",m:"r=\\tfrac{s}{2}"},{t:"Half a circle.",m:"A=\\tfrac12\\pi r^2=\\tfrac12\\pi\\left(\\tfrac{s}{2}\\right)^2"},{t:"Simplify.",m:"A=\\tfrac{\\pi}{8}s^2"}],
+   key:"If you got (π/2)s², you forgot to halve the diameter. The /8 is the tell."},
+
+  {p:"Cross sections are <b>equilateral triangles</b> with side s. What is the area of one slice?",
+   ctx:"Recall the equilateral triangle area.",
+   opts:["\\(\\tfrac{\\sqrt3}{4}s^2\\)","\\(\\tfrac12 s^2\\)","\\(\\tfrac{\\sqrt3}{2}s^2\\)","\\(s^2\\)"],correct:0,
+   intro:"<b>Equilateral triangle:</b> reconstruct it from the height.",
+   steps:[{t:"The height of an equilateral triangle with side s.",m:"h=\\tfrac{\\sqrt3}{2}s"},{t:"Area = ½·base·height.",m:"A=\\tfrac12\\cdot s\\cdot\\tfrac{\\sqrt3}{2}s=\\tfrac{\\sqrt3}{4}s^2"}],
+   key:"Equilateral → (√3/4)s². Rebuild it from h = (√3/2)s if you blank."},
+
+  {p:"Cross sections are <b>isosceles right triangles</b> whose <b>hypotenuse</b> lies in the region (length s). Area of one slice?",
+   ctx:"Careful — the slice is the hypotenuse, not a leg.",
+   opts:["\\(\\tfrac14 s^2\\)","\\(\\tfrac12 s^2\\)","\\(s^2\\)","\\(\\tfrac{\\sqrt3}{4}s^2\\)"],correct:0,
+   intro:"<b>Isosceles right, hypotenuse version:</b> the legs are shorter than s.",
+   steps:[{t:"If the hypotenuse is s, each leg is s/√2.",m:"\\text{leg}=\\tfrac{s}{\\sqrt2}"},{t:"Area = ½·leg·leg.",m:"A=\\tfrac12\\left(\\tfrac{s}{\\sqrt2}\\right)^2=\\tfrac14 s^2"}],
+   key:"Hypotenuse = s → ¼s². If the LEG were s instead, it'd be ½s². Read the problem!"},
+
+  {p:"The base is the region between \\(y=x\\) and \\(y=x^2\\). Cross sections ⊥ to the x-axis are squares. Which integral gives the volume?",
+   ctx:"Find s = top − bottom, then square it.",
+   opts:["\\(\\int_0^1 (x-x^2)^2\\,dx\\)","\\(\\int_0^1 (x-x^2)\\,dx\\)","\\(\\int_0^1 (x^2-x)^2\\,dx\\)","\\(\\int_0^2 (x-x^2)^2\\,dx\\)"],correct:0,
+   intro:"<b>Full setup:</b> bounds, then s, then square it.",
+   steps:[{t:"Curves meet where x = x², i.e. x = 0 and x = 1 → bounds.",m:"x=0,\\ x=1"},{t:"On (0,1), x is on top, so s = x − x².",m:"s=x-x^2"},{t:"Squares: A = s². Integrate over [0,1].",m:"V=\\int_0^1 (x-x^2)^2\\,dx"}],
+   key:"Bounds from setting equal, s = top − bottom, then A = s². (This one works out to 1/30.)"},
+
+  {p:"A solid's cross sections are taken <b>perpendicular to the y-axis</b>. How do you set up the volume?",
+   ctx:"Which variable do you integrate?",
+   opts:["Write s in terms of y and integrate \\(\\int A(y)\\,dy\\)","Write s in terms of x and integrate \\(\\int A(x)\\,dx\\)","It can't be done with one integral","Convert everything to x first"],correct:0,
+   intro:"<b>Slice direction sets the variable.</b>",
+   steps:[{t:"Slices ⊥ to the y-axis are stacked along y, so you integrate dy.",m:"V=\\int_c^d A(y)\\,dy"},{t:"Write the slice length as right − left in terms of y.",m:"s=s(y)"}],
+   key:"⊥ to y-axis → integrate dy, with s written in terms of y. Same shape formulas."}
+];
+(function(){
+  const QN=QUIZ.length; let order=[],idx=0,score=0,answered=false;
+  const scoreEl=document.getElementById('qScore'), bodyEl=document.getElementById('qBody');
+  let prompt,ctx,opts,fb,next;
+  function grab(){prompt=document.getElementById('qPrompt');ctx=document.getElementById('qCtx');opts=document.getElementById('qOpts');fb=document.getElementById('qFb');next=document.getElementById('qNext');next.addEventListener('click',onNext);}
+  function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function mathify(h){return h.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return m;}});}
+  function render(){answered=false;fb.innerHTML="";next.style.display="none";const q=QUIZ[order[idx]];
+    prompt.innerHTML=mathify(q.p);ctx.textContent=q.ctx;
+    const list=q.opts.map((t,i)=>({t,c:i===q.correct}));shuffle(list);opts.innerHTML="";
+    list.forEach(o=>{const b=document.createElement('button');b.innerHTML=mathify(o.t);b.dataset.c=o.c;b.addEventListener('click',()=>pick(b));opts.appendChild(b);});
+    scoreEl.textContent="Score: "+score+" / "+idx;}
+  function pick(btn){if(answered)return;answered=true;const q=QUIZ[order[idx]];const correct=btn.dataset.c==="true";
+    [...opts.children].forEach(b=>{b.disabled=true;if(b.dataset.c==="true")b.classList.add('correct');});
+    if(correct)score++;else btn.classList.add('wrong');
+    let html="<div class='fb-intro'>"+(correct?"<b>Correct.</b> ":"<b>Not quite.</b> ")+mathify(q.intro)+"</div>";
+    q.steps.forEach((st,si)=>{html+="<div class='fb-step'><div class='fb-step-n'>"+(si+1)+"</div><div class='fb-step-body'><div class='fb-step-t'>"+mathify(st.t)+"</div>"+(st.m?"<div class='fb-step-m'>"+tex(st.m,st.m,true)+"</div>":"")+"</div></div>";});
+    html+="<div class='fb-key'>"+mathify(q.key)+"</div>";fb.innerHTML=html;
+    scoreEl.textContent="Score: "+score+" / "+(idx+1);next.textContent=idx<QN-1?"Next →":"See result →";next.style.display="block";}
+  function onNext(){if(idx<QN-1){idx++;render();}else{const msg=score===QN?"Perfect — you've got the formulas cold.":score>=4?"Solid. Re-check the traps you missed.":"Worth another pass — focus on the area formulas and the semicircle trap.";bodyEl.innerHTML='<div class="qdone"><div class="big">'+score+' / '+QN+'</div><p style="margin:10px auto 16px;max-width:420px">'+msg+'</p><button class="qreset" id="qReset2">↺ try again</button></div>';document.getElementById('qReset2').addEventListener('click',restart);}}
+  function restart(){order=shuffle([...Array(QN).keys()]);idx=0;score=0;bodyEl.innerHTML='<div class="qprompt" id="qPrompt"></div><div class="qctx" id="qCtx"></div><div class="qopts" id="qOpts"></div><div class="qfb" id="qFb"></div><button class="qnext" id="qNext">Next →</button>';grab();render();}
+  document.getElementById('qReset').addEventListener('click',restart);grab();order=shuffle([...Array(QN).keys()]);render();
+  // re-render the first question once KaTeX finishes loading (deferred CDN)
+  if(!window.katex){let _kt=0;const _ki=setInterval(function(){if(window.katex){clearInterval(_ki);if(!answered)render();}else if(++_kt>80)clearInterval(_ki);},100);}
+
+})();
+
+function boot(){ renderEqs(); buildSheet(); }
+boot();
+if(window.addEventListener){ window.addEventListener('load',boot); }
+if(!window.katex){let tries=0;const t=setInterval(()=>{if(window.katex){clearInterval(t);renderEqs();buildSheet();}else if(++tries>60)clearInterval(t);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*45,400)+'ms';});
+</script>
+</body>
+</html>

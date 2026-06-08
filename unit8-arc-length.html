@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Arc Length — a curve is a chain of hypotenuses · Unit 8</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%2316140f%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%2340c98a%22%3EL%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{ --emerald:#40c98a; --emerald-glow:#5fe0a4; --approx:#40c98a; --amber:#e8a13c; --rose:#e0644f; --sky:#6db8c9;
+         --accent:#40c98a; --wrap-max:880px; }
+  .sub{color:var(--muted);font-size:15.5px;margin-top:10px;max-width:700px;line-height:1.6}
+  h2{font-family:var(--display);font-weight:600;font-size:24px;margin:56px 0 6px;letter-spacing:-0.015em}
+  h2 .n{color:var(--emerald);font-variant-numeric:tabular-nums}
+  h3{font-family:var(--display);font-weight:600;font-size:18px;margin:30px 0 4px;color:var(--ink)}
+  p{font-size:15px;color:var(--muted);max-width:720px;line-height:1.78;margin:14px 0}
+  p.lead{font-size:16px;color:var(--ink);max-width:720px}
+  p b{color:var(--ink);font-weight:600}
+  .mono{font-family:var(--mono);color:var(--ink)}
+  .em-text{color:var(--emerald);font-weight:600}
+
+  .eq{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:26px 22px;margin:22px 0;text-align:center;overflow-x:auto;overflow-y:hidden;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .eq .katex,.eq .katex-display{color:var(--ink)} .eq .katex{font-size:1.32em} .eq .katex-display{margin:0}
+
+  /* polygon visual */
+  .stage{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:18px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .plot{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:11px} .plot svg{width:100%;height:auto;display:block}
+  .controls{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:16px}
+  .ctrl{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase;flex:1;min-width:220px}
+  input[type=range]{width:100%;accent-color:var(--emerald);cursor:pointer}
+  .btn{font-family:var(--mono);font-size:12px;background:var(--bg);color:var(--ink);border:1px solid var(--line-2);border-radius:9px;padding:9px 13px;cursor:pointer} .btn:hover{border-color:var(--emerald)} .btn.on{background:rgba(217,164,65,.16);border-color:var(--emerald);color:var(--emerald-glow)}
+  .totals{display:flex;gap:18px;flex-wrap:wrap;margin-top:14px;font-family:var(--mono);font-size:13px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:13px 16px}
+  .totals .lbl{color:var(--muted)} .totals b{color:var(--emerald-glow)} .totals .ex{color:var(--amber)}
+  .vcap{margin-top:12px;font-size:13.5px;color:var(--muted);line-height:1.6} .vcap b{color:var(--ink)}
+
+  /* derivation steps */
+  .deriv{margin:18px 0;max-width:720px}
+  .dv-step{display:flex;gap:13px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line)} .dv-step:last-child{border-bottom:none}
+  .dv-n{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(217,164,65,.14);border:1px solid rgba(217,164,65,.4);color:var(--emerald);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .dv-b{flex:1;font-size:14px;color:var(--muted);line-height:1.6} .dv-b b{color:var(--ink)}
+  .dv-m{margin-top:9px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:11px 14px;overflow-x:auto;overflow-y:hidden} .dv-m .katex{color:var(--ink)} .dv-m .katex-display{margin:0}
+
+  /* forms grid */
+  .forms{display:flex;flex-direction:column;gap:12px;margin:18px 0;max-width:720px}
+  .formcard{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-left:3px solid var(--emerald);border-radius:0 12px 12px 0;padding:16px 18px}
+  .formcard h4{font-family:var(--display);font-size:15.5px;color:var(--ink);margin-bottom:4px}
+  .formcard .when{font-size:13px;color:var(--muted);margin-bottom:10px}
+  .formcard .fe{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:11px 14px;text-align:center;overflow-x:auto;overflow-y:hidden} .formcard .fe .katex{color:var(--ink)}
+  .formcard.future{border-left-color:var(--faint);opacity:.92}
+  .formcard.future h4{color:var(--muted)}
+
+  /* callout */
+  .callout{background:rgba(217,164,65,.07);border-left:2px solid var(--emerald);border-radius:0 10px 10px 0;padding:14px 18px;margin:18px 0;max-width:720px;font-size:14px;color:var(--muted);line-height:1.65} .callout b{color:var(--emerald)}
+
+  /* worked examples */
+  .worked{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px;margin:18px 0;max-width:720px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .worked-prob{font-size:14.5px;color:var(--ink);line-height:1.65;padding-bottom:14px;margin-bottom:6px;border-bottom:1px solid var(--line)} .worked-prob b{color:var(--emerald)} .worked-prob .mono{color:var(--emerald-glow)}
+  .wstep{display:flex;gap:13px;align-items:flex-start;padding:13px 0;border-bottom:1px solid var(--line)}
+  .wn{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--bg);border:1px solid rgba(217,164,65,.4);color:var(--emerald);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .wb{flex:1;font-size:14px;color:var(--muted);line-height:1.6} .wb b{color:var(--ink)}
+  .wm{margin-top:10px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:11px 14px;overflow-x:auto;overflow-y:hidden} .wm .katex{color:var(--ink)} .wm .katex-display{margin:0;text-align:left}
+  .worked-ans{margin-top:16px;font-family:var(--display);font-size:19px;color:var(--ink);text-align:center;padding:13px;background:rgba(217,164,65,.08);border-radius:10px} .worked-ans b{color:var(--emerald)}
+
+  /* quiz */
+  .quiz{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:24px;margin-top:22px;max-width:680px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .qtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .qscore{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .qreset{font-family:var(--mono);font-size:11px;background:none;border:1px solid var(--line-2);color:var(--muted);border-radius:7px;padding:5px 10px;cursor:pointer} .qreset:hover{border-color:var(--emerald);color:var(--ink)}
+  .qprompt{font-size:15.5px;color:var(--ink);line-height:1.6;margin-bottom:8px}
+  .qctx{font-size:13.5px;color:var(--muted);margin-bottom:14px}
+  .qopts{display:flex;flex-direction:column;gap:9px}
+  .qopts button{font-family:var(--body);font-size:14.5px;text-align:left;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px 15px;cursor:pointer;transition:border-color .15s,background .15s}
+  .qopts button:hover:not(:disabled){border-color:var(--emerald)} .qopts button:disabled{cursor:default}
+  .qopts button.correct{background:rgba(217,164,65,.16);border-color:var(--emerald);color:var(--emerald-glow);font-weight:600}
+  .qopts button.wrong{background:rgba(224,100,79,.16);border-color:var(--rose);color:var(--rose)}
+  .qfb{margin-top:14px;font-size:14px;line-height:1.65;color:var(--muted);min-height:1px}
+  .fb-intro{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:12px} .fb-intro b{color:var(--emerald)}
+  .fb-step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)} .fb-step:last-of-type{border-bottom:none}
+  .fb-step-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--bg);color:var(--emerald);border:1px solid rgba(217,164,65,.4);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .fb-step-body{flex:1}.fb-step-t{font-size:13.5px;color:var(--muted);line-height:1.5}
+  .fb-step-m{margin-top:7px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 12px;overflow-x:auto;overflow-y:hidden} .fb-step-m .katex-display{margin:0;text-align:left}
+  .fb-key{margin-top:13px;font-size:13.5px;color:var(--ink);background:rgba(217,164,65,.07);border-left:2px solid var(--emerald);border-radius:0 8px 8px 0;padding:10px 14px;line-height:1.55}
+  .qnext{margin-top:16px;width:100%;font-family:var(--mono);font-size:13px;font-weight:600;background:var(--emerald);color:#1a1408;border:none;border-radius:10px;padding:12px;cursor:pointer;display:none}
+  .qdone{text-align:center;padding:10px}.qdone .big{font-family:var(--display);font-size:32px;font-weight:600;color:var(--emerald)}
+  .tex-fallback{font-family:var(--mono);font-size:14px;color:var(--ink)}
+
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  .whatsnext{margin-top:30px;font-size:14px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;max-width:720px} .whatsnext a{color:var(--emerald);text-decoration:none;font-weight:600} .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:54px;border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit8.html">← Unit 8</a>
+  <header class="reveal">
+    <h1>Arc <span class="em">Length</span></h1>
+    <div class="sub">How long is a curve? You can't lay a ruler along a bend — but you can chop it into tiny straight
+      pieces, and each piece is just the hypotenuse of a little right triangle. Arc length is Pythagoras, integrated.</div>
+  </header>
+
+  <!-- ===== 1 · CHAIN OF HYPOTENUSES ===== -->
+  <h2 class="reveal"><span class="n">1</span> · A curve is a chain of tiny hypotenuses</h2>
+  <p class="lead reveal">Start with one straight chord from end to end — useless, it ignores every bend. Add more chords
+    and the chain starts to <b>hug the curve</b>. Each chord is the hypotenuse of a right triangle with legs Δx and Δy.</p>
+  <div class="stage reveal">
+    <div class="plot"><svg id="svg" viewBox="0 0 560 360" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <div class="controls">
+      <div class="ctrl">Segments: <span id="nVal" style="color:var(--emerald-glow)">1</span>
+        <input type="range" id="nSeg" min="1" max="40" step="1" value="1"></div>
+      <button class="btn" id="playBtn">▶ Add segments</button>
+      <button class="btn on" id="triBtn">Show one triangle</button>
+    </div>
+    <div class="totals">
+      <span><span class="lbl">polygon length</span> = <b id="polyV">—</b></span>
+      <span><span class="lbl">true arc length</span> = <span class="ex">≈ 7.640</span></span>
+    </div>
+    <div class="vcap" id="cap"></div>
+  </div>
+  <p class="lead reveal" style="margin-top:22px">Each little hypotenuse has length <span class="mono">Δs = √(Δx² + Δy²)</span>
+    by the Pythagorean theorem. The curve's length is the sum of all of them — and as the pieces shrink, that sum becomes
+    an integral. The only question left is how to turn that √ into something you can integrate.</p>
+
+  <!-- ===== 2 · DERIVATION ===== -->
+  <h2 class="reveal"><span class="n">2</span> · Where the formula comes from</h2>
+  <p class="lead reveal">The famous arc-length formula looks intimidating, but it's nothing more than that little triangle,
+    tidied up. Three steps:</p>
+  <div class="deriv reveal">
+    <div class="dv-step"><div class="dv-n">1</div><div class="dv-b"><b>Pythagoras on one piece.</b> A tiny segment of curve is the hypotenuse of a right triangle with horizontal leg Δx and vertical leg Δy.<div class="dv-m" id="dv0"></div></div></div>
+    <div class="dv-step"><div class="dv-n">2</div><div class="dv-b"><b>Factor out Δx.</b> Pull Δx out of the square root so the inside is written with the slope Δy/Δx.<div class="dv-m" id="dv1"></div></div></div>
+    <div class="dv-step"><div class="dv-n">3</div><div class="dv-b"><b>Δy/Δx becomes the derivative.</b> As the piece shrinks, the slope of the chord becomes f′(x), the sum becomes an integral, and Δx becomes dx.<div class="dv-m" id="dv2"></div></div></div>
+  </div>
+  <div class="eq reveal" id="mainEq"></div>
+  <p class="reveal">That's the whole formula — and now you can see it's not arbitrary. The <span class="mono">1</span> under the
+    root is the horizontal leg (Δx² factored out), and the <span class="mono">[f′(x)]²</span> is the vertical leg (the
+    slope, squared). It's the Pythagorean theorem wearing an integral sign.</p>
+
+  <!-- ===== 3 · TWO FORMS ===== -->
+  <h2 class="reveal"><span class="n">3</span> · A note on curves given as x = g(y)</h2>
+  <p class="lead reveal">Almost every problem you'll see is <span class="mono">y = f(x)</span> — that's the formula from the last
+    section, and it's what gets tested. But the same Pythagorean idea works no matter which variable a curve is written in.</p>
+  <p class="reveal">If a curve is more natural as <span class="mono">x = g(y)</span> (a sideways curve that fails the vertical-line
+    test, say), you just swap the roles of x and y: differentiate x with respect to y, and integrate over the y-interval.
+    Nothing about the logic changes — you're still adding up little hypotenuses, only now you factored out Δy instead of Δx.</p>
+  <div class="eq reveal" id="formY"></div>
+  <div class="callout reveal" style="border-left-color:var(--faint)"><b style="color:var(--muted)">Coming in Unit 9.</b>
+    When x and y both depend on a parameter t, the same idea gives a curve's length (and a particle's distance traveled)
+    from its speed. You'll meet that parametric form once parametric curves are introduced in Unit 9.</div>
+
+  <!-- ===== 4 · WORKED EXAMPLES ===== -->
+  <h2 class="reveal"><span class="n">4</span> · Worked examples</h2>
+  <p class="lead reveal">Here's the catch the formula hides: that square root is almost never integrable by hand. Exam
+    problems are <b>rigged</b> so the inside becomes a perfect square. Spotting that is the real skill.</p>
+
+  <h3 class="reveal">A clean setup</h3>
+  <div class="worked reveal">
+    <div class="worked-prob"><b>Problem.</b> Find the length of <span id="probA"></span> from
+      <span class="mono">x = 0</span> to <span class="mono">x = 3</span>.</div>
+    <div class="wstep"><div class="wn">1</div><div class="wb"><b>Differentiate.</b> Bring down the power.<div class="wm" id="a1"></div></div></div>
+    <div class="wstep"><div class="wn">2</div><div class="wb"><b>Build the integrand.</b> 1 + (f′)² = 1 + x — and the messy root collapses to √(1+x).<div class="wm" id="a2"></div></div></div>
+    <div class="wstep"><div class="wn">3</div><div class="wb"><b>Integrate.</b> A clean power rule on (1+x).<div class="wm" id="a3"></div></div></div>
+    <div class="worked-ans">L = <b>14/3</b></div>
+  </div>
+
+  <h3 class="reveal">The perfect-square trick</h3>
+  <p class="reveal">This one looks hopeless until you notice <span class="mono">1 + (f′)²</span> is a perfect square. That's
+    not luck — it's how every by-hand arc-length problem is built.</p>
+  <div class="worked reveal">
+    <div class="worked-prob"><b>Problem.</b> Find the length of <span id="probB"></span> from
+      <span class="mono">x = 1</span> to <span class="mono">x = 2</span>.</div>
+    <div class="wstep"><div class="wn">1</div><div class="wb"><b>Differentiate.</b> f′(x) = x²/2 − 1/(2x²).<div class="wm" id="b1"></div></div></div>
+    <div class="wstep"><div class="wn">2</div><div class="wb"><b>Spot the perfect square.</b> Adding 1 turns the difference into a sum-squared — the cross terms cancel perfectly. This is the move to look for.<div class="wm" id="b2"></div></div></div>
+    <div class="wstep"><div class="wn">3</div><div class="wb"><b>Root vanishes, then integrate.</b> √ of a perfect square is just the bracket.<div class="wm" id="b3"></div></div></div>
+    <div class="worked-ans">L = <b>17/12</b></div>
+  </div>
+  <div class="callout reveal"><b>Exam tip.</b> If 1 + (f′)² doesn't become a perfect square, you're not meant to integrate
+    by hand — it's a calculator question, or the task is only to <i>set up</i> the integral. Always write the integral
+    first; you'll get credit for the correct setup even when the antiderivative is out of reach.</div>
+
+  <!-- ===== 5 · SANITY CHECK ===== -->
+  <h2 class="reveal"><span class="n">5</span> · Does the formula actually work?</h2>
+  <p class="lead reveal">A formula you can't sanity-check is just a thing to memorize. So let's aim it at a shape whose
+    length we <i>already</i> know — a circle — and see if it gives the right answer.</p>
+  <p class="reveal">Take the top half of the unit circle, <span class="mono">y = √(1 − x²)</span> on
+    <span class="mono">[−1, 1]</span>. We already know the answer: a full unit circle has circumference
+    <span class="mono">2πr = 2π</span>, so the top half should come out to exactly <b>π</b>. Does the formula agree?</p>
+  <div class="worked reveal">
+    <div class="worked-prob"><b>Check.</b> Find the arc length of <span id="probC"></span> on
+      <span class="mono">[−1, 1]</span> — and compare to the known semicircle length π.</div>
+    <div class="wstep"><div class="wn">1</div><div class="wb"><b>Differentiate.</b> The derivative of √(1 − x²).<div class="wm" id="c1"></div></div></div>
+    <div class="wstep"><div class="wn">2</div><div class="wb"><b>Build the integrand — and watch it simplify.</b> The 1 and the fraction combine over a common denominator, and almost everything cancels.<div class="wm" id="c2"></div></div></div>
+    <div class="wstep"><div class="wn">3</div><div class="wb"><b>Integrate.</b> That's the arcsine integral — one worth recognizing.<div class="wm" id="c3"></div></div></div>
+    <div class="worked-ans">L = <b>π</b> ✓ — exactly the semicircle length we expected</div>
+  </div>
+  <p class="reveal">It works. The formula, built from nothing but Pythagoras on tiny segments, reproduces the circumference
+    of a circle that geometry handed us thousands of years ago. That's the sign of a formula you can trust — not just
+    one you memorized.</p>
+
+  <!-- ===== 6 · DRILL ===== -->
+  <h2 class="reveal"><span class="n">6</span> · Drill it</h2>
+  <p class="lead reveal">Set up the integral, spot the perfect square, pick the right variable. Five quick checks.</p>
+  <div class="quiz reveal" id="quiz">
+    <div class="qtop"><span class="qscore" id="qScore">Score: 0 / 0</span><button class="qreset" id="qReset">↺ restart</button></div>
+    <div id="qBody">
+      <div class="qprompt" id="qPrompt"></div><div class="qctx" id="qCtx"></div>
+      <div class="qopts" id="qOpts"></div><div class="qfb" id="qFb"></div>
+      <button class="qnext" id="qNext">Next →</button>
+    </div>
+  </div>
+
+  <div class="whatsnext reveal">
+    That wraps the methods of Unit 8. Put it all together in the <a href="unit8-exam-practice.html">Exam Practice</a>
+    capstone, grab the <a href="unit8-cheatsheet.html">cheat sheet</a> for quick review — or head on to Unit 9,
+    where arc length returns for parametric curves and motion.
+  </div>
+  <footer class="reveal">Arc Length · Topic 8.13 (BC) · Unit 8 · part of the Visual AP Calculus guide.</footer>
+</div>
+
+<script>
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const EMER="#40c98a",EMERG="#5fe0a4",AM="#e8a13c",ROSE="#e0644f",SKY="#6db8c9",MUT="#9a9183",LINE="#332e25",INK="#ece7dd";
+
+/* ===== §1 polygon visual ===== */
+(function(){
+  const svgEl=document.getElementById('svg'); if(!svgEl) return;
+  const f=x=>Math.sin(x), A=0, B=2*Math.PI, TRUE_L=7.6404;
+  const padL=40,padR=20,padT=24,padB=40,W=560,H=360;
+  const xmin=0,xmax=6.55,ymin=-1.35,ymax=1.35;
+  const SX=x=>padL+(x-xmin)/(xmax-xmin)*(W-padL-padR);
+  const SY=y=>H-padB-(y-ymin)/(ymax-ymin)*(H-padT-padB);
+  let N=1, showTri=true, playing=false, playT=0;
+  function polyLen(n){let s=0,dx=(B-A)/n;for(let i=0;i<n;i++){const x0=A+i*dx,x1=A+(i+1)*dx;s+=Math.hypot(x1-x0,f(x1)-f(x0));}return s;}
+  function draw(){
+    svgEl.innerHTML="";
+    svgEl.appendChild(el("line",{x1:padL,y1:SY(0),x2:W-padR,y2:SY(0),stroke:MUT,"stroke-width":1.2}));
+    svgEl.appendChild(el("line",{x1:SX(0),y1:SY(ymax),x2:SX(0),y2:SY(ymin),stroke:MUT,"stroke-width":1.2}));
+    svgEl.appendChild(el("text",{x:W-padR,y:SY(0)+18,fill:MUT,"font-size":11,"text-anchor":"end","font-family":"monospace"},"x"));
+    svgEl.appendChild(el("text",{x:SX(Math.PI),y:SY(0)+16,fill:"#6b6457","font-size":9.5,"text-anchor":"middle","font-family":"monospace"},"\u03c0"));
+    svgEl.appendChild(el("text",{x:SX(2*Math.PI),y:SY(0)+16,fill:"#6b6457","font-size":9.5,"text-anchor":"middle","font-family":"monospace"},"2\u03c0"));
+    let d="M "+SX(A)+" "+SY(f(A));
+    for(let x=A;x<=B+1e-9;x+=0.03)d+=" L "+SX(x)+" "+SY(f(x));
+    svgEl.appendChild(el("path",{d,fill:"none",stroke:SKY,"stroke-width":2,opacity:0.5}));
+    svgEl.appendChild(el("text",{x:SX(1.57),y:SY(1)-10,fill:SKY,"font-size":11,"text-anchor":"middle","font-family":"monospace",opacity:0.7},"y = sin x"));
+    const dx=(B-A)/N;
+    for(let i=0;i<N;i++){const x0=A+i*dx,x1=A+(i+1)*dx;svgEl.appendChild(el("line",{x1:SX(x0),y1:SY(f(x0)),x2:SX(x1),y2:SY(f(x1)),stroke:EMER,"stroke-width":2.4}));}
+    for(let i=0;i<=N;i++){const x=A+i*dx;svgEl.appendChild(el("circle",{cx:SX(x),cy:SY(f(x)),r:(N>16?1.6:2.4),fill:EMERG,opacity:0.9}));}
+    if(showTri && N>=1){
+      const i=Math.min(N-1,Math.floor(N/2)); const x0=A+i*dx,x1=A+(i+1)*dx,y0=f(x0),y1=f(x1);
+      svgEl.appendChild(el("line",{x1:SX(x0),y1:SY(y0),x2:SX(x1),y2:SY(y0),stroke:AM,"stroke-width":2,"stroke-dasharray":"4 3"}));
+      svgEl.appendChild(el("line",{x1:SX(x1),y1:SY(y0),x2:SX(x1),y2:SY(y1),stroke:ROSE,"stroke-width":2,"stroke-dasharray":"4 3"}));
+      svgEl.appendChild(el("line",{x1:SX(x0),y1:SY(y0),x2:SX(x1),y2:SY(y1),stroke:EMERG,"stroke-width":3}));
+      svgEl.appendChild(el("text",{x:(SX(x0)+SX(x1))/2,y:SY(y0)+15,fill:AM,"font-size":12,"text-anchor":"middle","font-family":"monospace"},"\u0394x"));
+      svgEl.appendChild(el("text",{x:SX(x1)+8,y:(SY(y0)+SY(y1))/2,fill:ROSE,"font-size":12,"font-family":"monospace"},"\u0394y"));
+      svgEl.appendChild(el("text",{x:(SX(x0)+SX(x1))/2-16,y:(SY(y0)+SY(y1))/2-4,fill:EMERG,"font-size":12,"text-anchor":"end","font-family":"monospace"},"\u0394s"));
+    }
+    document.getElementById('nVal').textContent=N;
+    document.getElementById('polyV').textContent=polyLen(N).toFixed(3);
+    const cap=document.getElementById('cap');
+    if(N===1) cap.innerHTML="<b>One chord</b> from end to end \u2014 a single hypotenuse, ignoring the whole wave. Add segments below.";
+    else if(N<=2) cap.innerHTML="Still way too coarse \u2014 the chords skip the humps, so the total is far too short.";
+    else if(N<8) cap.innerHTML="Closer, but the chords cut corners. The polygon always <b>underestimates</b>.";
+    else if(N<20) cap.innerHTML="Now it <b>hugs the curve</b> \u2014 each chord nearly matches the arc beneath it.";
+    else cap.innerHTML="Essentially the curve. In the limit, the sum of hypotenuses <b>becomes the integral</b>.";
+  }
+  draw();
+  document.getElementById('nSeg').addEventListener('input',e=>{playing=false;document.getElementById('playBtn').textContent='\u25b6 Add segments';document.getElementById('playBtn').classList.remove('on');N=parseInt(e.target.value);draw();});
+  document.getElementById('playBtn').addEventListener('click',e=>{if(N>=40)N=1;playing=!playing;playT=0;e.target.textContent=playing?'\u275a\u275a Pause':'\u25b6 Add segments';e.target.classList.toggle('on',playing);});
+  document.getElementById('triBtn').addEventListener('click',e=>{showTri=!showTri;e.target.classList.toggle('on',showTri);draw();});
+  function loop(){requestAnimationFrame(loop);if(playing){playT+=0.055;const target=Math.min(40,1+Math.floor(playT));if(target!==N){N=target;document.getElementById('nSeg').value=N;draw();}if(N>=40){playing=false;document.getElementById('playBtn').textContent='\u25b6 Add segments';document.getElementById('playBtn').classList.remove('on');}}}
+  loop();
+})();
+
+/* ===== equations ===== */
+function renderEqs(){
+  var pa=document.getElementById('probA'); if(pa) pa.innerHTML=tex(String.raw`y=\tfrac{2}{3}x^{3/2}`,"y = (2/3)x^(3/2)",false);
+  var pb=document.getElementById('probB'); if(pb) pb.innerHTML=tex(String.raw`y=\tfrac{x^3}{6}+\tfrac{1}{2x}`,"y = x\u00b3/6 + 1/(2x)",false);
+  // derivation
+  document.getElementById('dv0').innerHTML=tex(String.raw`\Delta s=\sqrt{(\Delta x)^2+(\Delta y)^2}`,"\u0394s = \u221a(\u0394x\u00b2+\u0394y\u00b2)",false);
+  document.getElementById('dv1').innerHTML=tex(String.raw`\Delta s=\sqrt{1+\left(\tfrac{\Delta y}{\Delta x}\right)^2}\;\Delta x`,"\u0394s = \u221a(1+(\u0394y/\u0394x)\u00b2)\u00b7\u0394x",false);
+  document.getElementById('dv2').innerHTML=tex(String.raw`L=\int_a^b \sqrt{1+\left[f'(x)\right]^2}\,dx`,"L = \u222b\u221a(1+[f\u2032(x)]\u00b2)dx",true);
+  document.getElementById('mainEq').innerHTML=tex(String.raw`L=\int_a^b \sqrt{1+\left[\textcolor{${EMER}}{f'(x)}\right]^2}\,dx`,"L = \u222b\u221a(1+[f\u2032(x)]\u00b2)dx",true);
+  // x=g(y) form (demoted note in §3)
+  document.getElementById('formY').innerHTML=tex(String.raw`L=\int_c^d \sqrt{1+\left[\tfrac{dx}{dy}\right]^2}\,dy`,"L = \u222b\u221a(1+(dx/dy)\u00b2)dy",true);
+  // example A
+  document.getElementById('a1').innerHTML=tex(String.raw`f'(x)=\tfrac{2}{3}\cdot\tfrac{3}{2}x^{1/2}=\sqrt{x}`,"f\u2032 = \u221ax",false);
+  document.getElementById('a2').innerHTML=tex(String.raw`1+(f')^2=1+x \;\Rightarrow\; \sqrt{1+x}`,"1+(f\u2032)\u00b2 = 1+x",false);
+  document.getElementById('a3').innerHTML=tex(String.raw`L=\int_0^3\sqrt{1+x}\,dx=\left[\tfrac{2}{3}(1+x)^{3/2}\right]_0^3=\tfrac{2}{3}(8-1)=\tfrac{14}{3}`,"L = \u222b\u2080\u00b3\u221a(1+x)dx = 14/3",true);
+  // example B
+  document.getElementById('b1').innerHTML=tex(String.raw`f'(x)=\tfrac{x^2}{2}-\tfrac{1}{2x^2}`,"f\u2032 = x\u00b2/2 \u2212 1/(2x\u00b2)",false);
+  document.getElementById('b2').innerHTML=tex(String.raw`1+(f')^2=\left(\tfrac{x^2}{2}+\tfrac{1}{2x^2}\right)^2`,"1+(f\u2032)\u00b2 = (x\u00b2/2 + 1/(2x\u00b2))\u00b2",false);
+  document.getElementById('b3').innerHTML=tex(String.raw`L=\int_1^2\!\left(\tfrac{x^2}{2}+\tfrac{1}{2x^2}\right)dx=\left[\tfrac{x^3}{6}-\tfrac{1}{2x}\right]_1^2=\tfrac{17}{12}`,"L = \u222b\u2081\u00b2(x\u00b2/2+1/(2x\u00b2))dx = 17/12",true);
+  // §5 circle sanity check
+  var pc=document.getElementById('probC'); if(pc) pc.innerHTML=tex(String.raw`y=\sqrt{1-x^2}`,"y = \u221a(1\u2212x\u00b2)",false);
+  document.getElementById('c1').innerHTML=tex(String.raw`f'(x)=\dfrac{-x}{\sqrt{1-x^2}}`,"f\u2032 = \u2212x/\u221a(1\u2212x\u00b2)",false);
+  document.getElementById('c2').innerHTML=tex(String.raw`1+(f')^2=1+\dfrac{x^2}{1-x^2}=\dfrac{1}{1-x^2}\;\Rightarrow\;\dfrac{1}{\sqrt{1-x^2}}`,"1+(f\u2032)\u00b2 = 1/(1\u2212x\u00b2)",false);
+  document.getElementById('c3').innerHTML=tex(String.raw`L=\int_{-1}^{1}\dfrac{dx}{\sqrt{1-x^2}}=\big[\arcsin x\big]_{-1}^{1}=\tfrac{\pi}{2}-\left(-\tfrac{\pi}{2}\right)=\pi`,"L = \u222b 1/\u221a(1\u2212x\u00b2) dx = \u03c0",true);
+}
+
+/* ===== quiz ===== */
+const QUIZ=[
+  {p:"Which integral gives the length of <b>y = x²</b> from x = 0 to x = 2?",
+   ctx:"Arc length: L = ∫√(1 + (f′)²) dx.",
+   opts:["\\(\\int_0^2\\sqrt{1+4x^2}\\,dx\\)","\\(\\int_0^2\\sqrt{1+x^2}\\,dx\\)","\\(\\int_0^2\\sqrt{1+2x}\\,dx\\)","\\(\\int_0^2 (1+4x^2)\\,dx\\)"],correct:0,
+   intro:"<b>√(1+4x²).</b> Differentiate first, then square.",
+   steps:[{t:"f′ = 2x.",m:"f'(x)=2x"},{t:"Square it inside the root.",m:"1+(2x)^2=1+4x^2"}],
+   key:"Always differentiate and square: (2x)² = 4x², not 2x. And keep the root — it's length, not area."},
+
+  {p:"For <b>\\(y=\\tfrac{2}{3}x^{3/2}\\)</b>, what does 1 + (f′)² simplify to?",
+   ctx:"This is what makes the integral doable.",
+   opts:["\\(1+x\\)","\\(1+x^2\\)","\\(1+\\tfrac{3}{2}x\\)","\\(x\\)"],correct:0,
+   intro:"<b>1 + x.</b> The fractional powers cancel cleanly.",
+   steps:[{t:"f′ = √x.",m:"f'(x)=x^{1/2}"},{t:"Square and add one.",m:"1+(\\sqrt{x})^2=1+x"}],
+   key:"f′ = √x squares to x, so the root becomes √(1+x) — a clean power-rule integral."},
+
+  {p:"An arc-length integrand <b>1 + (f′)²</b> turns out to be <b>(x²/2 + 1/(2x²))²</b>. What's √ of that?",
+   ctx:"The whole point of the perfect-square setup.",
+   opts:["\\(\\tfrac{x^2}{2}+\\tfrac{1}{2x^2}\\)","\\(\\tfrac{x^2}{2}-\\tfrac{1}{2x^2}\\)","\\(x+\\tfrac{1}{x}\\)","\\(\\tfrac{x^4}{4}+\\tfrac{1}{4x^4}\\)"],correct:0,
+   intro:"<b>The bracket itself.</b> √ of a square is the thing being squared (it's positive here).",
+   steps:[{t:"√ of a perfect square removes the exponent.",m:"\\sqrt{\\left(\\tfrac{x^2}{2}+\\tfrac{1}{2x^2}\\right)^2}=\\tfrac{x^2}{2}+\\tfrac{1}{2x^2}"}],
+   key:"That's why problems are rigged into perfect squares — the root disappears and you can integrate."},
+
+  {p:"A curve is given as <b>x = g(y)</b>. How do you find its length?",
+   ctx:"Same idea, different variable.",
+   opts:["Integrate √(1+(dx/dy)²) dy","Solve for y first, then use dx","You can't — only y = f(x) works","Integrate √(1+(dx/dy)²) dx"],correct:0,
+   intro:"<b>Integrate in y</b> with dx/dy.",
+   steps:[{t:"Swap the roles of x and y.",m:"L=\\int_c^d\\sqrt{1+\\left(\\tfrac{dx}{dy}\\right)^2}\\,dy"}],
+   key:"When the curve is nicer as x = g(y), differentiate x with respect to y and integrate over the y-interval."},
+
+  {p:"Why is the integrand for arc length <b>√(1 + (f′)²)</b> rather than just <b>f′</b>?",
+   ctx:"Think about the little triangle.",
+   opts:["Each piece is a hypotenuse: √(Δx²+Δy²)","It makes the integral easier","To keep the answer positive","It's a convention with no reason"],correct:0,
+   intro:"<b>It's the Pythagorean theorem.</b>",
+   steps:[{t:"A tiny piece of curve is a hypotenuse with legs Δx and Δy.",m:"\\Delta s=\\sqrt{(\\Delta x)^2+(\\Delta y)^2}"},{t:"Factor out Δx; the slope becomes f′.",m:"=\\sqrt{1+(f')^2}\\,\\Delta x"}],
+   key:"The 1 is the horizontal leg, the (f′)² is the vertical leg. Arc length is Pythagoras, summed up."}
+];
+(function(){
+  const QN=QUIZ.length;let order=[],idx=0,score=0,answered=false;
+  const scoreEl=document.getElementById('qScore'),bodyEl=document.getElementById('qBody');
+  let prompt,ctx,opts,fb,next;
+  function grab(){prompt=document.getElementById('qPrompt');ctx=document.getElementById('qCtx');opts=document.getElementById('qOpts');fb=document.getElementById('qFb');next=document.getElementById('qNext');next.addEventListener('click',onNext);}
+  function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function mathify(h){return h.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return m;}});}
+  function render(){answered=false;fb.innerHTML="";next.style.display="none";const q=QUIZ[order[idx]];
+    prompt.innerHTML=mathify(q.p);ctx.textContent=q.ctx;
+    const list=q.opts.map((t,i)=>({t,c:i===q.correct}));shuffle(list);opts.innerHTML="";
+    list.forEach(o=>{const b=document.createElement('button');b.innerHTML=mathify(o.t);b.dataset.c=o.c;b.addEventListener('click',()=>pick(b));opts.appendChild(b);});
+    scoreEl.textContent="Score: "+score+" / "+idx;}
+  function pick(btn){if(answered)return;answered=true;const q=QUIZ[order[idx]];const correct=btn.dataset.c==="true";
+    [...opts.children].forEach(b=>{b.disabled=true;if(b.dataset.c==="true")b.classList.add('correct');});
+    if(correct)score++;else btn.classList.add('wrong');
+    let html="<div class='fb-intro'>"+(correct?"<b>Correct.</b> ":"<b>Not quite.</b> ")+mathify(q.intro)+"</div>";
+    q.steps.forEach((st,si)=>{html+="<div class='fb-step'><div class='fb-step-n'>"+(si+1)+"</div><div class='fb-step-body'><div class='fb-step-t'>"+mathify(st.t)+"</div>"+(st.m?"<div class='fb-step-m'>"+tex(st.m,st.m,true)+"</div>":"")+"</div></div>";});
+    html+="<div class='fb-key'>"+mathify(q.key)+"</div>";fb.innerHTML=html;
+    scoreEl.textContent="Score: "+score+" / "+(idx+1);next.textContent=idx<QN-1?"Next →":"See result →";next.style.display="block";}
+  function onNext(){if(idx<QN-1){idx++;render();}else{const msg=score===QN?"Perfect — Pythagoras, the perfect-square trick, and both forms all locked.":score>=4?"Strong. Re-check the one you missed.":"Worth another pass — focus on differentiate-then-square and the perfect-square setup.";bodyEl.innerHTML='<div class="qdone"><div class="big">'+score+' / '+QN+'</div><p style="margin:10px auto 16px;max-width:420px">'+msg+'</p><button class="qreset" id="qReset2">↺ try again</button></div>';document.getElementById('qReset2').addEventListener('click',restart);}}
+  function restart(){order=shuffle([...Array(QN).keys()]);idx=0;score=0;bodyEl.innerHTML='<div class="qprompt" id="qPrompt"></div><div class="qctx" id="qCtx"></div><div class="qopts" id="qOpts"></div><div class="qfb" id="qFb"></div><button class="qnext" id="qNext">Next →</button>';grab();render();}
+  document.getElementById('qReset').addEventListener('click',restart);grab();order=shuffle([...Array(QN).keys()]);render();
+  // re-render the first question once KaTeX finishes loading (deferred CDN)
+  if(!window.katex){let _kt=0;const _ki=setInterval(function(){if(window.katex){clearInterval(_ki);if(!answered)render();}else if(++_kt>80)clearInterval(_ki);},100);}
+
+})();
+
+function boot(){renderEqs();}
+boot();
+if(window.addEventListener)window.addEventListener('load',boot);
+if(!window.katex){let t=0;const iv=setInterval(()=>{if(window.katex){clearInterval(iv);boot();}else if(++t>60)clearInterval(iv);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*45,400)+'ms';});
+</script>
+</body>
+</html>

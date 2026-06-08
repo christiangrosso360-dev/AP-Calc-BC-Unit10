@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Area Between Curves — top minus bottom, dx vs dy, splitting · Unit 8 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%2316140f%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%2340c98a%22%3E%26%238747%3B%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{ --approx:#40c98a; --gold:#40c98a; --true:#40c98a;
+         --emerald:#40c98a; --emerald-glow:#5fe0a4;
+         --top:#40c98a; --bot:#e8a13c; --strip:#a892f0; --split:#e0644f;
+         --glow:rgba(64,201,138,.08); --wrap-max:880px; }
+  .sub{color:var(--muted);font-size:15.5px;margin-top:10px;max-width:700px;line-height:1.6}
+  h2{font-family:var(--display);font-weight:600;font-size:24px;margin:56px 0 6px;letter-spacing:-0.015em}
+  h2 .n{color:var(--emerald);font-variant-numeric:tabular-nums}
+  p{font-size:15px;color:var(--muted);max-width:720px;line-height:1.78;margin:14px 0}
+  p.lead{font-size:16px;color:var(--ink);max-width:720px}
+  p b{color:var(--ink);font-weight:600}
+  .em-text{color:var(--emerald);font-weight:600}
+  .mono{font-family:var(--mono);color:var(--ink)}
+
+  .eq{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);
+    border-radius:14px;padding:22px;margin:20px 0;text-align:center;overflow-x:auto;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .legend{display:flex;flex-wrap:wrap;gap:12px 20px;margin:16px 0 4px}
+  .lg{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--muted);max-width:330px;line-height:1.55}
+  .lg .sw{flex-shrink:0;width:13px;height:13px;border-radius:4px;margin-top:3px}
+  .lg b{font-weight:600}
+
+  .dissect{margin:18px 0;max-width:720px}
+  .dpiece{display:flex;gap:13px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+  .dpiece:last-child{border-bottom:none}
+  .dpiece .dlabel{flex-shrink:0;width:130px;font-family:var(--mono);font-size:12.5px;padding-top:2px}
+  .dpiece .dexpl{flex:1;font-size:14px;color:var(--muted);line-height:1.62}
+  .dpiece .dexpl b{color:var(--ink)}
+
+  .panel{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;
+    padding:24px;margin-top:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 20px 44px -28px rgba(0,0,0,.7)}
+  svg.viz{width:100%;height:auto;background:var(--bg);border:1px solid var(--line);border-radius:12px;display:block}
+  .controls{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin-top:18px}
+  .ctrl{display:flex;flex-direction:column;gap:6px;font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+  input[type=range]{width:100%;min-width:240px;accent-color:var(--emerald);cursor:pointer}
+  .hint{font-size:13px;color:var(--faint);font-style:italic;margin-top:12px}
+
+  .readouts{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+  .ro{flex:1;min-width:150px;border-radius:13px;padding:14px 16px;border:1px solid var(--line);background:var(--panel-2);position:relative;overflow:hidden}
+  .ro::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--strip)}
+  .ro.area::before{background:var(--emerald)}
+  .ro .rl{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .ro .rv{font-family:var(--display);font-size:28px;font-weight:600;margin-top:5px;color:var(--ink)}
+  .ro.area .rv{color:var(--emerald)}
+  .ro .rsub{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:3px}
+
+  .strip-labels{display:flex;flex-wrap:wrap;gap:10px 22px;margin-bottom:12px}
+  .strip-lbl{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+  .strip-lbl .sw{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+  .strip-lbl .katex{font-size:.96em}
+  .beat-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .beat-tab{font-family:var(--mono);font-size:12px;background:var(--bg);color:var(--muted);
+    border:1px solid var(--line);border-radius:9px;padding:8px 13px;cursor:pointer;transition:border-color .15s,color .15s,background .15s}
+  .beat-tab:hover{border-color:var(--emerald);color:var(--ink)}
+  .beat-tab.on{background:var(--emerald);color:#16140f;border-color:var(--emerald);font-weight:600}
+  .beat-caption{margin-top:14px;font-size:14px;color:var(--ink);line-height:1.6;min-height:1px}
+  .graph-legend{display:flex;flex-wrap:wrap;gap:10px 20px;margin-bottom:13px}
+  .graph-legend .gl-item{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)}
+  .graph-legend .gl-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0}
+  .graph-legend .katex{font-size:.95em}
+  .workpanel{margin-top:16px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:6px 18px}
+  .work-line{display:flex;gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .work-line:last-child{border-bottom:none}
+  .work-line .wl-label{font-size:13.5px;color:var(--muted);min-width:130px;flex-shrink:0}
+  .work-line .wl-math{flex:1;min-width:160px}
+  .work-line.result .wl-math .katex{font-size:1.15em}
+  .work-line.result{background:rgba(64,201,138,.06);margin:4px -10px 0;padding:12px 10px;border-radius:8px;border-bottom:none}
+
+  .insight{border-left:3px solid var(--emerald);background:rgba(64,201,138,.06);border-radius:0 12px 12px 0;
+    padding:16px 20px;margin:24px 0;font-size:14.5px;line-height:1.7;color:var(--ink);max-width:720px}
+  .insight b{color:var(--emerald)}
+  .stumble{border-left:3px solid var(--split);background:rgba(224,100,79,.07);border-radius:0 12px 12px 0;
+    padding:16px 20px;margin:22px 0;font-size:14px;line-height:1.7;color:var(--ink);max-width:720px}
+  .stumble b{color:var(--split)}
+
+  .twocol{display:flex;gap:22px;flex-wrap:wrap;align-items:center;margin-top:18px}
+  .twocol svg{flex:1;min-width:280px;max-width:400px}
+  .twocol .tc-text{flex:1;min-width:260px}
+  .vs-compare{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+  .vs-card{flex:1;min-width:230px;border-radius:13px;padding:15px 17px;border:1px solid var(--line);background:var(--panel-2)}
+  .vs-card.bad{border-color:rgba(224,100,79,.3)}
+  .vs-card.good{border-color:rgba(64,201,138,.35);background:rgba(64,201,138,.05)}
+  .vs-head{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:9px;display:flex;align-items:center;gap:8px}
+  .vs-x{color:var(--split);font-size:14px}
+  .vs-check{color:var(--emerald);font-size:14px}
+  .vs-body{font-size:13px;color:var(--muted);line-height:1.55;margin-bottom:10px}
+  .vs-body b{color:var(--ink)}
+  .vs-math{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;overflow-x:auto}
+
+  /* quiz */
+  .quiz{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:18px;
+    padding:24px;margin-top:22px;max-width:680px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .qtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .qscore{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .qreset{font-family:var(--mono);font-size:11px;background:none;border:1px solid var(--line-2);color:var(--muted);border-radius:7px;padding:5px 10px;cursor:pointer;transition:border-color .15s,color .15s}
+  .qreset:hover{border-color:var(--emerald);color:var(--ink)}
+  .qprompt{font-size:15.5px;color:var(--ink);line-height:1.6;margin-bottom:8px}
+  .qctx{font-size:13.5px;color:var(--muted);margin-bottom:14px}
+  .qopts{display:flex;flex-direction:column;gap:9px}
+  .qopts button{font-family:var(--body);font-size:14.5px;text-align:left;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:12px 15px;cursor:pointer;transition:border-color .15s,background .15s}
+  .qopts button:hover:not(:disabled){border-color:var(--emerald)}
+  .qopts button:disabled{cursor:default}
+  .qopts button.correct{background:rgba(64,201,138,.16);border-color:var(--emerald);color:var(--emerald);font-weight:600}
+  .qopts button.wrong{background:rgba(224,100,79,.16);border-color:var(--split);color:var(--split)}
+  .qfb{margin-top:14px;font-size:14px;line-height:1.65;color:var(--muted);min-height:1px}
+  .fb-intro{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+  .fb-intro b{color:var(--emerald)}
+  .fb-step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .fb-step:last-of-type{border-bottom:none}
+  .fb-step-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--bg);color:var(--emerald);border:1px solid rgba(64,201,138,.4);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .fb-step-body{flex:1}
+  .fb-step-t{font-size:13.5px;color:var(--muted);line-height:1.5}
+  .fb-step-m{margin-top:7px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 12px;overflow-x:auto}
+  .fb-key{margin-top:13px;font-size:13.5px;color:var(--ink);background:rgba(64,201,138,.07);border-left:2px solid var(--emerald);border-radius:0 8px 8px 0;padding:10px 14px;line-height:1.55}
+  .qnext{margin-top:16px;width:100%;font-family:var(--mono);font-size:13px;font-weight:600;background:var(--emerald);color:#16140f;border:none;border-radius:10px;padding:12px;cursor:pointer;display:none}
+  .qdone{text-align:center;padding:10px}
+  .qdone .big{font-family:var(--display);font-size:32px;font-weight:600;color:var(--emerald)}
+
+  .tex-fallback{font-family:var(--mono);font-size:14px;color:var(--ink)}
+  .eq .katex,.eq .katex-display{color:var(--ink)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  a:focus-visible{outline:2px solid var(--emerald);outline-offset:3px;border-radius:6px}
+  .whatsnext{margin-top:30px;font-size:14px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;max-width:720px}
+  .whatsnext a{color:var(--emerald);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:54px;border-top:1px solid var(--line);padding-top:14px}
+  footer a{color:var(--muted)}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit8.html">← Unit 8</a>
+
+  <header class="reveal">
+    <h1>Area Between <span class="em">Curves</span></h1>
+    <div class="sub">This is where the integral grows up. You already know it measures area under a curve —
+      now you'll measure the area trapped <i>between two</i>. Master the setup here and every volume in this unit
+      becomes the same move in disguise.</div>
+  </header>
+
+  <!-- ============ 1 · CORE IDEA ============ -->
+  <h2 class="reveal"><span class="n">1</span> · The whole idea: top minus bottom</h2>
+  <p class="lead reveal">Forget formulas for a second. If one curve sits above another, the area trapped between them
+    is just <b>the area under the top curve minus the area under the bottom curve</b>. Two areas you already know how
+    to find, subtracted. That's the entire concept — everything else is bookkeeping.</p>
+  <p class="reveal">Here's why it collapses into a single clean integral. Picture slicing the region into many thin
+    vertical strips. Each strip is a skinny rectangle: its <b>width</b> is a tiny <span class="mono">dx</span>, and
+    its <b>height</b> is the distance from the bottom curve up to the top curve — that's
+    <span class="mono">(top − bottom)</span>. The area of one strip is height × width,
+    <span class="mono">(top − bottom)·dx</span>. Add up every strip across the interval and you have the integral.
+    <span style="color:var(--muted)">(You met this "limit of a sum of strips" idea back in Unit 6 — here each term in the
+    sum is simply a top-minus-bottom strip.)</span></p>
+
+  <div class="eq reveal" id="coreEq"></div>
+  <div class="dissect reveal">
+    <div class="dpiece"><div class="dlabel" style="color:var(--top)">top(x)</div>
+      <div class="dexpl">The <b>upper</b> curve — whichever function is higher on the interval. Its area would be <span class="mono">∫ top dx</span> alone.</div></div>
+    <div class="dpiece"><div class="dlabel" style="color:var(--bot)">− bottom(x)</div>
+      <div class="dexpl">Subtract the <b>lower</b> curve. Removing the area beneath the bottom curve leaves exactly the strip between them.</div></div>
+    <div class="dpiece"><div class="dlabel">[top − bottom]</div>
+      <div class="dexpl">The <b>height of one strip</b> at position <span class="mono">x</span> — the <span style="color:var(--top)">green</span> value minus the <span style="color:var(--bot)">amber</span> value. Always upper minus lower, so the height stays positive.</div></div>
+    <div class="dpiece"><div class="dlabel" style="color:var(--muted)" id="intLabel"></div>
+      <div class="dexpl">Sum the strips from <span class="mono">a</span> to <span class="mono">b</span> (the intersection points). That total <b>is</b> the area between the curves.</div></div>
+  </div>
+  <div class="stumble reveal">
+    <p style="margin:0 0 10px"><b>The #1 mistake:</b> guessing which curve is on top instead of checking. One test
+      point between the intersections settles it every time.</p>
+    <p style="margin:0 0 10px;color:var(--ink)">Take this page's curves at <span class="mono">x = 0</span>:
+      the line <span class="mono">y = x + 2</span> gives <span class="mono">2</span>, the parabola
+      <span class="mono">y = x²</span> gives <span class="mono">0</span>. Since <span class="mono">2 &gt; 0</span>,
+      the line wins — integrate <span class="mono">(x + 2) − x²</span>, in that order.</p>
+    <p style="margin:0">Subtract the other way and you'd get a <b>negative</b> area — the tell-tale sign you
+      flipped them. Area is always <span class="mono">(upper − lower)</span>.</p>
+  </div>
+  <p class="reveal">One more piece completes the setup: <b>where do the limits <span class="mono">a</span> and
+    <span class="mono">b</span> come from?</b> They're the <b>x-values where the curves cross</b> — found by setting the
+    two functions equal and solving. The visual below works a full example start to finish, bounds and all.</p>
+
+  <!-- ============ 2 · WORKED EXAMPLE ============ -->
+  <h2 class="reveal"><span class="n">2</span> · A complete example, start to finish</h2>
+  <p class="lead reveal">Let's work the whole thing for <span class="mono" style="color:var(--top)">y = x + 2</span> and
+    <span class="mono" style="color:var(--bot)">y = x²</span> — every step you'd actually do, in order. Click through:
+    find the bounds, decide which curve is on top, then subtract the two areas.</p>
+  <div class="panel reveal">
+    <div class="beat-tabs" id="beatTabs">
+      <button class="beat-tab on" data-beat="0">1 · Find the bounds</button>
+      <button class="beat-tab" data-beat="1">2 · Which is on top</button>
+      <button class="beat-tab" data-beat="2">3 · The two areas</button>
+      <button class="beat-tab" data-beat="3">4 · Subtract → answer</button>
+    </div>
+    <div class="graph-legend">
+      <span class="gl-item"><span class="gl-dot" style="background:var(--top)"></span><span id="legTop2"></span></span>
+      <span class="gl-item"><span class="gl-dot" style="background:var(--bot)"></span><span id="legBot2"></span></span>
+    </div>
+    <svg class="viz" id="areaViz" viewBox="0 0 660 420" aria-label="A complete area-between-curves worked example"></svg>
+    <div class="beat-caption" id="beatCaption"></div>
+    <div class="workpanel" id="workPanel"></div>
+  </div>
+  <div class="insight reveal">That's the entire method, every time: <b>(1)</b> set the curves equal to find where they cross —
+    those are your bounds; <b>(2)</b> test a point to see which is on top; <b>(3)</b> integrate top minus bottom. The
+    area between isn't a new mystery shape — it's the area under the top with the area under the bottom carved away,
+    here <b>15/2 − 3 = 9/2</b>.</div>
+
+  <!-- ============ 3 · DX VS DY ============ -->
+  <h2 class="reveal"><span class="n">3</span> · When vertical strips fail: integrate in y</h2>
+  <p class="lead reveal">Vertical strips assume a single "top" and a single "bottom" the whole way across. But some
+    regions don't cooperate — the boundary on top or bottom <i>changes</i> partway, which would force you to split
+    into multiple integrals. Often there's a slicker fix: <b>turn the strips sideways.</b></p>
+  <p class="reveal">If you slice with <b>horizontal</b> strips instead, each strip's width runs from a
+    <b style="color:var(--bot)">left</b> curve to a <b style="color:var(--top)">right</b> curve, and you integrate in
+    <span class="mono">y</span>. The formula is the same idea rotated 90°: <span class="mono">(right − left)</span>
+    instead of <span class="mono">(top − bottom)</span>, summed over <span class="mono">y</span>.</p>
+  <div class="eq reveal" id="dyEq"></div>
+  <div class="panel reveal">
+    <div class="twocol">
+      <div class="graph-legend" style="flex-direction:column;gap:7px">
+        <span class="gl-item"><span class="gl-dot" style="background:var(--top)"></span><span id="legRight3"></span></span>
+        <span class="gl-item"><span class="gl-dot" style="background:var(--bot)"></span><span id="legLeft3"></span></span>
+      </div>
+      <svg id="dyViz" viewBox="0 0 380 320" aria-label="Same region sliced with a sweeping horizontal strip"></svg>
+      <div class="tc-text">
+        <p style="margin-top:0">This is the region bounded by <span class="mono" style="color:var(--top)">x = y + 2</span>
+          and <span class="mono" style="color:var(--bot)">x = y²</span> — the same shape as before, lying on its side.
+          Drag the strip up through the region: each <b>horizontal</b> strip runs cleanly from the parabola on the
+          <b style="color:var(--bot)">left</b> to the line on the <b style="color:var(--top)">right</b>, with width
+          <span class="mono">(right − left)</span>.</p>
+        <p style="margin-bottom:0;font-size:13.5px">Area <span id="dyAreaInline"></span> —
+          same answer, because it's the same region. The art is choosing the strip direction that needs the
+          <b>fewest</b> integrals.</p>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="ctrl" style="flex:1">Sweep the strip&nbsp; y = <span id="dyYval" style="color:var(--emerald)">0.50</span>
+        <input type="range" id="dyY" min="-1" max="2" step="0.01" value="0.5">
+      </div>
+    </div>
+    <div class="readouts">
+      <div class="ro area" style="max-width:340px"><div class="rl">Strip width = right − left = (y+2) − y²</div><div class="rv" id="dyWidth">–</div><div class="rsub">sum these widths over y → area 9/2</div></div>
+    </div>
+    <div class="vs-compare">
+      <div class="vs-card bad">
+        <div class="vs-head"><span class="vs-x">✗</span> Vertical strips (in x)</div>
+        <div class="vs-body">The bottom boundary <b>switches</b> from the parabola to the line at x = 1, so the top-minus-bottom rule changes partway. You'd need to <b>break it into two integrals</b>:</div>
+        <div class="vs-math" id="vsXmath"></div>
+      </div>
+      <div class="vs-card good">
+        <div class="vs-head"><span class="vs-check">✓</span> Horizontal strips (in y)</div>
+        <div class="vs-body">Every strip runs from the parabola (left) to the line (right) the whole way up — one rule, no switch. <b>Just one integral</b>:</div>
+        <div class="vs-math" id="vsYmath"></div>
+      </div>
+    </div>
+    <div class="hint">Each horizontal strip runs from the parabola (left) to the line (right). Its width is widest in the middle and shrinks to zero at the corners (y = −1 and y = 2), where the curves meet. Add up every strip's width across y and you get the area, 9/2 — same as the vertical-strip answer.</div>
+  </div>
+  <div class="insight reveal"><b>How to choose:</b> look at the region. If a single function is clearly on top and
+    another clearly on the bottom across the whole interval → vertical strips, integrate in <span class="mono">x</span>.
+    If instead a single function is clearly on the left and another on the right → horizontal strips, integrate in
+    <span class="mono">y</span>. Pick whichever gives one clean integral instead of several.</div>
+
+  <!-- ============ 4 · MULTIPLE INTERSECTIONS ============ -->
+  <h2 class="reveal"><span class="n">4</span> · When curves cross: split the integral</h2>
+  <p class="lead reveal">What if the two curves cross <i>inside</i> your interval? Then "top" and "bottom"
+    <b>swap places</b> at the crossing — the curve that was higher is suddenly lower. A single
+    <span class="mono">(top − bottom)</span> integral can't handle that, and it'll quietly give you the wrong answer.</p>
+  <div class="panel reveal">
+    <div class="beat-tabs" id="splitTabs">
+      <button class="beat-tab on" data-mode="0">✗ Ignore the crossing</button>
+      <button class="beat-tab" data-mode="1">✓ Split at the crossing</button>
+    </div>
+    <div class="twocol">
+      <div class="graph-legend" style="flex-direction:column;gap:7px">
+        <span class="gl-item"><span class="gl-dot" style="background:var(--top)"></span><span id="legLine4"></span></span>
+        <span class="gl-item"><span class="gl-dot" style="background:var(--strip)"></span><span id="legCube4"></span></span>
+      </div>
+      <svg id="splitViz" viewBox="0 0 380 320" aria-label="Two curves crossing, signed area versus split area"></svg>
+      <div class="tc-text">
+        <p style="margin-top:0">Here are <span class="mono" style="color:var(--top)">y = x</span> and
+          <span class="mono" style="color:var(--strip)">y = x³</span> on <span class="mono">[−1, 1]</span>. They cross
+          at <span class="mono">x = 0</span>. On the <b>left</b> half the cubic is on top; on the <b>right</b> half the
+          line is on top. The roles flip.</p>
+        <p style="margin-bottom:0;font-size:13.5px" id="splitCaption"></p>
+      </div>
+    </div>
+    <div class="readouts">
+      <div class="ro" id="roLeft"><div class="rl">Left piece&nbsp; [−1, 0]</div><div class="rv" id="splitLeft">–</div><div class="rsub" id="splitLeftSub">&nbsp;</div></div>
+      <div class="ro" id="roRight"><div class="rl">Right piece&nbsp; [0, 1]</div><div class="rv" id="splitRight">–</div><div class="rsub" id="splitRightSub">&nbsp;</div></div>
+      <div class="ro area" id="roTotal"><div class="rl" id="splitTotalLbl">Total</div><div class="rv" id="splitTotal">–</div><div class="rsub" id="splitTotalSub">&nbsp;</div></div>
+    </div>
+  </div>
+  <div class="stumble reveal"><b>The dangerous part:</b> if you ignore the crossing and just compute
+    <span id="wrongInline"></span>, you get <b>exactly 0</b> — the two halves cancel, because one comes
+    out negative. Zero area for an obviously non-empty region is the classic tell that you forgot to split. The fix is
+    always the same: <b>find every intersection inside the interval, split there, and make each piece (upper − lower)
+    so all areas count as positive.</b> (Same logic as splitting at sign changes for distance, last page.)</div>
+
+  <div class="insight reveal">Three situations, one skill. <b>Top − bottom</b> sets up every area. <b>dx vs dy</b> is just
+    choosing the strip direction that's cleanest. <b>Splitting</b> handles curves that trade places. Underneath, it's
+    always the same move: sum up (upper − lower) strips, set up so every piece is positive.</div>
+
+  <!-- ============ 5 · DRILL ============ -->
+  <h2 class="reveal"><span class="n">5</span> · Drill it</h2>
+  <p class="lead reveal">Six questions across setting up top − bottom, choosing dx vs dy, and splitting at
+    crossings. Each gives a full worked solution after you answer.</p>
+  <div class="quiz reveal" id="quiz">
+    <div class="qtop"><span class="qscore" id="qScore">Score: 0 / 0</span><button class="qreset" id="qReset">↺ restart</button></div>
+    <div id="qBody">
+      <div class="qprompt" id="qPrompt"></div>
+      <div class="qctx" id="qCtx"></div>
+      <div class="qopts" id="qOpts"></div>
+      <div class="qfb" id="qFb"></div>
+      <button class="qnext" id="qNext">Next →</button>
+    </div>
+  </div>
+
+  <div class="whatsnext reveal">
+    This setup skill is the foundation for everything next: spin a region around an axis and the same
+    (top − bottom) thinking becomes <a href="unit8-solids.html">volume</a>, or stack known shapes on it for
+    <a href="unit8-cross-sections.html">cross-sections</a>. Back to <a href="unit8.html">Unit 8</a>.
+  </div>
+  <footer class="reveal">Area Between Curves · Unit 8 · <a href="unit8.html">back to Unit 8</a> · part of the Visual AP Calculus guide.</footer>
+</div>
+
+<script>
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const TOP="#40c98a",TOPG="#5fe0a4",BOT="#e8a13c",STRIP="#a892f0",SPLIT="#e0644f",MUT="#9a9183",LINE="#332e25",INK="#ece7dd",BG="#0d0c0a",FAINT="#6b6457";
+
+function renderEqs(){
+  document.getElementById('coreEq').innerHTML=tex(String.raw`A=\int_a^b \Big[\,\textcolor{${TOP}}{\text{top}(x)}-\textcolor{${BOT}}{\text{bottom}(x)}\,\Big]\,dx`,"A = \u222b\u2090\u1d47 [top \u2212 bottom] dx",true);
+  document.getElementById('dyEq').innerHTML=tex(String.raw`A=\int_c^d \Big[\,\textcolor{${TOP}}{\text{right}(y)}-\textcolor{${BOT}}{\text{left}(y)}\,\Big]\,dy`,"A = \u222b_c^d [right \u2212 left] dy",true);
+  var il=document.getElementById('intLabel'); if(il) il.innerHTML=tex(String.raw`\int_a^b \!\cdots\, dx`,"\u222b\u2090\u1d47 \u2026 dx",false);
+  var dyi=document.getElementById('dyAreaInline'); if(dyi) dyi.innerHTML=tex(String.raw`=\int_{-1}^{2}(y+2-y^2)\,dy=\tfrac{9}{2}`,"= \u222b(y+2\u2212y\u00b2)dy = 9/2",false);
+  var wri=document.getElementById('wrongInline'); if(wri) wri.innerHTML=tex(String.raw`\int_{-1}^{1}(x-x^3)\,dx`,"\u222b(x\u2212x\u00b3)dx",false);
+  var vx=document.getElementById('vsXmath'); if(vx) vx.innerHTML=tex(String.raw`\int_{0}^{1}\!2\sqrt{x}\,dx+\int_{1}^{4}\!\big(\sqrt{x}-(x-2)\big)dx`,"\u222b2\u221ax dx + \u222b(\u221ax\u2212(x\u22122))dx",false);
+  var vy=document.getElementById('vsYmath'); if(vy) vy.innerHTML=tex(String.raw`\int_{-1}^{2}\big[(y+2)-y^2\big]\,dy`,"\u222b[(y+2)\u2212y\u00b2]dy",false);
+  // graph legends (curve names moved out of the plots)
+  var l1=document.getElementById('legTop2'); if(l1) l1.innerHTML=tex(String.raw`y=x+2`,"y=x+2",false);
+  var l2=document.getElementById('legBot2'); if(l2) l2.innerHTML=tex(String.raw`y=x^2`,"y=x\u00b2",false);
+  var l3=document.getElementById('legRight3'); if(l3) l3.innerHTML=tex(String.raw`x=y+2\ \text{ (right)}`,"x=y+2 (right)",false);
+  var l4=document.getElementById('legLeft3'); if(l4) l4.innerHTML=tex(String.raw`x=y^2\ \text{ (left)}`,"x=y\u00b2 (left)",false);
+  var l5=document.getElementById('legLine4'); if(l5) l5.innerHTML=tex(String.raw`y=x`,"y=x",false);
+  var l6=document.getElementById('legCube4'); if(l6) l6.innerHTML=tex(String.raw`y=x^3`,"y=x\u00b3",false);
+}
+
+/* ===== MAIN VISUAL: complete worked example, 4 beats ===== */
+(function(){
+  const top=x=>x+2, bot=x=>x*x;
+  const a=-1,b=2;
+  const svg=document.getElementById('areaViz'); if(!svg) return;
+  const tabs=document.getElementById('beatTabs');
+  const cap=document.getElementById('beatCaption'), work=document.getElementById('workPanel');
+  const W=660,H=420,padL=46,padR=24,padT=24,padB=40;
+  const xMin=-1.6,xMax=2.6,yMin=-0.4,yMax=4.6;
+  const sx=x=>padL+(x-xMin)/(xMax-xMin)*(W-padL-padR);
+  const sy=y=>padT+(yMax-y)/(yMax-yMin)*(H-padT-padB);
+  let beat=0;
+  const captions=[
+    "<b>Step 1 — find the bounds.</b> The region starts and ends where the curves cross. Set them equal and solve; the solutions are your limits of integration.",
+    "<b>Step 2 — which is on top?</b> Pick any x between the bounds and compare. Here the line beats the parabola, so the line is the top curve.",
+    "<b>Step 3 — the two areas.</b> The area between is the area under the top curve minus the area under the bottom curve. Here are both, down to the axis.",
+    "<b>Step 4 — subtract.</b> Carve the bottom area out of the top area. What's left is the region between — and the integral does it all in one line."
+  ];
+  // work-panel content per beat: array of {label, math}
+  const works=[
+    [ {l:"Set the curves equal",m:"x+2 = x^2"},
+      {l:"Rearrange",m:"x^2 - x - 2 = 0"},
+      {l:"Factor",m:"(x-2)(x+1)=0"},
+      {l:"Bounds",m:"x=-1 \\;\\text{ and }\\; x=2",r:true} ],
+    [ {l:"Pick any x between the bounds",m:"x = 0"},
+      {l:"Top candidate",m:"y=x+2 \\;\\to\\; 0+2 = 2"},
+      {l:"Bottom candidate",m:"y=x^2 \\;\\to\\; 0^2 = 0"},
+      {l:"Compare",m:"2 > 0 \\;\\Rightarrow\\; x+2 \\text{ is on top}",r:true} ],
+    [ {l:"Area under top",m:"\\int_{-1}^{2}(x+2)\\,dx = \\tfrac{15}{2}"},
+      {l:"Area under bottom",m:"\\int_{-1}^{2} x^2\\,dx = 3"} ],
+    [ {l:"Set up top − bottom",m:"A=\\int_{-1}^{2}\\big[(x+2)-x^2\\big]\\,dx"},
+      {l:"Subtract the areas",m:"\\tfrac{15}{2} - 3 = \\tfrac{9}{2}",r:true} ]
+  ];
+  function areaUnder(f,fill,op){
+    let d="M "+sx(a)+" "+sy(0);
+    for(let x=a;x<=b;x+=0.01) d+=" L "+sx(x)+" "+sy(f(x));
+    d+=" L "+sx(b)+" "+sy(0)+" Z";
+    svg.appendChild(el("path",{d,fill,opacity:op}));
+  }
+  function betweenRegion(op){
+    let d="M "+sx(a)+" "+sy(top(a));
+    for(let x=a;x<=b;x+=0.01) d+=" L "+sx(x)+" "+sy(top(x));
+    for(let x=b;x>=a;x-=0.01) d+=" L "+sx(x)+" "+sy(bot(x));
+    d+=" Z";
+    svg.appendChild(el("path",{d,fill:TOP,opacity:op}));
+  }
+  function draw(){
+    svg.innerHTML="";
+    for(let gx=-1;gx<=2;gx++) svg.appendChild(el("line",{x1:sx(gx),y1:padT,x2:sx(gx),y2:H-padB,stroke:LINE,"stroke-width":1,opacity:.3}));
+    svg.appendChild(el("line",{x1:padL,y1:sy(0),x2:W-padR,y2:sy(0),stroke:MUT,"stroke-width":1.3}));
+    svg.appendChild(el("line",{x1:sx(0),y1:padT,x2:sx(0),y2:H-padB,stroke:MUT,"stroke-width":1.1,opacity:.7}));
+
+    if(beat===0){
+      // bounds: dashed verticals + big dots at crossings
+      [a,b].forEach(p=>{
+        svg.appendChild(el("line",{x1:sx(p),y1:padT,x2:sx(p),y2:H-padB,stroke:STRIP,"stroke-width":1.5,"stroke-dasharray":"5 4",opacity:.8}));
+        svg.appendChild(el("text",{x:sx(p),y:padT+12,fill:STRIP,"font-size":12,"text-anchor":"middle","font-family":"var(--mono)"},"x="+p));
+      });
+    } else if(beat===1){
+      betweenRegion(.14);
+      // test point at x=0
+      svg.appendChild(el("line",{x1:sx(0),y1:sy(bot(0)),x2:sx(0),y2:sy(top(0)),stroke:STRIP,"stroke-width":2.5}));
+      svg.appendChild(el("circle",{cx:sx(0),cy:sy(top(0)),r:5,fill:TOPG}));
+      svg.appendChild(el("circle",{cx:sx(0),cy:sy(bot(0)),r:5,fill:BOT}));
+      svg.appendChild(el("text",{x:sx(0)+10,y:sy(top(0))-2,fill:TOPG,"font-size":11,"font-family":"var(--mono)"},"x+2 = 2"));
+      svg.appendChild(el("text",{x:sx(0)+10,y:sy(bot(0))+14,fill:BOT,"font-size":11,"font-family":"var(--mono)"},"x\u00b2 = 0"));
+    } else if(beat===2){
+      areaUnder(top,TOP,.20);
+      areaUnder(bot,BOT,.42);
+    } else {
+      betweenRegion(.30);
+    }
+    // curves
+    function curve(f,color){let d="M "+sx(xMin)+" "+sy(f(xMin));for(let x=xMin;x<=xMax;x+=0.01)d+=" L "+sx(x)+" "+sy(f(x));svg.appendChild(el("path",{d,fill:"none",stroke:color,"stroke-width":3}));}
+    curve(top,TOP); curve(bot,BOT);
+    // crossing dots (all beats)
+    [a,b].forEach(p=>svg.appendChild(el("circle",{cx:sx(p),cy:sy(top(p)),r:4,fill:INK})));
+    // axis + curve tags
+    svg.appendChild(el("text",{x:W-padR-4,y:sy(0)-7,fill:MUT,"font-size":11,"text-anchor":"end","font-family":"var(--mono)"},"x"));
+    for(let gx=-1;gx<=2;gx++) svg.appendChild(el("text",{x:sx(gx),y:sy(0)+15,fill:MUT,"font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},gx));
+
+    cap.innerHTML=captions[beat];
+    // build work panel
+    work.innerHTML = works[beat].map(function(w){
+      return "<div class='work-line"+(w.r?" result":"")+"'><div class='wl-label'>"+w.l+"</div><div class='wl-math'>"+tex(w.m,w.m,false)+"</div></div>";
+    }).join("");
+    [...tabs.children].forEach((t,i)=>t.classList.toggle('on',i===beat));
+  }
+  [...tabs.children].forEach(t=>t.addEventListener('click',()=>{beat=parseInt(t.dataset.beat);draw();}));
+  draw();
+})();
+
+/* ===== DY VISUAL: interactive sweeping horizontal strip ===== */
+(function(){
+  const right=y=>y+2, left=y=>y*y;
+  const svg=document.getElementById('dyViz'); if(!svg) return;
+  const yEl=document.getElementById('dyY'), yVal=document.getElementById('dyYval');
+  const W=380,H=320,padL=36,padR=20,padT=20,padB=34;
+  const xMin=-0.5,xMax=4.6,yMin=-1.6,yMax=2.6;
+  const sx=x=>padL+(x-xMin)/(xMax-xMin)*(W-padL-padR);
+  const sy=y=>padT+(yMax-y)/(yMax-yMin)*(H-padT-padB);
+  function draw(){
+    const Y=parseFloat(yEl.value); yVal.textContent=Y.toFixed(2); svg.innerHTML="";
+    // region fill
+    let reg="M "+sx(right(-1))+" "+sy(-1);
+    for(let y=-1;y<=2;y+=0.01) reg+=" L "+sx(right(y))+" "+sy(y);
+    for(let y=2;y>=-1;y-=0.01) reg+=" L "+sx(left(y))+" "+sy(y);
+    reg+=" Z";
+    svg.appendChild(el("path",{d:reg,fill:TOP,opacity:.12}));
+    // axes
+    svg.appendChild(el("line",{x1:padL,y1:sy(0),x2:W-padR,y2:sy(0),stroke:MUT,"stroke-width":1.2}));
+    svg.appendChild(el("line",{x1:sx(0),y1:padT,x2:sx(0),y2:H-padB,stroke:MUT,"stroke-width":1.2}));
+    // faint guide strips
+    for(let y=-0.7;y<=1.9;y+=0.45){
+      if(Math.abs(y-Y)>0.12) svg.appendChild(el("line",{x1:sx(left(y)),y1:sy(y),x2:sx(right(y)),y2:sy(y),stroke:STRIP,"stroke-width":2.5,opacity:.22,"stroke-linecap":"round"}));
+    }
+    // curves
+    function curveY(f,color){let d="M "+sx(f(yMin))+" "+sy(yMin);for(let y=yMin;y<=yMax;y+=0.01)d+=" L "+sx(f(y))+" "+sy(y);svg.appendChild(el("path",{d,fill:"none",stroke:color,"stroke-width":2.6}));}
+    curveY(right,TOP); curveY(left,BOT);
+    // the active strip at Y
+    if(Y>=-1 && Y<=2){
+      svg.appendChild(el("line",{x1:sx(left(Y)),y1:sy(Y),x2:sx(right(Y)),y2:sy(Y),stroke:STRIP,"stroke-width":6,opacity:.85,"stroke-linecap":"round"}));
+      svg.appendChild(el("circle",{cx:sx(left(Y)),cy:sy(Y),r:5,fill:BOT}));
+      svg.appendChild(el("circle",{cx:sx(right(Y)),cy:sy(Y),r:5,fill:TOP}));
+    }
+    // intersection dots
+    [-1,2].forEach(y=>svg.appendChild(el("circle",{cx:sx(right(y)),cy:sy(y),r:3.5,fill:INK})));
+    // axis ticks only
+    svg.appendChild(el("text",{x:W-padR-2,y:sy(0)-6,fill:MUT,"font-size":10,"text-anchor":"end","font-family":"var(--mono)"},"x"));
+    svg.appendChild(el("text",{x:sx(0)+6,y:padT+8,fill:MUT,"font-size":10,"font-family":"var(--mono)"},"y"));
+    // readout
+    const inRange=(Y>=-1&&Y<=2);
+    document.getElementById('dyWidth').textContent=inRange?(right(Y)-left(Y)).toFixed(2):"–";
+  }
+  yEl.addEventListener('input',draw); draw();
+})();
+
+/* ===== SPLIT VISUAL: toggle wrong-way (signed, =0) vs split (=1/2) ===== */
+(function(){
+  const line=x=>x, cube=x=>x*x*x;
+  const svg=document.getElementById('splitViz'); if(!svg) return;
+  const tabs=document.getElementById('splitTabs');
+  const cap=document.getElementById('splitCaption');
+  const W=380,H=320,padL=30,padR=20,padT=20,padB=28;
+  const xMin=-1.3,xMax=1.3,yMin=-1.3,yMax=1.3;
+  const sx=x=>padL+(x-xMin)/(xMax-xMin)*(W-padL-padR);
+  const sy=y=>padT+(yMax-y)/(yMax-yMin)*(H-padT-padB);
+  let mode=0; // 0 = ignore (signed), 1 = split (positive)
+  function regionLeft(){ // x in [-1,0], between line and cube
+    let d="M "+sx(-1)+" "+sy(cube(-1));
+    for(let x=-1;x<=0;x+=0.005) d+=" L "+sx(x)+" "+sy(cube(x));
+    for(let x=0;x>=-1;x-=0.005) d+=" L "+sx(x)+" "+sy(line(x));
+    return d+" Z";
+  }
+  function regionRight(){ // x in [0,1]
+    let d="M "+sx(0)+" "+sy(line(0));
+    for(let x=0;x<=1;x+=0.005) d+=" L "+sx(x)+" "+sy(line(x));
+    for(let x=1;x>=0;x-=0.005) d+=" L "+sx(x)+" "+sy(cube(x));
+    return d+" Z";
+  }
+  function pillLabel(cx,cy,txt,color){
+    const w=txt.length*6+9, h=16;
+    svg.appendChild(el("rect",{x:cx-w/2,y:cy-h/2,width:w,height:h,rx:5,fill:BG,opacity:.78,stroke:color,"stroke-width":1,"stroke-opacity":.5}));
+    const t=el("text",{x:cx,y:cy,fill:color,"font-size":11,"text-anchor":"middle","dominant-baseline":"central","font-weight":"600","font-family":"var(--mono)","letter-spacing":"0.8"},txt);
+    svg.appendChild(t);
+  }
+  function draw(){
+    svg.innerHTML="";
+    // fills depend on mode
+    if(mode===0){
+      // wrong way: left counts NEGATIVE (red), right POSITIVE (green)
+      svg.appendChild(el("path",{d:regionLeft(),fill:SPLIT,opacity:.30}));
+      svg.appendChild(el("path",{d:regionRight(),fill:TOP,opacity:.22}));
+      pillLabel(sx(-0.55),sy(-0.34),"\u22121/4",SPLIT);
+      pillLabel(sx(0.55),sy(0.40),"+1/4",TOP);
+    } else {
+      // split: both POSITIVE (green)
+      svg.appendChild(el("path",{d:regionLeft(),fill:TOP,opacity:.26}));
+      svg.appendChild(el("path",{d:regionRight(),fill:TOP,opacity:.26}));
+      pillLabel(sx(-0.55),sy(-0.34),"1/4",TOPG);
+      pillLabel(sx(0.55),sy(0.40),"1/4",TOPG);
+      // divider at the split
+      svg.appendChild(el("line",{x1:sx(0),y1:padT,x2:sx(0),y2:H-padB,stroke:TOPG,"stroke-width":1.5,"stroke-dasharray":"4 4",opacity:.6}));
+    }
+    // axes
+    svg.appendChild(el("line",{x1:padL,y1:sy(0),x2:W-padR,y2:sy(0),stroke:MUT,"stroke-width":1.2}));
+    svg.appendChild(el("line",{x1:sx(0),y1:padT,x2:sx(0),y2:H-padB,stroke:MUT,"stroke-width":1.2}));
+    // curves
+    function curve(f,color){let d="M "+sx(xMin)+" "+sy(f(xMin));for(let x=xMin;x<=xMax;x+=0.005)d+=" L "+sx(x)+" "+sy(f(x));svg.appendChild(el("path",{d,fill:"none",stroke:color,"stroke-width":2.6}));}
+    curve(cube,STRIP); curve(line,TOP);
+    // crossing point
+    svg.appendChild(el("circle",{cx:sx(0),cy:sy(0),r:5,fill:SPLIT,stroke:BG,"stroke-width":2}));
+
+    // readouts + caption per mode
+    const L=document.getElementById('splitLeft'), R=document.getElementById('splitRight'), T=document.getElementById('splitTotal');
+    const Ls=document.getElementById('splitLeftSub'), Rs=document.getElementById('splitRightSub'), Ts=document.getElementById('splitTotalSub');
+    const Tl=document.getElementById('splitTotalLbl');
+    const roTotal=document.getElementById('roTotal');
+    if(mode===0){
+      L.textContent="\u22121/4"; L.style.color=SPLIT; Ls.textContent="counted negative";
+      R.textContent="+1/4"; R.style.color=TOP; Rs.textContent="counted positive";
+      T.textContent="0"; T.style.color=SPLIT; Tl.textContent="Single integral (signed)"; Ts.textContent="the halves cancel \u2014 wrong!";
+      roTotal.style.setProperty('--ro-accent',SPLIT);
+      cap.innerHTML="<b style='color:var(--split)'>Ignoring the crossing</b> means one integral <span class='mono'>\u222b(x\u2212x\u00b3)dx</span>. But left of zero that's <i>negative</i>, so it cancels the right half \u2014 giving <b>0</b> for a region that clearly has area.";
+    } else {
+      L.textContent="1/4"; L.style.color=TOPG; Ls.textContent="cubic on top: \u222b(x\u00b3\u2212x)";
+      R.textContent="1/4"; R.style.color=TOPG; Rs.textContent="line on top: \u222b(x\u2212x\u00b3)";
+      T.textContent="1/2"; T.style.color=TOPG; Tl.textContent="Split, both positive"; Ts.textContent="the true area";
+      cap.innerHTML="<b style='color:var(--emerald)'>Splitting at x = 0</b> lets each piece be set up as (upper \u2212 lower), so both count as <i>positive</i> area: <span class='mono'>1/4 + 1/4 = 1/2</span>. Same picture, correct answer.";
+    }
+    [...tabs.children].forEach((t,i)=>t.classList.toggle('on',i===mode));
+  }
+  [...tabs.children].forEach(t=>t.addEventListener('click',()=>{mode=parseInt(t.dataset.mode);draw();}));
+  draw();
+})();
+
+/* ===== QUIZ ===== */
+const QUIZ=[
+  {p:"Find the area between \\(y=2x\\) and \\(y=x^2\\).",
+   ctx:"First find where they meet, then integrate top minus bottom.",
+   opts:["4/3","8/3","2","4"],correct:0,
+   intro:"<b>Section 1:</b> area = integral of (top \u2212 bottom) between the intersection points.",
+   steps:[
+     {t:"Find intersections: set the curves equal.", m:"2x=x^2 \\Rightarrow x=0,\\;x=2"},
+     {t:"On (0,2), test x=1: line gives 2, parabola gives 1, so \\(2x\\) is on top.", m:"\\text{top}=2x,\\;\\text{bottom}=x^2"},
+     {t:"Integrate the difference.", m:"\\int_0^2(2x-x^2)\\,dx=\\Big[x^2-\\tfrac{x^3}{3}\\Big]_0^2=4-\\tfrac{8}{3}=\\tfrac{4}{3}"}
+   ],
+   key:"Always confirm which curve is on top with a test point before integrating."},
+
+  {p:"Between \\(y=x^2\\) and \\(y=8-x^2\\), which curve is on top?",
+   ctx:"Pick any x between the intersections and compare.",
+   opts:["\\(y=8-x^2\\)","\\(y=x^2\\)","They're equal everywhere","Depends on x"],correct:0,
+   intro:"<b>Section 1:</b> 'top' is whichever curve is higher between the intersection points.",
+   steps:[
+     {t:"Test an easy point, x=0.", m:"x^2=0,\\qquad 8-x^2=8"},
+     {t:"Compare: 8 is higher than 0.", m:"8-x^2 > x^2 \\text{ at } x=0"}
+   ],
+   key:"One test point settles it \u2014 the downward parabola 8\u2212x\u00b2 sits on top."},
+
+  {p:"A region is bounded by \\(x=y^2\\) and \\(x=4\\). What's the smartest way to set up the area?",
+   ctx:"Think about which strip direction needs fewer integrals.",
+   opts:["Horizontal strips, integrate in y","Vertical strips, integrate in x","Either needs two integrals","It can't be done with one integral"],correct:0,
+   intro:"<b>Section 3:</b> choose the strip direction that gives one clean integral.",
+   steps:[
+     {t:"In x: the top boundary is the parabola's upper branch and the bottom is its lower branch \u2014 awkward.", m:"\\text{vertical strips} \\to \\text{messy}"},
+     {t:"In y: every horizontal strip runs cleanly from the parabola (left) to x=4 (right).", m:"\\text{right}=4,\\;\\text{left}=y^2"},
+     {t:"One integral does it.", m:"\\int_{-2}^{2}(4-y^2)\\,dy"}
+   ],
+   key:"Sideways-opening regions are usually cleanest with horizontal strips (dy)."},
+
+  {p:"For \\(y=x\\) and \\(y=x^3\\) on \\([-1,1]\\), why must you split the integral at \\(x=0\\)?",
+   ctx:"Think about what happens to 'top' and 'bottom' at the crossing.",
+   opts:["The curves swap which one is on top","The interval is too wide","x³ is undefined at 0","You don't \u2014 one integral works"],correct:0,
+   intro:"<b>Section 4:</b> when curves cross inside the interval, top and bottom trade places.",
+   steps:[
+     {t:"On (\u22121,0), test x=\u22120.5: cube gives \u22120.125, line gives \u22120.5 \u2014 cube is higher.", m:"x^3>x \\text{ on }(-1,0)"},
+     {t:"On (0,1), test x=0.5: line gives 0.5, cube gives 0.125 \u2014 line is higher.", m:"x>x^3 \\text{ on }(0,1)"},
+     {t:"Roles flip at 0, so split and make each piece (upper \u2212 lower).", m:"\\int_{-1}^0(x^3-x)+\\int_0^1(x-x^3)"}
+   ],
+   key:"Ignoring the split here gives 0 \u2014 the halves cancel. Always split at crossings."},
+
+  {p:"Compute the area between \\(y=x+2\\) and \\(y=x^2\\).",
+   ctx:"They meet at x=\u22121 and x=2; the line is on top.",
+   opts:["9/2","7/2","9","6"],correct:0,
+   intro:"<b>Sections 1\u20132:</b> the very region from the main visual \u2014 top minus bottom, integrated.",
+   steps:[
+     {t:"Intersections: set equal.", m:"x+2=x^2 \\Rightarrow x^2-x-2=0 \\Rightarrow x=-1,2"},
+     {t:"Line is on top; integrate the difference.", m:"\\int_{-1}^{2}(x+2-x^2)\\,dx"},
+     {t:"Evaluate.", m:"\\Big[\\tfrac{x^2}{2}+2x-\\tfrac{x^3}{3}\\Big]_{-1}^{2}=\\tfrac{9}{2}"}
+   ],
+   key:"This is the visual's region \u2014 area 9/2, exactly the value the sweep builds to."},
+
+  {p:"Find the area between \\(y=x\\) and \\(y=x^2\\) from \\(x=0\\) to \\(x=1\\).",
+   ctx:"On (0,1), which is bigger \u2014 x or x²?",
+   opts:["1/6","1/2","1/3","5/6"],correct:0,
+   intro:"<b>Section 1:</b> straightforward top minus bottom, no crossing inside (0,1).",
+   steps:[
+     {t:"On (0,1), test x=0.5: x=0.5 beats x²=0.25, so \\(y=x\\) is on top.", m:"\\text{top}=x,\\;\\text{bottom}=x^2"},
+     {t:"Integrate the difference.", m:"\\int_0^1(x-x^2)\\,dx=\\Big[\\tfrac{x^2}{2}-\\tfrac{x^3}{3}\\Big]_0^1"},
+     {t:"Evaluate.", m:"\\tfrac{1}{2}-\\tfrac{1}{3}=\\tfrac{1}{6}"}
+   ],
+   key:"Between 0 and 1, the line sits just above the parabola \u2014 a small area, 1/6."}
+];
+(function(){
+  const QN=QUIZ.length;
+  let order=[], idx=0, score=0, answered=false;
+  const scoreEl=document.getElementById('qScore');
+  const bodyEl=document.getElementById('qBody');
+  let prompt,ctx,opts,fb,next;
+  function grab(){
+    prompt=document.getElementById('qPrompt'); ctx=document.getElementById('qCtx');
+    opts=document.getElementById('qOpts'); fb=document.getElementById('qFb'); next=document.getElementById('qNext');
+    next.addEventListener('click',onNext);
+  }
+  function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function mathify(html){return html.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return m;}});}
+  function render(){
+    answered=false; fb.innerHTML=""; next.style.display="none";
+    const q=QUIZ[order[idx]];
+    prompt.innerHTML=mathify(q.p); ctx.textContent=q.ctx;
+    const list=q.opts.map((t,i)=>({t,c:i===q.correct})); shuffle(list);
+    opts.innerHTML="";
+    list.forEach(o=>{const b=document.createElement('button');b.innerHTML=mathify(o.t);b.dataset.c=o.c;b.addEventListener('click',()=>pick(b));opts.appendChild(b);});
+    scoreEl.textContent="Score: "+score+" / "+idx;
+  }
+  function pick(btn){
+    if(answered)return; answered=true;
+    const q=QUIZ[order[idx]];
+    const correct=btn.dataset.c==="true";
+    [...opts.children].forEach(b=>{b.disabled=true; if(b.dataset.c==="true")b.classList.add('correct');});
+    if(correct)score++; else btn.classList.add('wrong');
+    var html="<div class='fb-intro'>"+(correct?"<b>Correct.</b> ":"<b>Not quite.</b> ")+mathify(q.intro)+"</div>";
+    q.steps.forEach(function(st,si){
+      html+="<div class='fb-step'><div class='fb-step-n'>"+(si+1)+"</div><div class='fb-step-body'>"
+          +"<div class='fb-step-t'>"+mathify(st.t)+"</div>"
+          +(st.m?"<div class='fb-step-m'>"+tex(st.m,st.m,true)+"</div>":"")
+          +"</div></div>";
+    });
+    html+="<div class='fb-key'>"+mathify(q.key)+"</div>";
+    fb.innerHTML=html;
+    scoreEl.textContent="Score: "+score+" / "+(idx+1);
+    next.textContent=idx<QN-1?"Next \u2192":"See result \u2192"; next.style.display="block";
+  }
+  function onNext(){
+    if(idx<QN-1){idx++;render();}
+    else{
+      const msg=score===QN?"Perfect \u2014 you've got the setup skill down cold.":score>=4?"Solid. Re-check the ones you missed.":"Worth another pass \u2014 focus on which curve is on top and when to split.";
+      bodyEl.innerHTML='<div class="qdone"><div class="big">'+score+' / '+QN+'</div><p style="margin:10px auto 16px;max-width:420px">'+msg+'</p><button class="qreset" id="qReset2">\u21ba try again</button></div>';
+      document.getElementById('qReset2').addEventListener('click',restart);
+    }
+  }
+  function restart(){
+    order=shuffle([...Array(QN).keys()]); idx=0; score=0;
+    bodyEl.innerHTML='<div class="qprompt" id="qPrompt"></div><div class="qctx" id="qCtx"></div><div class="qopts" id="qOpts"></div><div class="qfb" id="qFb"></div><button class="qnext" id="qNext">Next \u2192</button>';
+    grab(); render();
+  }
+  document.getElementById('qReset').addEventListener('click',restart);
+  grab();
+  order=shuffle([...Array(QN).keys()]);
+  render();
+  // re-render the first question once KaTeX finishes loading (deferred CDN)
+  if(!window.katex){let _kt=0;const _ki=setInterval(function(){if(window.katex){clearInterval(_ki);if(!answered)render();}else if(++_kt>80)clearInterval(_ki);},100);}
+})();
+
+function boot(){ renderEqs(); }
+boot();
+if(window.addEventListener){ window.addEventListener('load',boot); document.addEventListener('DOMContentLoaded',boot); }
+if(!window.katex){let tries=0;const t=setInterval(()=>{if(window.katex){clearInterval(t);renderEqs();}else if(++tries>60)clearInterval(t);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*45,400)+'ms';});
+</script>
+</body>
+</html>

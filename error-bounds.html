@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Error Bounds — Alternating Series &amp; Lagrange · Unit 10 Guide</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23e8e4dc%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%23c8841f%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23e8e4dc%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%237d5fd0%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="styles.css">
@@ -12,9 +12,9 @@
 <style>
   /* page accent: gold. base palette/fonts/chrome from styles.css */
   /* page accent: gold. base palette/fonts/chrome from styles.css */
-  :root{ --approx:#cdb24e; --gold:#cdb24e; --true:#3fd0b0;
+  :root{ --approx:#a98cf0; --gold:#a98cf0; --true:#3fd0b0;
          --glow:rgba(205,178,78,.08); --wrap-max:1060px;
-         --vM:#e0644f; --vDist:#6aa9e0; --vFact:#a98cf0; --vErr:#cdb24e; --vEst:#3fd0b0; }
+         --vM:#e0644f; --vDist:#6aa9e0; --vFact:#a98cf0; --vErr:#a98cf0; --vEst:#3fd0b0; }
   .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:680px}
   h2{font-family:var(--display);font-weight:600;font-size:21px;margin:42px 0 8px;letter-spacing:-0.01em}
   h2 .pill{font-family:var(--mono);font-size:11px;font-weight:500;vertical-align:middle;margin-left:8px;
@@ -217,7 +217,7 @@
 const NS="http://www.w3.org/2000/svg";
 const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
 // variable color scheme (matches CSS --v* vars), used to color-code symbols inside KaTeX and the legend
-const VC={M:"#e0644f", dist:"#6aa9e0", fact:"#a98cf0", err:"#cdb24e", est:"#3fd0b0", term:"#6aa9e0"};
+const VC={M:"#e0644f", dist:"#6aa9e0", fact:"#a98cf0", err:"#a98cf0", est:"#3fd0b0", term:"#6aa9e0"};
 // build a digestible formula block: color-coded equation + plain-language line + color-matched legend
 function formulaBlock(latex, fallback, plain, legend){
   const leg = legend.map(([color,sym,desc])=>

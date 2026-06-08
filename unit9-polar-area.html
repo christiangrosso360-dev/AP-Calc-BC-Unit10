@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Area in Polar — a fan of pie slices · Unit 9</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230d1417%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2220%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%233fb6d8%22%3E%CE%B8%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{
+    --cyan:#3fb6d8; --cyan-glow:#6dd4ef; --cyan-deep:#2a8fad;
+    --approx:#3fb6d8; --accent:#3fb6d8;
+    --amber:#e8a13c; --amber-glow:#f4bb63; --rose:#e0644f;
+    --bg:#0b0e10; --panel:#141b1f; --panel-2:#1a2329;
+    --ink:#e7eef2; --muted:#8fa2ac; --faint:#5f7480;
+    --line:#26323a; --line-2:#33444e;
+    --wrap-max:900px;
+  }
+  body{background:var(--bg)}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(ellipse 60% 45% at 82% 0%, rgba(63,182,216,.08), transparent 60%);}
+  .wrap{position:relative;z-index:1}
+  .sub{color:var(--muted);font-size:15.5px;margin-top:10px;max-width:720px;line-height:1.6}
+  h2{font-family:var(--display);font-weight:600;font-size:24px;margin:58px 0 6px;letter-spacing:-0.015em;color:var(--ink)}
+  h2 .n{color:var(--cyan);font-variant-numeric:tabular-nums}
+  h3{font-family:var(--display);font-weight:600;font-size:18px;margin:30px 0 4px;color:var(--ink)}
+  p{font-size:15px;color:var(--muted);max-width:730px;line-height:1.78;margin:14px 0}
+  p.lead{font-size:16px;color:var(--ink);max-width:730px}
+  p b{color:var(--ink);font-weight:600}
+  .mono{font-family:var(--mono);color:var(--ink)}
+  .em-text{color:var(--cyan);font-weight:600}
+  a.inl{color:var(--cyan);text-decoration:none;border-bottom:1px dashed var(--line-2)}
+  a.inl:hover{border-color:var(--cyan)}
+
+  .eq{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:24px 22px;margin:22px 0;text-align:center;overflow-x:auto;overflow-y:hidden;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .eq .katex,.eq .katex-display{color:var(--ink)} .eq .katex{font-size:1.3em} .eq .katex-display{margin:0}
+  .eq .cap{font-size:12.5px;color:var(--muted);margin-top:12px;font-family:var(--mono);letter-spacing:.02em}
+
+  /* the sector-sweep visual */
+  .stage{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .plot{width:100%;background:#0a0f12;border:1px solid var(--line);border-radius:11px}
+  .plot canvas{width:100%;height:auto;display:block;border-radius:11px}
+  .area-plots{display:grid;grid-template-columns:1fr;gap:12px;max-width:560px;margin:0 auto}
+  .area-plots.dual{grid-template-columns:1fr 1fr;max-width:none}
+  @media(max-width:680px){.area-plots.dual{grid-template-columns:1fr}}
+  .dual-labels{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .dual-labels .dl{display:flex;align-items:center;gap:7px}
+  .dual-labels .dl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+  /* intersection callout (two-curve pause) */
+  .xcallout{display:none;margin-top:14px;padding:14px 16px;border:1px solid rgba(224,100,79,.4);background:rgba(224,100,79,.07);border-radius:12px;align-items:center;gap:14px}
+  .xcallout.show{display:flex;flex-wrap:wrap}
+  .xc-body{flex:1;min-width:240px;font-size:13.5px;line-height:1.6;color:var(--muted)}
+  .xc-body b{color:var(--ink)} .xc-body .hl{color:var(--amber-glow);font-weight:600}
+  .xc-btn{font-family:var(--mono);font-size:12px;background:var(--cyan);color:#0b1417;font-weight:600;border:none;border-radius:9px;padding:9px 16px;cursor:pointer;white-space:nowrap;transition:opacity .2s}
+  .xc-btn:hover{opacity:.9}
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:14px}
+  .seg{display:flex;gap:0;border:1px solid var(--line-2);border-radius:9px;overflow:hidden}
+  .seg button{font-family:var(--mono);font-size:12px;background:transparent;color:var(--muted);border:none;padding:8px 14px;cursor:pointer;transition:background .2s,color .2s;border-right:1px solid var(--line-2)}
+  .seg button:last-child{border-right:none}
+  .seg button.on{background:var(--cyan);color:#0b1417;font-weight:600}
+  .seg button:not(.on):hover{color:var(--ink);background:rgba(63,182,216,.08)}
+  .play{font-family:var(--mono);font-size:12px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-2);border-radius:9px;padding:8px 15px;cursor:pointer;transition:border-color .2s}
+  .play:hover{border-color:var(--cyan)}
+  .slider-row{display:flex;align-items:center;gap:12px;flex:1;min-width:220px}
+  .slider-row label{font-family:var(--mono);font-size:11.5px;color:var(--faint);white-space:nowrap}
+  input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:3px;background:var(--line-2);outline:none;min-width:120px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 8px rgba(63,182,216,.6)}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:var(--cyan);cursor:pointer}
+  .curve-eq{font-family:var(--mono);font-size:13px;color:var(--cyan);margin-top:10px}
+  .readout{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px;font-family:var(--mono);font-size:12.5px}
+  .readout .item{color:var(--muted)} .readout .item b{color:var(--ink);font-weight:600}
+  .readout .rarea b{color:var(--cyan-glow)} .readout .rang b{color:var(--amber-glow)}
+
+  .note{background:rgba(63,182,216,.06);border:1px solid rgba(63,182,216,.22);border-radius:12px;padding:14px 18px;margin:22px 0}
+  .note .nh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+  .note p{margin:0;font-size:13.5px;color:var(--muted)}.note p b{color:var(--ink)}
+
+  .trap{background:rgba(224,100,79,.06);border-left:2px solid var(--rose);border-radius:0 10px 10px 0;padding:13px 18px;margin:22px 0}
+  .trap .th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+  .trap p{margin:0;font-size:13.5px;color:var(--muted)}.trap p b{color:var(--ink)}
+
+  .work{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:22px 0}
+  .work .wtag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin:16px 0 0}
+  .work .step{font-size:14px;color:var(--muted);line-height:1.7;margin:10px 0}
+  .work .step b{color:var(--ink)}
+  .work .ans{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:13px;color:var(--cyan-glow);border:1px solid rgba(63,182,216,.3);border-radius:8px;padding:5px 12px;background:rgba(63,182,216,.05)}
+
+  .quiz{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-top:22px}
+  .qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .qcount{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  .qprompt{font-size:15.5px;color:var(--ink);margin:10px 0 16px;line-height:1.6}
+  .qopts{display:flex;flex-direction:column;gap:9px}
+  .qopts button{text-align:left;font-family:var(--body);font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line-2);border-radius:10px;padding:12px 15px;cursor:pointer;transition:border-color .2s,background .2s}
+  .qopts button:hover:not(:disabled){border-color:var(--cyan)}
+  .qopts button:disabled{cursor:default}
+  .qopts button.correct{background:rgba(63,208,176,.14);border-color:var(--conv,#3fd0b0);color:#cfeee6}
+  .qopts button.wrong{background:rgba(224,100,79,.12);border-color:var(--rose);color:#f0c9c1}
+  .qfb{margin-top:14px;font-size:13.5px;line-height:1.6;color:var(--muted);display:none}
+  .qfb.show{display:block}
+  .qfb b{color:var(--ink)}
+  .qfb .verdict{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+  .qfb .verdict.r{color:var(--conv,#3fd0b0)} .qfb .verdict.w{color:var(--rose)}
+  .qnav{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+  .qnav button{font-family:var(--mono);font-size:12.5px;background:var(--cyan);color:#0b1417;font-weight:600;border:none;border-radius:9px;padding:10px 18px;cursor:pointer;transition:transform .2s,opacity .2s}
+  .qnav button:disabled{opacity:.4;cursor:default}
+  .qnav button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line-2)}
+  .qdone{text-align:center;padding:10px 0}
+  .qdone .score{font-family:var(--display);font-size:34px;color:var(--cyan);font-weight:600}
+  .qdone p{margin:6px 0 14px}
+
+  .fnav{display:flex;justify-content:space-between;gap:14px;margin-top:60px;flex-wrap:wrap}
+  .fnav a{flex:1;min-width:200px;text-decoration:none;border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:linear-gradient(160deg,var(--panel-2),var(--panel));transition:border-color .3s,transform .3s}
+  .fnav a:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .fnav .d{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+  .fnav .ti{font-family:var(--display);font-size:17px;color:var(--ink);font-weight:600}
+  .fnav .next{text-align:right}
+
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .55s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit9.html">← Unit 9</a>
+  <header class="reveal">
+    <h1>Area in <span class="em">Polar</span></h1>
+    <div class="sub">Finding area under a rectangular curve means stacking thin <i>rectangles</i>. But a
+      polar region fans out from a center, so the natural building block isn't a rectangle — it's a thin
+      <b>pie slice</b>. Add up the slices and you get the polar area formula.
+      <span class="em-text">A sum of infinitely many sectors.</span></div>
+  </header>
+
+  <!-- ===================== §1 WHY ½∫r² ===================== -->
+  <h2><span class="n">1.</span> Why area is ½∫r² dθ</h2>
+  <p class="lead">Sweep out a tiny angle \(d\theta\) at radius \(r\). The sliver you trace isn't a
+    rectangle — it's a <b>circular sector</b>, a pie slice. A full circle of radius \(r\) has area
+    \(\pi r^2\) and spans \(2\pi\); a slice of angle \(d\theta\) is that fraction of it:</p>
+
+  <div class="eq reveal" id="eqSector"></div>
+
+  <p>Add up all the slices from the starting angle \(\alpha\) to the ending angle \(\beta\) and the sum
+    becomes an integral — the polar area formula:</p>
+
+  <div class="eq reveal" id="eqArea"></div>
+
+  <p>Watch the slices fill the region below. Each thin <span class="em-text">cyan wedge</span> is one
+    \(\tfrac12 r^2\,d\theta\) sector. Pick a curve, then <b>drag the α and β handles</b> to set the limits
+    — the area updates live, so you can feel how the bounds decide the answer (drag them to the full
+    region and the total snaps to the exact value). Switch to the two-curve mode to see where limits come
+    from when two curves meet.</p>
+
+  <div class="stage reveal">
+    <div class="controls" style="margin-top:0;margin-bottom:14px">
+      <div class="seg" id="modeSeg">
+        <button data-m="single" class="on">One region: sum slices</button>
+        <button data-m="double">Two curves: where do they cross?</button>
+      </div>
+    </div>
+    <div class="area-plots" id="areaPlots">
+      <div class="plot"><canvas id="areaCv" width="560" height="560"></canvas></div>
+      <div class="plot" id="rthPlotWrap" style="display:none"><canvas id="rthCv" width="560" height="560"></canvas></div>
+    </div>
+    <div class="dual-labels" id="dualLabels" style="display:none">
+      <span class="dl"><span class="dl-dot" style="background:var(--cyan-glow)"></span> the polar curves — where they physically meet</span>
+      <span class="dl"><span class="dl-dot" style="background:var(--amber-glow)"></span> the same r's vs. θ — solving r₁ = r₂ is where these cross</span>
+    </div>
+
+    <!-- SINGLE-MODE controls: curve picker + draggable α/β bounds -->
+    <div id="singleCtl">
+      <div class="controls" style="margin-bottom:6px">
+        <div class="seg" id="curveSeg">
+          <button data-c="petal" class="on">Rose petal</button>
+          <button data-c="cardioid">Cardioid</button>
+          <button data-c="circle">Circle</button>
+        </div>
+        <button class="play" id="singlePlayBtn">▶ Sweep fill</button>
+        <button class="play" id="snapBtn">⤢ Snap to full region</button>
+      </div>
+      <div class="slider-row" style="min-width:100%">
+        <label style="color:var(--cyan-glow)">α (start)</label>
+        <input type="range" id="aSlider" min="0" max="1000" value="0" />
+        <span class="mono" id="aVal" style="color:var(--cyan-glow);min-width:78px">α = 0.00</span>
+      </div>
+      <div class="slider-row" style="min-width:100%;margin-top:10px">
+        <label style="color:var(--amber-glow)">β (end)</label>
+        <input type="range" id="bSlider" min="0" max="1000" value="1000" />
+        <span class="mono" id="bVal" style="color:var(--amber-glow);min-width:78px">β = 6.28</span>
+      </div>
+    </div>
+
+    <!-- DOUBLE-MODE controls: θ sweep -->
+    <div id="doubleCtl" style="display:none">
+      <div class="controls">
+        <button class="play" id="playBtn">▶ Sweep</button>
+        <div class="slider-row">
+          <label>θ =</label>
+          <input type="range" id="thSlider" min="0" max="1000" value="1000" />
+          <span class="mono" id="thVal" style="color:var(--amber-glow);min-width:62px">θ = β</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="curve-eq" id="curveEq"></div>
+    <div class="readout">
+      <span class="item rang" id="roRangeWrap">over <b id="roTh">α, β</b></span>
+      <span class="item rarea"><span id="roAreaLabel">area ≈ </span><b id="roArea">0.00</b></span>
+      <span class="item" id="roExact" style="display:none;color:var(--faint)"></span>
+    </div>
+    <div class="xcallout" id="xCallout">
+      <div class="xc-body" id="xcBody"></div>
+      <button class="xc-btn" id="xcContinue">Continue →</button>
+    </div>
+  </div>
+
+  <div class="trap reveal">
+    <div class="th">The formula students get wrong</div>
+    <p>Polar area is \(\tfrac12\int r^2\,d\theta\) — <b>not</b> \(\int y\,dx\) (that's rectangular) and
+      <b>not</b> \(\int r\,d\theta\) (that forgets the sector is a slice, not an arc). Miss the
+      <b>½</b> or the <b>square on r</b> and the whole problem is wrong.</p>
+  </div>
+
+  <!-- ===================== §2 FINDING THE BOUNDS ===================== -->
+  <h2><span class="n">2.</span> Finding the bounds — the hard part</h2>
+  <p class="lead">Setting up \(\tfrac12\int r^2\,d\theta\) is the easy half. The half that decides whether
+    you get the problem right is the <b>limits of integration</b> — the start and end angles. There's no
+    single rule; instead, identify which of three situations you're in.</p>
+
+  <h3>Case 1 — one loop or petal: solve \(r=0\)</h3>
+  <p>A single petal or loop begins and ends at the <b>pole</b>, where the radius is zero. So set
+    \(f(\theta)=0\) and solve; two consecutive solutions are your bounds. For the rose
+    \(r=2\cos(2\theta)\), one petal runs between the angles where it hits the pole:</p>
+  <div class="eq reveal" id="eqB1"></div>
+
+  <h3>Case 2 — a whole closed curve: usually \(0\) to \(2\pi\)</h3>
+  <p>A curve traced exactly once as the angle goes around — a cardioid, a single-loop limaçon — is swept
+    out over \(0\le\theta\le 2\pi\). But <b>check that it isn't retraced</b>: a circle like
+    \(r=2\cos\theta\) completes in just \(0\) to \(\pi\) (the negative-\(r\) half retraces it), so using
+    \(2\pi\) would <b>double-count</b> the area.</p>
+
+  <h3>Case 3 — between two curves: set \(r_1=r_2\)</h3>
+  <p>When the region is bounded by two different curves, the limits are the angles where they
+    <b>intersect</b>. Set the radii equal and solve — these crossing angles become \(\alpha\) and
+    \(\beta\). This is the step most often missed on the exam:</p>
+  <div class="eq reveal" id="eqB3"></div>
+
+  <div class="note reveal">
+    <div class="nh">Always sketch first</div>
+    <p>Before integrating, draw the region. A quick sketch tells you which case you're in, whether the
+      curve retraces, which curve is outer, and roughly where the bounds should land — so you can sanity-check
+      the angles you solve for. Skipping the sketch is how a setup that looks right silently uses the wrong
+      limits.</p>
+  </div>
+
+  <!-- ===================== §3 ONE REGION ===================== -->
+  <h2><span class="n">3.</span> Area of one region</h2>
+  <p>The mechanics: square the radius, integrate, multiply by a half. The real work is choosing the
+    <b>limits</b> — the angles where the region begins and ends. For a closed loop that's often where
+    \(r=0\) (the curve touches the pole) or a full \(0\) to \(2\pi\) for a curve traced once.</p>
+
+  <div class="eq reveal" id="eqCardioid"></div>
+
+  <p>For a single rose petal, the limits come straight from setting \(r=0\). The petal of
+    \(r=2\cos(2\theta)\) lives between the two angles where the radius vanishes:</p>
+
+  <div class="eq reveal" id="eqPetalLim"></div>
+  <div class="eq reveal" id="eqPetalArea"></div>
+
+  <div class="note reveal">
+    <div class="nh">Finding the limits is the skill</div>
+    <p>Setting up \(\tfrac12\int r^2\,d\theta\) is easy; the points lost are almost always on the
+      <b>limits of integration</b>. Sketch the curve, find where the loop or petal starts and ends
+      (frequently the \(r=0\) angles), and integrate over exactly that span — not blindly from \(0\) to
+      \(2\pi\), which would trace some curves more than once.</p>
+  </div>
+
+  <!-- ===================== §4 BETWEEN TWO CURVES ===================== -->
+  <h2><span class="n">4.</span> Area between two curves</h2>
+  <p>For the region trapped between an outer and an inner polar curve, subtract the inner sector area
+    from the outer — the polar version of "top minus bottom":</p>
+
+  <div class="eq reveal" id="eqTwo"></div>
+
+  <p>But before you can integrate, you need the limits — and now they come from where the two curves
+    <b>intersect</b>. Set the radii equal and solve. That's the step that decides the whole problem, and
+    it's where most points are lost.</p>
+
+  <div class="eq reveal" id="eqIntersect"></div>
+
+  <p>Switch the visual at the top to <b>"Two curves: where do they cross?"</b> — it shows both pictures at
+    once. On the left, the polar curves \(r_1=3\sin\theta\) and \(r_2=1+\sin\theta\) and the points where
+    they physically meet. On the right, those same radii graphed against \(\theta\): solving \(r_1=r_2\)
+    is literally where the two graphs cross. Both views mark the limits, \(\theta=\tfrac{\pi}{6}\) and
+    \(\tfrac{5\pi}{6}\).</p>
+
+  <div class="trap reveal">
+    <div class="th">Outer², inner², then subtract — in that order</div>
+    <p>The integrand is \(r_{\text{outer}}^2-r_{\text{inner}}^2\), <b>not</b>
+      \((r_{\text{outer}}-r_{\text{inner}})^2\). Square each radius first, <i>then</i> subtract. And make
+      sure you've correctly identified which curve is outer over the interval — if they swap, the region
+      splits into pieces.</p>
+  </div>
+
+  <!-- ===================== §5 WORKED EXAMPLES ===================== -->
+  <h2><span class="n">5.</span> Worked examples</h2>
+
+  <div class="work reveal">
+    <div class="wtag">Example 1 · area of one loop</div>
+    <p class="step">Find the area enclosed by one petal of the rose \(r=2\cos(2\theta)\).</p>
+    <p class="step"><b>Find the limits.</b> One petal runs between consecutive \(r=0\) angles:
+      \(2\cos(2\theta)=0\Rightarrow 2\theta=\pm\tfrac{\pi}{2}\Rightarrow\theta=\pm\tfrac{\pi}{4}\).</p>
+    <p class="step"><b>Set up and integrate.</b> <span id="w1a"></span> Using
+      \(\cos^2 u=\tfrac{1+\cos 2u}{2}\), this evaluates to <span class="ans">π/2</span></p>
+  </div>
+
+  <div class="work reveal">
+    <div class="wtag">Example 2 · area inside a cardioid</div>
+    <p class="step">Find the total area enclosed by the cardioid \(r=1+\cos\theta\).</p>
+    <p class="step"><b>Limits.</b> The cardioid is traced once over \(0\) to \(2\pi\), so those are the
+      limits.</p>
+    <p class="step"><b>Integrate.</b> <span id="w2a"></span> Expanding \((1+\cos\theta)^2\) and
+      integrating term by term gives <span class="ans">3π/2</span></p>
+  </div>
+
+  <div class="work reveal">
+    <div class="wtag">Example 3 · between two curves (the AP classic)</div>
+    <p class="step">Find the area inside \(r=3\sin\theta\) and outside \(r=1+\sin\theta\).</p>
+    <p class="step"><b>Find the intersection (the limits).</b> Set them equal:
+      \(3\sin\theta=1+\sin\theta\Rightarrow 2\sin\theta=1\Rightarrow\sin\theta=\tfrac12\), so
+      \(\theta=\tfrac{\pi}{6}\) and \(\tfrac{5\pi}{6}\).</p>
+    <p class="step"><b>Outer minus inner.</b> Over that span \(r=3\sin\theta\) is outer. <span id="w3a"></span></p>
+    <p class="step"><b>Evaluate.</b> The integral works out to a clean <span class="ans">π</span></p>
+  </div>
+
+  <!-- ===================== §6 DRILL ===================== -->
+  <h2><span class="n">6.</span> Quick drill</h2>
+  <p>Five questions on the formula, the limits, and the two-curve setup.</p>
+
+  <div class="quiz reveal" id="quiz">
+    <div class="qhead">
+      <span class="qcount" id="qCount">Question 1 of 5</span>
+      <span class="qcount" id="qScore">Score: 0</span>
+    </div>
+    <div class="qprompt" id="qPrompt"></div>
+    <div class="qopts" id="qOpts"></div>
+    <div class="qfb" id="qFb"></div>
+    <div class="qnav">
+      <button class="ghost" id="qReset">↺ Restart</button>
+      <button id="qNext" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- ===================== FORWARD NAV ===================== -->
+  <div class="fnav reveal">
+    <a href="unit9-polar-graphing.html">
+      <div class="d">← Previous</div>
+      <div class="ti">Polar Graphing</div>
+    </a>
+    <a href="unit9-exam-practice.html" class="next">
+      <div class="d">Next →</div>
+      <div class="ti">Unit 9 Exam Practice</div>
+    </a>
+  </div>
+
+  <footer style="color:var(--muted);font-size:12.5px;margin:46px 0 30px;border-top:1px solid var(--line);padding-top:16px">
+    Area in Polar · Topics 9.8–9.9 · Unit 9 · part of the Visual AP Calculus guide.
+  </footer>
+</div>
+
+<script>
+/* ===================== rendered equations ===================== */
+function renderEqs(){
+  const R=String.raw;
+  const put=(id,t,fb,display)=>{const e=document.getElementById(id);if(e)e.innerHTML=tex(t,fb||t,display!==false);};
+  put('eqSector', R`dA=\underbrace{\pi r^2}_{\text{full circle}}\cdot\underbrace{\frac{d\theta}{2\pi}}_{\text{fraction}}=\frac{1}{2}r^2\,d\theta`, "dA = πr²·(dθ/2π) = ½r² dθ");
+  put('eqArea', R`A=\frac{1}{2}\int_{\alpha}^{\beta} r^2\,d\theta`, "A = ½∫ r² dθ");
+  put('eqCardioid', R`A=\frac{1}{2}\int_{\alpha}^{\beta}\big(f(\theta)\big)^2\,d\theta`, "A = ½∫ (f(θ))² dθ");
+  put('eqPetalLim', R`2\cos(2\theta)=0\ \Rightarrow\ 2\theta=\pm\tfrac{\pi}{2}\ \Rightarrow\ \theta=\pm\tfrac{\pi}{4}`, "2cos(2θ)=0 ⟹ θ=±π/4");
+  put('eqPetalArea', R`A=\frac{1}{2}\int_{-\pi/4}^{\pi/4}\big(2\cos 2\theta\big)^2\,d\theta=\frac{\pi}{2}`, "A = ½∫_{−π/4}^{π/4} (2cos2θ)² dθ = π/2");
+  put('eqTwo', R`A=\frac{1}{2}\int_{\alpha}^{\beta}\Big(r_{\text{outer}}^{\,2}-r_{\text{inner}}^{\,2}\Big)\,d\theta`, "A = ½∫ (r_outer² − r_inner²) dθ");
+  put('eqIntersect', R`r_1(\theta)=r_2(\theta)\quad\longrightarrow\quad\text{solve for the limits }\alpha,\beta`, "set r₁(θ)=r₂(θ) → limits");
+  // §2 finding the bounds
+  put('eqB1', R`2\cos(2\theta)=0\ \Rightarrow\ 2\theta=\tfrac{\pi}{2},\,\tfrac{3\pi}{2}\ \Rightarrow\ \theta=\tfrac{\pi}{4},\,\tfrac{3\pi}{4}`, "2cos(2θ)=0 ⟹ θ=π/4, 3π/4");
+  put('eqB3', R`3\sin\theta=1+\sin\theta\ \Rightarrow\ \sin\theta=\tfrac12\ \Rightarrow\ \theta=\tfrac{\pi}{6},\,\tfrac{5\pi}{6}`, "3sinθ=1+sinθ ⟹ θ=π/6, 5π/6");
+  // worked-example inline bits
+  put('w1a', R`A=\frac{1}{2}\int_{-\pi/4}^{\pi/4}\big(2\cos 2\theta\big)^2 d\theta=2\!\int_{-\pi/4}^{\pi/4}\cos^2(2\theta)\,d\theta.`, "A = ½∫(2cos2θ)² dθ = 2∫cos²(2θ) dθ", false);
+  put('w2a', R`A=\frac{1}{2}\int_{0}^{2\pi}\big(1+\cos\theta\big)^2 d\theta.`, "A = ½∫₀^{2π} (1+cosθ)² dθ", false);
+  put('w3a', R`A=\frac{1}{2}\int_{\pi/6}^{5\pi/6}\!\Big((3\sin\theta)^2-(1+\sin\theta)^2\Big)d\theta.`, "A = ½∫ ((3sinθ)²−(1+sinθ)²) dθ", false);
+}
+
+/* ===================== §1/§3 sector-sweep + dual intersection view ===================== */
+(function(){
+  const cv=document.getElementById('areaCv'); if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const W=cv.width, H=cv.height, cx=W/2, cy=H/2;
+  const rcv=document.getElementById('rthCv'); const rctx=rcv?rcv.getContext('2d'):null;
+  const RW=rcv?rcv.width:0, RH=rcv?rcv.height:0;
+
+  // single-region curve: cardioid-ish... use r=1.6(1+cosθ)? keep clean: rose petal is nice but let's use a cardioid for area filling
+  // For clarity use a single loop: limaçon-free cardioid r = 1.4(1+cosθ) over [0,2π]
+  // single-region curve set: each with r(θ), the θ-range the sliders map to, exact full-region bounds + area
+  const SINGLES={
+    petal:{ eq:'r = 2 cos(2θ) — one petal', r:th=>2*Math.cos(2*th), tlo:-Math.PI/2, thi:Math.PI/2, span:2.3,
+            fa:-Math.PI/4, fb:Math.PI/4, exact:'π/2 ≈ 1.571', exactNum:Math.PI/2 },
+    cardioid:{ eq:'r = 1 + cos θ', r:th=>1+Math.cos(th), tlo:0, thi:2*Math.PI, span:2.5,
+            fa:0, fb:2*Math.PI, exact:'3π/2 ≈ 4.712', exactNum:3*Math.PI/2 },
+    circle:{ eq:'r = 2 cos θ', r:th=>2*Math.cos(th), tlo:-Math.PI/2, thi:Math.PI/2, span:2.3,
+            fa:-Math.PI/2, fb:Math.PI/2, exact:'π ≈ 3.142', exactNum:Math.PI }
+  };
+  let curCurve='petal';
+  const DOUBLE={
+    eq:'outer r₁ = 3 sin θ,  inner r₂ = 1 + sin θ  —  find where r₁ = r₂',
+    ro:th=>3*Math.sin(th), ri:th=>1+Math.sin(th),
+    a:Math.PI/6, b:5*Math.PI/6, span:3.3
+  };
+  let mode='single', playing=false, raf=null;
+  let singleSweep=1, singlePlaying=false, singleRaf=null;
+  const slider=document.getElementById('thSlider'), thValEl=document.getElementById('thVal');
+  const aSlider=document.getElementById('aSlider'), bSlider=document.getElementById('bSlider');
+  const aVal=document.getElementById('aVal'), bVal=document.getElementById('bVal');
+  const eqEl=document.getElementById('curveEq'), roTh=document.getElementById('roTh'), roArea=document.getElementById('roArea');
+  const roExact=document.getElementById('roExact');
+
+  function SC(){ return SINGLES[curCurve]; }
+  // map a slider value [0,1000] to this curve's θ-range
+  function sTheta(v){ const C=SC(); return C.tlo + (v/1000)*(C.thi-C.tlo); }
+
+  function spanOf(){ return mode==='single'?SC().span:DOUBLE.span; }
+  function scale(){ return (Math.min(W,H)/2-30)/spanOf(); }
+  function toPx(r,th){ const s=scale(); return [cx+r*Math.cos(th)*s, cy-r*Math.sin(th)*s]; }
+
+  function grid(){
+    const s=scale(), sp=spanOf();
+    ctx.strokeStyle='rgba(143,162,172,0.09)'; ctx.lineWidth=1;
+    for(let rr=1; rr<=sp; rr++){ ctx.beginPath(); ctx.arc(cx,cy,rr*s,0,Math.PI*2); ctx.stroke(); }
+    for(let a=0;a<12;a++){ const ang=a*Math.PI/6; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(ang)*sp*s, cy-Math.sin(ang)*sp*s); ctx.stroke(); }
+    ctx.strokeStyle='rgba(143,162,172,0.2)';
+    ctx.beginPath(); ctx.moveTo(cx-sp*s,cy); ctx.lineTo(cx+sp*s,cy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx,cy-sp*s); ctx.lineTo(cx,cy+sp*s); ctx.stroke();
+  }
+  function fullCurve(rfn,a,b,color,wd){
+    ctx.strokeStyle=color; ctx.lineWidth=wd||2; ctx.lineCap='round';
+    ctx.beginPath(); let n=600,st=false;
+    for(let i=0;i<=n;i++){const tt=a+(i/n)*(b-a),r=rfn(tt);const[px,py]=toPx(r,tt);if(!st){ctx.moveTo(px,py);st=true;}else ctx.lineTo(px,py);}
+    ctx.stroke();
+  }
+
+  function draw(frac){
+    ctx.clearRect(0,0,W,H); grid();
+    if(mode==='single'){
+      const C=SC();
+      // read α, β from sliders (α clamped below β)
+      let a=sTheta(+aSlider.value), b=sTheta(+bSlider.value);
+      if(a>b){ const t=a; a=b; b=t; }
+      // how far the sweep-fill has progressed through [a,b]: singleSweep in [0,1]
+      const swept = a + singleSweep*(b-a);
+      // ghost full curve (faint) over the curve's whole range
+      fullCurve(C.r,C.tlo,C.thi,'rgba(63,182,216,0.18)',1.4);
+      // filled sectors from α up to the swept angle
+      const steps=160;
+      for(let i=0;i<steps;i++){
+        const t0=a+(i/steps)*(b-a), t1=a+((i+1)/steps)*(b-a);
+        if(t1>swept+1e-9) break;
+        const r0=C.r((t0+t1)/2);
+        const [p0x,p0y]=toPx(r0,t0), [p1x,p1y]=toPx(r0,t1);
+        ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(p0x,p0y); ctx.lineTo(p1x,p1y); ctx.closePath();
+        ctx.fillStyle='rgba(63,182,216,0.16)'; ctx.fill();
+        ctx.strokeStyle='rgba(63,182,216,0.26)'; ctx.lineWidth=0.6; ctx.stroke();
+      }
+      // bright curve arc over [α, swept]
+      fullCurve(C.r,a,b,'rgba(63,182,216,0.28)',1.6);
+      fullCurve(C.r,a,swept,'rgba(63,182,216,0.95)',2.4);
+      // the two boundary arms (α cyan, β amber)
+      const [ax,ay]=toPx(C.r(a),a), [bx,by]=toPx(C.r(b),b);
+      ctx.strokeStyle='rgba(109,212,239,0.95)'; ctx.lineWidth=2.2; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(ax,ay); ctx.stroke();
+      ctx.strokeStyle='rgba(244,187,99,0.95)'; ctx.lineWidth=2.2; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(bx,by); ctx.stroke();
+      ctx.beginPath(); ctx.arc(ax,ay,4,0,Math.PI*2); ctx.fillStyle='#6dd4ef'; ctx.fill();
+      ctx.beginPath(); ctx.arc(bx,by,4,0,Math.PI*2); ctx.fillStyle='#f4bb63'; ctx.fill();
+      // live area (over the full [a,b] — the answer for these bounds)
+      const area=0.5*integrate(C.r,a,b);
+      const full=Math.abs(area-C.exactNum)<0.02;
+      aVal.textContent='α = '+a.toFixed(2); bVal.textContent='β = '+b.toFixed(2);
+      roTh.textContent='['+a.toFixed(2)+', '+b.toFixed(2)+']';
+      roArea.textContent=area.toFixed(3)+(full?'  ✓ full region':'');
+      roExact.style.display=''; roExact.textContent='(full region = '+C.exact+')';
+    } else {
+      // DUAL VIEW — LEFT: the polar curves and where they physically meet
+      const C=DOUBLE, cur=frac*2*Math.PI;
+      // polar grid (use DOUBLE.span)
+      // outer r1=3sinθ is a circle traced on [0,π]; inner r2=1+sinθ cardioid on [0,2π]
+      fullCurve(C.ro,0,Math.PI,'rgba(109,212,239,0.9)',2.4);
+      fullCurve(C.ri,0,2*Math.PI,'rgba(244,187,99,0.85)',2.4);
+      // mark the two physical intersection points (θ=π/6, 5π/6, both r=1.5)
+      [Math.PI/6,5*Math.PI/6].forEach(t=>{
+        const [ix,iy]=toPx(C.ro(t),t);
+        ctx.beginPath(); ctx.arc(ix,iy,7,0,Math.PI*2); ctx.strokeStyle='rgba(224,100,79,0.95)'; ctx.lineWidth=2.5; ctx.stroke();
+        ctx.fillStyle='rgba(224,100,79,0.9)'; ctx.font='bold 12px ui-monospace,Menlo,monospace';
+        ctx.fillText('θ='+(t<Math.PI/2?'π/6':'5π/6'), ix+(t<Math.PI/2?10:-58), iy-8);
+      });
+      // current θ arms (both radii along the same direction)
+      const r1=C.ro(cur), r2=C.ri(cur);
+      const [hx,hy]=toPx(r1,cur), [gx,gy]=toPx(r2,cur);
+      ctx.strokeStyle='rgba(109,212,239,0.5)'; ctx.lineWidth=1.6; ctx.setLineDash([4,3]);
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(hx,hy); ctx.stroke(); ctx.setLineDash([]);
+      ctx.beginPath(); ctx.arc(hx,hy,4,0,Math.PI*2); ctx.fillStyle='#6dd4ef'; ctx.fill();
+      ctx.beginPath(); ctx.arc(gx,gy,4,0,Math.PI*2); ctx.fillStyle='#f4bb63'; ctx.fill();
+      const near=Math.abs(r1-r2)<0.06;
+      if(near){ ctx.beginPath(); ctx.arc(hx,hy,11,0,Math.PI*2); ctx.strokeStyle='rgba(224,100,79,0.95)'; ctx.lineWidth=2.5; ctx.stroke(); }
+      // RIGHT: the r-vs-θ graphs crossing
+      drawRTheta(cur, near);
+      // readouts
+      thValEl.textContent='θ = '+cur.toFixed(2);
+      roTh.textContent=cur.toFixed(2);
+      roArea.textContent='r₁='+r1.toFixed(2)+'  r₂='+r2.toFixed(2)+(near?'   ⟵ equal → a limit!':'');
+    }
+  }
+
+  // RIGHT canvas: the two radius functions plotted against θ, crossing where r1=r2
+  function drawRTheta(cur, near){
+    if(!rctx) return;
+    const C=DOUBLE;
+    rctx.clearRect(0,0,RW,RH);
+    const padL=50, padR=20, padT=40, padB=40;
+    const plotW=RW-padL-padR, plotH=RH-padT-padB, tmax=2*Math.PI;
+    const lo=-0.5, hi=3.3;
+    const X=t=> padL + (t/tmax)*plotW;
+    const Y=r=> padT + (hi-r)/(hi-lo)*plotH;
+    const yz=Y(0);
+    // axes
+    rctx.strokeStyle='rgba(143,162,172,0.28)'; rctx.lineWidth=1;
+    rctx.beginPath(); rctx.moveTo(padL,yz); rctx.lineTo(padL+plotW,yz); rctx.stroke();
+    rctx.beginPath(); rctx.moveTo(padL,padT); rctx.lineTo(padL,padT+plotH); rctx.stroke();
+    rctx.fillStyle='rgba(143,162,172,0.7)'; rctx.font='12px ui-monospace,Menlo,monospace';
+    rctx.fillText('r', padL-40, padT+10); rctx.fillText('θ', padL+plotW-2, yz+20);
+    [0,1,2,3].forEach(rv=>{ rctx.fillStyle='rgba(143,162,172,0.5)'; rctx.fillText(''+rv, padL-20, Y(rv)+4); });
+    // θ tick marks for the crossings
+    rctx.strokeStyle='rgba(143,162,172,0.10)';
+    [Math.PI/6,5*Math.PI/6,Math.PI,3*Math.PI/2].forEach(t=>{ rctx.beginPath(); rctx.moveTo(X(t),padT); rctx.lineTo(X(t),padT+plotH); rctx.stroke(); });
+    // the two function curves
+    function plot(fn,color){
+      rctx.strokeStyle=color; rctx.lineWidth=2.6; rctx.lineCap='round';
+      rctx.beginPath(); let n=600,st=false;
+      for(let i=0;i<=n;i++){const tt=(i/n)*tmax;const px=X(tt),py=Y(fn(tt));if(!st){rctx.moveTo(px,py);st=true;}else rctx.lineTo(px,py);}
+      rctx.stroke();
+    }
+    plot(C.ro,'rgba(109,212,239,0.95)');
+    plot(C.ri,'rgba(244,187,99,0.95)');
+    rctx.font='12px ui-monospace,Menlo,monospace';
+    rctx.fillStyle='rgba(109,212,239,0.95)'; rctx.fillText('r₁=3sinθ', X(1.05), Y(C.ro(1.05))-8);
+    rctx.fillStyle='rgba(244,187,99,0.95)'; rctx.fillText('r₂=1+sinθ', X(3.05), Y(C.ri(3.05))+16);
+    // mark crossings with θ labels
+    [['π/6',Math.PI/6],['5π/6',5*Math.PI/6]].forEach(([lab,t])=>{
+      const px=X(t), py=Y(C.ro(t));
+      rctx.beginPath(); rctx.arc(px,py,7,0,Math.PI*2); rctx.strokeStyle='rgba(224,100,79,0.95)'; rctx.lineWidth=2.5; rctx.stroke();
+      rctx.fillStyle='rgba(224,100,79,0.95)'; rctx.font='bold 12px ui-monospace,Menlo,monospace';
+      rctx.fillText('θ='+lab, px-16, padT-12);
+      rctx.strokeStyle='rgba(224,100,79,0.3)'; rctx.lineWidth=1; rctx.setLineDash([4,3]);
+      rctx.beginPath(); rctx.moveTo(px,py); rctx.lineTo(px,yz); rctx.stroke(); rctx.setLineDash([]);
+    });
+    // current θ tracer
+    const px=X(cur), r1=C.ro(cur), r2=C.ri(cur);
+    rctx.strokeStyle='rgba(231,238,242,0.25)'; rctx.lineWidth=1; rctx.setLineDash([3,3]);
+    rctx.beginPath(); rctx.moveTo(px,padT); rctx.lineTo(px,padT+plotH); rctx.stroke(); rctx.setLineDash([]);
+    rctx.beginPath(); rctx.arc(px,Y(r1),4.5,0,Math.PI*2); rctx.fillStyle='#6dd4ef'; rctx.fill();
+    rctx.beginPath(); rctx.arc(px,Y(r2),4.5,0,Math.PI*2); rctx.fillStyle='#f4bb63'; rctx.fill();
+    if(near){ rctx.beginPath(); rctx.arc(px,Y(r1),11,0,Math.PI*2); rctx.strokeStyle='rgba(224,100,79,0.95)'; rctx.lineWidth=2.5; rctx.stroke(); }
+  }
+  // simple midpoint integrator (single region)
+  function integrate(rfn,a,b){ if(b<=a) return 0; let s=0,n=400,h=(b-a)/n; for(let i=0;i<n;i++){const t=a+(i+0.5)*h; s+=rfn(t)*rfn(t)*h;} return s; }
+
+  function setMode(m){
+    mode=m;
+    if(typeof stopSingleSweep==='function') stopSingleSweep();
+    singleSweep=1;
+    eqEl.textContent='Region:  '+(m==='single'?SC().eq:DOUBLE.eq);
+    const lbl=document.getElementById('roAreaLabel');
+    if(lbl) lbl.textContent = (m==='single') ? 'area ≈ ' : 'radii:  ';
+    // toggle plot layout
+    const plots=document.getElementById('areaPlots'), rwrap=document.getElementById('rthPlotWrap'), dl=document.getElementById('dualLabels');
+    // toggle control panels
+    const sCtl=document.getElementById('singleCtl'), dCtl=document.getElementById('doubleCtl');
+    if(m==='double'){
+      plots.classList.add('dual'); rwrap.style.display=''; dl.style.display='flex';
+      sCtl.style.display='none'; dCtl.style.display='';
+      roExact.style.display='none';
+      slider.value=1000;
+    } else {
+      plots.classList.remove('dual'); rwrap.style.display='none'; dl.style.display='none';
+      sCtl.style.display=''; dCtl.style.display='none';
+      const co=document.getElementById('xCallout'); if(co) co.classList.remove('show');
+    }
+    document.querySelectorAll('#modeSeg button').forEach(b=>b.classList.toggle('on', b.dataset.m===m));
+    draw(1);
+  }
+  // map a θ back to a slider value for the current curve (for snap)
+  function thetaToSlider(th){ const C=SC(); return (th-C.tlo)/(C.thi-C.tlo)*1000; }
+  function setCurve(c){
+    curCurve=c;
+    document.querySelectorAll('#curveSeg button').forEach(b=>b.classList.toggle('on', b.dataset.c===c));
+    eqEl.textContent='Region:  '+SC().eq;
+    // reset bounds to the full region for the new curve
+    aSlider.value=thetaToSlider(SC().fa); bSlider.value=thetaToSlider(SC().fb);
+    draw(1);
+  }
+  // intersection stops for double mode (θ values, in sweep order)
+  const STOPS=[
+    {th:Math.PI/6, frac:(Math.PI/6)/(2*Math.PI),
+      html:'<b>First intersection — θ = π/6.</b> Both radii equal <span class="hl">1.5</span> here: on the left the circle and cardioid touch; on the right the two graphs cross. Setting \u2192 3 sin θ = 1 + sin θ gives sin θ = ½, so θ = π/6. This is your <span class="hl">lower limit</span>.'},
+    {th:5*Math.PI/6, frac:(5*Math.PI/6)/(2*Math.PI),
+      html:'<b>Second intersection — θ = 5π/6.</b> Again r₁ = r₂ = <span class="hl">1.5</span> — the other solution of sin θ = ½. This is your <span class="hl">upper limit</span>. The region you integrate lives between θ = π/6 and θ = 5π/6, which become the bounds of \u00bd\u222b(r₁²\u2212r₂²)dθ.'}
+  ];
+  let hitStops={};
+  const callout=document.getElementById('xCallout'), xcBody=document.getElementById('xcBody'), playBtn=document.getElementById('playBtn');
+
+  function showCallout(stop){
+    xcBody.innerHTML=stop.html; callout.classList.add('show');
+  }
+  function hideCallout(){ callout.classList.remove('show'); }
+
+  function step(){
+    if(!playing) return;
+    let v=+slider.value + 2.2;
+    // double mode: check for an intersection stop we're about to cross
+    if(mode==='double'){
+      const curFrac=v/1000;
+      for(const s of STOPS){
+        const sv=s.frac*1000;
+        if(!hitStops[s.th] && v>=sv && (+slider.value)<sv+12){
+          // snap to the stop, pause, show explanation
+          slider.value=sv; draw(s.frac);
+          hitStops[s.th]=true; playing=false;
+          playBtn.textContent='▶ Sweep';
+          showCallout(s);
+          return;
+        }
+      }
+    }
+    if(v>=1000){ v=1000; playing=false; playBtn.textContent='▶ Sweep'; }
+    slider.value=v; draw(v/1000);
+    if(playing) raf=requestAnimationFrame(step);
+  }
+  playBtn.addEventListener('click',function(){
+    if(playing){ playing=false; this.textContent='▶ Sweep'; if(raf)cancelAnimationFrame(raf); return; }
+    hideCallout();
+    if(+slider.value>=1000){ slider.value=0; hitStops={}; }   // fresh pass resets stops
+    playing=true; this.textContent='❚❚ Pause'; raf=requestAnimationFrame(step);
+  });
+  document.getElementById('xcContinue').addEventListener('click',function(){
+    hideCallout();
+    if(+slider.value>=1000) return;
+    playing=true; playBtn.textContent='❚❚ Pause'; raf=requestAnimationFrame(step);
+  });
+  slider.addEventListener('input',function(){
+    if(playing){ playing=false; playBtn.textContent='▶ Sweep'; if(raf)cancelAnimationFrame(raf); }
+    hideCallout();
+    draw(this.value/1000);
+  });
+  document.querySelectorAll('#modeSeg button').forEach(b=>{
+    b.addEventListener('click',()=>{ if(playing){playing=false;playBtn.textContent='▶ Sweep';if(raf)cancelAnimationFrame(raf);} hideCallout(); hitStops={}; setMode(b.dataset.m); });
+  });
+
+  // single-mode: α/β sliders update the area live (and show full fill while dragging)
+  function onBoundDrag(){ stopSingleSweep(); singleSweep=1; draw(1); }
+  aSlider.addEventListener('input',onBoundDrag);
+  bSlider.addEventListener('input',onBoundDrag);
+  // single-mode: curve picker
+  document.querySelectorAll('#curveSeg button').forEach(b=>{
+    b.addEventListener('click',()=>{ stopSingleSweep(); singleSweep=1; setCurve(b.dataset.c); });
+  });
+  // single-mode: snap to the exact full-region bounds
+  document.getElementById('snapBtn').addEventListener('click',function(){
+    stopSingleSweep(); singleSweep=1;
+    aSlider.value=thetaToSlider(SC().fa); bSlider.value=thetaToSlider(SC().fb); draw(1);
+  });
+  // single-mode: sweep-fill animation (fills sectors from α to β)
+  const singlePlayBtn=document.getElementById('singlePlayBtn');
+  function stopSingleSweep(){ singlePlaying=false; if(singleRaf)cancelAnimationFrame(singleRaf); singlePlayBtn.textContent='▶ Sweep fill'; }
+  function singleStep(){
+    if(!singlePlaying) return;
+    singleSweep += 0.012;
+    if(singleSweep>=1){ singleSweep=1; singlePlaying=false; singlePlayBtn.textContent='▶ Sweep fill'; }
+    draw(1);
+    if(singlePlaying) singleRaf=requestAnimationFrame(singleStep);
+  }
+  singlePlayBtn.addEventListener('click',function(){
+    if(singlePlaying){ stopSingleSweep(); return; }
+    singleSweep=0; singlePlaying=true; this.textContent='❚❚ Pause'; singleRaf=requestAnimationFrame(singleStep);
+  });
+
+  setMode('single');
+  setCurve('petal');
+})();
+
+/* ===================== §5 quiz ===================== */
+(function(){
+  const QUESTIONS=[
+    {
+      p:String.raw`The area enclosed by a polar curve is:`,
+      opts:[String.raw`\(\frac{1}{2}\int_\alpha^\beta r^2\,d\theta\)`,String.raw`\(\int_\alpha^\beta r\,d\theta\)`,String.raw`\(\int_\alpha^\beta y\,dx\)`,String.raw`\(\frac{1}{2}\int_\alpha^\beta r\,d\theta\)`],
+      correct:0,
+      fb:String.raw`A thin sector has area \(\frac12 r^2\,d\theta\), so the total is \(\frac12\int r^2\,d\theta\). \(\int y\,dx\) is the rectangular formula; \(\int r\,d\theta\) is arc-length-like and forgets the slice is a sector (missing the \(\frac12\) and the square).`
+    },
+    {
+      p:String.raw`To find the area of one petal of \(r=4\cos(3\theta)\), the limits of integration come from:`,
+      opts:[String.raw`Setting \(r=0\): \(\cos(3\theta)=0\)`,String.raw`Always using \(0\) to \(2\pi\)`,String.raw`Setting \(r=4\)`,String.raw`The derivative \(\frac{dr}{d\theta}=0\)`],
+      correct:0,
+      fb:String.raw`A petal begins and ends where the curve returns to the pole, i.e. where \(r=0\). Solving \(4\cos(3\theta)=0\) gives the two consecutive angles that bound one petal. Integrating \(0\) to \(2\pi\) would sweep all petals (and overlap).`
+    },
+    {
+      p:String.raw`For the area between an outer curve \(r_1\) and inner curve \(r_2\), the integrand is:`,
+      opts:[String.raw`\(r_1^2-r_2^2\)`,String.raw`\((r_1-r_2)^2\)`,String.raw`\(r_1-r_2\)`,String.raw`\(r_1^2+r_2^2\)`],
+      correct:0,
+      fb:String.raw`Subtract the sector areas: \(\frac12\int(r_1^2-r_2^2)\,d\theta\), so the integrand is \(r_1^2-r_2^2\). Squaring the difference \((r_1-r_2)^2\) is wrong — you must square each radius first, then subtract.`
+    },
+    {
+      p:String.raw`The curves \(r=2\) and \(r=4\cos\theta\) intersect where:`,
+      opts:[String.raw`\(4\cos\theta=2\Rightarrow\theta=\pm\tfrac{\pi}{3}\)`,String.raw`\(\theta=0\)`,String.raw`\(\cos\theta=2\)`,String.raw`\(\theta=\tfrac{\pi}{2}\)`],
+      correct:0,
+      fb:String.raw`Set the radii equal: \(4\cos\theta=2\Rightarrow\cos\theta=\tfrac12\Rightarrow\theta=\pm\tfrac{\pi}{3}\). These intersection angles are exactly the limits you'd use for an area-between problem. (\(\cos\theta=2\) has no solution.)`
+    },
+    {
+      p:String.raw`Which integral gives the area inside the cardioid \(r=1+\cos\theta\)?`,
+      opts:[String.raw`\(\frac{1}{2}\int_0^{2\pi}(1+\cos\theta)^2\,d\theta\)`,String.raw`\(\int_0^{2\pi}(1+\cos\theta)\,d\theta\)`,String.raw`\(\frac{1}{2}\int_0^{\pi}(1+\cos\theta)^2\,d\theta\)`,String.raw`\(\frac{1}{2}\int_0^{2\pi}(1+\cos\theta)\,d\theta\)`],
+      correct:0,
+      fb:String.raw`The cardioid is traced once over \(0\) to \(2\pi\), and the area formula squares \(r\): \(\frac12\int_0^{2\pi}(1+\cos\theta)^2\,d\theta=\frac{3\pi}{2}\). Stopping at \(\pi\) captures only half; dropping the square or the \(\frac12\) is wrong.`
+    }
+  ];
+  let idx=0, score=0, answered=false;
+  const promptEl=document.getElementById('qPrompt'), optsEl=document.getElementById('qOpts'),
+        fbEl=document.getElementById('qFb'), countEl=document.getElementById('qCount'),
+        scoreEl=document.getElementById('qScore'), nextBtn=document.getElementById('qNext'),
+        resetBtn=document.getElementById('qReset');
+  function mathify(s){ if(!window.katex) return s; return s.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return katex.renderToString(t,{throwOnError:false});}catch(e){return m;}}); }
+  function render(){
+    if(idx>=QUESTIONS.length){ renderDone(); return; }
+    answered=false; const q=QUESTIONS[idx];
+    countEl.textContent='Question '+(idx+1)+' of '+QUESTIONS.length; scoreEl.textContent='Score: '+score;
+    promptEl.innerHTML=mathify(q.p); optsEl.innerHTML=''; fbEl.className='qfb'; fbEl.innerHTML=''; nextBtn.disabled=true;
+    q.opts.forEach((o,i)=>{const b=document.createElement('button');b.innerHTML=mathify(o);b.addEventListener('click',()=>choose(i,b));optsEl.appendChild(b);});
+  }
+  function choose(i,btn){
+    if(answered)return; answered=true; const q=QUESTIONS[idx]; const all=optsEl.querySelectorAll('button');
+    all.forEach((b,j)=>{b.disabled=true;if(j===q.correct)b.classList.add('correct');});
+    if(i===q.correct){score++;scoreEl.textContent='Score: '+score;fbEl.innerHTML='<span class="verdict r">✓ Correct</span><br>'+mathify(q.fb);}
+    else{btn.classList.add('wrong');fbEl.innerHTML='<span class="verdict w">✗ Not quite</span><br>'+mathify(q.fb);}
+    fbEl.className='qfb show'; nextBtn.disabled=false;
+  }
+  function renderDone(){
+    document.getElementById('quiz').innerHTML=
+      '<div class="qdone"><div class="score">'+score+' / '+QUESTIONS.length+'</div>'+
+      '<p>'+(score===QUESTIONS.length?'Perfect — the ½∫r² formula, finding limits, and the two-curve setup are all locked in.':
+              score>=3?'Solid. Re-check the ones you missed, especially finding the limits from r=0 or intersections.':
+              'Worth another pass — re-read §1 and §3, then try again.')+'</p>'+
+      '<button style="font-family:var(--mono);font-size:12.5px;background:var(--cyan);color:#0b1417;font-weight:600;border:none;border-radius:9px;padding:10px 20px;cursor:pointer" onclick="location.reload()">↺ Try again</button></div>';
+  }
+  nextBtn.addEventListener('click',()=>{ if(!answered)return; idx++; render(); });
+  resetBtn.addEventListener('click',()=>{ idx=0;score=0;answered=false; document.getElementById('quiz').style.opacity=1; render(); });
+  render();
+  if(!window.katex){let _kt=0;const _ki=setInterval(function(){if(window.katex){clearInterval(_ki);if(!answered)render();}else if(++_kt>80)clearInterval(_ki);},100);}
+})();
+
+/* ===================== inline math in prose/examples ===================== */
+function mathifyInline(){
+  if(!window.katex) return;
+  document.querySelectorAll('h2, h3, p, .step, .note p, .trap p, .sub').forEach(node=>{
+    if(node.dataset.mdone) return;
+    if(node.innerHTML.indexOf('\\(')===-1){ node.dataset.mdone="1"; return; }
+    node.innerHTML=node.innerHTML.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return katex.renderToString(t,{throwOnError:false});}catch(e){return m;}});
+    node.dataset.mdone="1";
+  });
+}
+
+/* ===================== boot ===================== */
+function boot(){ renderEqs(); mathifyInline(); }
+boot();
+if(window.addEventListener){ window.addEventListener('load',boot); document.addEventListener('DOMContentLoaded',boot); }
+if(!window.katex){let tries=0;const t=setInterval(()=>{if(window.katex){clearInterval(t);renderEqs();mathifyInline();}else if(++tries>80)clearInterval(t);},100);}
+</script>
+</body>
+</html>

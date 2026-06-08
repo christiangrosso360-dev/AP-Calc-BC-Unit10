@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Polar Graphing — distance and angle instead of x and y · Unit 9</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230d1417%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2220%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%233fb6d8%22%3E%CE%B8%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{
+    --cyan:#3fb6d8; --cyan-glow:#6dd4ef; --cyan-deep:#2a8fad;
+    --approx:#3fb6d8; --accent:#3fb6d8;
+    --amber:#e8a13c; --amber-glow:#f4bb63; --rose:#e0644f;
+    --bg:#0b0e10; --panel:#141b1f; --panel-2:#1a2329;
+    --ink:#e7eef2; --muted:#8fa2ac; --faint:#5f7480;
+    --line:#26323a; --line-2:#33444e;
+    --wrap-max:900px;
+  }
+  body{background:var(--bg)}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(ellipse 60% 45% at 82% 0%, rgba(63,182,216,.08), transparent 60%);}
+  .wrap{position:relative;z-index:1}
+  .sub{color:var(--muted);font-size:15.5px;margin-top:10px;max-width:720px;line-height:1.6}
+  h2{font-family:var(--display);font-weight:600;font-size:24px;margin:58px 0 6px;letter-spacing:-0.015em;color:var(--ink)}
+  h2 .n{color:var(--cyan);font-variant-numeric:tabular-nums}
+  h3{font-family:var(--display);font-weight:600;font-size:18px;margin:30px 0 4px;color:var(--ink)}
+  p{font-size:15px;color:var(--muted);max-width:730px;line-height:1.78;margin:14px 0}
+  p.lead{font-size:16px;color:var(--ink);max-width:730px}
+  p b{color:var(--ink);font-weight:600}
+  .mono{font-family:var(--mono);color:var(--ink)}
+  .em-text{color:var(--cyan);font-weight:600}
+  a.inl{color:var(--cyan);text-decoration:none;border-bottom:1px dashed var(--line-2)}
+  a.inl:hover{border-color:var(--cyan)}
+
+  .eq{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:24px 22px;margin:22px 0;text-align:center;overflow-x:auto;overflow-y:hidden;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .eq .katex,.eq .katex-display{color:var(--ink)} .eq .katex{font-size:1.3em} .eq .katex-display{margin:0}
+  .eq .cap{font-size:12.5px;color:var(--muted);margin-top:12px;font-family:var(--mono);letter-spacing:.02em}
+
+  /* the self-drawing polar visual */
+  .stage{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .plot{width:100%;background:#0a0f12;border:1px solid var(--line);border-radius:11px}
+  .plot canvas{width:100%;height:auto;display:block;border-radius:11px}
+  .dual{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:680px){.dual{grid-template-columns:1fr}}
+  .dual-labels{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  .dual-labels .dl{display:flex;align-items:center;gap:7px}
+  .dual-labels .dl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .krow{display:flex;align-items:center;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+  .krow label{font-family:var(--mono);font-size:11.5px;color:var(--faint);white-space:nowrap}
+  .krow input[type=range]{max-width:200px}
+  .krow .mono,#kVal{font-family:var(--mono);font-size:12px;color:var(--cyan-glow);white-space:nowrap}
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:14px}
+  .seg{display:flex;gap:0;border:1px solid var(--line-2);border-radius:9px;overflow:hidden;flex-wrap:wrap}
+  .seg button{font-family:var(--mono);font-size:12px;background:transparent;color:var(--muted);border:none;padding:8px 13px;cursor:pointer;transition:background .2s,color .2s;border-right:1px solid var(--line-2)}
+  .seg button:last-child{border-right:none}
+  .seg button.on{background:var(--cyan);color:#0b1417;font-weight:600}
+  .seg button:not(.on):hover{color:var(--ink);background:rgba(63,182,216,.08)}
+  .play{font-family:var(--mono);font-size:12px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-2);border-radius:9px;padding:8px 15px;cursor:pointer;transition:border-color .2s}
+  .play:hover{border-color:var(--cyan)}
+  .slider-row{display:flex;align-items:center;gap:12px;flex:1;min-width:220px}
+  .slider-row label{font-family:var(--mono);font-size:11.5px;color:var(--faint);white-space:nowrap}
+  input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:3px;background:var(--line-2);outline:none;min-width:120px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 8px rgba(63,182,216,.6)}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:var(--cyan);cursor:pointer}
+  .curve-eq{font-family:var(--mono);font-size:13px;color:var(--cyan);margin-top:10px}
+  .readout{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px;font-family:var(--mono);font-size:12.5px}
+  .readout .item{color:var(--muted)} .readout .item b{color:var(--ink);font-weight:600}
+  .readout .rth b{color:var(--amber-glow)} .readout .rr b{color:var(--cyan-glow)}
+
+  .note{background:rgba(63,182,216,.06);border:1px solid rgba(63,182,216,.22);border-radius:12px;padding:14px 18px;margin:22px 0}
+  .note .nh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+  .note p{margin:0;font-size:13.5px;color:var(--muted)}.note p b{color:var(--ink)}
+
+  .trap{background:rgba(224,100,79,.06);border-left:2px solid var(--rose);border-radius:0 10px 10px 0;padding:13px 18px;margin:22px 0}
+  .trap .th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+  .trap p{margin:0;font-size:13.5px;color:var(--muted)}.trap p b{color:var(--ink)}
+
+  /* gallery */
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:22px 0}
+  .gcard{background:var(--bg);border:1px solid var(--line);border-radius:13px;padding:14px;text-align:center}
+  .gcard canvas{width:100%;height:auto;display:block;margin-bottom:10px}
+  .gcard .gname{font-family:var(--display);font-size:15px;color:var(--ink);font-weight:600;margin-bottom:3px}
+  .gcard .gform{font-family:var(--mono);font-size:11.5px;color:var(--cyan)}
+  .gcard .gnote{font-size:11.5px;color:var(--muted);margin-top:6px;line-height:1.45}
+  @media(max-width:680px){.gallery{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:440px){.gallery{grid-template-columns:1fr}}
+
+  .work{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:22px 0}
+  .work .wtag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin:16px 0 0}
+  .work .step{font-size:14px;color:var(--muted);line-height:1.7;margin:10px 0}
+  .work .step b{color:var(--ink)}
+  .work .ans{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:13px;color:var(--cyan-glow);border:1px solid rgba(63,182,216,.3);border-radius:8px;padding:5px 12px;background:rgba(63,182,216,.05)}
+
+  .quiz{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-top:22px}
+  .qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .qcount{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  .qprompt{font-size:15.5px;color:var(--ink);margin:10px 0 16px;line-height:1.6}
+  .qopts{display:flex;flex-direction:column;gap:9px}
+  .qopts button{text-align:left;font-family:var(--body);font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line-2);border-radius:10px;padding:12px 15px;cursor:pointer;transition:border-color .2s,background .2s}
+  .qopts button:hover:not(:disabled){border-color:var(--cyan)}
+  .qopts button:disabled{cursor:default}
+  .qopts button.correct{background:rgba(63,208,176,.14);border-color:var(--conv,#3fd0b0);color:#cfeee6}
+  .qopts button.wrong{background:rgba(224,100,79,.12);border-color:var(--rose);color:#f0c9c1}
+  .qfb{margin-top:14px;font-size:13.5px;line-height:1.6;color:var(--muted);display:none}
+  .qfb.show{display:block}
+  .qfb b{color:var(--ink)}
+  .qfb .verdict{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+  .qfb .verdict.r{color:var(--conv,#3fd0b0)} .qfb .verdict.w{color:var(--rose)}
+  .qnav{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+  .qnav button{font-family:var(--mono);font-size:12.5px;background:var(--cyan);color:#0b1417;font-weight:600;border:none;border-radius:9px;padding:10px 18px;cursor:pointer;transition:transform .2s,opacity .2s}
+  .qnav button:disabled{opacity:.4;cursor:default}
+  .qnav button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line-2)}
+  .qdone{text-align:center;padding:10px 0}
+  .qdone .score{font-family:var(--display);font-size:34px;color:var(--cyan);font-weight:600}
+  .qdone p{margin:6px 0 14px}
+
+  .fnav{display:flex;justify-content:space-between;gap:14px;margin-top:60px;flex-wrap:wrap}
+  .fnav a{flex:1;min-width:200px;text-decoration:none;border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:linear-gradient(160deg,var(--panel-2),var(--panel));transition:border-color .3s,transform .3s}
+  .fnav a:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .fnav .d{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+  .fnav .ti{font-family:var(--display);font-size:17px;color:var(--ink);font-weight:600}
+  .fnav .next{text-align:right}
+
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .55s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit9.html">← Unit 9</a>
+  <header class="reveal">
+    <h1>Polar <span class="em">Graphing</span></h1>
+    <div class="sub">Rectangular coordinates ask "how far right, how far up?" Polar coordinates ask a
+      different question: <b>"how far out, and which way am I facing?"</b> That single change of viewpoint
+      turns clumsy equations into elegant ones — circles, spirals, and flowers fall out naturally.
+      <span class="em-text">Distance and angle instead of x and y.</span></div>
+  </header>
+
+  <!-- ===================== §1 POLAR COORDINATES ===================== -->
+  <h2><span class="n">1.</span> Coordinates by distance and angle</h2>
+  <p class="lead">A polar point is written \((r,\theta)\): start facing along the positive x-axis, rotate
+    by the angle \(\theta\), then walk a distance \(r\) outward. That's the location.</p>
+
+  <p>To move between the two systems, drop a right triangle from the point. The conversions are just the
+    legs of that triangle:</p>
+
+  <div class="eq reveal" id="eqConv"></div>
+  <div class="eq reveal" id="eqConvBack"></div>
+
+  <p>A <b>polar curve</b> \(r=f(\theta)\) gives a rule: for each angle, how far out to go. As the angle
+    sweeps around, the point traces a shape. The magic is that shapes which need messy equations in
+    \(x\) and \(y\) — circles off-center, loops, petals — often have beautifully simple polar forms.</p>
+
+  <!-- ===================== §2 THE SELF-DRAWING VISUAL ===================== -->
+  <h2><span class="n">2.</span> Watch a polar curve draw itself</h2>
+  <p>This is the whole idea in one picture. The <span style="color:var(--amber-glow)">amber arm</span> is
+    the current angle \(\theta\); its length is \(r=f(\theta)\) for that angle. As \(\theta\) sweeps from
+    \(0\) around, the tip of the arm traces the <span class="em-text">cyan curve</span>. Pick a curve and
+    hit play — or scrub the angle by hand and watch the arm swing and stretch.</p>
+
+  <div class="stage reveal">
+    <div class="dual">
+      <div class="plot dual-left"><canvas id="polarCv" width="520" height="520"></canvas></div>
+      <div class="plot dual-right"><canvas id="rthCv" width="520" height="520"></canvas></div>
+    </div>
+    <div class="dual-labels">
+      <span class="dl"><span class="dl-dot" style="background:var(--cyan-glow)"></span> polar curve r = f(θ)</span>
+      <span class="dl"><span class="dl-dot" style="background:var(--amber-glow)"></span> the <i>same</i> r, graphed against θ (ordinary xy)</span>
+    </div>
+    <div class="controls">
+      <div class="seg" id="curveSeg">
+        <button data-c="circle" class="on">Circle</button>
+        <button data-c="rose">Rose</button>
+        <button data-c="cardioid">Cardioid</button>
+        <button data-c="limacon">Limaçon</button>
+        <button data-c="spiral">Spiral</button>
+      </div>
+      <button class="play" id="playBtn">▶ Play</button>
+      <div class="slider-row">
+        <label>θ =</label>
+        <input type="range" id="thSlider" min="0" max="1000" value="0" />
+        <span class="mono" id="thVal" style="color:var(--amber-glow);min-width:62px">θ = 0.00</span>
+      </div>
+    </div>
+    <div class="krow" id="kRow" style="display:none">
+      <label>petals: k =</label>
+      <input type="range" id="kSlider" min="1" max="8" step="1" value="4" />
+      <span class="mono" id="kVal">k = 4 (even) → 8 petals</span>
+    </div>
+    <div class="curve-eq" id="curveEq"></div>
+    <div class="readout">
+      <span class="item rth">θ = <b id="roTh">0.00 rad</b></span>
+      <span class="item rr">r = f(θ) = <b id="roR">2.00</b></span>
+      <span class="item">point (x, y) = <b id="roXY">(2.00, 0.00)</b></span>
+      <span class="item" id="roSwing" style="display:none;color:var(--rose)"><b>r &lt; 0 — point swung 180°</b></span>
+    </div>
+  </div>
+
+  <div class="note reveal">
+    <div class="nh">What to watch for</div>
+    <p>&bull; <b>Two views, one motion.</b> Left is the polar curve; right is the <i>same</i> \(r\) plotted
+      the ordinary way — \(r\) up, \(\theta\) across. The dots move together, so you can see exactly which
+      angle produces which point.<br>
+      &bull; <b>The negative-r reveal.</b> Watch the right graph dip into the shaded band below the
+      \(r=0\) line. The instant \(r\) goes negative, the polar point (and its arm) flips to the
+      <span style="color:var(--rose)">opposite side</span> — that's the whole secret of how roses grow
+      petals and limaçons grow loops, shown directly.<br>
+      &bull; <b>The rose's k.</b> Pick the rose and drag the <b>k slider</b> — petals appear and vanish in
+      real time, and the label shows the odd/even rule as you go.</p>
+  </div>
+
+  <div class="trap reveal">
+    <div class="th">Negative r means "backwards"</div>
+    <p>When \(f(\theta)\) is <b>negative</b>, you don't go forward along the angle — you plot the point
+      <b>in the opposite direction</b>, \(180°\) around. So \((-1,\tfrac{\pi}{3})\) is the same point as
+      \((1,\tfrac{4\pi}{3})\). This is exactly how a rose grows extra petals and a limaçon grows its inner
+      loop — the curve swings to the other side whenever \(r\lt 0\).</p>
+  </div>
+
+  <!-- ===================== §3 THE GALLERY ===================== -->
+  <h2><span class="n">3.</span> The curve gallery</h2>
+  <p>A handful of forms cover almost everything the exam throws at you. Learn to recognize them at a
+    glance from the equation:</p>
+
+  <div class="gallery reveal" id="gallery">
+    <div class="gcard"><canvas data-g="circle" width="150" height="150"></canvas>
+      <div class="gname">Circle</div><div class="gform">r = a cos θ</div>
+      <div class="gnote">Through the origin, centered on an axis. Diameter a.</div></div>
+    <div class="gcard"><canvas data-g="rose" width="150" height="150"></canvas>
+      <div class="gname">Rose</div><div class="gform">r = a cos(kθ)</div>
+      <div class="gnote">k odd → k petals; k even → 2k petals.</div></div>
+    <div class="gcard"><canvas data-g="cardioid" width="150" height="150"></canvas>
+      <div class="gname">Cardioid</div><div class="gform">r = a(1 + cos θ)</div>
+      <div class="gnote">Heart shape, a cusp at the pole. (|a|=|b| limaçon.)</div></div>
+    <div class="gcard"><canvas data-g="limacon" width="150" height="150"></canvas>
+      <div class="gname">Limaçon</div><div class="gform">r = a + b cos θ</div>
+      <div class="gnote">Inner loop when a &lt; b; dimple when a &gt; b.</div></div>
+    <div class="gcard"><canvas data-g="spiral" width="150" height="150"></canvas>
+      <div class="gname">Spiral</div><div class="gform">r = θ</div>
+      <div class="gnote">Radius grows with the angle — winds outward forever.</div></div>
+    <div class="gcard"><canvas data-g="rose3" width="150" height="150"></canvas>
+      <div class="gname">Rose (k = 3)</div><div class="gform">r = a cos(3θ)</div>
+      <div class="gnote">Odd k: exactly 3 petals (negative r retraces them).</div></div>
+  </div>
+
+  <div class="note reveal">
+    <div class="nh">The petal-counting rule</div>
+    <p>For a rose \(r=a\cos(k\theta)\) or \(r=a\sin(k\theta)\): if \(k\) is <b>odd</b>, you get \(k\)
+      petals; if \(k\) is <b>even</b>, you get \(2k\) petals. (The odd case looks like it should give
+      \(2k\), but negative \(r\) makes the second set of petals land exactly on top of the first.)</p>
+  </div>
+
+  <!-- ===================== §4 SLOPE IN POLAR ===================== -->
+  <h2><span class="n">4.</span> Slope of a polar curve</h2>
+  <p>"What's \(\tfrac{dy}{dx}\) at this point?" still makes sense for a polar curve — it's the slope of
+    the tangent line in the ordinary xy-plane. The trick: convert to parametric form using \(\theta\) as
+    the parameter, then use the parametric slope rule from the start of this unit.</p>
+
+  <div class="eq reveal" id="eqXY"></div>
+
+  <p>Now \(x\) and \(y\) are both functions of \(\theta\) (remember \(r=f(\theta)\), so each is a product).
+    Differentiate with the product rule and divide, exactly like parametric:</p>
+
+  <div class="eq reveal" id="eqSlope"></div>
+
+  <div class="note reveal">
+    <div class="nh">Where the product rule comes from</div>
+    <p>Since \(x=f(\theta)\cos\theta\), the product rule gives
+      \(\tfrac{dx}{d\theta}=f'(\theta)\cos\theta-f(\theta)\sin\theta=r'\cos\theta-r\sin\theta\). Likewise
+      \(\tfrac{dy}{d\theta}=r'\sin\theta+r\cos\theta\). You only need \(r\) and its derivative \(r'\).</p>
+  </div>
+
+  <p>See it on a curve. Drag \(\theta\) around this cardioid \(r=1+\cos\theta\) and watch the
+    <span style="color:var(--amber-glow)">tangent line</span> tilt. The slope \(\tfrac{dy}{dx}\) updates
+    live — notice it reads <b>horizontal</b> (slope 0) and <b>vertical</b> (undefined) at exactly the
+    spots your eye expects.</p>
+
+  <div class="stage reveal">
+    <div class="plot" style="max-width:460px;margin:0 auto"><canvas id="tanCv" width="460" height="460"></canvas></div>
+    <div class="controls">
+      <button class="play" id="tanPlayBtn">▶ Play</button>
+      <div class="slider-row">
+        <label>θ =</label>
+        <input type="range" id="tanSlider" min="0" max="1000" value="0" />
+        <span class="mono" id="tanThVal" style="color:var(--amber-glow);min-width:62px">θ = 0.00</span>
+      </div>
+    </div>
+    <div class="readout">
+      <span class="item">point (x, y) = <b id="tanXY">—</b></span>
+      <span class="item" style="color:var(--amber-glow)">slope dy/dx = <b id="tanSlope" style="color:inherit">—</b></span>
+    </div>
+  </div>
+
+  <div class="trap reveal">
+    <div class="th">It's not dr/dθ</div>
+    <p>A natural mistake is to report \(\tfrac{dr}{d\theta}\) as the slope. But \(\tfrac{dr}{d\theta}\)
+      only measures how fast the <i>radius</i> grows as you sweep the angle — it says nothing about the
+      tilt of the curve in the plane. The actual tangent slope is \(\tfrac{dy}{dx}\), so you always have
+      to go through \(x\) and \(y\) first.</p>
+  </div>
+
+  <!-- ===================== §5 WORKED EXAMPLES ===================== -->
+  <h2><span class="n">5.</span> Worked examples</h2>
+
+  <div class="work reveal">
+    <div class="wtag">Example 1 · convert a point</div>
+    <p class="step">Convert the polar point \((4,\tfrac{2\pi}{3})\) to rectangular coordinates.</p>
+    <p class="step"><b>Use \(x=r\cos\theta,\ y=r\sin\theta\).</b> <span id="w1a"></span>
+      <span class="ans">(−2, 2√3)</span></p>
+  </div>
+
+  <div class="work reveal">
+    <div class="wtag">Example 2 · identify a curve</div>
+    <p class="step">What shape is \(r=4\cos(2\theta)\), and how many petals does it have?</p>
+    <p class="step"><b>Recognize the form.</b> It's a rose, \(r=a\cos(k\theta)\), with \(a=4\), \(k=2\).</p>
+    <p class="step"><b>Apply the petal rule.</b> \(k=2\) is even, so the rose has \(2k=4\) petals, each
+      reaching out to a maximum radius of \(4\). <span class="ans">4-petal rose, radius 4</span></p>
+  </div>
+
+  <div class="work reveal">
+    <div class="wtag">Example 3 · slope of a polar curve</div>
+    <p class="step">Find \(\tfrac{dy}{dx}\) for \(r=2\cos\theta\) at \(\theta=\tfrac{\pi}{4}\).</p>
+    <p class="step"><b>Set up.</b> Here \(r=2\cos\theta\) and \(r'=-2\sin\theta\). At
+      \(\theta=\tfrac{\pi}{4}\): \(r=\sqrt2\), \(r'=-\sqrt2\).</p>
+    <p class="step"><b>Build the two derivatives.</b> <span id="w3a"></span></p>
+    <p class="step"><b>Divide.</b> \(\tfrac{dy}{dx}=\dfrac{dy/d\theta}{dx/d\theta}=\dfrac{0}{-2}=0\) — a
+      horizontal tangent, which makes sense: \(\theta=\tfrac{\pi}{4}\) lands at the top of this circle.
+      <span class="ans">dy/dx = 0</span></p>
+  </div>
+
+  <!-- ===================== §6 DRILL ===================== -->
+  <h2><span class="n">6.</span> Quick drill</h2>
+  <p>Five questions on conversions, recognizing curves, the petal rule, negative r, and polar slope.</p>
+
+  <div class="quiz reveal" id="quiz">
+    <div class="qhead">
+      <span class="qcount" id="qCount">Question 1 of 5</span>
+      <span class="qcount" id="qScore">Score: 0</span>
+    </div>
+    <div class="qprompt" id="qPrompt"></div>
+    <div class="qopts" id="qOpts"></div>
+    <div class="qfb" id="qFb"></div>
+    <div class="qnav">
+      <button class="ghost" id="qReset">↺ Restart</button>
+      <button id="qNext" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- ===================== FORWARD NAV ===================== -->
+  <div class="fnav reveal">
+    <a href="unit9-vectors.html">
+      <div class="d">← Previous</div>
+      <div class="ti">Vector-Valued Functions</div>
+    </a>
+    <a href="unit9-polar-area.html" class="next">
+      <div class="d">Next →</div>
+      <div class="ti">Area in Polar</div>
+    </a>
+  </div>
+
+  <footer style="color:var(--muted);font-size:12.5px;margin:46px 0 30px;border-top:1px solid var(--line);padding-top:16px">
+    Polar Graphing · Topic 9.7 · Unit 9 · part of the Visual AP Calculus guide.
+  </footer>
+</div>
+
+<script>
+/* ===================== rendered equations ===================== */
+function renderEqs(){
+  const R=String.raw;
+  const put=(id,t,fb,display)=>{const e=document.getElementById(id);if(e)e.innerHTML=tex(t,fb||t,display!==false);};
+  put('eqConv', R`x=r\cos\theta,\qquad y=r\sin\theta`, "x = r cos θ,  y = r sin θ");
+  put('eqConvBack', R`r=\sqrt{x^2+y^2},\qquad \tan\theta=\frac{y}{x}`, "r = √(x²+y²),  tan θ = y/x");
+  put('eqXY', R`x=r\cos\theta=f(\theta)\cos\theta,\qquad y=r\sin\theta=f(\theta)\sin\theta`, "x = f(θ)cos θ,  y = f(θ)sin θ");
+  put('eqSlope', R`\frac{dy}{dx}=\frac{dy/d\theta}{dx/d\theta}=\frac{r'\sin\theta+r\cos\theta}{r'\cos\theta-r\sin\theta}`, "dy/dx = (r' sinθ + r cosθ)/(r' cosθ − r sinθ)");
+  // worked-example inline bits
+  put('w1a', R`x=4\cos\tfrac{2\pi}{3}=4(-\tfrac12)=-2,\quad y=4\sin\tfrac{2\pi}{3}=4\cdot\tfrac{\sqrt3}{2}=2\sqrt3.`, "x=4cos(2π/3)=−2, y=4sin(2π/3)=2√3", false);
+  put('w3a', R`\frac{dy}{d\theta}=r'\sin\theta+r\cos\theta=-\sqrt2\cdot\tfrac{\sqrt2}{2}+\sqrt2\cdot\tfrac{\sqrt2}{2}=0,\quad \frac{dx}{d\theta}=r'\cos\theta-r\sin\theta=-1-1=-2.`, "dy/dθ=0, dx/dθ=−2", false);
+}
+
+/* ===================== §2 self-drawing polar visual (dual view) ===================== */
+(function(){
+  const cv=document.getElementById('polarCv'); if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const rcv=document.getElementById('rthCv'); const rctx=rcv?rcv.getContext('2d'):null;
+  const W=cv.width, H=cv.height, cx=W/2, cy=H/2;
+  const RW=rcv?rcv.width:0, RH=rcv?rcv.height:0;
+
+  let roseK=4;
+  // curve set: r(theta), thetaMax, span (world radius), and r-range for the r-θ graph
+  function curves(){ return {
+    circle:{ eq:'r = 2 cos θ', r:th=>2*Math.cos(th), tmax:2*Math.PI, span:2.3, rlo:-2, rhi:2 },
+    rose:{ eq:'r = 2 cos('+roseK+'θ)', r:th=>2*Math.cos(roseK*th), tmax:2*Math.PI, span:2.3, rlo:-2, rhi:2 },
+    cardioid:{ eq:'r = 1 + cos θ', r:th=>1+Math.cos(th), tmax:2*Math.PI, span:2.4, rlo:0, rhi:2 },
+    limacon:{ eq:'r = 1 + 2 cos θ', r:th=>1+2*Math.cos(th), tmax:2*Math.PI, span:3.3, rlo:-1, rhi:3 },
+    spiral:{ eq:'r = θ', r:th=>th, tmax:4*Math.PI, span:13, rlo:0, rhi:4*Math.PI }
+  };}
+  let cur='circle', playing=false, raf=null;
+  const slider=document.getElementById('thSlider'), thValEl=document.getElementById('thVal');
+  const eqEl=document.getElementById('curveEq');
+  const roTh=document.getElementById('roTh'), roR=document.getElementById('roR'), roXY=document.getElementById('roXY');
+  const roSwing=document.getElementById('roSwing');
+  const kRow=document.getElementById('kRow'), kSlider=document.getElementById('kSlider'), kVal=document.getElementById('kVal');
+
+  function C(){ return curves()[cur]; }
+  function scale(c){ return (Math.min(W,H)/2-34)/c.span; }
+  function toPx(c, r, th){ const s=scale(c); return [cx + r*Math.cos(th)*s, cy - r*Math.sin(th)*s]; }
+
+  function drawPolarGrid(c){
+    const s=scale(c);
+    ctx.strokeStyle='rgba(143,162,172,0.10)'; ctx.lineWidth=1;
+    for(let rr=1; rr<=c.span; rr++){ ctx.beginPath(); ctx.arc(cx,cy,rr*s,0,Math.PI*2); ctx.stroke(); }
+    for(let a=0;a<12;a++){ const ang=a*Math.PI/6; ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+Math.cos(ang)*(c.span*s), cy-Math.sin(ang)*(c.span*s)); ctx.stroke(); }
+    ctx.strokeStyle='rgba(143,162,172,0.22)';
+    ctx.beginPath(); ctx.moveTo(cx-c.span*s,cy); ctx.lineTo(cx+c.span*s,cy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx,cy-c.span*s); ctx.lineTo(cx,cy+c.span*s); ctx.stroke();
+  }
+
+  // ----- left: polar curve -----
+  function drawPolar(frac){
+    const c=C(), th=frac*c.tmax;
+    ctx.clearRect(0,0,W,H); drawPolarGrid(c);
+    // ghost full
+    ctx.strokeStyle='rgba(63,182,216,0.16)'; ctx.lineWidth=1.4; ctx.lineCap='round';
+    ctx.beginPath(); let n=900, st=false;
+    for(let i=0;i<=n;i++){const tt=(i/n)*c.tmax,r=c.r(tt);const[px,py]=toPx(c,r,tt);if(!st){ctx.moveTo(px,py);st=true;}else ctx.lineTo(px,py);}
+    ctx.stroke();
+    // drawn so far
+    ctx.strokeStyle='rgba(63,182,216,0.9)'; ctx.lineWidth=2.6;
+    ctx.beginPath(); let drawn=Math.max(1,Math.floor(frac*n)); st=false;
+    for(let i=0;i<=drawn;i++){const tt=(i/n)*c.tmax,r=c.r(tt);const[px,py]=toPx(c,r,tt);if(!st){ctx.moveTo(px,py);st=true;}else ctx.lineTo(px,py);}
+    ctx.stroke();
+    // radial arm
+    const r=c.r(th); const [hx,hy]=toPx(c,r,th);
+    const neg = r<0;
+    // when r<0 the arm visually points backwards; color it rose to flag the swing
+    ctx.strokeStyle = neg ? 'rgba(224,100,79,0.92)' : 'rgba(244,187,99,0.9)';
+    ctx.lineWidth=2.2; ctx.setLineDash([]);
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(hx,hy); ctx.stroke();
+    // a faint dashed "intended direction" ray when swung, showing where θ points vs where the point landed
+    if(neg){
+      const s=scale(c); const ix=cx+Math.cos(th)*Math.abs(r)*s, iy=cy-Math.sin(th)*Math.abs(r)*s;
+      ctx.strokeStyle='rgba(224,100,79,0.32)'; ctx.lineWidth=1.4; ctx.setLineDash([5,4]);
+      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(ix,iy); ctx.stroke(); ctx.setLineDash([]);
+    }
+    // point
+    ctx.beginPath(); ctx.arc(hx,hy,5.5,0,Math.PI*2); ctx.fillStyle = neg ? '#f0c9c1' : '#eaf6fb'; ctx.fill();
+    ctx.beginPath(); ctx.arc(hx,hy,5.5,0,Math.PI*2); ctx.strokeStyle='rgba(11,20,23,0.9)'; ctx.lineWidth=1.5; ctx.stroke();
+    return {th, r, neg, hx, hy};
+  }
+
+  // ----- right: r vs θ (ordinary Cartesian) -----
+  function drawRTheta(frac){
+    if(!rctx) return;
+    const c=C(), th=frac*c.tmax;
+    rctx.clearRect(0,0,RW,RH);
+    const padL=42, padR=16, padT=20, padB=30;
+    const plotW=RW-padL-padR, plotH=RH-padT-padB;
+    const tmax=c.tmax;
+    // y-range with a little headroom
+    let lo=Math.min(c.rlo,0), hi=Math.max(c.rhi,0); const pad=(hi-lo)*0.08; lo-=pad; hi+=pad;
+    const X=t=> padL + (t/tmax)*plotW;
+    const Y=r=> padT + (hi-r)/(hi-lo)*plotH;
+    // shade r<0 band (if any)
+    if(c.rlo<0){
+      rctx.fillStyle='rgba(224,100,79,0.09)';
+      const yz=Y(0); rctx.fillRect(padL,yz,plotW,Y(lo)-yz);
+    }
+    // axes
+    rctx.strokeStyle='rgba(143,162,172,0.28)'; rctx.lineWidth=1;
+    const yz=Y(0);
+    rctx.beginPath(); rctx.moveTo(padL,yz); rctx.lineTo(padL+plotW,yz); rctx.stroke(); // r=0 line
+    rctx.beginPath(); rctx.moveTo(padL,padT); rctx.lineTo(padL,padT+plotH); rctx.stroke(); // r axis
+    // labels
+    rctx.fillStyle='rgba(143,162,172,0.7)'; rctx.font='11px ui-monospace,Menlo,monospace';
+    rctx.fillText('r', padL-30, padT+10);
+    rctx.fillText('θ', padL+plotW-8, yz+18);
+    rctx.fillText('0', padL-16, yz+4);
+    rctx.fillText('r=0', padL+plotW-30, yz-5);
+    // gridlines at θ = π, 2π, ... 
+    rctx.strokeStyle='rgba(143,162,172,0.10)';
+    const tickStep = tmax<=2*Math.PI ? Math.PI/2 : Math.PI;
+    for(let t=tickStep;t<tmax-1e-6;t+=tickStep){ rctx.beginPath(); rctx.moveTo(X(t),padT); rctx.lineTo(X(t),padT+plotH); rctx.stroke(); }
+    // ghost full r(θ)
+    rctx.strokeStyle='rgba(244,187,99,0.22)'; rctx.lineWidth=1.4; rctx.lineCap='round';
+    rctx.beginPath(); let n=600,st=false;
+    for(let i=0;i<=n;i++){const tt=(i/n)*tmax;const px=X(tt),py=Y(c.r(tt));if(!st){rctx.moveTo(px,py);st=true;}else rctx.lineTo(px,py);}
+    rctx.stroke();
+    // drawn-so-far r(θ)
+    rctx.strokeStyle='rgba(244,187,99,0.95)'; rctx.lineWidth=2.4;
+    rctx.beginPath(); let drawn=Math.max(1,Math.floor(frac*n)); st=false;
+    for(let i=0;i<=drawn;i++){const tt=(i/n)*tmax;const px=X(tt),py=Y(c.r(tt));if(!st){rctx.moveTo(px,py);st=true;}else rctx.lineTo(px,py);}
+    rctx.stroke();
+    // current point on r-θ
+    const r=c.r(th); const px=X(th), py=Y(r);
+    const neg=r<0;
+    rctx.beginPath(); rctx.arc(px,py,5,0,Math.PI*2); rctx.fillStyle=neg?'#f0c9c1':'#f4bb63'; rctx.fill();
+    rctx.beginPath(); rctx.arc(px,py,5,0,Math.PI*2); rctx.strokeStyle='rgba(11,20,23,0.9)'; rctx.lineWidth=1.4; rctx.stroke();
+    // vertical guide to r=0
+    rctx.strokeStyle=neg?'rgba(224,100,79,0.4)':'rgba(244,187,99,0.3)'; rctx.lineWidth=1; rctx.setLineDash([4,3]);
+    rctx.beginPath(); rctx.moveTo(px,py); rctx.lineTo(px,yz); rctx.stroke(); rctx.setLineDash([]);
+  }
+
+  function draw(frac){
+    const info=drawPolar(frac);
+    drawRTheta(frac);
+    // readouts
+    const c=C(), th=frac*c.tmax, r=c.r(th);
+    thValEl.textContent='θ = '+th.toFixed(2);
+    roTh.textContent=th.toFixed(2)+' rad';
+    roR.textContent=r.toFixed(2);
+    const wx=r*Math.cos(th), wy=r*Math.sin(th);
+    roXY.textContent='('+wx.toFixed(2)+', '+wy.toFixed(2)+')';
+    if(roSwing) roSwing.style.display = r<0 ? '' : 'none';
+  }
+
+  function petalText(k){ const p = k%2===1 ? k : 2*k; return 'k = '+k+' ('+(k%2?'odd':'even')+') → '+p+' petals'; }
+
+  function setCurve(c){
+    cur=c;
+    eqEl.textContent='Tracing:  '+C().eq;
+    document.querySelectorAll('#curveSeg button').forEach(b=>b.classList.toggle('on', b.dataset.c===c));
+    if(kRow) kRow.style.display = (c==='rose') ? 'flex' : 'none';
+    draw(slider.value/1000);
+  }
+  function step(){
+    if(!playing) return;
+    let v=+slider.value + 2.2;
+    if(v>=1000){ v=1000; playing=false; document.getElementById('playBtn').textContent='▶ Play'; }
+    slider.value=v; draw(v/1000);
+    if(playing) raf=requestAnimationFrame(step);
+  }
+  document.getElementById('playBtn').addEventListener('click',function(){
+    if(playing){ playing=false; this.textContent='▶ Play'; if(raf)cancelAnimationFrame(raf); return; }
+    if(+slider.value>=1000) slider.value=0;
+    playing=true; this.textContent='❚❚ Pause'; raf=requestAnimationFrame(step);
+  });
+  slider.addEventListener('input',function(){
+    if(playing){ playing=false; document.getElementById('playBtn').textContent='▶ Play'; if(raf)cancelAnimationFrame(raf); }
+    draw(this.value/1000);
+  });
+  document.querySelectorAll('#curveSeg button').forEach(b=>{
+    b.addEventListener('click',()=>{ if(playing){playing=false;document.getElementById('playBtn').textContent='▶ Play';if(raf)cancelAnimationFrame(raf);} slider.value=0; setCurve(b.dataset.c); });
+  });
+  if(kSlider){
+    kSlider.addEventListener('input',function(){
+      roseK=+this.value; kVal.textContent=petalText(roseK);
+      eqEl.textContent='Tracing:  '+C().eq;
+      draw(slider.value/1000);
+    });
+    kVal.textContent=petalText(roseK);
+  }
+
+  setCurve('circle');
+})();
+
+/* ===================== §4 tangent-line visual (cardioid) ===================== */
+(function(){
+  const cv=document.getElementById('tanCv'); if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const W=cv.width, H=cv.height, cx=W/2, cy=H/2+18;
+  const TMAX=2*Math.PI, span=2.5;
+  const s=(Math.min(W,H)/2-30)/span;
+  const r=th=>1+Math.cos(th), rp=th=>-Math.sin(th);
+  const toPx=(rr,th)=>[cx+rr*Math.cos(th)*s, cy-rr*Math.sin(th)*s];
+  const slider=document.getElementById('tanSlider'), thVal=document.getElementById('tanThVal');
+  const xyEl=document.getElementById('tanXY'), slopeEl=document.getElementById('tanSlope');
+  let playing=false, raf=null;
+
+  function draw(frac){
+    const th=frac*TMAX;
+    ctx.clearRect(0,0,W,H);
+    // grid
+    ctx.strokeStyle='rgba(143,162,172,0.10)'; ctx.lineWidth=1;
+    for(let rr=1;rr<=span;rr++){ctx.beginPath();ctx.arc(cx,cy,rr*s,0,Math.PI*2);ctx.stroke();}
+    ctx.strokeStyle='rgba(143,162,172,0.20)';
+    ctx.beginPath();ctx.moveTo(cx-span*s,cy);ctx.lineTo(cx+span*s,cy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx,cy-span*s);ctx.lineTo(cx,cy+span*s);ctx.stroke();
+    // cardioid
+    ctx.strokeStyle='rgba(63,182,216,0.85)'; ctx.lineWidth=2.4; ctx.lineCap='round';
+    ctx.beginPath(); let n=600,st=false;
+    for(let i=0;i<=n;i++){const tt=(i/n)*TMAX;const[px,py]=toPx(r(tt),tt);if(!st){ctx.moveTo(px,py);st=true;}else ctx.lineTo(px,py);}
+    ctx.closePath(); ctx.stroke();
+    // point
+    const rr=r(th), [hx,hy]=toPx(rr,th);
+    // tangent slope dy/dx
+    const dy=rp(th)*Math.sin(th)+rr*Math.cos(th);
+    const dx=rp(th)*Math.cos(th)-rr*Math.sin(th);
+    const cusp = Math.abs(dy)<1e-6 && Math.abs(dx)<1e-6;
+    // draw tangent line (amber) through (hx,hy) with direction (dx,dy) in world → canvas (y flips)
+    if(!cusp){
+      let tdx=dx, tdy=-dy; const L=Math.hypot(tdx,tdy)||1; tdx/=L; tdy/=L;
+      const len=150;
+      ctx.strokeStyle='rgba(244,187,99,0.9)'; ctx.lineWidth=2; ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(hx-tdx*len,hy-tdy*len); ctx.lineTo(hx+tdx*len,hy+tdy*len); ctx.stroke();
+    }
+    // point dot
+    ctx.beginPath();ctx.arc(hx,hy,5.5,0,Math.PI*2);ctx.fillStyle='#eaf6fb';ctx.fill();
+    ctx.beginPath();ctx.arc(hx,hy,5.5,0,Math.PI*2);ctx.strokeStyle='rgba(11,20,23,0.9)';ctx.lineWidth=1.5;ctx.stroke();
+    // readouts
+    thVal.textContent='θ = '+th.toFixed(2);
+    const wx=rr*Math.cos(th), wy=rr*Math.sin(th);
+    xyEl.textContent='('+wx.toFixed(2)+', '+wy.toFixed(2)+')';
+    if(cusp) slopeEl.textContent='cusp (undefined)';
+    else if(Math.abs(dx)<1e-6) slopeEl.textContent='vertical (undefined)';
+    else if(Math.abs(dy)<1e-6) slopeEl.textContent='0 (horizontal)';
+    else slopeEl.textContent=(dy/dx).toFixed(2);
+  }
+  function step(){
+    if(!playing)return;
+    let v=+slider.value+2.2;
+    if(v>=1000){v=1000;playing=false;document.getElementById('tanPlayBtn').textContent='▶ Play';}
+    slider.value=v; draw(v/1000);
+    if(playing) raf=requestAnimationFrame(step);
+  }
+  document.getElementById('tanPlayBtn').addEventListener('click',function(){
+    if(playing){playing=false;this.textContent='▶ Play';if(raf)cancelAnimationFrame(raf);return;}
+    if(+slider.value>=1000)slider.value=0;
+    playing=true;this.textContent='❚❚ Pause';raf=requestAnimationFrame(step);
+  });
+  slider.addEventListener('input',function(){
+    if(playing){playing=false;document.getElementById('tanPlayBtn').textContent='▶ Play';if(raf)cancelAnimationFrame(raf);}
+    draw(this.value/1000);
+  });
+  draw(slider.value/1000);
+})();
+
+/* ===================== §3 gallery thumbnails ===================== */
+(function(){
+  const G={
+    circle:{r:th=>2*Math.cos(th),tmax:Math.PI,span:2.2},
+    rose:{r:th=>2*Math.cos(2*th),tmax:2*Math.PI,span:2.2},
+    cardioid:{r:th=>1+Math.cos(th),tmax:2*Math.PI,span:2.3},
+    limacon:{r:th=>1+2*Math.cos(th),tmax:2*Math.PI,span:3.2},
+    spiral:{r:th=>th,tmax:4*Math.PI,span:13},
+    rose3:{r:th=>2*Math.cos(3*th),tmax:2*Math.PI,span:2.2}
+  };
+  document.querySelectorAll('#gallery canvas').forEach(cv=>{
+    const key=cv.dataset.g, C=G[key]; if(!C) return;
+    const ctx=cv.getContext('2d'), W=cv.width, H=cv.height, cx=W/2, cy=H/2;
+    const s=(Math.min(W,H)/2-12)/C.span;
+    // faint axes
+    ctx.strokeStyle='rgba(143,162,172,0.14)'; ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(cx-W/2,cy);ctx.lineTo(cx+W/2,cy);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(cx,cy-H/2);ctx.lineTo(cx,cy+H/2);ctx.stroke();
+    // curve
+    ctx.strokeStyle='rgba(63,182,216,0.92)'; ctx.lineWidth=2; ctx.lineCap='round';
+    ctx.beginPath();
+    let n=700,started=false;
+    for(let i=0;i<=n;i++){const tt=(i/n)*C.tmax,r=C.r(tt);const px=cx+r*Math.cos(tt)*s,py=cy-r*Math.sin(tt)*s;if(!started){ctx.moveTo(px,py);started=true;}else ctx.lineTo(px,py);}
+    ctx.stroke();
+  });
+})();
+
+/* ===================== §6 quiz ===================== */
+(function(){
+  const QUESTIONS=[
+    {
+      p:String.raw`Convert the polar point \((6,\tfrac{\pi}{2})\) to rectangular coordinates.`,
+      opts:[String.raw`\((0,\ 6)\)`,String.raw`\((6,\ 0)\)`,String.raw`\((6,\ 6)\)`,String.raw`\((0,\ -6)\)`],
+      correct:0,
+      fb:String.raw`Use \(x=r\cos\theta,\ y=r\sin\theta\). Here \(x=6\cos\tfrac{\pi}{2}=0\) and \(y=6\sin\tfrac{\pi}{2}=6\), so the point is \((0,6)\) — straight up, distance 6, exactly as \(\theta=\tfrac{\pi}{2}\) (90°) suggests.`
+    },
+    {
+      p:String.raw`How many petals does the rose \(r=3\sin(5\theta)\) have?`,
+      opts:[String.raw`5`,String.raw`10`,String.raw`15`,String.raw`25`],
+      correct:0,
+      fb:String.raw`The petal rule: for \(r=a\sin(k\theta)\), if \(k\) is odd you get \(k\) petals; if even, \(2k\). Here \(k=5\) is odd, so \(5\) petals. (It looks like it "should" be 10, but negative \(r\) makes the second set retrace the first.)`
+    },
+    {
+      p:String.raw`The polar point \((-2,\tfrac{\pi}{6})\) is the same as which point?`,
+      opts:[String.raw`\((2,\ \tfrac{7\pi}{6})\)`,String.raw`\((2,\ \tfrac{\pi}{6})\)`,String.raw`\((-2,\ \tfrac{7\pi}{6})\)`,String.raw`\((2,\ \tfrac{5\pi}{6})\)`],
+      correct:0,
+      fb:String.raw`A negative \(r\) means plot in the opposite direction — add \(\pi\) to the angle and flip the sign of \(r\). So \((-2,\tfrac{\pi}{6})=(2,\ \tfrac{\pi}{6}+\pi)=(2,\tfrac{7\pi}{6})\).`
+    },
+    {
+      p:String.raw`Which equation is a cardioid?`,
+      opts:[String.raw`\(r=2+2\cos\theta\)`,String.raw`\(r=2\cos\theta\)`,String.raw`\(r=2\cos(3\theta)\)`,String.raw`\(r=2+5\cos\theta\)`],
+      correct:0,
+      fb:String.raw`A cardioid is \(r=a(1+\cos\theta)\) — equivalently \(r=a+b\cos\theta\) with \(a=b\). Here \(2+2\cos\theta\) has \(a=b=2\). \(r=2\cos\theta\) is a circle; \(r=2\cos(3\theta)\) is a rose; \(2+5\cos\theta\) is a limaçon with an inner loop (since \(a\lt b\)).`
+    },
+    {
+      p:String.raw`To find the slope \(\tfrac{dy}{dx}\) of a polar curve \(r=f(\theta)\), you should:`,
+      opts:[String.raw`Compute \(\tfrac{dy/d\theta}{dx/d\theta}\) using \(x=r\cos\theta,\ y=r\sin\theta\)`,String.raw`Compute \(\tfrac{dr}{d\theta}\)`,String.raw`Compute \(\tfrac{d r}{d\theta}\div r\)`,String.raw`Set \(r=0\) and solve`],
+      correct:0,
+      fb:String.raw`Slope in the plane is \(\tfrac{dy}{dx}\), found by writing \(x=r\cos\theta,\ y=r\sin\theta\) (both functions of \(\theta\)) and taking \(\tfrac{dy/d\theta}{dx/d\theta}\). \(\tfrac{dr}{d\theta}\) only measures how fast the radius changes — it is not the tangent slope.`
+    }
+  ];
+  let idx=0, score=0, answered=false;
+  const promptEl=document.getElementById('qPrompt'), optsEl=document.getElementById('qOpts'),
+        fbEl=document.getElementById('qFb'), countEl=document.getElementById('qCount'),
+        scoreEl=document.getElementById('qScore'), nextBtn=document.getElementById('qNext'),
+        resetBtn=document.getElementById('qReset');
+  function mathify(s){ if(!window.katex) return s; return s.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return katex.renderToString(t,{throwOnError:false});}catch(e){return m;}}); }
+  function render(){
+    if(idx>=QUESTIONS.length){ renderDone(); return; }
+    answered=false; const q=QUESTIONS[idx];
+    countEl.textContent='Question '+(idx+1)+' of '+QUESTIONS.length; scoreEl.textContent='Score: '+score;
+    promptEl.innerHTML=mathify(q.p); optsEl.innerHTML=''; fbEl.className='qfb'; fbEl.innerHTML=''; nextBtn.disabled=true;
+    q.opts.forEach((o,i)=>{const b=document.createElement('button');b.innerHTML=mathify(o);b.addEventListener('click',()=>choose(i,b));optsEl.appendChild(b);});
+  }
+  function choose(i,btn){
+    if(answered)return; answered=true; const q=QUESTIONS[idx]; const all=optsEl.querySelectorAll('button');
+    all.forEach((b,j)=>{b.disabled=true;if(j===q.correct)b.classList.add('correct');});
+    if(i===q.correct){score++;scoreEl.textContent='Score: '+score;fbEl.innerHTML='<span class="verdict r">✓ Correct</span><br>'+mathify(q.fb);}
+    else{btn.classList.add('wrong');fbEl.innerHTML='<span class="verdict w">✗ Not quite</span><br>'+mathify(q.fb);}
+    fbEl.className='qfb show'; nextBtn.disabled=false;
+  }
+  function renderDone(){
+    document.getElementById('quiz').innerHTML=
+      '<div class="qdone"><div class="score">'+score+' / '+QUESTIONS.length+'</div>'+
+      '<p>'+(score===QUESTIONS.length?'Perfect — conversions, the curve gallery, negative r, and polar slope are all locked in.':
+              score>=3?'Solid. Re-check the ones you missed, especially the petal rule and negative r.':
+              'Worth another pass — re-read §1, §3, and the negative-r trap, then try again.')+'</p>'+
+      '<button style="font-family:var(--mono);font-size:12.5px;background:var(--cyan);color:#0b1417;font-weight:600;border:none;border-radius:9px;padding:10px 20px;cursor:pointer" onclick="location.reload()">↺ Try again</button></div>';
+  }
+  nextBtn.addEventListener('click',()=>{ if(!answered)return; idx++; render(); });
+  resetBtn.addEventListener('click',()=>{ idx=0;score=0;answered=false; document.getElementById('quiz').style.opacity=1; render(); });
+  render();
+  if(!window.katex){let _kt=0;const _ki=setInterval(function(){if(window.katex){clearInterval(_ki);if(!answered)render();}else if(++_kt>80)clearInterval(_ki);},100);}
+})();
+
+/* ===================== inline math in prose/examples ===================== */
+function mathifyInline(){
+  if(!window.katex) return;
+  document.querySelectorAll('h2, h3, p, .step, .note p, .trap p, .sub').forEach(node=>{
+    if(node.dataset.mdone) return;
+    if(node.innerHTML.indexOf('\\(')===-1){ node.dataset.mdone="1"; return; }
+    node.innerHTML=node.innerHTML.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return katex.renderToString(t,{throwOnError:false});}catch(e){return m;}});
+    node.dataset.mdone="1";
+  });
+}
+
+/* ===================== boot ===================== */
+function boot(){ renderEqs(); mathifyInline(); }
+boot();
+if(window.addEventListener){ window.addEventListener('load',boot); document.addEventListener('DOMContentLoaded',boot); }
+if(!window.katex){let tries=0;const t=setInterval(()=>{if(window.katex){clearInterval(t);renderEqs();mathifyInline();}else if(++tries>80)clearInterval(t);},100);}
+</script>
+</body>
+</html>

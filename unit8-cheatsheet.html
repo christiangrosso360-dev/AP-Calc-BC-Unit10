@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unit 8 Cheat Sheet — every formula + when to use it · Applications of Integration</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%2316140f%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2220%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%2340c98a%22%3E%E2%98%B0%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{ --emerald:#40c98a; --emerald-glow:#5fe0a4; --approx:#40c98a; --amber:#e8a13c; --rose:#e0644f; --violet:#a892f0; --wrap-max:1100px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:10px;max-width:680px;line-height:1.6}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}
+  .tool-btn{font-family:var(--mono);font-size:12.5px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-2);border-radius:9px;padding:9px 15px;cursor:pointer;text-decoration:none;transition:border-color .2s,color .2s}
+  .tool-btn:hover{border-color:var(--emerald);color:var(--emerald-glow)}
+
+  /* dense topic grid */
+  /* two explicit columns: left holds 8.1-8.3 + the reminders filler, right holds area/cross-sec/solids */
+  .sheet{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px}
+  .col{display:flex;flex-direction:column;gap:16px;min-width:0}
+  @media(max-width:760px){.sheet{grid-template-columns:1fr}}
+  .block.span2{margin-top:0}
+  .arc-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px}
+  @media(max-width:760px){.arc-cols{grid-template-columns:1fr}}
+  .block{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .block.span2{grid-column:1 / -1}
+  .block h3{font-family:var(--display);font-weight:600;font-size:17px;color:var(--ink);margin:0 0 3px;display:flex;align-items:baseline;gap:10px}
+  .block h3 a{color:inherit;text-decoration:none;border-bottom:1px dashed var(--line-2);transition:border-color .2s,color .2s}
+  .block h3 a:hover{color:var(--emerald-glow);border-color:var(--emerald)}
+  .block .tno{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--emerald);font-weight:400}
+  .block .blurb{font-size:12.5px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+
+  .f{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin:8px 0;overflow-x:auto;overflow-y:hidden}
+  .f .katex{color:var(--ink);font-size:1.02em}
+  .f .flab{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+
+  .mini{font-size:12.5px;color:var(--muted);line-height:1.55;margin:8px 0 0}
+  .mini b{color:var(--ink)} .mini .am{color:var(--amber)} .mini .ro{color:var(--rose)}
+
+  /* decision callouts — the standout part */
+  .decide{background:rgba(64,201,138,.06);border:1px solid rgba(64,201,138,.25);border-radius:10px;padding:12px 14px;margin-top:12px}
+  .decide .dh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--emerald);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+  .decide .dh::before{content:"◆";font-size:9px}
+  .branch{display:flex;gap:10px;font-size:12.5px;color:var(--ink);padding:5px 0;align-items:flex-start;line-height:1.45}
+  .branch .cond{font-family:var(--mono);color:var(--emerald-glow);flex-shrink:0;min-width:96px}
+  .branch .res{color:var(--muted)}
+
+  /* traps */
+  .traps{background:rgba(224,100,79,.06);border-left:2px solid var(--rose);border-radius:0 9px 9px 0;padding:10px 14px;margin-top:12px}
+  .traps .th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+  .traps ul{margin:0;padding-left:16px} .traps li{font-size:12.5px;color:var(--muted);line-height:1.55;margin:3px 0} .traps li b{color:var(--ink)}
+
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .55s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}}
+  footer{color:var(--muted);font-size:12px;margin-top:46px;border-top:1px solid var(--line);padding-top:14px} footer a{color:var(--emerald);text-decoration:none}
+
+  /* closing band */
+  .closer{margin-top:18px;background:linear-gradient(110deg, rgba(31,157,110,.10), var(--panel-2) 60%, var(--panel));border:1px solid rgba(64,201,138,.3);border-radius:16px;padding:26px 28px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .closer-line{display:flex;gap:18px;align-items:flex-start}
+  .big-idea-mark{font-family:var(--display);font-size:46px;line-height:.9;color:var(--emerald);flex-shrink:0;opacity:.85}
+  .closer-line p{font-size:15px;color:var(--ink);line-height:1.65;margin:2px 0 0} .closer-line p b{color:var(--emerald-glow)}
+  .closer-jump{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+  .jump-primary{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:13.5px;font-weight:600;color:#1a1408;background:var(--emerald);border-radius:10px;padding:11px 18px;text-decoration:none;box-shadow:0 8px 20px -10px var(--emerald);transition:transform .2s,box-shadow .2s}
+  .jump-primary:hover{transform:translateY(-2px);box-shadow:0 12px 26px -10px var(--emerald)} .jump-primary span{transition:transform .2s} .jump-primary:hover span{transform:translateX(4px)}
+  .jump-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .jump-row a{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line-2);border-radius:30px;padding:6px 13px;text-decoration:none;transition:border-color .2s,color .2s}
+  .jump-row a:hover{border-color:var(--emerald);color:var(--emerald-glow)}
+  @media(max-width:560px){.closer-line{flex-direction:column;gap:8px}.big-idea-mark{font-size:36px}}
+
+  /* print: clean white reference */
+  @media print{
+    @page{margin:1.2cm}
+    body{background:#fff!important;color:#111!important}
+    .backlink,.toolbar,.sub,.scroll-cue,footer a,.closer-jump{display:none!important}
+    .block{background:#fff!important;border:1px solid #bbb!important;box-shadow:none!important;break-inside:avoid}
+    .f{background:#f7f7f5!important;border-color:#ccc!important}
+    .f .katex{color:#111!important}
+    .decide{background:#f0faf5!important;border-color:#9bd}
+    .traps{background:#fdf2f0!important}
+    .closer{background:#f0faf5!important;border-color:#9bd!important}
+    .closer-line p,.big-idea-mark{color:#111!important}.big-idea-mark{color:#0a7!important}
+    h1,.block h3,.block .blurb,.mini,.branch,.traps li{color:#111!important}
+    .tno,.decide .dh,.branch .cond{color:#0a7!important}
+    .sheet{gap:10px}.col{gap:10px}.arc-cols{gap:10px}
+    .reveal{animation:none;opacity:1}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit8.html">← Unit 8</a>
+  <header class="reveal">
+    <h1>Unit 8 <span class="em">Cheat Sheet</span></h1>
+    <div class="sub">Every formula in Applications of Integration — and, more importantly, <b>when to use which</b>.
+      The methods that look alike (disc vs. washer, dx vs. dy, displacement vs. distance) are exactly where points
+      are lost, so each block ends with the decision that picks the right tool.</div>
+    <div class="toolbar">
+      <button class="tool-btn" onclick="window.print()">⎙ Print / save as PDF</button>
+      <a class="tool-btn" href="unit8-exam-practice.html">→ Test yourself</a>
+    </div>
+  </header>
+
+  <div class="sheet">
+    <div class="col">
+      <!-- AVERAGE VALUE -->
+    <div class="block reveal">
+      <h3><a href="unit8-foundations.html">Average Value</a> <span class="tno">8.1</span></h3>
+      <p class="blurb">The mean height of a function over an interval.</p>
+      <div class="f"><div class="flab">average value</div><div id="f_avg"></div></div>
+      <p class="mini"><b>MVT for Integrals:</b> if \(f\) is continuous, some \(c\) in \([a,b]\) actually hits this average value.</p>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Divide by \(b-a\).</b> The integral alone is not the average.</li>
+      </ul></div>
+    </div>
+      <!-- MOTION -->
+    <div class="block reveal">
+      <h3><a href="unit8-foundations.html">Motion</a> <span class="tno">8.2</span></h3>
+      <p class="blurb">Velocity integrates to position; signs carry meaning.</p>
+      <div class="f"><div class="flab">displacement (signed)</div><div id="f_disp"></div></div>
+      <div class="f"><div class="flab">total distance</div><div id="f_dist"></div></div>
+      <div class="f"><div class="flab">position from velocity</div><div id="f_pos"></div></div>
+      <div class="decide"><div class="dh">Displacement or distance?</div>
+        <div class="branch"><span class="cond">net change</span><span class="res">→ displacement, \(\int v\) (keep signs)</span></div>
+        <div class="branch"><span class="cond">total traveled</span><span class="res">→ distance, \(\int|v|\) — find where \(v=0\) and split</span></div>
+      </div>
+      <div class="decide"><div class="dh">Speeding up or slowing down?</div>
+        <div class="branch"><span class="cond">v, a same sign</span><span class="res">→ speeding up</span></div>
+        <div class="branch"><span class="cond">v, a opposite</span><span class="res">→ slowing down</span></div>
+      </div>
+    </div>
+      <!-- ACCUMULATION -->
+    <div class="block reveal">
+      <h3><a href="unit8-foundations.html">Accumulation</a> <span class="tno">8.3</span></h3>
+      <p class="blurb">Integrate a rate to get a total; the FTC links them.</p>
+      <div class="f"><div class="flab">fundamental theorem (part 2)</div><div id="f_ftc"></div></div>
+      <p class="mini"><b>Net change:</b> \(\int_a^b(\text{rate})\,dt\) = total change. <b>Amount:</b> start value \(+\) net change.</p>
+      <p class="mini"><b>Chain rule:</b> if the upper limit is \(u(x)\), then \(\frac{d}{dx}\int_a^{u}f\,dt=f(u)\cdot u'\).</p>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Add the initial amount.</b> The integral gives the <i>change</i>, not the final total.</li>
+        <li>\(F'(x)\) is the integrand evaluated at \(x\) — don't integrate, and don't differentiate it again.</li>
+      </ul></div>
+    </div>
+      <!-- QUICK REMINDERS (filler / genuinely useful) -->
+    <div class="block reveal" style="border-color:rgba(64,201,138,.28)">
+      <h3 style="border:none">Before you integrate <span class="tno">every problem</span></h3>
+      <p class="blurb" style="margin-bottom:10px">A 20-second checklist that catches most lost points.</p>
+      <div class="decide" style="margin-top:0"><div class="dh">Always</div>
+        <div class="branch"><span class="cond">sketch first</span><span class="res">→ see the region, the axis, and which curve is on top</span></div>
+        <div class="branch"><span class="cond">find bounds</span><span class="res">→ set curves equal; check for <i>every</i> intersection</span></div>
+        <div class="branch"><span class="cond">pick the variable</span><span class="res">→ strips ⊥ x-axis use \(dx\); ⊥ y-axis use \(dy\)</span></div>
+      </div>
+      <p class="mini"><b>Units tell:</b> area is square units, volume cubic, arc length linear. If your setup's units don't match, the setup is wrong.</p>
+      <p class="mini"><b>Calculator section?</b> Set up the exact integral, then evaluate numerically — you still earn the setup points even if the antiderivative is ugly.</p>
+    </div>
+    </div>
+    <div class="col">
+      <!-- AREA -->
+    <div class="block reveal">
+      <h3><a href="unit8-area.html">Area Between Curves</a> <span class="tno">8.4 – 8.6</span></h3>
+      <p class="blurb">Integrate the gap between the boundaries.</p>
+      <div class="f"><div class="flab">in x (vertical strips)</div><div id="f_areax"></div></div>
+      <div class="f"><div class="flab">in y (horizontal strips)</div><div id="f_areay"></div></div>
+      <div class="decide"><div class="dh">Integrate in x or y?</div>
+        <div class="branch"><span class="cond">strips ⊥ x-axis</span><span class="res">→ \(dx\), curves as \(y=f(x)\), top − bottom</span></div>
+        <div class="branch"><span class="cond">strips ⊥ y-axis</span><span class="res">→ \(dy\), curves as \(x=g(y)\), right − left</span></div>
+        <div class="branch"><span class="cond">sideways region</span><span class="res">→ \(dy\) avoids splitting (e.g. \(x=y^2\))</span></div>
+      </div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Find every intersection.</b> Curves can cross more than once — the top/bottom may swap.</li>
+      </ul></div>
+    </div>
+      <!-- CROSS SECTIONS -->
+    <div class="block reveal">
+      <h3><a href="unit8-cross-sections.html">Volume by Cross-Sections</a> <span class="tno">8.7 – 8.8</span></h3>
+      <p class="blurb">Stack up slices of a known shape on a base region.</p>
+      <div class="f"><div class="flab">volume (any shape)</div><div id="f_vcross"></div></div>
+      <p class="mini" style="margin-bottom:6px"><b>Slice area</b> \(A\), where \(s\) = the base region's width:</p>
+      <div class="f"><div id="f_shapes"></div></div>
+      <p class="mini"><b>\(s\)</b> = top − bottom (or right − left). The <b>rectangle</b> here uses height = twice the base (\(h=2s\)), giving \(2s^2\) — but that multiplier changes per problem, so read it. For semicircles, \(s\) is the <i>diameter</i>, so radius \(=s/2\).</p>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>No \(\pi\) unless it's a circle.</b> Squares/triangles get their own area formula.</li>
+        <li>Slices ⊥ y-axis ⇒ integrate in \(y\).</li>
+      </ul></div>
+    </div>
+      <!-- SOLIDS -->
+    <div class="block reveal">
+      <h3><a href="unit8-solids.html">Solids of Revolution</a> <span class="tno">8.9 – 8.12</span></h3>
+      <p class="blurb">Spin a region around an axis; slices are circles.</p>
+      <div class="f"><div class="flab">disc (no hole)</div><div id="f_disc"></div></div>
+      <div class="f"><div class="flab">washer (with hole)</div><div id="f_washer"></div></div>
+      <p class="mini"><span class="am">R</span> = outer radius (axis → far edge); <span class="ro">r</span> = inner radius (axis → near edge).</p>
+      <div class="decide"><div class="dh">Disc or washer?</div>
+        <div class="branch"><span class="cond">region touches axis</span><span class="res">→ disc (no gap, \(r=0\))</span></div>
+        <div class="branch"><span class="cond">gap to the axis</span><span class="res">→ washer, \(R^2-r^2\)</span></div>
+        <div class="branch"><span class="cond">axis is a line \(y=k\)</span><span class="res">→ measure each radius <i>from that line</i></span></div>
+      </div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>\(R^2-r^2\), not \((R-r)^2\)</b> — subtract the squares.</li>
+        <li>Square the whole radius: \((x^2)^2=x^4\).</li>
+      </ul></div>
+    </div>
+    </div>
+  </div>
+
+  <!-- ARC LENGTH (full width, below the masonry columns) -->
+  <div class="block span2 reveal" style="margin-top:16px">
+    <h3><a href="unit8-arc-length.html">Arc Length</a> <span class="tno">8.13 · BC only</span></h3>
+    <p class="blurb">A curve's length = the sum of tiny hypotenuses. Pythagoras, integrated.</p>
+    <div class="arc-cols">
+      <div>
+        <div class="f"><div class="flab">y = f(x)</div><div id="f_arc"></div></div>
+        <div class="f"><div class="flab">x = g(y)</div><div id="f_arcy"></div></div>
+      </div>
+      <div>
+        <p class="mini" style="margin-top:0"><b>The perfect-square trick.</b> The integrand is almost never integrable by hand — exam problems are rigged so the inside becomes a perfect square:</p>
+        <div class="f"><div id="f_psq"></div></div>
+        <div class="traps" style="margin-top:10px"><div class="th">trap</div><ul>
+          <li><b>Square the derivative</b> before adding 1: \((2x)^2=4x^2\).</li>
+          <li>If it's not a perfect square, just <b>set up</b> the integral — that earns the credit.</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLOSING: the unit in one line + jump-off -->
+  <div class="closer reveal">
+    <div class="closer-line">
+      <span class="big-idea-mark">∫</span>
+      <p>Half of Unit 8 is one idea: <b>an integral adds up infinitely many tiny pieces into a total</b> —
+        a rate into a net change, strips into an area, discs into a volume, hypotenuses into a length. Set up the
+        right piece, and the integral does the rest.</p>
+    </div>
+    <div class="closer-jump">
+      <a href="unit8-exam-practice.html" class="jump-primary">Test yourself on the exam set <span>→</span></a>
+      <div class="jump-row">
+        <a href="unit8-foundations.html">Accumulation</a>
+        <a href="unit8-area.html">Area</a>
+        <a href="unit8-cross-sections.html">Cross-Sections</a>
+        <a href="unit8-solids.html">Solids</a>
+        <a href="unit8-arc-length.html">Arc Length</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="reveal">Unit 8 Cheat Sheet · Applications of Integration · <a href="unit8.html">back to the unit</a> · print-friendly.</footer>
+</div>
+
+<script>
+function renderSheet(){
+  const R=String.raw;
+  const put=(id,tex_,fb)=>{const e=document.getElementById(id);if(e)e.innerHTML=tex(tex_,fb||tex_,true);};
+  put('f_avg', R`f_{\text{avg}}=\frac{1}{b-a}\int_a^b f(x)\,dx`, "f_avg = (1/(b−a)) ∫ f dx");
+  put('f_disp', R`\text{displacement}=\int_a^b v(t)\,dt`, "∫ v dt");
+  put('f_dist', R`\text{distance}=\int_a^b |v(t)|\,dt`, "∫ |v| dt");
+  put('f_pos', R`s(t)=s(0)+\int_0^t v(\tau)\,d\tau`, "s(t)=s(0)+∫v");
+  put('f_ftc', R`\frac{d}{dx}\int_a^x f(t)\,dt=f(x)`, "d/dx ∫ = f(x)");
+  put('f_areax', R`A=\int_a^b\big[\,\text{top}-\text{bottom}\,\big]\,dx`, "∫ (top−bottom) dx");
+  put('f_areay', R`A=\int_c^d\big[\,\text{right}-\text{left}\,\big]\,dy`, "∫ (right−left) dy");
+  put('f_vcross', R`V=\int_a^b A(x)\,dx`, "V = ∫ A(x) dx");
+  put('f_shapes', R`A_{\square}=s^2\quad A_{\text{rect}}=2s^2\quad A_{\text{semi}}=\tfrac{\pi}{8}s^2\quad A_{\triangle}=\tfrac{\sqrt3}{4}s^2\quad A_{\text{isos}\,\llcorner}=\tfrac12 s^2`, "square s²; rectangle 2s²; semi (π/8)s²; equilateral (√3/4)s²; isos-right ½s²");
+  put('f_disc', R`V=\pi\int_a^b R^2\,dx`, "V = π ∫ R² dx");
+  put('f_washer', R`V=\pi\int_a^b\big(R^2-r^2\big)\,dx`, "V = π ∫ (R²−r²) dx");
+  put('f_arc', R`L=\int_a^b\sqrt{1+\big[f'(x)\big]^2}\,dx`, "L = ∫ √(1+(f′)²) dx");
+  put('f_arcy', R`L=\int_c^d\sqrt{1+\big[\tfrac{dx}{dy}\big]^2}\,dy`, "L = ∫ √(1+(dx/dy)²) dy");
+  put('f_psq', R`1+\big[f'(x)\big]^2=\big(\text{something}\big)^2`, "1+(f′)² = (something)²");
+}
+// inline \( \) in mini/decide/traps text
+function mathifyInline(){
+  document.querySelectorAll('.mini,.branch .res,.branch .cond,.traps li').forEach(node=>{
+    if(node.dataset.done)return;
+    node.innerHTML=node.innerHTML.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):m;}catch(e){return m;}});
+    node.dataset.done="1";
+  });
+}
+function boot(){renderSheet();mathifyInline();}
+boot();
+if(window.addEventListener)window.addEventListener('load',boot);
+if(!window.katex){let t=0;const iv=setInterval(()=>{if(window.katex){clearInterval(iv);boot();}else if(++t>60)clearInterval(iv);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*40,320)+'ms';});
+</script>
+</body>
+</html>

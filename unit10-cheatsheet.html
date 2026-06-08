@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unit 10 Cheat Sheet — every test + series + when to use it · Infinite Series</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%2316140f%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2220%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%23a98cf0%22%3E%CE%A3%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  /* Unit 10 signature: violet */
+  :root{ --violet:#a98cf0; --violet-glow:#c4adff; --violet-deep:#7d5fd0; --approx:#a98cf0; --amber:#e8a13c; --rose:#e0644f; --teal:#3fd0b0; --wrap-max:1100px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:10px;max-width:700px;line-height:1.6}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}
+  .tool-btn{font-family:var(--mono);font-size:12.5px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-2);border-radius:9px;padding:9px 15px;cursor:pointer;text-decoration:none;transition:border-color .2s,color .2s}
+  .tool-btn:hover{border-color:var(--violet);color:var(--violet-glow)}
+
+  /* two explicit columns */
+  .sheet{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px}
+  .col{display:flex;flex-direction:column;gap:16px;min-width:0}
+  @media(max-width:760px){.sheet{grid-template-columns:1fr}}
+
+  .block{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .block.span2{margin-top:0}
+  .arc-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px}
+  @media(max-width:760px){.arc-cols{grid-template-columns:1fr}}
+  .block h3{font-family:var(--display);font-weight:600;font-size:17px;color:var(--ink);margin:0 0 3px;display:flex;align-items:baseline;gap:10px}
+  .block h3 a{color:inherit;text-decoration:none;border-bottom:1px dashed var(--line-2);transition:border-color .2s,color .2s}
+  .block h3 a:hover{color:var(--violet-glow);border-color:var(--violet)}
+  .block .tno{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--violet);font-weight:400}
+  .block .blurb{font-size:12.5px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+
+  .f{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin:8px 0;overflow-x:auto;overflow-y:hidden}
+  .f .katex{color:var(--ink);font-size:1.0em}
+  .f .flab{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+
+  .mini{font-size:12.5px;color:var(--muted);line-height:1.55;margin:8px 0 0}
+  .mini b{color:var(--ink)} .mini .am{color:var(--amber)} .mini .ro{color:var(--rose)} .mini .te{color:var(--teal)}
+
+  /* test list rows */
+  .tests{margin-top:6px}
+  .test-row{display:grid;grid-template-columns:118px 1fr;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);align-items:start}
+  .test-row:last-child{border-bottom:none}
+  .test-row .tn{font-family:var(--display);font-size:13.5px;font-weight:600;color:var(--violet-glow);line-height:1.3}
+  .test-row .td{font-size:12.5px;color:var(--muted);line-height:1.5} .test-row .td b{color:var(--ink)}
+
+  /* decision callouts */
+  .decide{background:rgba(169,140,240,.07);border:1px solid rgba(169,140,240,.28);border-radius:10px;padding:12px 14px;margin-top:12px}
+  .decide .dh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--violet);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+  .decide .dh::before{content:"◆";font-size:9px}
+  .branch{display:flex;gap:10px;font-size:12.5px;color:var(--ink);padding:5px 0;align-items:flex-start;line-height:1.45}
+  .branch .cond{font-family:var(--mono);color:var(--violet-glow);flex-shrink:0;min-width:120px}
+  .branch .res{color:var(--muted)}
+
+  /* traps */
+  .traps{background:rgba(224,100,79,.06);border-left:2px solid var(--rose);border-radius:0 9px 9px 0;padding:10px 14px;margin-top:12px}
+  .traps .th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+  .traps ul{margin:0;padding-left:16px} .traps li{font-size:12.5px;color:var(--muted);line-height:1.55;margin:3px 0} .traps li b{color:var(--ink)}
+
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .55s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}}
+  footer{color:var(--muted);font-size:12px;margin-top:46px;border-top:1px solid var(--line);padding-top:14px} footer a{color:var(--violet);text-decoration:none}
+
+  /* closing band */
+  .closer{margin-top:18px;background:linear-gradient(110deg, rgba(125,95,208,.12), var(--panel-2) 60%, var(--panel));border:1px solid rgba(169,140,240,.32);border-radius:16px;padding:26px 28px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .closer-line{display:flex;gap:18px;align-items:flex-start}
+  .big-idea-mark{font-family:var(--display);font-size:46px;line-height:.9;color:var(--violet);flex-shrink:0;opacity:.85}
+  .closer-line p{font-size:15px;color:var(--ink);line-height:1.65;margin:2px 0 0} .closer-line p b{color:var(--violet-glow)}
+  .closer-jump{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+  .jump-primary{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:13.5px;font-weight:600;color:#160f24;background:var(--violet);border-radius:10px;padding:11px 18px;text-decoration:none;box-shadow:0 8px 20px -10px var(--violet);transition:transform .2s,box-shadow .2s}
+  .jump-primary:hover{transform:translateY(-2px);box-shadow:0 12px 26px -10px var(--violet)} .jump-primary span{transition:transform .2s} .jump-primary:hover span{transform:translateX(4px)}
+  .jump-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .jump-row a{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line-2);border-radius:30px;padding:6px 13px;text-decoration:none;transition:border-color .2s,color .2s}
+  .jump-row a:hover{border-color:var(--violet);color:var(--violet-glow)}
+  @media(max-width:560px){.closer-line{flex-direction:column;gap:8px}.big-idea-mark{font-size:36px}}
+
+  /* print */
+  @media print{
+    @page{margin:1.2cm}
+    body{background:#fff!important;color:#111!important}
+    .backlink,.toolbar,.sub,.scroll-cue,footer a,.closer-jump{display:none!important}
+    .block{background:#fff!important;border:1px solid #bbb!important;box-shadow:none!important;break-inside:avoid}
+    .f{background:#f7f7f5!important;border-color:#ccc!important}.f .katex{color:#111!important}
+    .decide{background:#f5f2fc!important;border-color:#b9a}
+    .traps{background:#fdf2f0!important}
+    .closer{background:#f5f2fc!important;border-color:#b9a!important}.closer-line p,.big-idea-mark{color:#111!important}.big-idea-mark{color:#74c!important}
+    h1,.block h3,.block .blurb,.mini,.branch,.traps li,.test-row .td{color:#111!important}
+    .tno,.decide .dh,.branch .cond,.test-row .tn{color:#74c!important}
+    .sheet{gap:10px}.col{gap:10px}.arc-cols{gap:10px}
+    .reveal{animation:none;opacity:1}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="index.html">← Unit 10</a>
+  <header class="reveal">
+    <h1>Unit 10 <span class="em">Cheat Sheet</span></h1>
+    <div class="sub">Every convergence test, every must-know series, and the one thing the unit really tests:
+      <b>which tool to reach for</b>. The tests look interchangeable until you know their tells — so the big block
+      below is a decision guide, not just a list.</div>
+    <div class="toolbar">
+      <button class="tool-btn" onclick="window.print()">⎙ Print / save as PDF</button>
+      <a class="tool-btn" href="exam-practice.html">→ Test yourself</a>
+    </div>
+  </header>
+
+  <div class="sheet">
+    <div class="col">
+
+      <!-- SERIES FOUNDATIONS -->
+      <div class="block reveal">
+        <h3><a href="series-foundations.html">Series Foundations</a> <span class="tno">the basics</span></h3>
+        <p class="blurb">A series converges if its partial sums approach a finite limit.</p>
+        <div class="f"><div class="flab">geometric series</div><div id="f_geo"></div></div>
+        <div class="f"><div class="flab">p-series</div><div id="f_pseries"></div></div>
+        <p class="mini"><b>Two you just know:</b> a geometric series converges exactly when \(|r|\lt 1\) (and you can find its sum); a p-series converges exactly when \(p\gt 1\). The harmonic series \((p=1)\) <i>diverges</i>.</p>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li>Geometric sum \(\tfrac{a}{1-r}\) uses \(a=\) the <b>first</b> term actually present.</li>
+        </ul></div>
+      </div>
+
+      <!-- nth-term -->
+      <div class="block reveal">
+        <h3><a href="convergence-compass.html">The Divergence Test</a> <span class="tno">always first</span></h3>
+        <p class="blurb">The one quick check to run before anything else.</p>
+        <div class="f"><div class="flab">nth-term (divergence) test</div><div id="f_nth"></div></div>
+        <p class="mini">If the terms don't shrink to zero, the series <b>can't</b> converge. But it only ever shows <i>divergence</i> — if \(\lim a_n=0\), the test is <b>inconclusive</b> and you need a real test.</p>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li><b>\(\lim a_n=0\) does not prove convergence.</b> The harmonic series has \(a_n\to0\) yet diverges.</li>
+        </ul></div>
+      </div>
+
+      <!-- ERROR BOUNDS -->
+      <div class="block reveal">
+        <h3><a href="error-bounds.html">Error Bounds</a> <span class="tno">how close?</span></h3>
+        <p class="blurb">How far a partial sum / Taylor polynomial is from the true value.</p>
+        <div class="f"><div class="flab">Lagrange error (Taylor)</div><div id="f_lagrange"></div></div>
+        <div class="f"><div class="flab">alternating series error</div><div id="f_alterr"></div></div>
+        <div class="decide"><div class="dh">Which error bound?</div>
+          <div class="branch"><span class="cond">Taylor polynomial</span><span class="res">→ Lagrange: \(M=\max|f^{(n+1)}|\) on the interval</span></div>
+          <div class="branch"><span class="cond">alternating series</span><span class="res">→ error ≤ the first term you dropped</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li>Lagrange uses the <b>\((n{+}1)\)th</b> derivative and \((n{+}1)!\), not the \(n\)th.</li>
+          <li>\(M\) is the <b>max</b> of the derivative on the whole interval, not its value at a point.</li>
+        </ul></div>
+      </div>
+
+    </div>
+    <div class="col">
+
+      <!-- THE CONVERGENCE TESTS (the big one) -->
+      <div class="block reveal">
+        <h3><a href="convergence-compass.html">The Convergence Tests</a> <span class="tno">the toolkit</span></h3>
+        <p class="blurb">Each test has a tell — a series shape it's built for.</p>
+        <div class="tests">
+          <div class="test-row"><div class="tn">Geometric</div><div class="td">Form \(ar^n\). Converges iff \(|r|\lt 1\).</div></div>
+          <div class="test-row"><div class="tn">p-series</div><div class="td">Form \(\tfrac{1}{n^p}\). Converges iff \(p\gt 1\).</div></div>
+          <div class="test-row"><div class="tn">Ratio</div><div class="td">Factorials or \(n\)th powers. \(L=\lim\big|\tfrac{a_{n+1}}{a_n}\big|\): \(L\lt 1\) conv, \(L\gt 1\) div, \(L=1\) try another.</div></div>
+          <div class="test-row"><div class="tn">Root</div><div class="td">Whole term to the \(n\)th power. \(L=\lim\sqrt[n]{|a_n|}\), same thresholds.</div></div>
+          <div class="test-row"><div class="tn">Integral</div><div class="td">\(a_n=f(n)\), \(f\) positive, decreasing, integrable. Series and \(\int_1^\infty f\) do the same thing.</div></div>
+          <div class="test-row"><div class="tn">Comparison</div><div class="td">Bound by a known series: smaller-than-convergent conv; bigger-than-divergent div.</div></div>
+          <div class="test-row"><div class="tn">Limit Comp.</div><div class="td">\(\lim\tfrac{a_n}{b_n}=c\gt 0\): both do the same. Pick \(b_n\) by dominant terms.</div></div>
+          <div class="test-row"><div class="tn">Alternating</div><div class="td">\((-1)^n a_n\) with \(a_n\) decreasing to 0 → converges.</div></div>
+        </div>
+        <div class="decide"><div class="dh">Which test? — read the shape</div>
+          <div class="branch"><span class="cond">terms ↛ 0</span><span class="res">→ nth-term: diverges, done</span></div>
+          <div class="branch"><span class="cond">\(ar^n\) / \(1/n^p\)</span><span class="res">→ geometric / p-series by inspection</span></div>
+          <div class="branch"><span class="cond">factorials, \(n\)th powers</span><span class="res">→ Ratio (or Root)</span></div>
+          <div class="branch"><span class="cond">looks like a p-series</span><span class="res">→ Limit Comparison to \(1/n^p\)</span></div>
+          <div class="branch"><span class="cond">nice to integrate</span><span class="res">→ Integral Test</span></div>
+          <div class="branch"><span class="cond">\((-1)^n\) out front</span><span class="res">→ Alternating Series Test</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li>Ratio/Root with \(L=1\) tells you <b>nothing</b> — switch tests.</li>
+          <li><b>Absolute vs conditional:</b> if \(\sum|a_n|\) converges it's absolute; if only \(\sum a_n\) does, conditional.</li>
+        </ul></div>
+      </div>
+
+      <!-- ABSOLUTE vs CONDITIONAL (fills the right column under the tests) -->
+      <div class="block reveal">
+        <h3><a href="convergence-compass.html">Absolute vs. Conditional</a> <span class="tno">which kind?</span></h3>
+        <p class="blurb">When a series has negative terms, there are two grades of convergence.</p>
+        <div class="decide" style="margin-top:0"><div class="dh">Test the absolute value first</div>
+          <div class="branch"><span class="cond">\(\sum|a_n|\) converges</span><span class="res">→ <b>absolutely</b> convergent (the strong kind)</span></div>
+          <div class="branch"><span class="cond">\(\sum|a_n|\) diverges</span><span class="res">but \(\sum a_n\) converges → <b>conditionally</b> convergent</span></div>
+          <div class="branch"><span class="cond">\(\sum a_n\) diverges</span><span class="res">→ just divergent</span></div>
+        </div>
+        <p class="mini"><b>Why it matters:</b> absolute convergence is sturdy — you can rearrange terms freely. Conditional convergence is fragile. The classic split: \(\sum\tfrac{(-1)^n}{n}\) is conditional (the harmonic series underneath diverges), while \(\sum\tfrac{(-1)^n}{n^2}\) is absolute.</p>
+        <p class="mini"><b>Quick routine:</b> strip the signs and test \(\sum|a_n|\) with whatever fits (often Ratio or a p-series comparison). Converges → absolute, and you're done. Diverges → fall back to the Alternating Series Test on \(\sum a_n\); if that converges, it's conditional.</p>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li>Run the Alternating Series Test on \(\sum a_n\), but test convergence on \(\sum|a_n|\) to decide the <i>kind</i>.</li>
+          <li>"Converges" on the AP usually means <b>conditionally or absolutely</b> — name which when asked.</li>
+        </ul></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAYLOR & MACLAURIN (full width) -->
+  <div class="block span2 reveal" style="margin-top:16px">
+    <h3><a href="breaking-point.html">Taylor &amp; Maclaurin Series</a> <span class="tno">build the polynomial</span></h3>
+    <p class="blurb">Rebuild a function as an infinite polynomial from its derivatives at a point.</p>
+    <div class="arc-cols">
+      <div>
+        <div class="f"><div class="flab">Taylor series about x = c</div><div id="f_taylor"></div></div>
+        <p class="mini" style="margin-top:6px"><b>Maclaurin</b> is just Taylor with \(c=0\). The \(n\)th-degree Taylor <i>polynomial</i> stops the sum at \(n\).</p>
+        <div class="traps" style="margin-top:10px"><div class="th">trap</div><ul>
+          <li>Divide by \(n!\) — the derivatives alone aren't the coefficients.</li>
+          <li>"About \(x=c\)" means powers of \((x-c)\), not \(x\).</li>
+        </ul></div>
+      </div>
+      <div>
+        <p class="mini" style="margin-top:0"><b>Memorize these four</b> — they're the starting point for most problems (sub, differentiate, or integrate to get others):</p>
+        <div class="f"><div class="flab">e^x · all reals</div><div id="f_ex"></div></div>
+        <div class="f"><div class="flab">sin x · all reals</div><div id="f_sin"></div></div>
+        <div class="f"><div class="flab">cos x · all reals</div><div id="f_cos"></div></div>
+        <div class="f"><div class="flab">geometric · |x| &lt; 1</div><div id="f_geo2"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INTERVAL OF CONVERGENCE (full width) -->
+  <div class="block span2 reveal" style="margin-top:16px">
+    <h3><a href="interval-of-convergence.html">Radius &amp; Interval of Convergence</a> <span class="tno">where it's valid</span></h3>
+    <p class="blurb">A power series only equals its function for \(x\) close enough to the center.</p>
+    <div class="arc-cols">
+      <div>
+        <div class="f"><div class="flab">radius (via ratio test)</div><div id="f_radius"></div></div>
+        <div class="f"><div class="flab">interval (before endpoints)</div><div id="f_interval"></div></div>
+        <div class="f"><div class="flab">ln(1 + x) · −1 &lt; x ≤ 1</div><div id="f_ln"></div></div>
+      </div>
+      <div>
+        <div class="decide" style="margin-top:0"><div class="dh">Finding the interval</div>
+          <div class="branch"><span class="cond">1. ratio test</span><span class="res">run it on the power series, set \(L\lt 1\)</span></div>
+          <div class="branch"><span class="cond">2. solve</span><span class="res">get \(|x-c|\lt R\) → open interval</span></div>
+          <div class="branch"><span class="cond">3. test ends</span><span class="res">plug <i>each</i> endpoint in separately</span></div>
+          <div class="branch"><span class="cond">4. write it</span><span class="res">use [ ] or ( ) per endpoint result</span></div>
+        </div>
+        <div class="traps" style="margin-top:12px"><div class="th">trap</div><ul>
+          <li><b>Always check both endpoints</b> by substitution — the ratio test goes silent there \((L=1)\).</li>
+          <li>\(R=\infty\) (e.g. \(e^x,\sin,\cos\)) means all reals; \(R=0\) means only at \(x=c\).</li>
+        </ul></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="closer reveal">
+    <div class="closer-line">
+      <span class="big-idea-mark">Σ</span>
+      <p>The whole unit answers two questions: <b>does this infinite sum settle to a number</b> (convergence tests),
+        and <b>can I rebuild a function as an infinite polynomial</b> (Taylor series)? Match the series' shape to the
+        right test, and know your four Maclaurin series cold — everything else is built from those.</p>
+    </div>
+    <div class="closer-jump">
+      <a href="exam-practice.html" class="jump-primary">Test yourself on the exam set <span>→</span></a>
+      <div class="jump-row">
+        <a href="series-foundations.html">Foundations</a>
+        <a href="convergence-compass.html">Convergence</a>
+        <a href="breaking-point.html">Taylor</a>
+        <a href="interval-of-convergence.html">Interval</a>
+        <a href="error-bounds.html">Error</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="reveal">Unit 10 Cheat Sheet · Infinite Series · <a href="index.html">back to the unit</a> · print-friendly.</footer>
+</div>
+
+<script>
+function renderSheet(){
+  const R=String.raw;
+  const put=(id,t,fb)=>{const e=document.getElementById(id);if(e)e.innerHTML=tex(t,fb||t,true);};
+  put('f_geo', R`\sum_{n=0}^{\infty} ar^n=\frac{a}{1-r}\quad(|r|<1)`, "Σ arⁿ = a/(1−r), |r|<1");
+  put('f_pseries', R`\sum_{n=1}^{\infty}\frac{1}{n^p}\ \text{converges}\iff p>1`, "Σ 1/nᵖ converges ⟺ p>1");
+  put('f_nth', R`\lim_{n\to\infty} a_n\neq 0\ \Rightarrow\ \text{diverges}`, "lim aₙ ≠ 0 ⟹ diverges");
+  put('f_lagrange', R`|R_n(x)|\le\frac{M}{(n+1)!}\,|x-c|^{n+1}`, "|Rₙ| ≤ M/(n+1)! · |x−c|ⁿ⁺¹");
+  put('f_alterr', R`|R_n|\le a_{n+1}`, "|Rₙ| ≤ a₍ₙ₊₁₎ (first dropped term)");
+  put('f_taylor', R`f(x)=\sum_{n=0}^{\infty}\frac{f^{(n)}(c)}{n!}(x-c)^n`, "f(x)=Σ f⁽ⁿ⁾(c)/n! (x−c)ⁿ");
+  put('f_ex', R`e^x=\sum_{n=0}^{\infty}\frac{x^n}{n!}=1+x+\tfrac{x^2}{2!}+\cdots`, "eˣ = Σ xⁿ/n!");
+  put('f_sin', R`\sin x=\sum_{n=0}^{\infty}\frac{(-1)^n x^{2n+1}}{(2n+1)!}`, "sin x = Σ (−1)ⁿx^(2n+1)/(2n+1)!");
+  put('f_cos', R`\cos x=\sum_{n=0}^{\infty}\frac{(-1)^n x^{2n}}{(2n)!}`, "cos x = Σ (−1)ⁿx^(2n)/(2n)!");
+  put('f_geo2', R`\frac{1}{1-x}=\sum_{n=0}^{\infty}x^n=1+x+x^2+\cdots`, "1/(1−x) = Σ xⁿ");
+  put('f_radius', R`R=\lim_{n\to\infty}\left|\frac{a_n}{a_{n+1}}\right|`, "R = lim |aₙ/aₙ₊₁|");
+  put('f_interval', R`|x-c|<R\ \Rightarrow\ c-R<x<c+R`, "|x−c|<R");
+  put('f_ln', R`\ln(1+x)=\sum_{n=1}^{\infty}\frac{(-1)^{n+1}x^n}{n}`, "ln(1+x) = Σ (−1)ⁿ⁺¹xⁿ/n");
+}
+function mathifyInline(){
+  document.querySelectorAll('.mini,.branch .res,.branch .cond,.traps li,.test-row .td').forEach(node=>{
+    if(node.dataset.done)return;
+    node.innerHTML=node.innerHTML.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):m;}catch(e){return m;}});
+    node.dataset.done="1";
+  });
+}
+function boot(){renderSheet();mathifyInline();}
+boot();
+if(window.addEventListener)window.addEventListener('load',boot);
+if(!window.katex){let t=0;const iv=setInterval(()=>{if(window.katex){clearInterval(iv);boot();}else if(++t>60)clearInterval(iv);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*40,320)+'ms';});
+</script>
+</body>
+</html>

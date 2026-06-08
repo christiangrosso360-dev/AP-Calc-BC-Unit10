@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Exam Practice — Mixed Review &amp; FRQ · Unit 8</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%2316140f%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%2340c98a%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{ --approx:#40c98a; --emerald:#40c98a; --true:#3fd0b0; --glow:rgba(64,201,138,.08); --wrap-max:820px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:680px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:720px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-top:18px} .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7);margin-top:14px}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:14px;text-align:left;transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--emerald);transform:translateY(-1px)} button:active{transform:translateY(0) scale(.99)} button:disabled{cursor:default}
+  .qtag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:3px 10px;margin-bottom:10px;background:var(--panel-2)}
+  .qprompt{font-size:15.5px;font-weight:500;margin:6px 0 4px;line-height:1.5}
+  .qmath{font-family:var(--mono);font-size:16px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center;margin:12px 0;overflow-x:auto} .qmath .katex{font-size:1.06em}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px}
+  @media(max-width:560px){.opts{grid-template-columns:1fr}}
+  .opts button{text-align:center;font-size:14.5px;padding:11px}
+  .opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv);font-weight:600}
+  .opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .fb{font-size:13.5px;line-height:1.55;margin-top:12px;background:var(--bg);border-radius:9px;padding:11px 13px;display:none} .fb.show{display:block} .fb .ftag{font-weight:600}
+  .fb .ftag.ok{color:var(--conv)} .fb .ftag.bad{color:var(--div)}
+  .next{background:var(--approx);color:#1a1408;border-color:var(--approx);font-weight:600;text-align:center;width:100%;box-shadow:0 8px 18px -10px var(--approx);margin-top:16px;display:none} .next.show{display:block}
+  .review-link{display:inline-block;margin-top:8px;font-size:12.5px;font-family:var(--mono);color:var(--emerald);text-decoration:none} .review-link:hover{text-decoration:underline}
+  /* FRQ */
+  .frq-given{background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+  .frq-given .katex{font-size:1.05em} .frq-given .gl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .frq-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .frq-tabs button{font-size:13px;padding:9px 13px;text-align:center;border-radius:9px}
+  .frq-tabs button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .frq-desc{font-size:13px;color:var(--muted);background:var(--bg);border-radius:9px;padding:9px 13px;margin-bottom:6px} .frq-desc b{color:var(--approx)}
+  .part{border-top:1px solid var(--line);padding:16px 0 4px} .part:first-child{border-top:none}
+  .part-h{display:flex;justify-content:space-between;align-items:center;gap:10px} .part-l{font-weight:600;font-size:14.5px;color:var(--ink)} .part-pts{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .part-q{font-size:14.5px;line-height:1.55;margin:8px 0 4px}
+  .frq-fields{display:flex;flex-direction:column;gap:10px;margin:4px 0 12px}
+  .frq-field{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .frq-flabel{font-size:14px;min-width:54px;color:var(--ink)} .frq-flabel .katex{font-size:1em}
+  .frq-input{font-family:var(--mono);font-size:14px;padding:8px 11px;border:1px solid var(--line);border-radius:8px;background:var(--panel-2);color:var(--ink);min-width:140px}
+  .frq-input:focus{outline:none;border-color:var(--emerald)} .frq-input.ok{border-color:var(--conv);background:rgba(63,208,176,.16)} .frq-input.no{border-color:var(--div);background:rgba(224,100,79,.16)}
+  .frq-check{background:var(--ink);color:var(--panel);border-color:var(--ink);font-size:13px;padding:8px 14px} .frq-check:hover{background:#d8d2c6} .frq-check:disabled{opacity:.5}
+  .frq-sol{display:none;margin-top:10px;font-size:13.5px;line-height:1.6;background:var(--bg);border-left:2px solid var(--emerald);border-radius:0 9px 9px 0;padding:11px 14px} .frq-sol.show{display:block}
+  .frq-sol .stepm{font-family:var(--mono);background:var(--panel-2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;margin:7px 0;overflow-x:auto;font-size:13px}
+  .rubric{margin-top:10px} .rubric-h{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .rubric label{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink);padding:5px 0;cursor:pointer} .rubric input{margin-top:3px;accent-color:var(--emerald)}
+  .reveal-sol{font-family:var(--mono);font-size:12.5px;color:var(--emerald);background:none;border:1px dashed var(--line-2);width:100%;text-align:center;margin-top:8px}
+  .scoreline{font-family:var(--mono);font-size:14px;color:var(--ink);background:var(--panel-2);border-radius:9px;padding:12px 14px;margin-top:14px;text-align:center} .scoreline b{color:var(--emerald)}
+  .weakrow{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:13.5px}
+  .weakbar{flex:1;height:8px;background:var(--panel-2);border-radius:5px;overflow:hidden} .weakbar i{display:block;height:100%;background:var(--emerald);border-radius:5px}
+  .weaklabel{min-width:160px;color:var(--ink)} .weakpct{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:48px;text-align:right}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  footer{color:var(--muted);font-size:12px;margin-top:50px;border-top:1px solid var(--line);padding-top:14px}
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit8.html">← Unit 8</a>
+  <header class="reveal">
+    <h1>Exam <span class="em">Practice</span></h1>
+    <div class="sub">Mixed multiple choice across all of Unit 8 — average value, motion, accumulation, area, volume, and
+      arc length — plus a free-response trainer built on real AP question shapes. Every answer is worked and verified.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    <b>How to use this.</b> The multiple choice pulls a fresh batch of 12 from a bank of 48, mixing every topic the way
+    the real exam does. Answer, read the worked explanation, and your weak spots surface at the bottom. Then train the
+    free-response format — one scenario, several chained parts — exactly how Section II works.
+  </div>
+
+  <h2 class="reveal">Mixed multiple choice</h2>
+  <div class="card reveal" id="mcCard">
+    <div class="row">
+      <span class="score" id="mcProgress">Question 1 of 12</span>
+      <span class="score" id="mcScore">Score: 0</span>
+    </div>
+    <div class="qtag" id="mcTag"></div>
+    <div class="qprompt" id="mcPrompt"></div>
+    <div class="qmath" id="mcMath"></div>
+    <div class="opts" id="mcOpts"></div>
+    <div class="fb" id="mcFb"></div>
+    <button class="next" id="mcNext">Next question →</button>
+    <div id="mcDone" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Free-response trainer <span style="font-family:var(--mono);font-size:13px;color:var(--approx);font-weight:400">· Section II style</span></h2>
+  <p class="lead reveal">One scenario, several chained parts — exactly how the real FRQ works. Pick a problem below; type
+    what you can, then check the worked solution and score your reasoning against the rubric.</p>
+  <div class="frq-tabs reveal" id="frqTabs"></div>
+  <div class="card reveal" id="frqCard">
+    <div class="frq-desc" id="frqDesc"></div>
+    <div class="frq-given">
+      <div class="gl">Given</div>
+      <div id="frqGiven"></div>
+      <div id="frqGivenNote" style="font-size:12.5px;color:var(--muted);margin-top:8px"></div>
+    </div>
+    <div id="frqParts"></div>
+    <div class="scoreline" id="frqScore" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Where you stand</h2>
+  <div class="card reveal" id="weakCard">
+    <div id="weakBody" style="font-size:14px;color:var(--muted)">Finish some multiple-choice questions and your topic breakdown shows up here.</div>
+  </div>
+
+  <footer class="reveal">Exam Practice · Unit 8 · part of the Visual AP Calculus guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+const TOPICS={
+  avg:["Average value","unit8-foundations.html"],
+  motion:["Motion","unit8-foundations.html"],
+  accum:["Accumulation","unit8-foundations.html"],
+  area:["Area between curves","unit8-area.html"],
+  xsec:["Cross sections","unit8-cross-sections.html"],
+  solid:["Solids of revolution","unit8-solids.html"],
+  arc:["Arc length","unit8-arc-length.html"]
+};
+
+// ===================== MC BANK (48, all verified in Node) =====================
+const MC=[
+ // ============ AVERAGE VALUE (6) ============
+ {topic:"avg",prompt:"Find the average value of the function on the interval.",math:"f(x)=\\dfrac{6}{(x+1)^2},\\quad [0,2]",
+  opts:[{t:"2",correct:true},{t:"4"},{t:"3"},{t:"1"}],
+  explain:`<b>Average value</b> is \\(\\dfrac{1}{b-a}\\displaystyle\\int_a^b f\\,dx\\), so the work is in two parts: integrate, then divide by the width.<br><br><b>Integrate:</b> rewrite \\(6(x+1)^{-2}\\); its antiderivative is \\(-6(x+1)^{-1}\\). Evaluating, \\(\\big[-\\tfrac{6}{x+1}\\big]_0^2=-\\tfrac{6}{3}-(-\\tfrac{6}{1})=-2+6=4\\).<br><b>Divide</b> by the width \\(b-a=2\\): \\(\\tfrac{4}{2}=2\\).<br><br><b>Why the distractors miss:</b> <b>4</b> is the integral itself — the single most common error is forgetting to divide by the interval width. <b>3</b> averages \\(4\\) and \\(2\\) loosely (no basis). <b>1</b> divides \\(4\\) by the wrong width or mishandles the power-rule sign on a negative exponent.`},
+ {topic:"avg",prompt:"Find the average value of the function on the interval. (Calculator permitted.)",math:"f(x)=e^{2x},\\quad [0,1]",
+  opts:[{t:"\\dfrac{e^2-1}{2}",correct:true},{t:"e^2-1"},{t:"2(e^2-1)"},{t:"\\dfrac{e^2}{2}"}],
+  explain:`<b>Set up</b> \\(\\dfrac{1}{1-0}\\displaystyle\\int_0^1 e^{2x}\\,dx\\). Since the width is \\(1\\), the average <i>equals</i> the integral here — but you still must integrate correctly.<br><br><b>Integrate:</b> \\(\\int e^{2x}\\,dx=\\tfrac12 e^{2x}\\) (the \\(\\tfrac12\\) comes from the chain rule running backward — the inside is \\(2x\\)). So \\(\\big[\\tfrac12 e^{2x}\\big]_0^1=\\tfrac12 e^2-\\tfrac12=\\dfrac{e^2-1}{2}\\approx3.19\\).<br><br><b>Why the distractors miss:</b> <b>\\(e^2-1\\)</b> forgets the \\(\\tfrac12\\) from integrating \\(e^{2x}\\) — the single most common slip. <b>\\(2(e^2-1)\\)</b> multiplies by 2 instead of dividing. <b>\\(\\tfrac{e^2}{2}\\)</b> drops the lower-limit term \\(-\\tfrac12\\).`},
+ {topic:"avg",prompt:"The average value of \\(f(x)=x^2\\) on \\([0,3]\\) is \\(3\\). The Mean Value Theorem for Integrals guarantees some \\(c\\) in the interval where \\(f(c)\\) equals that average. Find \\(c\\).",
+  opts:[{t:"\\sqrt{3}",correct:true},{t:"\\tfrac{3}{2}"},{t:"\\sqrt{2}"},{t:"3"}],
+  explain:`<b>What the theorem says:</b> if \\(f\\) is continuous on \\([a,b]\\), there is a \\(c\\) where \\(f(c)=\\) the average value. So you set the function equal to the average and solve.<br><br><b>Solve:</b> \\(f(c)=c^2=3\\Rightarrow c=\\sqrt{3}\\approx1.73\\), which does lie in \\([0,3]\\). (We take the positive root since the interval is \\([0,3]\\).)<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac32\\)</b> is the <i>midpoint</i> of the interval — a tempting guess, but the average value is attained where the curve actually reaches height \\(3\\), not at the interval's center. <b>\\(\\sqrt2\\)</b> solves \\(c^2=2\\) (using the wrong average). <b>3</b> is the average value itself, confusing the output \\(f(c)\\) with the input \\(c\\).`},
+ {topic:"avg",prompt:"Find the average value of the function on the interval.",math:"f(x)=\\sec^2 x,\\quad \\left[0,\\tfrac{\\pi}{4}\\right]",
+  opts:[{t:"\\dfrac{4}{\\pi}",correct:true},{t:"1"},{t:"\\dfrac{\\pi}{4}"},{t:"\\dfrac{2}{\\pi}"}],
+  explain:`<b>Set up</b> \\(\\dfrac{1}{\\pi/4-0}\\displaystyle\\int_0^{\\pi/4}\\sec^2 x\\,dx=\\dfrac{4}{\\pi}\\displaystyle\\int_0^{\\pi/4}\\sec^2 x\\,dx\\).<br><br><b>Integrate:</b> the antiderivative of \\(\\sec^2 x\\) is \\(\\tan x\\) (worth memorizing). So \\(\\big[\\tan x\\big]_0^{\\pi/4}=\\tan\\tfrac\\pi4-\\tan 0=1-0=1\\).<br><b>Multiply</b> by \\(\\tfrac{4}{\\pi}\\): the average is \\(\\dfrac{4}{\\pi}\\approx1.27\\).<br><br><b>Why the distractors miss:</b> <b>1</b> is the integral alone — forgetting to divide by the width \\(\\tfrac\\pi4\\) (equivalently, multiply by \\(\\tfrac4\\pi\\)). <b>\\(\\tfrac\\pi4\\)</b> divides by the reciprocal. <b>\\(\\tfrac2\\pi\\)</b> uses width \\(\\tfrac\\pi2\\) instead of \\(\\tfrac\\pi4\\).`},
+ {topic:"avg",prompt:"A particle's velocity is \\(v(t)=6t\\) (ft/s) on \\([0,5]\\). Find its average velocity, and note how it relates to displacement.",
+  opts:[{t:"15 \\text{ ft/s}",correct:true},{t:"30 \\text{ ft/s}"},{t:"75 \\text{ ft/s}"},{t:"3 \\text{ ft/s}"}],
+  explain:`<b>Average velocity</b> is the average value of \\(v\\): \\(\\dfrac{1}{5}\\displaystyle\\int_0^5 6t\\,dt\\).<br><br><b>Integrate:</b> \\(\\int 6t\\,dt=3t^2\\), so \\(\\big[3t^2\\big]_0^5=75\\). This \\(75\\) is the <b>total displacement</b> in feet. <b>Divide</b> by the time \\(5\\): average velocity \\(=15\\) ft/s.<br><br>This is the key connection: <b>average velocity = displacement ÷ time</b>, exactly the average-value formula applied to \\(v\\).<br><br><b>Why the distractors miss:</b> <b>75</b> is the displacement (the integral) — not divided by time. <b>30</b> is the final velocity \\(v(5)=30\\), a snapshot, not an average. <b>3</b> divides the slope \\(6\\) by something unrelated.`},
+ {topic:"avg",prompt:"\\(f\\) is continuous with \\(\\displaystyle\\int_1^7 f(x)\\,dx=24\\). What is the average value of \\(f\\) on \\([1,7]\\)?",
+  opts:[{t:"4",correct:true},{t:"24"},{t:"6"},{t:"\\tfrac{24}{7}"}],
+  explain:`This tests the <b>formula itself</b>, no integration required — they hand you the integral.<br><br><b>Apply</b> \\(\\dfrac{1}{b-a}\\displaystyle\\int_a^b f=\\dfrac{1}{7-1}(24)=\\dfrac{24}{6}=4\\).<br><br><b>Why the distractors miss:</b> <b>24</b> is the integral, not divided by the width — the classic trap, and the whole point of the question. <b>6</b> is the width \\(b-a\\) itself. <b>\\(\\tfrac{24}{7}\\)</b> divides by \\(b\\) instead of by \\(b-a=6\\) — forgetting that the width is \\(7-1\\), not \\(7\\).`},
+
+ // ============ MOTION (6) ============
+ {topic:"motion",prompt:"A particle moves with velocity \\(v(t)=t^2-4t+3\\) on \\([0,4]\\). Find the displacement.",
+  opts:[{t:"\\tfrac{4}{3}",correct:true},{t:"4"},{t:"\\tfrac{16}{3}"},{t:"-\\tfrac{4}{3}"}],
+  explain:`<b>Displacement</b> is the <i>signed</i> integral of velocity, \\(\\displaystyle\\int_0^4 v\\,dt\\) — direction matters, so you do <b>not</b> take absolute value here.<br><br><b>Integrate:</b> \\(\\int(t^2-4t+3)\\,dt=\\tfrac{t^3}{3}-2t^2+3t\\). Evaluate: \\(\\big[\\tfrac{t^3}{3}-2t^2+3t\\big]_0^4=\\tfrac{64}{3}-32+12=\\tfrac{64}{3}-20=\\tfrac{4}{3}\\).<br><br><b>Why the distractors miss:</b> <b>4</b> is the total <i>distance</i> \\(\\int_0^4|v|\\,dt\\) — what you'd get treating all motion as positive (that's the next question). <b>\\(\\tfrac{16}{3}\\)</b> drops the \\(+3t\\) term or mishandles a bound. <b>\\(-\\tfrac43\\)</b> has a sign slip. Displacement can be smaller than distance because the particle reverses direction.`},
+ {topic:"motion",prompt:"For the same particle, \\(v(t)=t^2-4t+3\\) on \\([0,4]\\). Find the total distance traveled.",
+  opts:[{t:"4",correct:true},{t:"\\tfrac{4}{3}",},{t:"\\tfrac{8}{3}"},{t:"\\tfrac{16}{3}"}],
+  explain:`<b>Distance</b> is \\(\\displaystyle\\int_0^4|v|\\,dt\\). Because the particle reverses direction, you must <b>find where \\(v=0\\) and split</b>.<br><br><b>Factor:</b> \\(v=t^2-4t+3=(t-1)(t-3)\\), so \\(v=0\\) at \\(t=1,3\\). Sign: positive on \\([0,1]\\), negative on \\([1,3]\\), positive on \\([3,4]\\).<br><b>Add the magnitudes:</b> each piece works out to \\(\\tfrac43\\), so distance \\(=\\tfrac43+\\tfrac43+\\tfrac43=4\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac43\\)</b> is the <i>displacement</i> — it lets the negative middle cancel the positive ends, which is exactly what distance must <i>not</i> do. <b>\\(\\tfrac83\\)</b> forgets one of the three pieces. <b>\\(\\tfrac{16}{3}\\)</b> integrates without splitting at all.`},
+ {topic:"motion",prompt:"A particle has velocity \\(v(t)=3t^2-12\\) and acceleration \\(a(t)=6t\\). At \\(t=1\\), is the particle speeding up or slowing down?",
+  opts:[{t:"Slowing down",correct:true},{t:"Speeding up"},{t:"Moving at constant speed"},{t:"At rest"}],
+  explain:`<b>The rule:</b> a particle is <b>speeding up when \\(v\\) and \\(a\\) have the same sign</b> (acceleration pushes <i>with</i> the motion) and <b>slowing down when they have opposite signs</b>.<br><br><b>Evaluate at \\(t=1\\):</b> \\(v(1)=3-12=-9\\) (moving in the negative direction), \\(a(1)=6(1)=6\\) (pointing positive). Opposite signs ⇒ the push opposes the motion ⇒ <b>slowing down</b>.<br><br><b>Why the distractors miss:</b> <b>Speeding up</b> is the trap if you only look at \\(a>0\\) and assume "positive acceleration = speeding up" — but speed depends on the <i>signs together</i>, not on \\(a\\) alone. <b>Constant speed</b> would need \\(a=0\\). <b>At rest</b> would need \\(v=0\\), but \\(v(1)=-9\\neq0\\).`},
+ {topic:"motion",prompt:"A particle moves with \\(v(t)=t^2-4t+3\\) and starts at position \\(s(0)=2\\). Find \\(s(3)\\).",
+  opts:[{t:"2",correct:true},{t:"\\tfrac{4}{3}"},{t:"\\tfrac{10}{3}"},{t:"0"}],
+  explain:`<b>Position</b> from velocity uses the accumulation idea: \\(s(3)=s(0)+\\displaystyle\\int_0^3 v\\,dt\\) — start where you started, then add the (signed) displacement.<br><br><b>Integrate:</b> \\(\\big[\\tfrac{t^3}{3}-2t^2+3t\\big]_0^3=9-18+9=0\\). The net displacement over \\([0,3]\\) is exactly \\(0\\) (the particle drifts right, left, and returns).<br><b>Add the start:</b> \\(s(3)=2+0=2\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac43\\)</b> is the displacement over \\([0,4]\\), the wrong interval. <b>\\(\\tfrac{10}{3}\\)</b> is \\(s(4)\\), again the wrong endpoint. <b>0</b> is the displacement but forgets to add the initial position \\(s(0)=2\\) — the most common slip.`},
+ {topic:"motion",prompt:"The velocity of a particle is given in the table. Using a left Riemann sum with the three subintervals shown, estimate the displacement on \\([0,6]\\).",math:"\\begin{array}{c|cccc} t & 0 & 2 & 4 & 6\\\\\\hline v(t) & 3 & 5 & 4 & 1\\end{array}",
+  opts:[{t:"24",correct:true},{t:"20"},{t:"26"},{t:"12"}],
+  explain:`<b>Displacement</b> \\(=\\displaystyle\\int_0^6 v\\,dt\\), estimated here by a <b>left Riemann sum</b> — use the value at the <i>left</i> end of each subinterval, times the width.<br><br><b>Build it:</b> the subintervals are \\([0,2],[2,4],[4,6]\\), each width \\(2\\). Left endpoints give \\(v=3,5,4\\):<br>\\(2(3)+2(5)+2(4)=6+10+8=24\\).<br><br><b>Why the distractors miss:</b> <b>20</b> is the <i>right</i> Riemann sum \\(2(5)+2(4)+2(1)\\) — using the wrong end of each subinterval. <b>26</b> is the trapezoidal estimate. <b>12</b> forgets to multiply by the width \\(\\Delta t=2\\). Reading "left sum" correctly is the whole skill.`},
+ {topic:"motion",prompt:"At \\(t=3\\) a particle has velocity \\(v=15\\) and acceleration \\(a=18\\). Which statement is correct?",
+  opts:[{t:"Speed is increasing (v, a same sign)",correct:true},{t:"Speed is decreasing (v, a same sign)"},{t:"Speed is increasing (v, a opposite signs)"},{t:"Velocity is decreasing"}],
+  explain:`<b>The rule again:</b> speed increases when velocity and acceleration share a sign.<br><br><b>Here</b> \\(v=15>0\\) and \\(a=18>0\\) — same sign, so the acceleration pushes in the direction of motion and <b>speed is increasing</b>.<br><br><b>Why the distractors miss:</b> "Speed is decreasing (same sign)" states the right sign relationship but the wrong conclusion — same sign means <i>increasing</i>. "Increasing (opposite signs)" gets the conclusion right but misreads the signs. "Velocity is decreasing" is false: with \\(a>0\\), velocity is <i>increasing</i> (and since \\(v\\) is already positive, both speed and velocity rise together).`},
+
+ // ============ ACCUMULATION (6) ============
+ {topic:"accum",prompt:"Let \\(F(x)=\\displaystyle\\int_2^x \\sqrt{1+t^3}\\,dt\\). Find \\(F'(2)\\).",
+  opts:[{t:"3",correct:true},{t:"0"},{t:"2",},{t:"\\tfrac{2}{3}"}],
+  explain:`<b>Fundamental Theorem of Calculus, Part 2:</b> if \\(F(x)=\\displaystyle\\int_a^x g(t)\\,dt\\), then \\(F'(x)=g(x)\\) — differentiating an accumulation function just hands back the integrand, evaluated at the top limit. No integration needed (good, since \\(\\sqrt{1+t^3}\\) has no elementary antiderivative).<br><br><b>Apply:</b> \\(F'(x)=\\sqrt{1+x^3}\\), so \\(F'(2)=\\sqrt{1+8}=\\sqrt9=3\\).<br><br><b>Why the distractors miss:</b> <b>0</b> comes from thinking "the integral from 2 to 2 is zero" — but that's \\(F(2)\\), the value, not \\(F'(2)\\), the rate. <b>2</b> is what you get by over-differentiating — taking the derivative <i>of the integrand</i> \\(\\tfrac{d}{dx}\\sqrt{1+x^3}=\\tfrac{3x^2}{2\\sqrt{1+x^3}}=\\tfrac{12}{6}=2\\) — but the FTC says you just evaluate the integrand, not differentiate it again. <b>\\(\\tfrac23\\)</b> tries to actually integrate (impossible here, and the wrong target). The FTC lets you skip integration entirely — recognizing that is the point.`},
+ {topic:"accum",prompt:"Let \\(G(x)=\\displaystyle\\int_0^{x^2}\\cos t\\,dt\\). Find \\(G'(x)\\).",
+  opts:[{t:"2x\\cos(x^2)",correct:true},{t:"\\cos(x^2)"},{t:"\\sin(x^2)"},{t:"2x\\sin(x^2)"}],
+  explain:`This is the FTC <b>with the chain rule</b>, because the upper limit is \\(x^2\\), not \\(x\\).<br><br><b>The rule:</b> if \\(G(x)=\\displaystyle\\int_0^{u(x)} g(t)\\,dt\\), then \\(G'(x)=g(u(x))\\cdot u'(x)\\) — plug the upper limit into the integrand, then multiply by the derivative of that upper limit.<br><b>Apply:</b> \\(g(t)=\\cos t\\), \\(u=x^2\\), \\(u'=2x\\). So \\(G'(x)=\\cos(x^2)\\cdot 2x=2x\\cos(x^2)\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\cos(x^2)\\)</b> forgets the chain-rule factor \\(2x\\) — the most common error. <b>\\(\\sin(x^2)\\)</b> integrates instead of evaluating (the FTC does <i>not</i> antidifferentiate here). <b>\\(2x\\sin(x^2)\\)</b> makes both mistakes at once.`},
+ {topic:"accum",prompt:"Water flows into a tank at a rate \\(r(t)=10e^{-0.2t}\\) gal/hr. How many gallons enter during the first 5 hours? (Calculator permitted.)",
+  opts:[{t:"50\\left(1-e^{-1}\\right)\\approx31.6",correct:true},{t:"10\\left(1-e^{-1}\\right)\\approx6.3"},{t:"50e^{-1}\\approx18.4"},{t:"10e^{-1}\\approx3.7"}],
+  explain:`<b>Amount = integral of rate:</b> gallons in \\(=\\displaystyle\\int_0^5 10e^{-0.2t}\\,dt\\).<br><br><b>Integrate:</b> \\(\\int 10e^{-0.2t}\\,dt=\\dfrac{10}{-0.2}e^{-0.2t}=-50e^{-0.2t}\\) (dividing by the inside-derivative \\(-0.2\\)). Evaluate: \\(\\big[-50e^{-0.2t}\\big]_0^5=-50e^{-1}-(-50)=50(1-e^{-1})\\approx31.6\\) gal.<br><br><b>Why the distractors miss:</b> <b>\\(10(1-e^{-1})\\)</b> forgets to divide by \\(0.2\\) (i.e. multiply by 5) when integrating the exponential. <b>\\(50e^{-1}\\)</b> keeps only the upper-limit term and drops the \\(-(-50)\\) from the lower limit. <b>\\(10e^{-1}\\)</b> makes both errors.`},
+ {topic:"accum",prompt:"A tank holds \\(100\\) gallons at \\(t=0\\). Water enters at \\(E(t)=20+5t\\) and leaves at \\(L(t)=3t\\) gal/hr. How much is in the tank at \\(t=4\\)?",
+  opts:[{t:"196",correct:true},{t:"96"},{t:"120"},{t:"296"}],
+  explain:`<b>Two-step accumulation:</b> the amount is the start plus the <i>net</i> accumulated change, \\(100+\\displaystyle\\int_0^4\\big[E(t)-L(t)\\big]dt\\).<br><br><b>Net rate first:</b> \\(E-L=(20+5t)-3t=20+2t\\). <b>Integrate:</b> \\(\\int_0^4(20+2t)\\,dt=\\big[20t+t^2\\big]_0^4=80+16=96\\) gal of net gain.<br><b>Add the start:</b> \\(100+96=196\\) gal.<br><br><b>Why the distractors miss:</b> <b>96</b> is the net change but forgets to add the initial \\(100\\) — the classic omission. <b>120</b> integrates only the inflow \\(E\\) (ignoring what leaves) <i>and</i> drops the start. <b>296</b> adds inflow to the start without subtracting outflow.`},
+ {topic:"accum",prompt:"Let \\(g(x)=\\displaystyle\\int_0^x f(t)\\,dt\\), where \\(f\\) is positive and increasing on \\([0,\\infty)\\). What can you conclude about \\(g\\)?",
+  opts:[{t:"g is increasing and concave up",correct:true},{t:"g is increasing and concave down"},{t:"g is decreasing and concave up"},{t:"g is constant"}],
+  explain:`Read \\(g\\)'s behavior off \\(f\\) through two derivatives.<br><br><b>First derivative:</b> by the FTC, \\(g'(x)=f(x)\\). Since \\(f>0\\), \\(g'>0\\), so \\(g\\) is <b>increasing</b>.<br><b>Second derivative:</b> \\(g''(x)=f'(x)\\). Since \\(f\\) is <i>increasing</i>, \\(f'>0\\), so \\(g''>0\\), meaning \\(g\\) is <b>concave up</b>.<br><br>The accumulation function inherits its <i>slope</i> from \\(f\\)'s value and its <i>concavity</i> from \\(f\\)'s slope.<br><br><b>Why the distractors miss:</b> "concave down" would need \\(f\\) <i>decreasing</i>. "decreasing" would need \\(f<0\\). "constant" would need \\(f=0\\). Each contradicts a given fact about \\(f\\).`},
+ {topic:"accum",prompt:"If \\(f(1)=2\\) and \\(f(4)=9\\), evaluate \\(\\displaystyle\\int_1^4 f'(x)\\,dx\\).",
+  opts:[{t:"7",correct:true},{t:"11"},{t:"5"},{t:"\\text{cannot be determined}"}],
+  explain:`<b>FTC, Part 2 (the net-change form):</b> \\(\\displaystyle\\int_a^b f'(x)\\,dx=f(b)-f(a)\\) — the integral of a rate of change recovers the total change in the original quantity. You don't need a formula for \\(f\\).<br><br><b>Apply:</b> \\(\\int_1^4 f'(x)\\,dx=f(4)-f(1)=9-2=7\\).<br><br><b>Why the distractors miss:</b> <b>11</b> <i>adds</i> the endpoint values \\(9+2\\) instead of subtracting. <b>5</b> uses the interval width \\(4-1=3\\) somewhere it doesn't belong, or subtracts the wrong way \\((9-2=7\\), not \\(2-(-3))\\). <b>"Cannot be determined"</b> is the trap for anyone who thinks you need \\(f\\) itself — the FTC says the endpoints are enough.`},
+
+ // ============ AREA (8) ============
+ {topic:"area",prompt:"Find the area of the region enclosed by the curves.",math:"y=x \\text{ and } y=x^2",
+  opts:[{t:"\\tfrac{1}{6}",correct:true},{t:"\\tfrac{1}{3}"},{t:"\\tfrac{1}{2}"},{t:"-\\tfrac{1}{6}"}],
+  explain:`<b>Step 1 — find the bounds:</b> set \\(x=x^2\\Rightarrow x(1-x)=0\\Rightarrow x=0,1\\).<br><b>Step 2 — decide top vs. bottom:</b> test \\(x=\\tfrac12\\): the line gives \\(0.5\\), the parabola \\(0.25\\), so \\(y=x\\) is on top.<br><b>Step 3 — integrate (top − bottom):</b> \\(\\displaystyle\\int_0^1(x-x^2)\\,dx=\\big[\\tfrac{x^2}{2}-\\tfrac{x^3}{3}\\big]_0^1=\\tfrac12-\\tfrac13=\\tfrac16\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac13\\)</b> integrates only \\(x^2\\) (forgetting to subtract). <b>\\(\\tfrac12\\)</b> integrates only the line. <b>\\(-\\tfrac16\\)</b> reverses top and bottom (bottom − top) — area is always positive, so a negative answer signals you flipped the order.`},
+ {topic:"area",prompt:"Find the area enclosed by \\(y=2x\\) and \\(y=x^2\\).",
+  opts:[{t:"\\tfrac{4}{3}",correct:true},{t:"\\tfrac{8}{3}"},{t:"2"},{t:"\\tfrac{2}{3}"}],
+  explain:`<b>Bounds:</b> \\(2x=x^2\\Rightarrow x(x-2)=0\\Rightarrow x=0,2\\).<br><b>Top vs. bottom:</b> at \\(x=1\\), line \\(=2\\), parabola \\(=1\\), so \\(y=2x\\) is on top.<br><b>Integrate:</b> \\(\\displaystyle\\int_0^2(2x-x^2)\\,dx=\\big[x^2-\\tfrac{x^3}{3}\\big]_0^2=4-\\tfrac83=\\tfrac43\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac83\\)</b> integrates only \\(x^2\\). <b>2</b> stops at \\(x^2\\big|_0^2=4\\) then mishandles the subtraction. <b>\\(\\tfrac23\\)</b> uses bounds \\([0,1]\\) instead of \\([0,2]\\) — failing to solve for <i>both</i> intersection points.`},
+ {topic:"area",prompt:"Find the area enclosed by \\(y=4-x^2\\) and the x-axis.",
+  opts:[{t:"\\tfrac{32}{3}",correct:true},{t:"\\tfrac{16}{3}"},{t:"16"},{t:"8"}],
+  explain:`<b>Bounds:</b> the parabola meets \\(y=0\\) where \\(4-x^2=0\\Rightarrow x=\\pm2\\).<br><b>Integrate</b> the curve (it's above the axis on \\((-2,2)\\)): \\(\\displaystyle\\int_{-2}^{2}(4-x^2)\\,dx\\). Using symmetry, \\(=2\\displaystyle\\int_0^2(4-x^2)\\,dx=2\\big[4x-\\tfrac{x^3}{3}\\big]_0^2=2\\big(8-\\tfrac83\\big)=2\\cdot\\tfrac{16}{3}=\\tfrac{32}{3}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac{16}{3}\\)</b> integrates over only \\([0,2]\\), forgetting the left half (a symmetry oversight). <b>16</b> drops the \\(-\\tfrac{x^3}{3}\\) term. <b>8</b> is the value of \\(4x\\big|_0^2\\) alone.`},
+ {topic:"area",prompt:"Find the total area between \\(y=\\sin x\\) and \\(y=\\cos x\\) on \\(\\left[\\tfrac{\\pi}{4},\\tfrac{5\\pi}{4}\\right]\\).",
+  opts:[{t:"2\\sqrt{2}",correct:true},{t:"\\sqrt{2}"},{t:"2"},{t:"0"}],
+  explain:`<b>Which is on top?</b> On \\(\\left(\\tfrac\\pi4,\\tfrac{5\\pi}4\\right)\\), \\(\\sin x\\ge\\cos x\\) (they cross at \\(\\tfrac\\pi4\\) and again at \\(\\tfrac{5\\pi}4\\)). So integrate \\(\\sin x-\\cos x\\) — no further splitting needed inside this interval.<br><b>Integrate:</b> \\(\\displaystyle\\int_{\\pi/4}^{5\\pi/4}(\\sin x-\\cos x)\\,dx=\\big[-\\cos x-\\sin x\\big]_{\\pi/4}^{5\\pi/4}\\). At \\(\\tfrac{5\\pi}4\\): \\(-(-\\tfrac{\\sqrt2}2)-(-\\tfrac{\\sqrt2}2)=\\sqrt2\\). At \\(\\tfrac\\pi4\\): \\(-\\tfrac{\\sqrt2}2-\\tfrac{\\sqrt2}2=-\\sqrt2\\). Difference: \\(\\sqrt2-(-\\sqrt2)=2\\sqrt2\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\sqrt2\\)</b> evaluates only the upper limit. <b>0</b> is what you'd get integrating without the absolute-value reasoning, if you (wrongly) let the curves swap top/bottom mid-interval. <b>2</b> drops the \\(\\sqrt{}\\) factors.`},
+ {topic:"area",prompt:"The region bounded by \\(x=y^2\\) and \\(x=y+2\\) is most efficiently found by integrating in \\(y\\). Its area is:",
+  opts:[{t:"\\tfrac{9}{2}",correct:true},{t:"\\tfrac{7}{2}"},{t:"9"},{t:"\\tfrac{27}{6} \\text{ via } dx"}],
+  explain:`These are <b>sideways</b> curves (functions of \\(y\\)), so integrate in \\(y\\): the parabola \\(x=y^2\\) fails the vertical-line test, making \\(dx\\) awkward.<br><b>Bounds (in \\(y\\)):</b> \\(y^2=y+2\\Rightarrow y^2-y-2=0\\Rightarrow(y-2)(y+1)=0\\Rightarrow y=-1,2\\).<br><b>Right minus left:</b> on this range the line \\(x=y+2\\) is to the right of the parabola. \\(\\displaystyle\\int_{-1}^{2}\\big[(y+2)-y^2\\big]dy=\\big[\\tfrac{y^2}{2}+2y-\\tfrac{y^3}{3}\\big]_{-1}^{2}=\\tfrac{10}{3}-\\left(-\\tfrac76\\right)=\\tfrac{9}{2}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac72\\)</b> swaps right and left. <b>9</b> doubles via a symmetry that isn't there. The \\(dx\\) option is a reminder that forcing \\(x\\)-integration here means splitting into two messy pieces — the wrong tool.`},
+ {topic:"area",prompt:"Let \\(R\\) be the region between \\(y=e^x\\) and \\(y=2-x^2\\). Which expression gives its area? (Intersection points \\(a,b\\) found by calculator.)",
+  opts:[{t:"\\displaystyle\\int_a^b\\big[(2-x^2)-e^x\\big]dx",correct:true},{t:"\\displaystyle\\int_a^b\\big[e^x-(2-x^2)\\big]dx"},{t:"\\displaystyle\\int_a^b\\big[(2-x^2)-e^x\\big]dy"},{t:"\\pi\\displaystyle\\int_a^b\\big[(2-x^2)-e^x\\big]dx"}],
+  explain:`<b>Set up before computing:</b> the curves cross at two points \\(a\\approx-1.32\\) and \\(b\\approx0.54\\) (solve \\(e^x=2-x^2\\) numerically). Between them, test \\(x=0\\): the parabola gives \\(2\\), the exponential gives \\(1\\), so \\(2-x^2\\) is on top.<br><b>Area = top − bottom:</b> \\(\\displaystyle\\int_a^b\\big[(2-x^2)-e^x\\big]dx\\;(\\approx1.45)\\).<br><br><b>Why the distractors miss:</b> the second option has top and bottom <i>reversed</i> (gives a negative). The \\(dy\\) option mismatches the differential — everything is written in \\(x\\). The \\(\\pi\\int\\dots\\) option is a <i>volume</i> formula — there's no revolution here, so no \\(\\pi\\).`},
+ {topic:"area",prompt:"Find the area enclosed by \\(y=x^3\\) and \\(y=x\\).",
+  opts:[{t:"\\tfrac{1}{2}",correct:true},{t:"\\tfrac{1}{4}"},{t:"0"},{t:"\\tfrac{1}{6}"}],
+  explain:`<b>Bounds:</b> \\(x^3=x\\Rightarrow x(x^2-1)=0\\Rightarrow x=-1,0,1\\) — <i>three</i> intersections, so the region has two symmetric lobes.<br><b>Top vs bottom flips:</b> on \\((0,1)\\), \\(x>x^3\\); on \\((-1,0)\\), \\(x^3>x\\). By symmetry the two lobes have equal area, so compute one and double: \\(2\\displaystyle\\int_0^1(x-x^3)\\,dx=2\\big[\\tfrac{x^2}{2}-\\tfrac{x^4}{4}\\big]_0^1=2\\cdot\\tfrac14=\\tfrac12\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac14\\)</b> computes only one lobe — forgetting the curves cross at \\(x=-1\\) too. <b>0</b> integrates \\(\\int_{-1}^1(x-x^3)\\) directly, letting the odd function cancel (which is exactly why you must use \\(|{\\cdot}|\\) / symmetry). <b>\\(\\tfrac16\\)</b> uses the wrong pair of curves.`},
+ {topic:"area",prompt:"Find the area enclosed by \\(y=\\sqrt{x}\\) and \\(y=x\\) on \\([0,1]\\).",
+  opts:[{t:"\\tfrac{1}{6}",correct:true},{t:"\\tfrac{1}{3}"},{t:"\\tfrac{1}{2}"},{t:"\\tfrac{5}{6}"}],
+  explain:`<b>Top vs bottom:</b> on \\((0,1)\\), \\(\\sqrt{x}>x\\) (e.g. at \\(x=\\tfrac14\\), \\(\\sqrt{x}=0.5>0.25\\)).<br><b>Integrate (top − bottom):</b> \\(\\displaystyle\\int_0^1(\\sqrt{x}-x)\\,dx=\\big[\\tfrac23 x^{3/2}-\\tfrac{x^2}{2}\\big]_0^1=\\tfrac23-\\tfrac12=\\tfrac16\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac13\\)</b> integrates only \\(\\sqrt x\\) (\\(\\tfrac23 x^{3/2}\\big|_0^1=\\tfrac23\\)) and mishandles the rest. <b>\\(\\tfrac12\\)</b> integrates only the line. <b>\\(\\tfrac56\\)</b> adds the two areas instead of subtracting — the opposite of "top minus bottom."`},
+
+ // ============ CROSS SECTIONS (7) ============
+ {topic:"xsec",prompt:"The base of a solid is the region under \\(y=\\sqrt{x}\\) on \\([0,4]\\). Cross sections perpendicular to the x-axis are squares. Find the volume.",
+  opts:[{t:"8",correct:true},{t:"4"},{t:"16"},{t:"\\tfrac{32}{3}"}],
+  explain:`<b>The method:</b> volume by cross sections is \\(\\displaystyle\\int_a^b A(x)\\,dx\\) — find the area of one slice as a function of \\(x\\), then integrate. No \\(\\pi\\) (these are squares, not circles).<br><b>One slice:</b> the side of the square is the height of the region, \\(s=\\sqrt{x}\\), so its area is \\(A=s^2=(\\sqrt{x})^2=x\\).<br><b>Integrate:</b> \\(\\displaystyle\\int_0^4 x\\,dx=\\big[\\tfrac{x^2}{2}\\big]_0^4=8\\).<br><br><b>Why the distractors miss:</b> <b>4</b> integrates \\(\\sqrt{x}\\) without squaring (using the side as the area). <b>16</b> forgets the \\(\\tfrac12\\) from the power rule. <b>\\(\\tfrac{32}{3}\\)</b> squares wrong or uses the area-between-curves value rather than a cross-section area.`},
+ {topic:"xsec",prompt:"The base is bounded by \\(y=1-x^2\\) and the x-axis. Cross sections perpendicular to the x-axis are semicircles with diameter on the base. Find the volume.",
+  opts:[{t:"\\tfrac{2\\pi}{15}",correct:true},{t:"\\tfrac{16}{15}"},{t:"\\tfrac{\\pi}{15}"},{t:"\\tfrac{4\\pi}{15}"}],
+  explain:`<b>One slice — careful with the radius.</b> The <i>diameter</i> equals the region's height \\(s=1-x^2\\), so the radius is \\(\\tfrac{s}{2}\\). A semicircle's area is \\(\\tfrac12\\pi r^2=\\tfrac12\\pi\\left(\\tfrac{s}{2}\\right)^2=\\tfrac{\\pi}{8}s^2\\).<br><b>Integrate:</b> \\(\\dfrac{\\pi}{8}\\displaystyle\\int_{-1}^{1}(1-x^2)^2\\,dx=\\dfrac{\\pi}{8}\\cdot\\dfrac{16}{15}=\\dfrac{2\\pi}{15}\\) (using \\(\\int_{-1}^1(1-2x^2+x^4)=\\tfrac{16}{15}\\)).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac{16}{15}\\)</b> is the <i>square</i> cross-section volume — it forgets the \\(\\tfrac\\pi8\\) shape factor entirely. <b>\\(\\tfrac{4\\pi}{15}\\)</b> uses \\(\\tfrac\\pi2 s^2\\) (treating \\(s\\) as the radius, not the diameter). The "halve the diameter" step is the whole trap.`},
+ {topic:"xsec",prompt:"The base is the region between \\(y=x\\) and \\(y=x^2\\). Cross sections perpendicular to the x-axis are squares. Find the volume.",
+  opts:[{t:"\\tfrac{1}{30}",correct:true},{t:"\\tfrac{1}{6}"},{t:"\\tfrac{1}{12}"},{t:"\\tfrac{1}{15}"}],
+  explain:`<b>One slice:</b> the side spans between the two curves, \\(s=x-x^2\\) (top − bottom, with \\(x\\ge x^2\\) on \\([0,1]\\)). Area \\(A=s^2=(x-x^2)^2\\).<br><b>Expand and integrate:</b> \\((x-x^2)^2=x^2-2x^3+x^4\\), so \\(\\displaystyle\\int_0^1(x^2-2x^3+x^4)\\,dx=\\tfrac13-\\tfrac12+\\tfrac15=\\tfrac{10-15+6}{30}=\\tfrac{1}{30}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac16\\)</b> is the <i>area</i> of the base region \\(\\int(x-x^2)\\) — forgetting to square for a cross-section volume. <b>\\(\\tfrac{1}{12}\\)</b> drops a term in the expansion. <b>\\(\\tfrac{1}{15}\\)</b> mishandles the middle \\(-2x^3\\) term.`},
+ {topic:"xsec",prompt:"The base is the region under \\(y=\\cos x\\) on \\(\\left[0,\\tfrac{\\pi}{2}\\right]\\). Cross sections perpendicular to the x-axis are squares. Find the volume.",
+  opts:[{t:"\\tfrac{\\pi}{4}",correct:true},{t:"1"},{t:"\\tfrac{\\pi}{2}"},{t:"2"}],
+  explain:`<b>One slice:</b> side \\(s=\\cos x\\), area \\(A=\\cos^2 x\\).<br><b>Integrate using the power-reduction identity</b> \\(\\cos^2 x=\\dfrac{1+\\cos 2x}{2}\\): \\(\\displaystyle\\int_0^{\\pi/2}\\cos^2 x\\,dx=\\Big[\\tfrac{x}{2}+\\tfrac{\\sin 2x}{4}\\Big]_0^{\\pi/2}=\\tfrac\\pi4+0=\\tfrac\\pi4\\).<br><br><b>Why the distractors miss:</b> <b>1</b> is \\(\\int_0^{\\pi/2}\\cos x\\,dx\\) — the side, not the side squared. <b>\\(\\tfrac\\pi2\\)</b> integrates the constant \\(\\tfrac12\\) but forgets the \\(\\cos 2x\\) handling cancels to leave \\(\\tfrac\\pi4\\). <b>2</b> ignores the squaring entirely. The identity for \\(\\cos^2\\) is the needed tool.`},
+ {topic:"xsec",prompt:"The base is bounded by \\(y=1-x^2\\) and the x-axis. Cross sections perpendicular to the x-axis are isosceles right triangles with a leg on the base. Find the volume.",
+  opts:[{t:"\\tfrac{8}{15}",correct:true},{t:"\\tfrac{16}{15}"},{t:"\\tfrac{4}{15}"},{t:"\\tfrac{2}{15}"}],
+  explain:`<b>One slice:</b> for an isosceles right triangle with both legs equal to \\(s\\), the area is \\(\\tfrac12(\\text{leg})(\\text{leg})=\\tfrac12 s^2\\). Here the leg is the region's height, \\(s=1-x^2\\).<br><b>Integrate:</b> \\(\\tfrac12\\displaystyle\\int_{-1}^{1}(1-x^2)^2\\,dx=\\tfrac12\\cdot\\tfrac{16}{15}=\\tfrac{8}{15}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac{16}{15}\\)</b> is the square-cross-section volume — forgetting the \\(\\tfrac12\\) for a triangle. <b>\\(\\tfrac{4}{15}\\)</b> uses \\(\\tfrac14 s^2\\) (as if the hypotenuse were the leg). <b>\\(\\tfrac{2}{15}\\)</b> applies the semicircle factor by mistake. Matching the shape's area formula to "what is \\(s\\)" is the skill.`},
+ {topic:"xsec",prompt:"For a solid whose cross sections perpendicular to the x-axis have area \\(A(x)\\), the volume on \\([a,b]\\) is:",
+  opts:[{t:"\\displaystyle\\int_a^b A(x)\\,dx",correct:true},{t:"\\displaystyle\\int_a^b \\big[A(x)\\big]^2\\,dx"},{t:"\\pi\\displaystyle\\int_a^b A(x)\\,dx"},{t:"\\displaystyle\\int_a^b A(x)\\,dy"}],
+  explain:`<b>The fundamental idea:</b> slice the solid into thin slabs of thickness \\(dx\\); each has volume \\(A(x)\\,dx\\); add them up: \\(V=\\displaystyle\\int_a^b A(x)\\,dx\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\int [A(x)]^2\\)</b> squares the area — but any squaring already happened <i>inside</i> \\(A(x)\\) when you computed the slice's shape; you don't square again. <b>\\(\\pi\\int A(x)\\)</b> tacks on a \\(\\pi\\) that only belongs when the slice is a circle (and even then it's inside \\(A\\)). <b>\\(\\int A(x)\\,dy\\)</b> mismatches the differential — slices ⊥ to the x-axis are summed along \\(x\\), so it's \\(dx\\).`},
+ {topic:"xsec",prompt:"The base is bounded by \\(x=y^2\\) and the y-axis for \\(0\\le y\\le 2\\). Cross sections perpendicular to the <b>y-axis</b> are squares. Find the volume.",
+  opts:[{t:"\\tfrac{32}{5}",correct:true},{t:"\\tfrac{8}{3}"},{t:"\\tfrac{16}{5}"},{t:"\\tfrac{32}{3}"}],
+  explain:`<b>Slices ⊥ to the y-axis ⇒ integrate in \\(y\\).</b> Everything must be written in terms of \\(y\\), and the thickness is \\(dy\\).<br><b>One slice:</b> the side runs from the y-axis (\\(x=0\\)) to the curve \\(x=y^2\\), so \\(s=y^2\\) and area \\(A=(y^2)^2=y^4\\).<br><b>Integrate:</b> \\(\\displaystyle\\int_0^2 y^4\\,dy=\\big[\\tfrac{y^5}{5}\\big]_0^2=\\tfrac{32}{5}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac83\\)</b> integrates \\(y^2\\) (the side, not its square) — i.e. treats \\(s\\) as the area. <b>\\(\\tfrac{32}{3}\\)</b> integrates in \\(x\\) by mistake, ignoring that the slices force \\(dy\\). <b>\\(\\tfrac{16}{5}\\)</b> halves erroneously. Reading "⊥ to the y-axis" and switching to \\(y\\) is the whole move.`},
+
+ // ============ SOLIDS (10) ============
+ {topic:"solid",prompt:"The region under \\(y=\\sqrt{x}\\) on \\([0,4]\\) is revolved about the x-axis. Find the volume.",
+  opts:[{t:"8\\pi",correct:true},{t:"16\\pi"},{t:"\\tfrac{8\\pi}{3}"},{t:"4\\pi"}],
+  explain:`<b>Disc method:</b> revolving about the x-axis with no gap underneath gives discs of radius \\(R=f(x)\\) and area \\(\\pi R^2\\). Volume \\(=\\pi\\displaystyle\\int_a^b[f(x)]^2\\,dx\\).<br><b>Apply:</b> \\(R=\\sqrt{x}\\), so \\(R^2=x\\). \\(V=\\pi\\displaystyle\\int_0^4 x\\,dx=\\pi\\big[\\tfrac{x^2}{2}\\big]_0^4=8\\pi\\).<br><br><b>Why the distractors miss:</b> <b>\\(16\\pi\\)</b> forgets the \\(\\tfrac12\\) from integrating \\(x\\). <b>\\(\\tfrac{8\\pi}{3}\\)</b> comes from \\((\\sqrt x)^2\\) being mistaken or integrating \\(x^2\\). <b>\\(4\\pi\\)</b> drops the \\(\\pi\\) somewhere or uses radius without squaring. Square the radius, keep the \\(\\pi\\) outside.`},
+ {topic:"solid",prompt:"The region under \\(y=x^2\\) on \\([0,2]\\) is revolved about the x-axis. Find the volume.",
+  opts:[{t:"\\tfrac{32\\pi}{5}",correct:true},{t:"\\tfrac{8\\pi}{3}"},{t:"\\tfrac{32\\pi}{3}"},{t:"4\\pi"}],
+  explain:`<b>Disc method:</b> \\(R=x^2\\), so you must square the <i>whole</i> radius: \\(R^2=(x^2)^2=x^4\\).<br><b>Integrate:</b> \\(V=\\pi\\displaystyle\\int_0^2 x^4\\,dx=\\pi\\big[\\tfrac{x^5}{5}\\big]_0^2=\\tfrac{32\\pi}{5}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac{8\\pi}{3}\\)</b> squares to \\(x^2\\) instead of \\(x^4\\) (squaring the exponent's base only) — \\(\\pi\\int x^2=\\tfrac{8\\pi}{3}\\). This is <i>the</i> classic error with \\(y=x^2\\). <b>\\(\\tfrac{32\\pi}{3}\\)</b> integrates \\(x^4\\) but uses the wrong power-rule denominator. <b>\\(4\\pi\\)</b> loses the radius-squaring entirely.`},
+ {topic:"solid",prompt:"The region between \\(y=x\\) and \\(y=x^2\\) is revolved about the x-axis. Find the volume.",
+  opts:[{t:"\\tfrac{2\\pi}{15}",correct:true},{t:"\\tfrac{\\pi}{6}"},{t:"\\tfrac{\\pi}{15}"},{t:"\\tfrac{8\\pi}{15}"}],
+  explain:`<b>Washer method:</b> there's a gap between the curves, so each slice is a washer: \\(\\pi(R^2-r^2)\\). Outer radius is the curve farther from the axis: on \\([0,1]\\), \\(y=x\\) is above \\(y=x^2\\), so \\(R=x\\), \\(r=x^2\\).<br><b>Integrate:</b> \\(V=\\pi\\displaystyle\\int_0^1\\big[x^2-(x^2)^2\\big]dx=\\pi\\displaystyle\\int_0^1(x^2-x^4)\\,dx=\\pi\\big(\\tfrac13-\\tfrac15\\big)=\\tfrac{2\\pi}{15}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac\\pi6\\)</b> uses \\(\\pi\\int(x-x^2)\\) — the area-between-curves integrand, forgetting to <i>square</i> each radius. <b>\\(\\tfrac{8\\pi}{15}\\)</b> computes \\((R-r)^2\\) instead of \\(R^2-r^2\\) — you must subtract the squares, not square the difference.`},
+ {topic:"solid",prompt:"A washer cross section has outer radius \\(R=4\\) and inner radius \\(r=1\\). Its area is:",
+  opts:[{t:"15\\pi",correct:true},{t:"9\\pi"},{t:"3\\pi"},{t:"7\\pi"}],
+  explain:`<b>Washer area</b> is the big disc minus the hole: \\(\\pi R^2-\\pi r^2=\\pi(R^2-r^2)\\).<br><b>Apply:</b> \\(\\pi(4^2-1^2)=\\pi(16-1)=15\\pi\\).<br><br><b>Why the distractors miss:</b> <b>\\(9\\pi\\)</b> is the textbook trap \\(\\pi(R-r)^2=\\pi(3)^2=9\\pi\\) — squaring the <i>difference</i> of radii instead of subtracting their squares. These are not equal: \\(R^2-r^2=15\\) but \\((R-r)^2=9\\). <b>\\(3\\pi\\)</b> is \\(\\pi(R-r)\\). <b>\\(7\\pi\\)</b> mis-squares one radius.`},
+ {topic:"solid",prompt:"The region under \\(y=\\sqrt{x}\\) on \\([0,4]\\) is revolved about the line \\(y=-2\\). Find the volume.",
+  opts:[{t:"\\tfrac{88\\pi}{3}",correct:true},{t:"8\\pi"},{t:"\\tfrac{64\\pi}{3}",},{t:"\\tfrac{40\\pi}{3}"}],
+  explain:`<b>Shifting the axis creates a washer.</b> Distances are measured from \\(y=-2\\): the outer radius reaches the curve, \\(R=\\sqrt{x}-(-2)=\\sqrt{x}+2\\); the inner radius reaches the x-axis (the region's bottom), \\(r=0-(-2)=2\\).<br><b>Integrate:</b> \\(V=\\pi\\displaystyle\\int_0^4\\big[(\\sqrt{x}+2)^2-2^2\\big]dx=\\pi\\displaystyle\\int_0^4\\big[(x+4\\sqrt{x}+4)-4\\big]dx=\\pi\\displaystyle\\int_0^4(x+4\\sqrt{x})\\,dx=\\pi\\big[\\tfrac{x^2}{2}+\\tfrac{8}{3}x^{3/2}\\big]_0^4=\\pi\\big(8+\\tfrac{64}{3}\\big)=\\tfrac{88\\pi}{3}\\).<br><br><b>Why the distractors miss:</b> <b>\\(8\\pi\\)</b> ignores the shift entirely (the un-shifted disc volume). <b>\\(\\tfrac{64\\pi}{3}\\)</b> forgets the inner radius \\(r=2\\) (treats it as a disc). <b>\\(\\tfrac{40\\pi}{3}\\)</b> mishandles the \\((\\sqrt x+2)^2\\) expansion.`},
+ {topic:"solid",prompt:"The region bounded by \\(y=2\\), \\(y=x\\), and the y-axis (\\(0\\le x\\le 2\\)) is revolved about the x-axis. Find the volume.",
+  opts:[{t:"\\tfrac{16\\pi}{3}",correct:true},{t:"\\tfrac{8\\pi}{3}"},{t:"4\\pi"},{t:"8\\pi"}],
+  explain:`<b>Washer about the x-axis:</b> the top of the region is \\(y=2\\) (outer, \\(R=2\\)), the lower boundary is \\(y=x\\) (inner, \\(r=x\\)).<br><b>Integrate:</b> \\(V=\\pi\\displaystyle\\int_0^2(2^2-x^2)\\,dx=\\pi\\big[4x-\\tfrac{x^3}{3}\\big]_0^2=\\pi\\big(8-\\tfrac83\\big)=\\tfrac{16\\pi}{3}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac{8\\pi}{3}\\)</b> uses only the inner cone \\(\\pi\\int x^2\\) (forgetting the outer cylinder). <b>\\(8\\pi\\)</b> uses only the outer cylinder \\(\\pi\\int 4\\). <b>\\(4\\pi\\)</b> drops the \\(-\\tfrac{x^3}{3}\\). The washer needs <i>both</i> radii.`},
+ {topic:"solid",prompt:"The region under \\(y=\\sin x\\) on \\([0,\\pi]\\) is revolved about the x-axis. Find the volume.",
+  opts:[{t:"\\tfrac{\\pi^2}{2}",correct:true},{t:"\\tfrac{\\pi}{2}"},{t:"2\\pi"},{t:"\\pi^2"}],
+  explain:`<b>Disc method:</b> \\(V=\\pi\\displaystyle\\int_0^\\pi\\sin^2 x\\,dx\\) — and the key is integrating \\(\\sin^2\\) via the identity \\(\\sin^2 x=\\dfrac{1-\\cos 2x}{2}\\).<br><b>Integrate:</b> \\(\\displaystyle\\int_0^\\pi\\sin^2 x\\,dx=\\Big[\\tfrac{x}{2}-\\tfrac{\\sin 2x}{4}\\Big]_0^\\pi=\\tfrac\\pi2\\). Then \\(V=\\pi\\cdot\\tfrac\\pi2=\\tfrac{\\pi^2}{2}\\approx4.93\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac\\pi2\\)</b> is the integral \\(\\int\\sin^2\\) without the leading \\(\\pi\\) from the disc formula. <b>\\(\\pi^2\\)</b> uses \\(\\int_0^\\pi\\sin^2=\\pi\\) (forgetting the \\(\\tfrac12\\) in the identity). <b>\\(2\\pi\\)</b> is \\(\\pi\\int_0^\\pi\\sin x\\,dx=\\pi\\cdot2\\) — integrating \\(\\sin x\\) instead of \\(\\sin^2 x\\).`},
+ {topic:"solid",prompt:"The region bounded by \\(y=x^2\\) and \\(y=4\\) (for \\(0\\le x\\le 2\\)) is revolved about the line \\(y=4\\). Find the volume.",
+  opts:[{t:"\\tfrac{256\\pi}{15}",correct:true},{t:"\\tfrac{32\\pi}{5}"},{t:"\\tfrac{128\\pi}{15}"},{t:"8\\pi"}],
+  explain:`<b>Revolving about the top boundary \\(y=4\\):</b> the radius is the distance from \\(y=4\\) down to the curve, \\(R=4-x^2\\). The region touches \\(y=4\\), so there's no hole — discs, not washers.<br><b>Integrate:</b> \\(V=\\pi\\displaystyle\\int_0^2(4-x^2)^2\\,dx=\\pi\\displaystyle\\int_0^2(16-8x^2+x^4)\\,dx=\\pi\\big[16x-\\tfrac{8x^3}{3}+\\tfrac{x^5}{5}\\big]_0^2=\\pi\\big(32-\\tfrac{64}{3}+\\tfrac{32}{5}\\big)=\\tfrac{256\\pi}{15}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac{32\\pi}{5}\\)</b> uses \\(R=x^2\\) (revolving about the x-axis, not \\(y=4\\)). <b>\\(\\tfrac{128\\pi}{15}\\)</b> drops a term in the \\((4-x^2)^2\\) expansion. <b>\\(8\\pi\\)</b> forgets to square the radius. Measuring the radius <i>from the axis of revolution</i> is the key.`},
+ {topic:"solid",prompt:"The region under \\(y=x^2\\) (for \\(0\\le x\\le 2\\)) is revolved about the <b>y-axis</b>. Set up in \\(y\\); the volume is:",
+  opts:[{t:"8\\pi",correct:true},{t:"\\tfrac{32\\pi}{5}"},{t:"\\tfrac{16\\pi}{3}"},{t:"4\\pi"}],
+  explain:`<b>About the y-axis ⇒ integrate in \\(y\\),</b> with radius measured horizontally. The solid (a paraboloid-shaped region between the curve and the y-axis, capped at \\(y=4\\)) is a washer in \\(y\\): outer radius \\(x=2\\), inner radius \\(x=\\sqrt{y}\\) (solving \\(y=x^2\\)).<br><b>Integrate:</b> \\(V=\\pi\\displaystyle\\int_0^4\\big[2^2-(\\sqrt{y})^2\\big]dy=\\pi\\displaystyle\\int_0^4(4-y)\\,dy=\\pi\\big[4y-\\tfrac{y^2}{2}\\big]_0^4=\\pi(16-8)=8\\pi\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac{32\\pi}{5}\\)</b> revolves about the x-axis instead. <b>\\(\\tfrac{16\\pi}{3}\\)</b> mishandles the washer radii. <b>\\(4\\pi\\)</b> uses a single disc. Recognizing "y-axis ⇒ rewrite in \\(y\\)" is the move.`},
+ {topic:"solid",prompt:"Which integral gives the volume when the region under \\(y=f(x)\\) on \\([a,b]\\) (with \\(f\\ge0\\)) is revolved about the x-axis?",
+  opts:[{t:"\\pi\\displaystyle\\int_a^b [f(x)]^2\\,dx",correct:true},{t:"\\pi\\displaystyle\\int_a^b f(x)\\,dx"},{t:"2\\pi\\displaystyle\\int_a^b f(x)\\,dx"},{t:"\\displaystyle\\int_a^b [f(x)]^2\\,dx"}],
+  explain:`<b>Disc method, from scratch:</b> each thin slice is a disc of radius \\(R=f(x)\\); a disc's area is \\(\\pi R^2=\\pi[f(x)]^2\\); stacking them with thickness \\(dx\\) gives \\(V=\\pi\\displaystyle\\int_a^b[f(x)]^2\\,dx\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\pi\\int f(x)\\,dx\\)</b> forgets to square the radius — that integral is \\(\\pi\\times\\)area, not a volume. <b>\\(2\\pi\\int f(x)\\,dx\\)</b> is the <i>shell</i> setup (and even then needs a radius factor) — not the disc method. <b>\\(\\int[f(x)]^2\\,dx\\)</b> drops the \\(\\pi\\) that comes from a circle's area.`},
+
+ // ============ ARC LENGTH (6) ============
+ {topic:"arc",prompt:"Which integral gives the arc length of \\(y=x^2\\) from \\(x=0\\) to \\(x=2\\)?",
+  opts:[{t:"\\displaystyle\\int_0^2\\sqrt{1+4x^2}\\,dx",correct:true},{t:"\\displaystyle\\int_0^2\\sqrt{1+x^2}\\,dx"},{t:"\\displaystyle\\int_0^2\\sqrt{1+2x}\\,dx"},{t:"\\displaystyle\\int_0^2(1+4x^2)\\,dx"}],
+  explain:`<b>Arc length formula:</b> \\(L=\\displaystyle\\int_a^b\\sqrt{1+[f'(x)]^2}\\,dx\\). The work is: differentiate, square, add 1, root.<br><b>Apply:</b> \\(f'(x)=2x\\), so \\([f'(x)]^2=(2x)^2=4x^2\\). The integrand is \\(\\sqrt{1+4x^2}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\sqrt{1+x^2}\\)</b> forgets to square the coefficient — \\((2x)^2=4x^2\\), not \\(x^2\\). <b>\\(\\sqrt{1+2x}\\)</b> uses \\(f'\\) without squaring it. <b>\\(\\int(1+4x^2)\\)</b> drops the square root entirely (that would compute something with area-like units, not length).`},
+ {topic:"arc",prompt:"Find the exact arc length of \\(y=\\tfrac{2}{3}x^{3/2}\\) from \\(x=0\\) to \\(x=3\\).",
+  opts:[{t:"\\tfrac{14}{3}",correct:true},{t:"\\tfrac{7}{3}"},{t:"\\tfrac{28}{3}"},{t:"\\tfrac{13}{3}"}],
+  explain:`<b>Differentiate:</b> \\(f'(x)=\\tfrac23\\cdot\\tfrac32 x^{1/2}=x^{1/2}=\\sqrt{x}\\).<br><b>Build the integrand:</b> \\(1+(f')^2=1+x\\) — the square root simplifies to \\(\\sqrt{1+x}\\), which is exactly why this curve is chosen.<br><b>Integrate:</b> \\(L=\\displaystyle\\int_0^3\\sqrt{1+x}\\,dx=\\big[\\tfrac23(1+x)^{3/2}\\big]_0^3=\\tfrac23(4^{3/2}-1)=\\tfrac23(8-1)=\\tfrac{14}{3}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac73\\)</b> forgets the \\(\\tfrac23\\) factor or halves the result. <b>\\(\\tfrac{28}{3}\\)</b> doubles it. <b>\\(\\tfrac{13}{3}\\)</b> uses \\(4^{3/2}=7\\) (arithmetic slip — \\(4^{3/2}=8\\), since \\(4^{1/2}=2\\) then cubed).`},
+ {topic:"arc",prompt:"For \\(y=\\tfrac{x^3}{6}+\\tfrac{1}{2x}\\), the quantity \\(1+(f')^2\\) is a perfect square. Which is it?",
+  opts:[{t:"\\left(\\tfrac{x^2}{2}+\\tfrac{1}{2x^2}\\right)^2",correct:true},{t:"\\left(\\tfrac{x^2}{2}-\\tfrac{1}{2x^2}\\right)^2"},{t:"\\left(x+\\tfrac{1}{x}\\right)^2"},{t:"\\left(\\tfrac{x^3}{6}+\\tfrac{1}{2x}\\right)^2"}],
+  explain:`<b>Differentiate:</b> \\(f'=\\tfrac{x^2}{2}-\\tfrac{1}{2x^2}\\). Square it: \\((f')^2=\\tfrac{x^4}{4}-\\tfrac12+\\tfrac{1}{4x^4}\\) (the cross term is \\(2\\cdot\\tfrac{x^2}{2}\\cdot\\tfrac{1}{2x^2}=\\tfrac12\\), and it's negative).<br><b>Add 1:</b> the \\(-\\tfrac12\\) becomes \\(+\\tfrac12\\): \\(1+(f')^2=\\tfrac{x^4}{4}+\\tfrac12+\\tfrac{1}{4x^4}=\\left(\\tfrac{x^2}{2}+\\tfrac{1}{2x^2}\\right)^2\\). Adding 1 flips the middle sign, turning the difference-squared into a sum-squared.<br><br><b>Why the distractors miss:</b> <b>\\(\\left(\\tfrac{x^2}{2}-\\tfrac{1}{2x^2}\\right)^2\\)</b> is just \\((f')^2\\) — forgetting to add the 1. <b>\\((x+\\tfrac1x)^2\\)</b> and the last option don't expand to the right terms. Spotting that \\(+1\\) completes the square is the entire by-hand arc-length skill.`},
+ {topic:"arc",prompt:"Find the arc length of \\(y=\\tfrac{x^3}{6}+\\tfrac{1}{2x}\\) from \\(x=1\\) to \\(x=2\\).",
+  opts:[{t:"\\tfrac{17}{12}",correct:true},{t:"\\tfrac{13}{12}"},{t:"\\tfrac{5}{3}"},{t:"\\tfrac{11}{12}"}],
+  explain:`<b>Use the perfect square:</b> \\(\\sqrt{1+(f')^2}=\\sqrt{\\left(\\tfrac{x^2}{2}+\\tfrac{1}{2x^2}\\right)^2}=\\tfrac{x^2}{2}+\\tfrac{1}{2x^2}\\) (positive on \\([1,2]\\), so no absolute value needed).<br><b>Integrate:</b> \\(L=\\displaystyle\\int_1^2\\left(\\tfrac{x^2}{2}+\\tfrac{1}{2x^2}\\right)dx=\\big[\\tfrac{x^3}{6}-\\tfrac{1}{2x}\\big]_1^2\\). At \\(x=2\\): \\(\\tfrac86-\\tfrac14=\\tfrac{4}{3}-\\tfrac14\\). At \\(x=1\\): \\(\\tfrac16-\\tfrac12\\). Subtracting: \\(\\left(\\tfrac43-\\tfrac14\\right)-\\left(\\tfrac16-\\tfrac12\\right)=\\tfrac{17}{12}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\tfrac{11}{12}\\)</b> and <b>\\(\\tfrac{13}{12}\\)</b> come from sign slips in evaluating \\(-\\tfrac{1}{2x}\\) at the bounds (a very common spot to drop a negative). <b>\\(\\tfrac53\\)</b> integrates the wrong antiderivative.`},
+ {topic:"arc",prompt:"Which integral gives the length of \\(y=\\tan x\\) from \\(x=a\\) to \\(x=b\\) (with \\(0<a<b<\\tfrac{\\pi}{2}\\))?",
+  opts:[{t:"\\displaystyle\\int_a^b\\sqrt{1+\\sec^4 x}\\,dx",correct:true},{t:"\\displaystyle\\int_a^b\\sqrt{1+\\sec^2 x}\\,dx"},{t:"\\displaystyle\\int_a^b\\sqrt{1+\\tan^2 x}\\,dx"},{t:"\\displaystyle\\int_a^b\\sec^2 x\\,dx"}],
+  explain:`<b>Differentiate:</b> \\(\\dfrac{d}{dx}\\tan x=\\sec^2 x\\). <b>Square it:</b> \\((f')^2=(\\sec^2 x)^2=\\sec^4 x\\). So the integrand is \\(\\sqrt{1+\\sec^4 x}\\).<br><br><b>Why the distractors miss:</b> <b>\\(\\sqrt{1+\\sec^2 x}\\)</b> forgets to square the derivative — it leaves \\(\\sec^2\\) instead of \\((\\sec^2)^2=\\sec^4\\). This is the single most common error and the trap the question is built around. <b>\\(\\sqrt{1+\\tan^2 x}\\)</b> squares the original function, not its derivative (and equals \\(\\sec x\\), unrelated). <b>\\(\\int\\sec^2 x\\,dx\\)</b> drops the arc-length structure entirely.`},
+ {topic:"arc",prompt:"A smooth curve is given as \\(x=g(y)\\) for \\(c\\le y\\le d\\). Its arc length is:",
+  opts:[{t:"\\displaystyle\\int_c^d\\sqrt{1+\\left(\\tfrac{dx}{dy}\\right)^2}\\,dy",correct:true},{t:"\\displaystyle\\int_c^d\\sqrt{1+\\left(\\tfrac{dx}{dy}\\right)^2}\\,dx"},{t:"\\displaystyle\\int_a^b\\sqrt{1+\\left(\\tfrac{dy}{dx}\\right)^2}\\,dy"},{t:"\\text{undefined — must solve for } y \\text{ first}"}],
+  explain:`<b>Same Pythagorean idea, variables swapped.</b> When the curve is written \\(x=g(y)\\), differentiate \\(x\\) with respect to \\(y\\) and integrate over the \\(y\\)-interval: \\(L=\\displaystyle\\int_c^d\\sqrt{1+\\left(\\tfrac{dx}{dy}\\right)^2}\\,dy\\). Picture factoring \\(\\Delta y\\) (instead of \\(\\Delta x\\)) out of \\(\\sqrt{(\\Delta x)^2+(\\Delta y)^2}\\).<br><br><b>Why the distractors miss:</b> the second option pairs \\(\\tfrac{dx}{dy}\\) with \\(dx\\) — the differential must match the variable of integration (\\(dy\\)). The third mixes \\(\\tfrac{dy}{dx}\\) with \\(dy\\), the same mismatch reversed. <b>"Undefined"</b> is wrong: the \\(x=g(y)\\) form is precisely what lets you handle curves that aren't functions of \\(x\\).`}
+];
+
+// ===================== MC ENGINE (batches of 12) =====================
+let mcBatch=[], mcIdx=0, mcScore=0, mcAnswered=false;
+const stats={};
+Object.keys(TOPICS).forEach(k=>stats[k]={right:0,total:0});
+
+function mathify(h){return (h||"").replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return m;}});}
+// Decide how to render an MC option: embedded inline-math or prose -> mathify as-is; pure math -> wrap in \( \).
+function renderOpt(t){
+  if(t.indexOf("\\(")>=0) return mathify(t);                 // already has inline math (text+math mix)
+  // Pure math if it has LaTeX structure markers (commands, sup/sub, etc.). Prose otherwise.
+  if(/[\\^_{}]/.test(t)){
+    try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return t;}
+  }
+  // no LaTeX markers: simple numeric/symbolic (e.g. "3", "0,4") -> render as math; wordy -> render as text
+  if(/[A-Za-z]{2,}/.test(t)) return mathify(t);              // prose like "Slowing down", "15 ft/s"
+  try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return t;}
+}
+
+function newBatch(){
+  mcBatch=shuffle(MC).slice(0,12); mcIdx=0; mcScore=0;
+  document.getElementById('mcDone').style.display='none';
+  document.getElementById('mcTag').style.display='';
+  document.getElementById('mcPrompt').style.display='';
+  document.getElementById('mcOpts').style.display='';
+  renderMC();
+}
+function renderMC(){
+  mcAnswered=false;
+  const q=mcBatch[mcIdx];
+  document.getElementById('mcProgress').textContent="Question "+(mcIdx+1)+" of "+mcBatch.length;
+  document.getElementById('mcScore').textContent="Score: "+mcScore;
+  document.getElementById('mcTag').textContent=TOPICS[q.topic][0];
+  document.getElementById('mcPrompt').innerHTML=mathify(q.prompt);
+  const mm=document.getElementById('mcMath');
+  if(q.math){mm.style.display='';mm.innerHTML=tex(q.math,q.math,true);}else{mm.style.display='none';}
+  const opts=document.getElementById('mcOpts'); opts.innerHTML="";
+  const list=shuffle(q.opts.map((o,i)=>({...o})));
+  list.forEach(o=>{const b=document.createElement('button');b.innerHTML=renderOpt(o.t);b.dataset.correct=!!o.correct;b.onclick=()=>pickMC(b,q);opts.appendChild(b);});
+  const fb=document.getElementById('mcFb');fb.className="fb";fb.innerHTML="";
+  document.getElementById('mcNext').className="next";
+}
+function pickMC(btn,q){
+  if(mcAnswered)return; mcAnswered=true;
+  const correct=btn.dataset.correct==="true";
+  stats[q.topic].total++; if(correct){stats[q.topic].right++;mcScore++;}
+  [...document.getElementById('mcOpts').children].forEach(b=>{b.disabled=true;if(b.dataset.correct==="true")b.classList.add('correct');});
+  if(!correct)btn.classList.add('wrong');
+  const fb=document.getElementById('mcFb');
+  fb.className="fb show";
+  fb.innerHTML='<span class="ftag '+(correct?'ok':'bad')+'">'+(correct?'Correct. ':'Not quite. ')+'</span>'+mathify(q.explain)+
+    '<br><a class="review-link" href="'+TOPICS[q.topic][1]+'">Review: '+TOPICS[q.topic][0]+' →</a>';
+  document.getElementById('mcScore').textContent="Score: "+mcScore;
+  const nx=document.getElementById('mcNext'); nx.className="next show";
+  nx.textContent = mcIdx<mcBatch.length-1 ? "Next question →" : "See batch results →";
+  renderWeak();
+}
+document.getElementById('mcNext').onclick=()=>{
+  if(mcIdx<mcBatch.length-1){mcIdx++;renderMC();}
+  else{
+    document.getElementById('mcTag').style.display='none';
+    document.getElementById('mcPrompt').style.display='none';
+    document.getElementById('mcMath').style.display='none';
+    document.getElementById('mcOpts').style.display='none';
+    document.getElementById('mcFb').className="fb";
+    document.getElementById('mcNext').className="next";
+    const pct=Math.round(100*mcScore/mcBatch.length);
+    const msg=pct>=85?"Exam-ready across the board.":pct>=65?"Solid — clean up the misses below.":"Keep drilling; your weak topics are flagged below.";
+    const d=document.getElementById('mcDone');
+    d.style.display='block';
+    d.innerHTML='<div style="text-align:center;padding:10px"><div style="font-family:var(--display);font-size:34px;font-weight:600;color:var(--emerald)">'+mcScore+' / '+mcBatch.length+'</div><p style="color:var(--muted);margin:8px auto 16px;max-width:420px;font-size:14px">'+msg+'</p></div>';
+    const r=document.createElement('button');r.className="next show";r.style.maxWidth="240px";r.style.margin="4px auto 0";r.textContent="↺ Get a new batch of 12";r.onclick=newBatch;d.appendChild(r);
+    document.getElementById('mcProgress').textContent="Batch complete";
+  }
+};
+
+// ===================== WEAK-SPOTS =====================
+function renderWeak(){
+  const rows=Object.keys(TOPICS).filter(k=>stats[k].total>0);
+  const body=document.getElementById('weakBody');
+  if(!rows.length){return;}
+  rows.sort((a,b)=>(stats[a].right/stats[a].total)-(stats[b].right/stats[b].total));
+  body.innerHTML=rows.map(k=>{
+    const s=stats[k],pct=Math.round(100*s.right/s.total);
+    return '<div class="weakrow"><span class="weaklabel">'+TOPICS[k][0]+'</span><span class="weakbar"><i style="width:'+pct+'%"></i></span><span class="weakpct">'+s.right+'/'+s.total+'</span></div>';
+  }).join('')+'<p style="font-size:12.5px;color:var(--muted);margin-top:12px">Lowest topics first. Tap a topic in the question feedback to jump to its lesson.</p>';
+}
+
+// ===================== FRQ TRAINER =====================
+function frqNorm(s){return (s||"").toLowerCase().replace(/\s+/g,"").replace(/−/g,"-").replace(/·/g,"*").replace(/\{|\}/g,"");}
+const FRQS=[
+ { label:"Area + Volume",
+   desc:"<b>Region between two curves → intersections → area → volume by revolution → volume by cross sections.</b> The classic Section II area-and-volume problem, worth 9 points.",
+   given:"\\text{Region } R \\text{ is bounded by } y=\\sqrt{x} \\text{ and } y=\\tfrac{x}{2}.",
+   givenNote:"Let R be the region in the first quadrant enclosed by the curves y = √x and y = x/2.",
+   givenFall:"Region R bounded by y = √x and y = x/2",
+  parts:[
+   {pl:"Part A",pts:1,topic:"area",q:"Find the x-coordinates where the two curves intersect.",
+    fields:[{label:"x=",hint:"e.g. 0 and 4",match:s=>{const n=frqNorm(s);return ["0,4","0and4","x=0,4","0&4","4,0"].includes(n);}}],
+    sol:`<b>Set the curves equal</b> and solve. \\(\\sqrt{x}=\\tfrac{x}{2}\\). Square both sides to clear the root: \\(x=\\tfrac{x^2}{4}\\Rightarrow 4x=x^2\\Rightarrow x^2-4x=0\\Rightarrow x(x-4)=0\\). So \\(x=0\\) and \\(x=4\\).<br><br><b>Why it matters:</b> these become your limits of integration for every later part. Squaring can introduce extra roots, so in principle you'd check both work — here both lie in the first quadrant and satisfy the original equation.`,
+    rubric:["Set the curves equal and solved to get x = 0 and x = 4"]},
+   {pl:"Part B",pts:2,topic:"area",q:"Find the area of region \\(R\\).",
+    fields:[{label:"\\text{Area}=",hint:"e.g. 4/3",match:s=>["4/3","1.333","1.33"].includes(frqNorm(s))}],
+    sol:`<b>Decide top vs. bottom:</b> test a point in \\((0,4)\\), say \\(x=1\\): \\(\\sqrt{1}=1\\) vs \\(\\tfrac12\\), so \\(\\sqrt{x}\\) is on top.<br><b>Integrate (top − bottom):</b> \\(\\text{Area}=\\displaystyle\\int_0^4\\Big(\\sqrt{x}-\\tfrac{x}{2}\\Big)dx=\\Big[\\tfrac23 x^{3/2}-\\tfrac{x^2}{4}\\Big]_0^4\\).<br>Evaluate at 4: \\(\\tfrac23(8)-\\tfrac{16}{4}=\\tfrac{16}{3}-4=\\tfrac{4}{3}\\).<br><br><b>Scoring note:</b> on the AP, one point is the correct integral (integrand <i>and</i> limits), one is the value. Even a small antiderivative slip keeps the setup point if the integral is right.`,
+    rubric:["Integral set up as ∫₀⁴ (√x − x/2) dx (correct integrand and limits)","Evaluated to Area = 4/3"]},
+   {pl:"Part C",pts:3,topic:"solid",q:"Region \\(R\\) is revolved about the <b>x-axis</b>. Find the volume.",
+    fields:[{label:"V=",hint:"e.g. 8pi/3",match:s=>{const n=frqNorm(s);return ["8pi/3","8\\pi/3","(8/3)pi","8π/3","8/3pi"].includes(n);}}],
+    sol:`<b>There's a gap below the region, so use washers:</b> \\(\\pi(R^2-r^2)\\). The outer radius is the curve farther from the x-axis — on \\([0,4]\\), \\(\\sqrt{x}\\ge\\tfrac{x}{2}\\), so \\(R=\\sqrt{x}\\), \\(r=\\tfrac{x}{2}\\).<br><b>Set up and square each radius:</b> \\(V=\\pi\\displaystyle\\int_0^4\\Big[(\\sqrt{x})^2-\\big(\\tfrac{x}{2}\\big)^2\\Big]dx=\\pi\\displaystyle\\int_0^4\\Big(x-\\tfrac{x^2}{4}\\Big)dx\\).<br><b>Integrate:</b> \\(\\pi\\Big[\\tfrac{x^2}{2}-\\tfrac{x^3}{12}\\Big]_0^4=\\pi\\Big(8-\\tfrac{64}{12}\\Big)=\\pi\\Big(8-\\tfrac{16}{3}\\Big)=\\tfrac{8\\pi}{3}\\).<br><br><b>The critical move:</b> subtract the <i>squares</i> of the radii, not the square of the difference — \\(R^2-r^2\\neq(R-r)^2\\). The 3 points are typically: washer setup, correct radii squared, correct value.`,
+    rubric:["Washer setup π∫[(√x)² − (x/2)²] dx with correct limits","Subtracted the squares of the radii (not (R−r)²)","Evaluated to 8π/3"]},
+   {pl:"Part D",pts:3,topic:"xsec",q:"Region \\(R\\) is the base of a solid whose cross sections perpendicular to the x-axis are squares. Find that volume.",
+    fields:[{label:"V=",hint:"e.g. 8/15",match:s=>["8/15","0.533","0.5333",".533"].includes(frqNorm(s))}],
+    sol:`<b>Cross-section volume is \\(\\displaystyle\\int_a^b A(x)\\,dx\\) — no \\(\\pi\\), since the slices are squares, not discs.</b><br><b>One slice:</b> the side of each square is the height of the region, \\(s=\\sqrt{x}-\\tfrac{x}{2}\\), so its area is \\(A=s^2=\\big(\\sqrt{x}-\\tfrac{x}{2}\\big)^2\\).<br><b>Expand:</b> \\(\\big(\\sqrt{x}-\\tfrac{x}{2}\\big)^2=x-x^{3/2}+\\tfrac{x^2}{4}\\).<br><b>Integrate:</b> \\(\\displaystyle\\int_0^4\\Big(x-x^{3/2}+\\tfrac{x^2}{4}\\Big)dx=\\Big[\\tfrac{x^2}{2}-\\tfrac25 x^{5/2}+\\tfrac{x^3}{12}\\Big]_0^4=8-\\tfrac{64}{5}+\\tfrac{16}{3}=\\tfrac{8}{15}\\).<br><br><b>The trap this part guards against:</b> writing \\(\\pi\\int(\\ldots)\\) out of habit. Squares get no \\(\\pi\\); the squaring is the area of the <i>square</i>, \\(s^2\\). Points: correct \\(A=s^2\\) (no π), correct integral, correct value.`,
+    rubric:["Used A = (√x − x/2)² with NO π (square cross-section, not a disc)","Set up ∫₀⁴ of that area","Evaluated to 8/15"]}
+  ]},
+
+ { label:"Particle Motion",
+   desc:"<b>Velocity → position & acceleration → displacement → total distance → final position.</b> The standard 9-point motion problem; the distance part is where most points are lost.",
+   given:"v(t)=t^2-4t+3,\\qquad 0\\le t\\le 4",
+   givenNote:"A particle moves along a line with velocity v(t) = t² − 4t + 3 (units/sec). At t = 0 its position is s(0) = 2.",
+   givenFall:"v(t) = t² − 4t + 3 on [0,4], s(0) = 2",
+  parts:[
+   {pl:"Part A",pts:2,topic:"motion",q:"Find the velocity and acceleration at \\(t=2\\), and state the direction of motion.",
+    fields:[{label:"v(2)=",hint:"a number",match:s=>["-1"].includes(frqNorm(s))},{label:"a(2)=",hint:"a number",match:s=>["0"].includes(frqNorm(s))}],
+    sol:`<b>Velocity:</b> \\(v(2)=4-8+3=-1\\). Negative ⇒ the particle is moving in the <b>negative direction (left)</b>.<br><b>Acceleration</b> is the derivative of velocity: \\(a(t)=v'(t)=2t-4\\), so \\(a(2)=0\\).<br><br><b>Reading it:</b> at \\(t=2\\) the particle is moving left, and with \\(a=0\\) the velocity is momentarily neither growing nor shrinking — this is the vertex of the parabola \\(v(t)\\), its most-negative point. Points: \\(v(2)\\) with direction, and \\(a(2)\\).`,
+    rubric:["v(2) = −1, so moving left (negative direction)","a(t) = 2t − 4, so a(2) = 0"]},
+   {pl:"Part B",pts:2,topic:"motion",q:"Find the displacement over \\([0,4]\\).",
+    fields:[{label:"\\Delta s=",hint:"e.g. 4/3",match:s=>["4/3","1.333","1.33"].includes(frqNorm(s))}],
+    sol:`<b>Displacement is the signed integral of velocity</b> — direction counts, so no absolute value here: \\(\\Delta s=\\displaystyle\\int_0^4 v\\,dt\\).<br><b>Integrate:</b> \\(\\displaystyle\\int_0^4(t^2-4t+3)\\,dt=\\Big[\\tfrac{t^3}{3}-2t^2+3t\\Big]_0^4=\\tfrac{64}{3}-32+12=\\tfrac{64}{3}-20=\\tfrac{4}{3}\\).<br><br><b>Meaning:</b> the particle ends up \\(\\tfrac43\\) units to the right of where it started — even though it spent time moving left in between. Points: integral of \\(v\\) (not \\(|v|\\)), and the value.`,
+    rubric:["Set up displacement as ∫₀⁴ v dt (signed, no absolute value)","Evaluated to 4/3"]},
+   {pl:"Part C",pts:3,topic:"motion",q:"Find the total distance traveled over \\([0,4]\\).",
+    fields:[{label:"\\text{distance}=",hint:"a number",match:s=>["4"].includes(frqNorm(s))}],
+    sol:`<b>Distance uses \\(|v|\\), so first find where the particle turns around</b> (where \\(v=0\\)): factor \\(v=(t-1)(t-3)\\Rightarrow t=1,3\\). Velocity is \\(+\\) on \\([0,1]\\), \\(-\\) on \\([1,3]\\), \\(+\\) on \\([3,4]\\).<br><b>Split and add magnitudes:</b> \\(\\text{dist}=\\displaystyle\\int_0^1 v\\,dt-\\displaystyle\\int_1^3 v\\,dt+\\displaystyle\\int_3^4 v\\,dt\\). Each piece evaluates to \\(\\tfrac43\\), so \\(\\text{dist}=\\tfrac43+\\tfrac43+\\tfrac43=4\\).<br><br><b>Why it's worth 3 points:</b> the structure is the hard part. Finding the turning points \\(t=1,3\\) is one point, splitting with correct signs (or \\(\\int|v|\\)) is another, and the value is the third. The classic lost point: using \\(\\int v\\) and getting the displacement \\(\\tfrac43\\) instead.`,
+    rubric:["Found where v = 0: t = 1 and t = 3","Split into pieces and used |v| (correct signs on each subinterval)","Total distance = 4"]},
+   {pl:"Part D",pts:2,topic:"motion",q:"Find the particle's position at \\(t=4\\).",
+    fields:[{label:"s(4)=",hint:"e.g. 10/3",match:s=>["10/3","3.333","3.33"].includes(frqNorm(s))}],
+    sol:`<b>Position = starting position + accumulated displacement:</b> \\(s(4)=s(0)+\\displaystyle\\int_0^4 v\\,dt\\). This is the accumulation form of the FTC.<br><b>Compute:</b> you already found \\(\\displaystyle\\int_0^4 v\\,dt=\\tfrac43\\) in Part B, so \\(s(4)=2+\\tfrac43=\\tfrac{10}{3}\\).<br><br><b>Don't restart the integral:</b> reuse Part B. The two points are typically the correct expression \\(s(0)+\\int_0^4 v\\) and the value. The common slip is forgetting to add \\(s(0)=2\\).`,
+    rubric:["Wrote s(4) = s(0) + ∫₀⁴ v dt (added the initial position)","s(4) = 2 + 4/3 = 10/3"]}
+  ]},
+
+ { label:"Accumulation (rates)",
+   desc:"<b>Total inflow → net rate & direction → amount accumulated → when the amount is greatest.</b> The reservoir/tank problem, 9 points, ending with a sign-analysis part.",
+   given:"E(t)=20+5t,\\qquad L(t)=3t,\\qquad 0\\le t\\le 4",
+   givenNote:"Water enters a tank at E(t) = 20 + 5t gallons/hour and leaves at L(t) = 3t gallons/hour. The tank holds 100 gallons at t = 0.",
+   givenFall:"E(t) = 20 + 5t in, L(t) = 3t out, start 100 gal",
+  parts:[
+   {pl:"Part A",pts:2,topic:"accum",q:"How many gallons enter the tank during the first 4 hours?",
+    fields:[{label:"\\text{gallons}=",hint:"a number",match:s=>["120"].includes(frqNorm(s))}],
+    sol:`<b>Amount = integral of rate.</b> Gallons in \\(=\\displaystyle\\int_0^4 E(t)\\,dt=\\displaystyle\\int_0^4(20+5t)\\,dt\\).<br><b>Integrate:</b> \\(\\Big[20t+\\tfrac52 t^2\\Big]_0^4=80+\\tfrac52(16)=80+40=120\\) gallons.<br><br><b>Note the wording:</b> "enter" means integrate \\(E\\) alone — not the net \\(E-L\\). Points: correct integral of \\(E\\), and the value.`,
+    rubric:["Set up ∫₀⁴ E(t) dt (inflow only)","Evaluated to 120 gallons"]},
+   {pl:"Part B",pts:2,topic:"accum",q:"At \\(t=2\\), is the amount of water in the tank increasing or decreasing? Justify with the net rate.",
+    fields:[{label:"\\text{net rate}=",hint:"gal/hr, a number",match:s=>["24"].includes(frqNorm(s))}],
+    sol:`<b>The amount changes at the net rate</b> \\(E(t)-L(t)\\). Evaluate at \\(t=2\\): \\(E(2)-L(2)=(20+10)-(6)=24\\) gal/hr.<br><b>Interpret:</b> \\(24>0\\), so water is entering faster than it leaves — the amount is <b>increasing</b>.<br><br><b>Justification is the second point</b> on the AP: you must state the net rate is positive <i>and</i> conclude "increasing." A bare "increasing" with no rate shown typically earns nothing.`,
+    rubric:["Computed E(2) − L(2) = 24 gal/hr","Stated positive ⇒ increasing (with justification)"]},
+   {pl:"Part C",pts:3,topic:"accum",q:"How much water is in the tank at \\(t=4\\)?",
+    fields:[{label:"\\text{gallons}=",hint:"a number",match:s=>["196"].includes(frqNorm(s))}],
+    sol:`<b>Amount = start + net accumulated change:</b> \\(\\text{Amount}(4)=100+\\displaystyle\\int_0^4\\big[E(t)-L(t)\\big]dt\\).<br><b>Net rate:</b> \\(E-L=(20+5t)-3t=20+2t\\). <b>Integrate:</b> \\(\\displaystyle\\int_0^4(20+2t)\\,dt=\\Big[20t+t^2\\Big]_0^4=80+16=96\\) gallons of net gain.<br><b>Add the initial amount:</b> \\(100+96=196\\) gallons.<br><br><b>Three points, three ideas:</b> the net-rate integrand \\(E-L\\), the definite integral with the initial-condition term \\(100+\\int\\), and the value. The signature error: reporting the net change \\(96\\) and forgetting the \\(+100\\).`,
+    rubric:["Integrand is the net rate E − L over [0,4]","Wrote Amount = 100 + ∫₀⁴ (E − L) dt (included initial 100)","Evaluated to 196 gallons"]},
+   {pl:"Part D",pts:2,topic:"accum",q:"On the interval \\([0,4]\\), at what time is the amount of water in the tank greatest? Justify.",
+    fields:[{label:"t=",hint:"a time in [0,4]",match:s=>["4","t=4"].includes(frqNorm(s))}],
+    sol:`<b>The amount is greatest where its rate of change stops being positive</b> — check the net rate \\(E-L=20+2t\\) on \\([0,4]\\).<br><b>Analyze the sign:</b> \\(20+2t>0\\) for every \\(t\\) in \\([0,4]\\) (it ranges from \\(20\\) up to \\(28\\)). The net rate is never zero or negative, so the amount is <b>strictly increasing</b> the whole time.<br><b>Conclusion:</b> a strictly increasing quantity is largest at the <b>right endpoint, \\(t=4\\)</b>.<br><br><b>The AP reasoning:</b> normally you'd find critical times where \\(E-L=0\\) and test them — but here there are none, so you must argue from the sign that the maximum falls at the endpoint. Points: justification that the net rate stays positive, and the answer \\(t=4\\).`,
+    rubric:["Showed the net rate E − L = 20 + 2t > 0 on all of [0,4] (no interior critical point)","Concluded the maximum is at the endpoint t = 4"]}
+  ]},
+
+ { label:"Average Value",
+   desc:"<b>Average value → a point value → MVT for integrals → instantaneous rate and its meaning.</b> A 9-point problem that tests the <i>concepts</i> behind average value, not just the formula.",
+   given:"f(t)=60+10\\sin\\!\\left(\\tfrac{\\pi t}{12}\\right),\\qquad 0\\le t\\le 12",
+   givenNote:"The temperature in a room is f(t) = 60 + 10 sin(πt/12) degrees Fahrenheit, for 0 ≤ t ≤ 12 hours.",
+   givenFall:"f(t) = 60 + 10 sin(πt/12) on [0,12]",
+  parts:[
+   {pl:"Part A",pts:3,topic:"avg",q:"Find the average temperature over the 12 hours. Give an exact value.",
+    fields:[{label:"\\text{avg}=",hint:"e.g. 60+20/pi",match:s=>{const n=frqNorm(s);return ["60+20/pi","60+20/π","(60+20/pi)","60+20/\\pi","60+(20/pi)"].includes(n);}}],
+    sol:`<b>Average value</b> \\(=\\dfrac{1}{12-0}\\displaystyle\\int_0^{12}\\Big[60+10\\sin\\tfrac{\\pi t}{12}\\Big]dt\\).<br><b>Integrate the sine</b> (watch the chain-rule factor): \\(\\displaystyle\\int_0^{12}\\sin\\tfrac{\\pi t}{12}\\,dt=\\Big[-\\tfrac{12}{\\pi}\\cos\\tfrac{\\pi t}{12}\\Big]_0^{12}=-\\tfrac{12}{\\pi}(\\cos\\pi-\\cos 0)=-\\tfrac{12}{\\pi}(-1-1)=\\tfrac{24}{\\pi}\\).<br><b>Assemble:</b> \\(\\dfrac{1}{12}\\Big[60(12)+10\\cdot\\tfrac{24}{\\pi}\\Big]=\\dfrac{1}{12}\\Big[720+\\tfrac{240}{\\pi}\\Big]=60+\\dfrac{20}{\\pi}\\approx66.4^\\circ\\).<br><br><b>Three points:</b> the average-value setup \\(\\tfrac{1}{12}\\int\\), correct integration (the \\(-\\tfrac{12}{\\pi}\\) factor is where points vanish), and the exact value. The most common slip is forgetting to divide by 12.`,
+    rubric:["Set up (1/12)∫₀¹² f dt","Integrated correctly (sine term gives 24/π, with the −12/π factor)","Average = 60 + 20/π"]},
+   {pl:"Part B",pts:1,topic:"avg",q:"What is the temperature at \\(t=6\\)?",
+    fields:[{label:"f(6)=",hint:"a number",match:s=>["70"].includes(frqNorm(s))}],
+    sol:`<b>Just evaluate</b> \\(f(6)=60+10\\sin\\tfrac{6\\pi}{12}=60+10\\sin\\tfrac{\\pi}{2}=60+10(1)=70^\\circ\\).<br><br>Notice \\(\\sin\\tfrac\\pi2=1\\) is the maximum of sine, so \\(70^\\circ\\) is the highest the temperature gets — a fact Part D will connect to. One point: the value.`,
+    rubric:["f(6) = 60 + 10·sin(π/2) = 70°"]},
+   {pl:"Part C",pts:2,topic:"avg",q:"Must there be a time \\(c\\) in \\([0,12]\\) where \\(f(c)\\) equals the average from Part A? Name the theorem and justify.",
+    fields:[{label:"\\text{Yes/No}=",hint:"yes or no",match:s=>["yes"].includes(frqNorm(s))}],
+    sol:`<b>Yes.</b> The justification is the <b>Mean Value Theorem for Integrals</b>: if \\(f\\) is continuous on \\([a,b]\\), then there exists some \\(c\\) in \\([a,b]\\) with \\(f(c)=\\) the average value.<br><b>Check the hypothesis:</b> \\(f(t)=60+10\\sin\\tfrac{\\pi t}{12}\\) is continuous everywhere (sums and compositions of continuous functions), so the theorem applies on \\([0,12]\\). Therefore some \\(c\\) gives \\(f(c)=60+\\tfrac{20}{\\pi}\\approx66.4^\\circ\\).<br><br><b>Two points:</b> citing the theorem by name, and verifying continuity (the hypothesis). "Yes" alone, without the theorem and the continuity check, won't earn full credit on the AP.`,
+    rubric:["Answered Yes and named the Mean Value Theorem for Integrals","Verified f is continuous on [0,12] (the hypothesis)"]},
+   {pl:"Part D",pts:3,topic:"avg",q:"Find \\(f'(6)\\), the instantaneous rate of change of temperature at \\(t=6\\), and explain what it tells you.",
+    fields:[{label:"f'(6)=",hint:"a number",match:s=>["0"].includes(frqNorm(s))}],
+    sol:`<b>Differentiate</b> (chain rule): \\(f'(t)=10\\cos\\tfrac{\\pi t}{12}\\cdot\\tfrac{\\pi}{12}=\\tfrac{10\\pi}{12}\\cos\\tfrac{\\pi t}{12}=\\tfrac{5\\pi}{6}\\cos\\tfrac{\\pi t}{12}\\).<br><b>Evaluate at \\(t=6\\):</b> \\(f'(6)=\\tfrac{5\\pi}{6}\\cos\\tfrac{\\pi}{2}=\\tfrac{5\\pi}{6}(0)=0\\) °F/hr.<br><b>Interpret:</b> the temperature is <b>momentarily not changing</b> at \\(t=6\\) — and since Part B showed \\(f(6)=70^\\circ\\) is the maximum, this makes sense: the rate is zero exactly at the peak, where the temperature stops rising and is about to fall.<br><br><b>The conceptual payoff:</b> this contrasts the three "rates" the problem touches — the <i>average value</i> \\((\\approx66.4^\\circ\\), a mean height), versus the <i>instantaneous rate</i> \\((f'(6)=0\\), a slope). They answer completely different questions. Points: correct \\(f'(t)\\), the value \\(f'(6)=0\\), and a correct interpretation tied to the maximum.`,
+    rubric:["Differentiated: f′(t) = (5π/6)cos(πt/12)","f′(6) = 0","Interpreted: temperature momentarily not changing (it's the maximum from Part B)"]}
+  ]}
+];
+
+let frqActive=0;
+function buildFrqTabs(){
+  const t=document.getElementById('frqTabs');t.innerHTML="";
+  FRQS.forEach((f,i)=>{const b=document.createElement('button');b.textContent=f.label;if(i===frqActive)b.classList.add('on');b.onclick=()=>{frqActive=i;buildFrqTabs();renderFRQ();};t.appendChild(b);});
+}
+function renderFRQ(){
+  const f=FRQS[frqActive];
+  document.getElementById('frqDesc').innerHTML=mathify(f.desc);
+  document.getElementById('frqGiven').innerHTML=tex(f.given,f.givenFall,true);
+  document.getElementById('frqGivenNote').textContent=f.givenNote;
+  document.getElementById('frqScore').style.display='none';
+  const wrap=document.getElementById('frqParts');wrap.innerHTML="";
+  f.parts.forEach((p,pi)=>{
+    const div=document.createElement('div');div.className="part";
+    let fieldsHtml='<div class="frq-fields">';
+    p.fields.forEach((fl,fi)=>{
+      fieldsHtml+='<div class="frq-field"><span class="frq-flabel">'+tex(fl.label,fl.label,false)+'</span>'+
+        '<input class="frq-input" id="f'+pi+'_'+fi+'" placeholder="'+(fl.hint||'')+'" autocomplete="off"></div>';
+    });
+    fieldsHtml+='</div>';
+    let rubricHtml='<div class="rubric"><div class="rubric-h">Score your reasoning ('+p.pts+' pt'+(p.pts>1?'s':'')+')</div>';
+    p.rubric.forEach((r,ri)=>{rubricHtml+='<label><input type="checkbox" id="r'+pi+'_'+ri+'" onchange="updFrqScore()"> <span>'+mathify(r)+'</span></label>';});
+    rubricHtml+='</div>';
+    div.innerHTML='<div class="part-h"><span class="part-l">'+p.pl+'</span><span class="part-pts">'+p.pts+' pt'+(p.pts>1?'s':'')+'</span></div>'+
+      '<div class="part-q">'+mathify(p.q)+'</div>'+fieldsHtml+
+      '<button class="frq-check" onclick="checkFrqPart('+pi+')">Check answer</button>'+
+      '<button class="reveal-sol" onclick="document.getElementById(\'sol'+pi+'\').classList.add(\'show\');this.style.display=\'none\'">show worked solution</button>'+
+      '<div class="frq-sol" id="sol'+pi+'">'+mathify(p.sol)+rubricHtml+'</div>';
+    wrap.appendChild(div);
+  });
+}
+function checkFrqPart(pi){
+  const p=FRQS[frqActive].parts[pi];
+  p.fields.forEach((fl,fi)=>{
+    const inp=document.getElementById('f'+pi+'_'+fi);
+    if(!inp.value.trim()){inp.classList.remove('ok','no');return;}
+    const ok=fl.match(inp.value);
+    inp.classList.toggle('ok',ok);inp.classList.toggle('no',!ok);
+  });
+  document.getElementById('sol'+pi).classList.add('show');
+}
+function updFrqScore(){
+  const f=FRQS[frqActive];let got=0,tot=0;
+  f.parts.forEach((p,pi)=>{tot+=p.pts;let checked=0;p.rubric.forEach((r,ri)=>{const c=document.getElementById('r'+pi+'_'+ri);if(c&&c.checked)checked++;});got+=Math.round(p.pts*checked/p.rubric.length);});
+  const sl=document.getElementById('frqScore');sl.style.display='block';
+  sl.innerHTML='Self-scored: <b>'+got+' / '+tot+'</b> points'+(got===tot?' — full marks. ':' ')+'<span style="color:var(--muted);font-size:12.5px">(check rubric boxes for each part you earned)</span>';
+}
+window.checkFrqPart=checkFrqPart;window.updFrqScore=updFrqScore;
+
+// ===================== BOOT =====================
+function boot(){newBatch();buildFrqTabs();renderFRQ();}
+boot();
+if(window.addEventListener)window.addEventListener('load',()=>{if(window.katex){newBatch();renderFRQ();}});
+if(!window.katex){let t=0;const iv=setInterval(()=>{if(window.katex){clearInterval(iv);newBatch();renderFRQ();}else if(++t>60)clearInterval(iv);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*40,360)+'ms';});
+</script>
+</body>
+</html>

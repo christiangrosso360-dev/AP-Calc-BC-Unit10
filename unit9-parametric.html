@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Parametric Equations — one parameter, one curve · Unit 9</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%230d1417%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2220%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%233fb6d8%22%3Et%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  /* Unit 9 cyan accent + cool-dark palette override (to match the hub) */
+  :root{
+    --cyan:#3fb6d8; --cyan-glow:#6dd4ef; --cyan-deep:#2a8fad;
+    --approx:#3fb6d8; --accent:#3fb6d8;
+    --amber:#e8a13c; --rose:#e0644f;
+    /* override structural darks from styles.css to the cooler hub tones */
+    --bg:#0b0e10; --panel:#141b1f; --panel-2:#1a2329;
+    --ink:#e7eef2; --muted:#8fa2ac; --faint:#5f7480;
+    --line:#26323a; --line-2:#33444e;
+    --wrap-max:900px;
+  }
+  body{background:var(--bg)}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(ellipse 60% 45% at 82% 0%, rgba(63,182,216,.08), transparent 60%);}
+  .wrap{position:relative;z-index:1}
+  .sub{color:var(--muted);font-size:15.5px;margin-top:10px;max-width:720px;line-height:1.6}
+  h2{font-family:var(--display);font-weight:600;font-size:24px;margin:58px 0 6px;letter-spacing:-0.015em;color:var(--ink)}
+  h2 .n{color:var(--cyan);font-variant-numeric:tabular-nums}
+  h3{font-family:var(--display);font-weight:600;font-size:18px;margin:30px 0 4px;color:var(--ink)}
+  p{font-size:15px;color:var(--muted);max-width:730px;line-height:1.78;margin:14px 0}
+  p.lead{font-size:16px;color:var(--ink);max-width:730px}
+  p b{color:var(--ink);font-weight:600}
+  .mono{font-family:var(--mono);color:var(--ink)}
+  .em-text{color:var(--cyan);font-weight:600}
+  a.inl{color:var(--cyan);text-decoration:none;border-bottom:1px dashed var(--line-2)}
+  a.inl:hover{border-color:var(--cyan)}
+
+  /* equation cards */
+  .eq{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:24px 22px;margin:22px 0;text-align:center;overflow-x:auto;overflow-y:hidden;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .eq .katex,.eq .katex-display{color:var(--ink)} .eq .katex{font-size:1.3em} .eq .katex-display{margin:0}
+  .eq .cap{font-size:12.5px;color:var(--muted);margin-top:12px;font-family:var(--mono);letter-spacing:.02em}
+
+  /* the trace visual */
+  .stage{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .plot{width:100%;background:#0a0f12;border:1px solid var(--line);border-radius:11px}
+  .plot canvas{width:100%;height:auto;display:block;border-radius:11px}
+  .controls{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:14px}
+  .seg{display:flex;gap:0;border:1px solid var(--line-2);border-radius:9px;overflow:hidden}
+  .seg button{font-family:var(--mono);font-size:12px;background:transparent;color:var(--muted);border:none;padding:8px 13px;cursor:pointer;transition:background .2s,color .2s;border-right:1px solid var(--line-2)}
+  .seg button:last-child{border-right:none}
+  .seg button.on{background:var(--cyan);color:#0b1417;font-weight:600}
+  .seg button:not(.on):hover{color:var(--ink);background:rgba(63,182,216,.08)}
+  .play{font-family:var(--mono);font-size:12px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-2);border-radius:9px;padding:8px 15px;cursor:pointer;transition:border-color .2s}
+  .play:hover{border-color:var(--cyan)}
+  .slider-row{display:flex;align-items:center;gap:12px;flex:1;min-width:220px}
+  .slider-row label{font-family:var(--mono);font-size:11.5px;color:var(--faint);white-space:nowrap}
+  input[type=range]{flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:3px;background:var(--line-2);outline:none;min-width:120px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 8px rgba(63,182,216,.6)}
+  input[type=range]::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:var(--cyan);cursor:pointer}
+  .readout{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px;font-family:var(--mono);font-size:12.5px}
+  .readout .item{color:var(--muted)} .readout .item b{color:var(--ink);font-weight:600}
+  .readout .vx{color:var(--cyan-glow)} .readout .vy{color:var(--amber)}
+  .curve-eq{font-family:var(--mono);font-size:12.5px;color:var(--cyan);margin-top:4px}
+
+  /* callout / note */
+  .note{background:rgba(63,182,216,.06);border:1px solid rgba(63,182,216,.22);border-radius:12px;padding:14px 18px;margin:22px 0}
+  .note .nh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);margin-bottom:6px}
+  .note p{margin:0;font-size:13.5px;color:var(--muted)}.note p b{color:var(--ink)}
+
+  /* trap box */
+  .trap{background:rgba(224,100,79,.06);border-left:2px solid var(--rose);border-radius:0 10px 10px 0;padding:13px 18px;margin:22px 0}
+  .trap .th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+  .trap p{margin:0;font-size:13.5px;color:var(--muted)}.trap p b{color:var(--ink)}
+
+  /* worked example */
+  .work{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:6px 22px 18px;margin:22px 0}
+  .work .wtag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan);margin:16px 0 0}
+  .work .step{font-size:14px;color:var(--muted);line-height:1.7;margin:10px 0}
+  .work .step b{color:var(--ink)}
+  .work .ans{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:13px;color:var(--cyan-glow);border:1px solid rgba(63,182,216,.3);border-radius:8px;padding:5px 12px;background:rgba(63,182,216,.05)}
+
+  /* quiz */
+  .quiz{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-top:22px}
+  .qhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .qcount{font-family:var(--mono);font-size:11.5px;color:var(--faint)}
+  .qprompt{font-size:15.5px;color:var(--ink);margin:10px 0 16px;line-height:1.6}
+  .qopts{display:flex;flex-direction:column;gap:9px}
+  .qopts button{text-align:left;font-family:var(--body);font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line-2);border-radius:10px;padding:12px 15px;cursor:pointer;transition:border-color .2s,background .2s}
+  .qopts button:hover:not(:disabled){border-color:var(--cyan)}
+  .qopts button:disabled{cursor:default}
+  .qopts button.correct{background:rgba(63,208,176,.14);border-color:var(--conv,#3fd0b0);color:#cfeee6}
+  .qopts button.wrong{background:rgba(224,100,79,.12);border-color:var(--rose);color:#f0c9c1}
+  .qfb{margin-top:14px;font-size:13.5px;line-height:1.6;color:var(--muted);display:none}
+  .qfb.show{display:block}
+  .qfb b{color:var(--ink)}
+  .qfb .verdict{font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+  .qfb .verdict.r{color:var(--conv,#3fd0b0)} .qfb .verdict.w{color:var(--rose)}
+  .qnav{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
+  .qnav button{font-family:var(--mono);font-size:12.5px;background:var(--cyan);color:#0b1417;font-weight:600;border:none;border-radius:9px;padding:10px 18px;cursor:pointer;transition:transform .2s,opacity .2s}
+  .qnav button:disabled{opacity:.4;cursor:default}
+  .qnav button.ghost{background:transparent;color:var(--muted);border:1px solid var(--line-2)}
+  .qdone{text-align:center;padding:10px 0}
+  .qdone .score{font-family:var(--display);font-size:34px;color:var(--cyan);font-weight:600}
+  .qdone p{margin:6px 0 14px}
+
+  .fnav{display:flex;justify-content:space-between;gap:14px;margin-top:60px;flex-wrap:wrap}
+  .fnav a{flex:1;min-width:200px;text-decoration:none;border:1px solid var(--line);border-radius:14px;padding:18px 20px;background:linear-gradient(160deg,var(--panel-2),var(--panel));transition:border-color .3s,transform .3s}
+  .fnav a:hover{border-color:var(--cyan);transform:translateY(-2px)}
+  .fnav .d{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+  .fnav .ti{font-family:var(--display);font-size:17px;color:var(--ink);font-weight:600}
+  .fnav .next{text-align:right}
+
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .55s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit9.html">← Unit 9</a>
+  <header class="reveal">
+    <h1>Parametric <span class="em">Equations</span></h1>
+    <div class="sub">So far every curve has been \(y=f(x)\) — one output for each input.
+      But a particle looping through the air, or a spiral, doesn't pass that test. The fix: let a third
+      variable, <b>the parameter <span class="mono">t</span></b>, drive <span class="mono">x</span> and
+      <span class="mono">y</span> separately. <span class="em-text">Two clocks, one curve.</span></div>
+  </header>
+
+  <!-- ===================== §1 WHAT PARAMETRIC MEANS ===================== -->
+  <h2><span class="n">1.</span> A curve written as a path</h2>
+  <p class="lead">Instead of one equation, you get two: \(x(t)\) and
+    \(y(t)\). As <span class="mono">t</span> advances, the point
+    \((x(t),\,y(t))\) moves, and the trail it leaves <i>is</i> the curve.
+    Drag the slider to move time forward, or hit play. Switch curves to see why one function of
+    <span class="mono">x</span> could never capture these.</p>
+
+  <div class="stage reveal">
+    <div class="plot"><canvas id="traceCv" width="860" height="440"></canvas></div>
+    <div class="controls">
+      <div class="seg" id="curveSeg">
+        <button data-c="liss" class="on">Lissajous</button>
+        <button data-c="spiral">Spiral</button>
+        <button data-c="proj">Projectile</button>
+      </div>
+      <button class="play" id="playBtn">▶ Play</button>
+      <div class="slider-row">
+        <label>t =</label>
+        <input type="range" id="tSlider" min="0" max="1000" value="0" />
+        <span class="mono" id="tVal" style="color:var(--cyan-glow);min-width:54px">t&nbsp;=&nbsp;0.00</span>
+      </div>
+    </div>
+    <div class="curve-eq" id="curveEq"></div>
+    <div class="readout">
+      <span class="item">point: <b id="roPt">(0.00, 0.00)</b></span>
+      <span class="item vx">dx/dt = <b id="roDx" style="color:inherit">0.00</b></span>
+      <span class="item vy">dy/dt = <b id="roDy" style="color:inherit">0.00</b></span>
+      <span class="item">slope dy/dx = <b id="roSlope">0.00</b></span>
+    </div>
+  </div>
+  <p>The dashed cyan line is the <b>tangent</b> — its slope is exactly \(\tfrac{dy}{dx}\),
+    which we're about to compute. Notice it tilts and even goes vertical as the point moves; that's the
+    first hint that slope in parametric land needs its own formula.</p>
+
+  <!-- ===================== §2 ELIMINATING THE PARAMETER ===================== -->
+  <h2><span class="n">2.</span> Eliminating the parameter: what curve <i>is</i> this?</h2>
+  <p class="lead">Before doing any calculus, it helps to recognize the curve. If you can get rid of
+    <span class="mono">t</span> and write a plain relationship between <span class="mono">x</span> and
+    <span class="mono">y</span>, you often discover the parametric pair is just a familiar shape — a
+    line, a parabola, a circle — in disguise.</p>
+
+  <div class="eq reveal" id="eqElim"></div>
+
+  <h3>Method 1 — solve for <span class="mono">t</span>, then substitute</h3>
+  <p>When one equation is easy to solve for <span class="mono">t</span>, do that and plug into the
+    other. Take \(x=t+1\), \(y=t^2\). Solve the first: \(t=x-1\). Substitute into the second:</p>
+  <div class="eq reveal" id="eqElim1"></div>
+  <p>So this parametric pair traces the parabola \(y=(x-1)^2\) — same curve you'd graph in Algebra II,
+    now just "clocked" by <span class="mono">t</span>.</p>
+
+  <h3>Method 2 — use a trig identity</h3>
+  <p>When you see <span class="mono">cos</span> and <span class="mono">sin</span>, reach for
+    \(\cos^2\theta+\sin^2\theta=1\). Take \(x=3\cos t\), \(y=3\sin t\). Then
+    \(\cos t=\tfrac{x}{3}\) and \(\sin t=\tfrac{y}{3}\), so:</p>
+  <div class="eq reveal" id="eqElim2"></div>
+  <p>That's a <b>circle of radius 3</b> centered at the origin. (If the coefficients differ —
+    \(x=2\cos t\), \(y=3\sin t\) — the same trick gives \(\left(\tfrac{x}{2}\right)^2+\left(\tfrac{y}{3}\right)^2=1\),
+    an <b>ellipse</b>.)</p>
+
+  <div class="trap reveal">
+    <div class="th">Eliminating can hide the domain</div>
+    <p>The rectangular equation may describe <b>more</b> of the curve than the parametric form actually
+      traces. Example: \(x=t^2,\ y=t\) gives \(x=y^2\) — but since \(x=t^2\ge 0\) always, the parametric
+      curve is <b>only the right half</b> (\(x\ge 0\)) of that sideways parabola. Always check what range
+      of \(x\) and \(y\) the parameter really produces.</p>
+  </div>
+
+  <!-- ===================== §3 FIRST DERIVATIVE ===================== -->
+  <h2><span class="n">3.</span> Slope: \(\tfrac{dy}{dx}\) from \(\tfrac{dy}{dt}\) and \(\tfrac{dx}{dt}\)</h2>
+  <p>You want \(\tfrac{dy}{dx}\), but you only have <span class="mono">x</span> and
+    <span class="mono">y</span> in terms of <span class="mono">t</span>. The chain rule bridges them:
+    \(\tfrac{dy}{dt}=\tfrac{dy}{dx}\cdot\tfrac{dx}{dt}\). Solve for what you want:</p>
+
+  <div class="eq reveal" id="eqFirst"></div>
+
+  <p>In words: <b>the rate y changes with t, divided by the rate x changes with t.</b> The
+    <span class="mono">t</span>'s "cancel" the way fractions suggest. This is the slope of the tangent
+    line to the curve at the point for that <span class="mono">t</span>.</p>
+
+  <div class="note reveal">
+    <div class="nh">Horizontal &amp; vertical tangents</div>
+    <p>The tangent is <b>horizontal</b> where \(\tfrac{dy}{dt}=0\) (and
+      \(\tfrac{dx}{dt}\neq 0\)) — the curve momentarily stops rising. It's <b>vertical</b>
+      where \(\tfrac{dx}{dt}=0\) (and \(\tfrac{dy}{dt}\neq 0\)) — the slope
+      blows up. AP loves asking for both.</p>
+  </div>
+
+  <!-- ===================== §3 SECOND DERIVATIVE ===================== -->
+  <h2><span class="n">4.</span> Concavity: the second derivative</h2>
+  <p>Here's where most points are lost. To get \(\tfrac{d^2y}{dx^2}\) you do <b>not</b>
+    just take \(\tfrac{d^2y}{dt^2}\). The second derivative is the rate of change of the
+    <i>first</i> derivative with respect to <span class="mono">x</span> — so you apply the exact same
+    parametric rule again, this time to \(\tfrac{dy}{dx}\):</p>
+
+  <div class="eq reveal" id="eqSecond"></div>
+
+  <p>Read it as a recipe: <b>take the derivative of \(\tfrac{dy}{dx}\) with respect to
+    <span class="mono">t</span>, then divide by \(\tfrac{dx}{dt}\) again.</b> The
+    denominator is \(\tfrac{dx}{dt}\), never <span class="mono">dt</span> or
+    <span class="mono">dx</span> alone.</p>
+
+  <div class="trap reveal">
+    <div class="th">The #1 parametric trap</div>
+    <p><b>\(\dfrac{d^2y}{dx^2}\) is NOT \(\dfrac{d^2y}{dt^2}\div\dfrac{d^2x}{dt^2}\).</b> You must
+      differentiate the <i>slope</i> \(\tfrac{dy}{dx}\) with respect to \(t\), then divide by
+      \(\tfrac{dx}{dt}\). Forgetting that final "\(\div\,dx/dt\)" is the single most common error on
+      this topic.</p>
+  </div>
+
+  <!-- ===================== §4 ARC LENGTH ===================== -->
+  <h2><span class="n">5.</span> Arc length: Pythagoras, now both legs move</h2>
+  <p>In Unit 8 you found arc length for \(y=f(x)\) by adding up tiny
+    hypotenuses \(\sqrt{dx^2+dy^2}\), factoring out <span class="mono">dx</span>.
+    Parametric arc length is the same idea — but now <i>both</i> <span class="mono">x</span> and
+    <span class="mono">y</span> change with <span class="mono">t</span>, so factor out
+    <span class="mono">dt</span> instead:</p>
+
+  <div class="eq reveal" id="eqArc"></div>
+
+  <p>Each little step along the curve has horizontal part \((dx/dt)\,dt\) and
+    vertical part \((dy/dt)\,dt\); the hypotenuse is
+    \(\sqrt{(dx/dt)^2+(dy/dt)^2}\,dt\), and the integral sums them from
+    \(t=a\) to \(t=b\). Same Pythagorean theorem as
+    Unit 8 — it just has two moving legs now.</p>
+
+  <div class="trap reveal">
+    <div class="th">Watch the squares</div>
+    <p>Both derivatives get <b>squared</b> under the root: \((dx/dt)^2\) and
+      \((dy/dt)^2\). And the bounds are <b>values of t</b>, not x — make sure
+      your limits match the parameter.</p>
+  </div>
+
+  <!-- ===================== §5 WORKED EXAMPLES ===================== -->
+  <h2><span class="n">6.</span> Worked examples</h2>
+
+  <div class="work reveal">
+    <div class="wtag">Example 1 · slope &amp; concavity</div>
+    <p class="step">For \(x=t^2\), \(y=t^3\), find \(\dfrac{dy}{dx}\) and \(\dfrac{d^2y}{dx^2}\) at \(t=2\).</p>
+    <p class="step"><b>First derivative.</b> <span id="w1a"></span> So at \(t=2\),
+      \(\dfrac{dy}{dx}=\dfrac{3(2)}{2}=3\). <span class="ans">dy/dx = 3</span></p>
+    <p class="step"><b>Second derivative.</b> Differentiate \(\dfrac{dy}{dx}=\dfrac{3t}{2}\) with
+      respect to \(t\) (that's \(\tfrac{3}{2}\)), then divide by \(\dfrac{dx}{dt}=2t\):
+      <span id="w1b"></span> At \(t=2\): \(\dfrac{3}{4\cdot 2}=\dfrac{3}{8}\).
+      <span class="ans">d²y/dx² = 3/8</span></p>
+  </div>
+
+  <div class="work reveal">
+    <div class="wtag">Example 2 · horizontal &amp; vertical tangents</div>
+    <p class="step">For \(x=t^2+1\), \(y=t^3-3t\), where are the tangents horizontal or vertical?</p>
+    <p class="step"><b>Horizontal:</b> set \(\dfrac{dy}{dt}=3t^2-3=0\Rightarrow t=\pm 1\).
+      Points: \((2,-2)\) at \(t=1\) and \((2,2)\) at \(t=-1\).
+      <span class="ans">horizontal at t = ±1</span></p>
+    <p class="step"><b>Vertical:</b> set \(\dfrac{dx}{dt}=2t=0\Rightarrow t=0\). Point: \((1,0)\).
+      (Check \(\dfrac{dy}{dt}=-3\neq 0\) there, so it's genuinely vertical.)
+      <span class="ans">vertical at t = 0</span></p>
+  </div>
+
+  <div class="work reveal">
+    <div class="wtag">Example 3 · arc length</div>
+    <p class="step">Find the length of \(x=t^2\), \(y=t^3\) from \(t=0\) to \(t=1\).</p>
+    <p class="step"><b>Set up.</b> \(\dfrac{dx}{dt}=2t\), \(\dfrac{dy}{dt}=3t^2\), so <span id="w3a"></span></p>
+    <p class="step"><b>Simplify &amp; integrate.</b> Factor: \(\sqrt{4t^2+9t^4}=t\sqrt{4+9t^2}\)
+      (since \(t\ge 0\)). Substitute \(u=4+9t^2\), \(du=18t\,dt\): <span id="w3b"></span></p>
+    <p class="step"><b>Result.</b> \(=\tfrac{1}{27}\big(13^{3/2}-8\big)\approx 1.44\).
+      <span class="ans">L = (13√13 − 8)/27 ≈ 1.44</span></p>
+  </div>
+
+  <!-- ===================== §6 DRILL ===================== -->
+  <h2><span class="n">7.</span> Quick drill</h2>
+  <p>Five questions on slope, concavity, tangents, and arc length. Pick the right setup or value.</p>
+
+  <div class="quiz reveal" id="quiz">
+    <div class="qhead">
+      <span class="qcount" id="qCount">Question 1 of 5</span>
+      <span class="qcount" id="qScore">Score: 0</span>
+    </div>
+    <div class="qprompt" id="qPrompt"></div>
+    <div class="qopts" id="qOpts"></div>
+    <div class="qfb" id="qFb"></div>
+    <div class="qnav">
+      <button class="ghost" id="qReset">↺ Restart</button>
+      <button id="qNext" disabled>Next →</button>
+    </div>
+  </div>
+
+  <!-- ===================== FORWARD NAV ===================== -->
+  <div class="fnav reveal">
+    <a href="unit9.html">
+      <div class="d">← Back to</div>
+      <div class="ti">Unit 9 Hub</div>
+    </a>
+    <a href="unit9-vectors.html" class="next">
+      <div class="d">Next →</div>
+      <div class="ti">Vector-Valued Functions</div>
+    </a>
+  </div>
+
+  <footer style="color:var(--muted);font-size:12.5px;margin:46px 0 30px;border-top:1px solid var(--line);padding-top:16px">
+    Parametric Equations · Topics 9.1–9.3 · Unit 9 · part of the Visual AP Calculus guide.
+  </footer>
+</div>
+
+<script>
+/* ===================== rendered equations ===================== */
+function renderEqs(){
+  const R=String.raw;
+  const put=(id,t,fb,display)=>{const e=document.getElementById(id);if(e)e.innerHTML=tex(t,fb||t,display!==false);};
+  put('eqFirst', R`\frac{dy}{dx}=\frac{\;dy/dt\;}{\;dx/dt\;}=\frac{y'(t)}{x'(t)}`, "dy/dx = (dy/dt)/(dx/dt)");
+  put('eqSecond', R`\frac{d^2y}{dx^2}=\frac{\dfrac{d}{dt}\!\left[\dfrac{dy}{dx}\right]}{\;dx/dt\;}`, "d²y/dx² = [d/dt(dy/dx)] / (dx/dt)");
+  put('eqArc', R`L=\int_{a}^{b}\sqrt{\left(\frac{dx}{dt}\right)^{2}+\left(\frac{dy}{dt}\right)^{2}}\;dt`, "L = ∫√((dx/dt)²+(dy/dt)²) dt");
+  // §2 eliminating the parameter
+  put('eqElim', R`\underbrace{x=f(t),\ \ y=g(t)}_{\text{parametric}}\quad\longrightarrow\quad\underbrace{y=F(x)}_{\text{rectangular}}`, "parametric → rectangular");
+  put('eqElim1', R`t=x-1\ \Rightarrow\ y=(x-1)^2`, "t=x−1 ⟹ y=(x−1)²");
+  put('eqElim2', R`x^2+y^2=9\cos^2 t+9\sin^2 t=9(\cos^2 t+\sin^2 t)=9`, "x²+y²=9");
+  // worked-example inline bits
+  put('w1a', R`\dfrac{dy}{dx}=\dfrac{3t^2}{2t}=\dfrac{3t}{2}.`, "dy/dx = 3t²/2t = 3t/2", false);
+  put('w1b', R`\dfrac{d^2y}{dx^2}=\dfrac{3/2}{2t}=\dfrac{3}{4t}.`, "d²y/dx² = (3/2)/(2t) = 3/(4t)", false);
+  put('w3a', R`L=\int_0^1\sqrt{(2t)^2+(3t^2)^2}\,dt=\int_0^1\sqrt{4t^2+9t^4}\,dt.`, "L = ∫₀¹ √(4t²+9t⁴) dt", false);
+  put('w3b', R`\tfrac{1}{18}\!\int_4^{13}\!\sqrt{u}\,du=\tfrac{1}{18}\cdot\tfrac{2}{3}\big[u^{3/2}\big]_4^{13}.`, "(1/18)∫₄¹³ √u du = (1/27)[u^{3/2}]", false);
+}
+
+/* ===================== §1 trace visual ===================== */
+(function(){
+  const cv=document.getElementById('traceCv'); if(!cv) return;
+  const ctx=cv.getContext('2d');
+  const W=cv.width, H=cv.height;
+
+  // curve definitions: {x(t),y(t),dx,dy, tmin,tmax, world scale}
+  const CURVES={
+    liss:{
+      name:'Lissajous',
+      eq:'x = sin(3t),  y = sin(2t)',
+      x:t=>Math.sin(3*t), y:t=>Math.sin(2*t),
+      dx:t=>3*Math.cos(3*t), dy:t=>2*Math.cos(2*t),
+      tmin:0, tmax:2*Math.PI, range:1.35
+    },
+    spiral:{
+      name:'Spiral',
+      eq:'x = t·cos t,  y = t·sin t',
+      x:t=>t*Math.cos(t), y:t=>t*Math.sin(t),
+      dx:t=>Math.cos(t)-t*Math.sin(t), dy:t=>Math.sin(t)+t*Math.cos(t),
+      tmin:0, tmax:4*Math.PI, range:13
+    },
+    proj:{
+      name:'Projectile',
+      eq:'x = t,  y = 4t − t²',
+      x:t=>t, y:t=>4*t-t*t,
+      dx:t=>1, dy:t=>4-2*t,
+      tmin:0, tmax:4, range:null  // custom framing below
+    }
+  };
+  let cur='liss', playing=false, raf=null;
+  const slider=document.getElementById('tSlider');
+  const tValEl=document.getElementById('tVal');
+  const eqEl=document.getElementById('curveEq');
+  const roPt=document.getElementById('roPt'), roDx=document.getElementById('roDx'),
+        roDy=document.getElementById('roDy'), roSlope=document.getElementById('roSlope');
+
+  // map world coords -> canvas, per curve framing
+  function frame(C){
+    if(cur==='proj'){
+      // x in [0,4], y in [0,4]; pad
+      return {minx:-0.6, maxx:4.6, miny:-0.6, maxy:4.8};
+    }
+    const r=C.range;
+    return {minx:-r, maxx:r, miny:-r, maxy:r};
+  }
+  function toPx(C, wx, wy){
+    const f=frame(C);
+    const px=40 + (wx-f.minx)/(f.maxx-f.minx)*(W-80);
+    const py=H-30 - (wy-f.miny)/(f.maxy-f.miny)*(H-60);
+    return [px,py];
+  }
+
+  function draw(tFrac){
+    const C=CURVES[cur];
+    const t=C.tmin + tFrac*(C.tmax-C.tmin);
+    ctx.clearRect(0,0,W,H);
+
+    // axes
+    const f=frame(C);
+    ctx.strokeStyle='rgba(143,162,172,0.18)'; ctx.lineWidth=1;
+    const [ox0,oy0]=toPx(C,f.minx,0), [ox1,oy1]=toPx(C,f.maxx,0);
+    ctx.beginPath(); ctx.moveTo(ox0,oy0); ctx.lineTo(ox1,oy1); ctx.stroke();
+    const [ax0,ay0]=toPx(C,0,f.miny), [ax1,ay1]=toPx(C,0,f.maxy);
+    ctx.beginPath(); ctx.moveTo(ax0,ay0); ctx.lineTo(ax1,ay1); ctx.stroke();
+
+    // ghost full curve (faint)
+    ctx.strokeStyle='rgba(63,182,216,0.13)'; ctx.lineWidth=1.4; ctx.lineCap='round';
+    ctx.beginPath();
+    let n=600;
+    for(let i=0;i<=n;i++){
+      const tt=C.tmin+(i/n)*(C.tmax-C.tmin);
+      const [px,py]=toPx(C,C.x(tt),C.y(tt));
+      if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+
+    // drawn-so-far portion (bright)
+    ctx.strokeStyle='rgba(63,182,216,0.85)'; ctx.lineWidth=2.6;
+    ctx.beginPath();
+    let drawn=Math.max(2,Math.floor(tFrac*n));
+    for(let i=0;i<=drawn;i++){
+      const tt=C.tmin+(i/n)*(C.tmax-C.tmin);
+      const [px,py]=toPx(C,C.x(tt),C.y(tt));
+      if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+
+    // current point
+    const wx=C.x(t), wy=C.y(t);
+    const [hx,hy]=toPx(C,wx,wy);
+
+    // tangent line (slope dy/dx), drawn as a segment through the point
+    const dxv=C.dx(t), dyv=C.dy(t);
+    // direction in world space is (dxv,dyv); draw a fixed-length segment in canvas space
+    const f2=frame(C);
+    const sx=(W-80)/(f2.maxx-f2.minx), sy=(H-60)/(f2.maxy-f2.miny);
+    // canvas-space tangent direction
+    let tdx=dxv*sx, tdy=-dyv*sy;
+    const tlen=Math.hypot(tdx,tdy)||1; tdx/=tlen; tdy/=tlen;
+    const L=120;
+    ctx.strokeStyle='rgba(109,212,239,0.7)'; ctx.lineWidth=1.6; ctx.setLineDash([5,4]);
+    ctx.beginPath(); ctx.moveTo(hx-tdx*L, hy-tdy*L); ctx.lineTo(hx+tdx*L, hy+tdy*L); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // point glow + dot
+    ctx.beginPath(); ctx.arc(hx,hy,9,0,Math.PI*2);
+    ctx.strokeStyle='rgba(109,212,239,0.4)'; ctx.lineWidth=1.5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(hx,hy,4.5,0,Math.PI*2);
+    ctx.fillStyle='rgba(109,212,239,1)'; ctx.fill();
+
+    // readouts
+    tValEl.textContent='t = '+t.toFixed(2);
+    roPt.textContent='('+wx.toFixed(2)+', '+wy.toFixed(2)+')';
+    roDx.textContent=dxv.toFixed(2);
+    roDy.textContent=dyv.toFixed(2);
+    const slope = Math.abs(dxv)<1e-6 ? '∞ (vertical)' : (dyv/dxv).toFixed(2);
+    roSlope.textContent=slope;
+  }
+
+  function setCurve(c){
+    cur=c; eqEl.textContent=CURVES[c].eq;
+    document.querySelectorAll('#curveSeg button').forEach(b=>b.classList.toggle('on', b.dataset.c===c));
+    draw(slider.value/1000);
+  }
+
+  // play
+  function step(){
+    if(!playing) return;
+    let v=+slider.value + 2.2;   // linear, slow — full sweep in ~7.5s at 60fps (watchable)
+    if(v>=1000){ v=1000; playing=false; document.getElementById('playBtn').textContent='▶ Play'; }
+    slider.value=v; draw(v/1000);
+    if(playing) raf=requestAnimationFrame(step);
+  }
+  document.getElementById('playBtn').addEventListener('click',function(){
+    if(playing){ playing=false; this.textContent='▶ Play'; if(raf)cancelAnimationFrame(raf); return; }
+    if(+slider.value>=1000) slider.value=0;   // restart if at end
+    playing=true; this.textContent='❚❚ Pause'; raf=requestAnimationFrame(step);
+  });
+  slider.addEventListener('input',function(){
+    if(playing){ playing=false; document.getElementById('playBtn').textContent='▶ Play'; if(raf)cancelAnimationFrame(raf); }
+    draw(this.value/1000);
+  });
+  document.querySelectorAll('#curveSeg button').forEach(b=>{
+    b.addEventListener('click',()=>{ 
+      if(playing){playing=false;document.getElementById('playBtn').textContent='▶ Play';if(raf)cancelAnimationFrame(raf);}
+      setCurve(b.dataset.c); 
+    });
+  });
+
+  setCurve('liss');
+})();
+
+/* ===================== §6 quiz ===================== */
+(function(){
+  const QUESTIONS=[
+    {
+      p:String.raw`For \(x=t^3\) and \(y=t^2\), what is \(\dfrac{dy}{dx}\)?`,
+      opts:[String.raw`\(\dfrac{2t}{3t^2}=\dfrac{2}{3t}\)`,String.raw`\(\dfrac{3t^2}{2t}=\dfrac{3t}{2}\)`,String.raw`\(\dfrac{2t}{3t^2}\), then \(\times\,3t^2\)`,String.raw`\(6t\)`],
+      correct:0,
+      fb:String.raw`\(\dfrac{dy}{dx}=\dfrac{dy/dt}{dx/dt}\). Here \(dy/dt=2t\) and \(dx/dt=3t^2\), so \(\dfrac{dy}{dx}=\dfrac{2t}{3t^2}=\dfrac{2}{3t}\). The trap answer flips numerator and denominator — that would be \(dx/dy\).`
+    },
+    {
+      p:String.raw`A parametric curve has \(\dfrac{dx}{dt}=2t-4\) and \(\dfrac{dy}{dt}=t^2-1\). Where is the tangent line vertical?`,
+      opts:[String.raw`\(t=1\) and \(t=-1\)`,String.raw`\(t=2\)`,String.raw`\(t=0\)`,String.raw`Nowhere`],
+      correct:1,
+      fb:String.raw`Vertical tangents occur where \(dx/dt=0\) (and \(dy/dt\neq 0\)). Set \(2t-4=0\Rightarrow t=2\). Check \(dy/dt=2^2-1=3\neq 0\), so it's genuinely vertical. (At \(t=\pm 1\), \(dy/dt=0\) — those give horizontal tangents.)`
+    },
+    {
+      p:String.raw`To find \(\dfrac{d^2y}{dx^2}\) for a parametric curve, you should:`,
+      opts:[String.raw`Compute \(\dfrac{d^2y}{dt^2}\div\dfrac{d^2x}{dt^2}\)`,String.raw`Differentiate \(\dfrac{dy}{dx}\) with respect to \(t\), then divide by \(\dfrac{dx}{dt}\)`,String.raw`Differentiate \(\dfrac{dy}{dx}\) with respect to \(x\) directly`,String.raw`Square \(\dfrac{dy}{dx}\)`],
+      correct:1,
+      fb:String.raw`The second derivative is \(\dfrac{d}{dx}\) of the first. Since everything is in terms of \(t\), apply the parametric rule to \(\dfrac{dy}{dx}\): take \(\dfrac{d}{dt}\) of it, then divide by \(\dfrac{dx}{dt}\). Forgetting the \(\div\,dx/dt\) (or using \(d^2y/dt^2\)) is the classic mistake.`
+    },
+    {
+      p:String.raw`Which integral gives the arc length of \(x=\cos t,\ y=\sin t\) for \(0\le t\le \pi\)?`,
+      opts:[String.raw`\(\int_0^\pi \sqrt{\cos^2 t+\sin^2 t}\,dt\) — wrong derivatives`,String.raw`\(\int_0^\pi \sqrt{\sin^2 t+\cos^2 t}\,dt=\int_0^\pi 1\,dt\)`,String.raw`\(\int_0^\pi (-\sin t+\cos t)\,dt\)`,String.raw`\(\int_0^\pi \sqrt{(-\sin t)^2}\,dt\)`],
+      correct:1,
+      fb:String.raw`Arc length \(=\int\sqrt{(dx/dt)^2+(dy/dt)^2}\,dt\). Here \(dx/dt=-\sin t,\ dy/dt=\cos t\), so the integrand is \(\sqrt{\sin^2 t+\cos^2 t}=\sqrt{1}=1\), giving length \(\pi\) (half the unit circle). Both derivatives must be squared first.`
+    },
+    {
+      p:String.raw`For \(x=t^2,\ y=t^3\), the value of \(\dfrac{d^2y}{dx^2}\) at \(t=1\) is:`,
+      opts:[String.raw`\(\tfrac{3}{4}\)`,String.raw`\(6\)`,String.raw`\(\tfrac{3}{2}\)`,String.raw`\(\tfrac{2}{3}\)`],
+      correct:0,
+      fb:String.raw`\(\dfrac{dy}{dx}=\dfrac{3t^2}{2t}=\dfrac{3t}{2}\). Then \(\dfrac{d^2y}{dx^2}=\dfrac{d/dt(3t/2)}{dx/dt}=\dfrac{3/2}{2t}=\dfrac{3}{4t}\). At \(t=1\): \(\tfrac{3}{4}\). (The answer \(6\) is \(d^2y/dt^2=6t\) at \(t=1\) — the trap of skipping \(\div\,dx/dt\).)`
+    }
+  ];
+  let idx=0, score=0, answered=false;
+  const promptEl=document.getElementById('qPrompt'), optsEl=document.getElementById('qOpts'),
+        fbEl=document.getElementById('qFb'), countEl=document.getElementById('qCount'),
+        scoreEl=document.getElementById('qScore'), nextBtn=document.getElementById('qNext'),
+        resetBtn=document.getElementById('qReset');
+
+  function mathify(s){
+    // light: render \( \) if present; else plain
+    if(!window.katex) return s;
+    return s.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return katex.renderToString(t,{throwOnError:false});}catch(e){return m;}});
+  }
+
+  function render(){
+    if(idx>=QUESTIONS.length){ renderDone(); return; }
+    answered=false;
+    const q=QUESTIONS[idx];
+    countEl.textContent='Question '+(idx+1)+' of '+QUESTIONS.length;
+    scoreEl.textContent='Score: '+score;
+    promptEl.innerHTML=mathify(q.p);
+    optsEl.innerHTML='';
+    fbEl.className='qfb'; fbEl.innerHTML='';
+    nextBtn.disabled=true;
+    q.opts.forEach((o,i)=>{
+      const b=document.createElement('button');
+      b.innerHTML=mathify(o);
+      b.addEventListener('click',()=>choose(i,b));
+      optsEl.appendChild(b);
+    });
+  }
+  function choose(i,btn){
+    if(answered) return;
+    answered=true;
+    const q=QUESTIONS[idx];
+    const all=optsEl.querySelectorAll('button');
+    all.forEach((b,j)=>{ b.disabled=true; if(j===q.correct)b.classList.add('correct'); });
+    if(i===q.correct){ score++; scoreEl.textContent='Score: '+score;
+      fbEl.innerHTML='<span class="verdict r">✓ Correct</span><br>'+mathify(q.fb);
+    } else {
+      btn.classList.add('wrong');
+      fbEl.innerHTML='<span class="verdict w">✗ Not quite</span><br>'+mathify(q.fb);
+    }
+    fbEl.className='qfb show';
+    nextBtn.disabled=false;
+  }
+  function renderDone(){
+    document.getElementById('quiz').innerHTML=
+      '<div class="qdone"><div class="score">'+score+' / '+QUESTIONS.length+'</div>'+
+      '<p>'+(score===QUESTIONS.length?'Perfect — parametric slope, concavity, and arc length are locked in.':
+              score>=3?'Solid. Review the ones you missed, especially the ÷ dx/dt rule.':
+              'Worth another pass — re-read §3 and §4, then try again.')+'</p>'+
+      '<button class="qnav" style="font-family:var(--mono);font-size:12.5px;background:var(--cyan);color:#0b1417;font-weight:600;border:none;border-radius:9px;padding:10px 20px;cursor:pointer" onclick="location.reload()">↺ Try again</button></div>';
+  }
+  nextBtn.addEventListener('click',()=>{ if(!answered)return; idx++; render(); });
+  resetBtn.addEventListener('click',()=>{ idx=0;score=0;answered=false; document.getElementById('quiz').style.opacity=1; render(); });
+
+  render();
+  // KaTeX deferred-load fix: re-render once it arrives
+  if(!window.katex){let _kt=0;const _ki=setInterval(function(){if(window.katex){clearInterval(_ki);if(!answered)render();}else if(++_kt>80)clearInterval(_ki);},100);}
+})();
+
+/* ===================== inline math in prose/examples ===================== */
+function mathifyInline(){
+  if(!window.katex) return;
+  document.querySelectorAll('h2, h3, p, .step, .note p, .trap p, .sub').forEach(node=>{
+    if(node.dataset.mdone) return;
+    if(node.innerHTML.indexOf('\\(')===-1){ node.dataset.mdone="1"; return; }
+    node.innerHTML=node.innerHTML.replace(/\\\((.+?)\\\)/g,(m,t)=>{
+      try{return katex.renderToString(t,{throwOnError:false});}catch(e){return m;}
+    });
+    node.dataset.mdone="1";
+  });
+}
+
+/* ===================== boot ===================== */
+function boot(){ renderEqs(); mathifyInline(); }
+boot();
+if(window.addEventListener){ window.addEventListener('load',boot); document.addEventListener('DOMContentLoaded',boot); }
+if(!window.katex){let tries=0;const t=setInterval(()=>{if(window.katex){clearInterval(t);renderEqs();mathifyInline();}else if(++tries>80)clearInterval(t);},100);}
+</script>
+</body>
+</html>

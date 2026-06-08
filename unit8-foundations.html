@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Integral as Accumulation — Net Change, Motion, Average Value · Unit 8 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%2316140f%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2222%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%2340c98a%22%3E%26%238747%3B%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{ --approx:#40c98a; --gold:#40c98a; --true:#40c98a;
+         --emerald:#40c98a; --emerald-glow:#5fe0a4;
+         --fwd:#40c98a; --back:#e0644f; --dist:#e8a13c; --vio:#a892f0;
+         --glow:rgba(64,201,138,.08); --wrap-max:880px; }
+  .sub{color:var(--muted);font-size:15.5px;margin-top:10px;max-width:700px;line-height:1.6}
+  h2{font-family:var(--display);font-weight:600;font-size:24px;margin:56px 0 6px;letter-spacing:-0.015em}
+  h2 .n{color:var(--emerald);font-variant-numeric:tabular-nums}
+  p{font-size:15px;color:var(--muted);max-width:720px;line-height:1.78;margin:14px 0}
+  p.lead{font-size:16px;color:var(--ink);max-width:720px}
+  p b{color:var(--ink);font-weight:600}
+  .em-text{color:var(--emerald);font-weight:600}
+  .mono{font-family:var(--mono);color:var(--ink)}
+
+  .eq{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);
+    border-radius:14px;padding:22px;margin:20px 0;text-align:center;overflow-x:auto;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .legend{display:flex;flex-wrap:wrap;gap:12px 20px;margin:16px 0 4px}
+  .lg{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--muted);max-width:330px;line-height:1.55}
+  .lg .sw{flex-shrink:0;width:13px;height:13px;border-radius:4px;margin-top:3px}
+  .lg b{font-weight:600}
+
+  /* ===== the split visual: numbers are the star ===== */
+  .split-tool{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);
+    border-radius:18px;padding:26px 24px 22px;margin-top:22px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 22px 48px -28px rgba(0,0,0,.7)}
+  .split-nums{display:flex;align-items:stretch;gap:14px;justify-content:center}
+  .bignum{flex:1;max-width:240px;border-radius:16px;padding:18px 16px;text-align:center;position:relative;
+    border:1px solid var(--line);background:var(--bg);transition:border-color .25s,box-shadow .25s}
+  .bignum .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .bignum .val{font-family:var(--display);font-weight:600;font-size:54px;line-height:1;margin-top:8px;font-variant-numeric:tabular-nums;transition:color .2s}
+  .bignum .arr{font-size:18px;height:20px;margin-top:6px;font-family:var(--mono);letter-spacing:.1em}
+  .bignum.disp .val{color:var(--fwd)} .bignum.disp{box-shadow:0 0 0 1px rgba(64,201,138,.25)}
+  .bignum.dist .val{color:var(--dist)} .bignum.dist{box-shadow:0 0 0 1px rgba(232,161,60,.25)}
+  .bignum.disp.falling .val{color:var(--back)} .bignum.disp.falling{box-shadow:0 0 0 1px rgba(224,100,79,.4)}
+  .gap-badge{text-align:center;margin-top:16px;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .gap-badge b{color:var(--ink)}
+  .split-graph{margin-top:18px}
+  svg.viz{width:100%;height:auto;background:var(--bg);border:1px solid var(--line);border-radius:12px;display:block}
+  .controls{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:16px}
+  .ctrl{display:flex;flex-direction:column;gap:6px;font-family:var(--mono);font-size:10.5px;color:var(--muted);letter-spacing:.07em;text-transform:uppercase}
+  input[type=range]{width:100%;min-width:240px;accent-color:var(--emerald);cursor:pointer}
+  .hint{font-size:13px;color:var(--faint);font-style:italic;margin-top:10px}
+
+  .insight{border-left:3px solid var(--emerald);background:rgba(64,201,138,.06);border-radius:0 12px 12px 0;
+    padding:16px 20px;margin:24px 0;font-size:14.5px;line-height:1.7;color:var(--ink);max-width:720px}
+  .insight b{color:var(--emerald)}
+
+  /* step-by-step derivation block */
+  .derive{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);
+    border-radius:14px;padding:8px 22px 18px;margin:22px 0;max-width:720px}
+  .derive-title{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--emerald);
+    margin:16px 0 4px;display:flex;align-items:center;gap:9px}
+  .derive-title::before{content:"";width:18px;height:1px;background:var(--emerald);opacity:.6}
+  .dstep{display:flex;gap:14px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--line)}
+  .dstep:last-child{border-bottom:none}
+  .dstep .dn{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:rgba(64,201,138,.14);
+    border:1px solid rgba(64,201,138,.4);color:var(--emerald);font-family:var(--mono);font-size:12px;
+    display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .dstep .dbody{flex:1;font-size:14px;color:var(--muted);line-height:1.6}
+  .dstep .dbody b{color:var(--ink)}
+  .dstep .dmath{margin-top:7px;padding:8px 12px;background:var(--bg);border:1px solid var(--line);border-radius:8px;overflow-x:auto}
+  /* piece-by-piece formula dissection */
+  .dissect{margin:18px 0;max-width:720px}
+  .dpiece{display:flex;gap:13px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line)}
+  .dpiece:last-child{border-bottom:none}
+  .dpiece .dlabel{flex-shrink:0;width:120px;font-family:var(--mono);font-size:12.5px;padding-top:2px}
+  .dpiece .dexpl{flex:1;font-size:14px;color:var(--muted);line-height:1.62}
+  .dpiece .dexpl b{color:var(--ink)}
+  .stumble{border-left:3px solid var(--dist);background:rgba(232,161,60,.06);border-radius:0 12px 12px 0;
+    padding:14px 18px;margin:20px 0;font-size:14px;line-height:1.68;color:var(--ink);max-width:720px}
+  .stumble b{color:var(--dist)}
+  .acc-labels{display:flex;flex-wrap:wrap;gap:10px 24px;margin-bottom:12px}
+  .acc-lbl{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+  .acc-lbl .acc-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+  .acc-lbl .katex{font-size:1em}
+  @media(max-width:600px){.dpiece{flex-direction:column;gap:4px}.dpiece .dlabel{width:auto}}
+  .pitfall{border-left:3px solid var(--back);background:rgba(224,100,79,.06);border-radius:0 12px 12px 0;
+    padding:16px 20px;margin:24px 0;font-size:14px;line-height:1.7;color:var(--ink);max-width:720px}
+  .pitfall b{color:var(--back)}
+
+  /* small average-value diagram */
+  .av-wrap{display:flex;gap:22px;flex-wrap:wrap;align-items:center;margin-top:18px}
+  .av-wrap svg{flex:1;min-width:280px;max-width:380px}
+  .av-text{flex:1;min-width:260px}
+
+  /* ===== quiz ===== */
+  .quiz{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:18px;
+    padding:24px;margin-top:22px;max-width:660px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .qtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .qscore{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .qreset{font-family:var(--mono);font-size:11px;background:none;border:1px solid var(--line-2);color:var(--muted);
+    border-radius:7px;padding:5px 10px;cursor:pointer;transition:border-color .15s,color .15s}
+  .qreset:hover{border-color:var(--emerald);color:var(--ink)}
+  .qprompt{font-size:15.5px;color:var(--ink);line-height:1.6;margin-bottom:8px}
+  .qctx{font-size:13.5px;color:var(--muted);margin-bottom:14px}
+  .qopts{display:flex;flex-direction:column;gap:9px}
+  .qopts button{font-family:var(--body);font-size:14.5px;text-align:left;background:var(--bg);color:var(--ink);
+    border:1px solid var(--line);border-radius:10px;padding:12px 15px;cursor:pointer;transition:border-color .15s,background .15s}
+  .qopts button:hover:not(:disabled){border-color:var(--emerald)}
+  .qopts button:disabled{cursor:default}
+  .qopts button.correct{background:rgba(64,201,138,.16);border-color:var(--emerald);color:var(--emerald);font-weight:600}
+  .qopts button.wrong{background:rgba(224,100,79,.16);border-color:var(--back);color:var(--back)}
+  .qfb{margin-top:14px;font-size:14px;line-height:1.65;color:var(--muted);min-height:1px}
+  .qfb b{color:var(--ink)}
+  .fb-intro{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+  .fb-intro b{color:var(--emerald)}
+  .fb-step{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+  .fb-step:last-of-type{border-bottom:none}
+  .fb-step-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--bg);color:var(--emerald);
+    border:1px solid rgba(64,201,138,.4);font-family:var(--mono);font-size:12px;display:flex;align-items:center;justify-content:center;margin-top:1px}
+  .fb-step-body{flex:1}
+  .fb-step-t{font-size:13.5px;color:var(--muted);line-height:1.5}
+  .fb-step-m{margin-top:7px;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 12px;overflow-x:auto}
+  .fb-key{margin-top:13px;font-size:13.5px;color:var(--ink);background:rgba(64,201,138,.07);
+    border-left:2px solid var(--emerald);border-radius:0 8px 8px 0;padding:10px 14px;line-height:1.55}
+  .qnext{margin-top:16px;width:100%;font-family:var(--mono);font-size:13px;font-weight:600;background:var(--emerald);
+    color:#16140f;border:none;border-radius:10px;padding:12px;cursor:pointer;display:none}
+  .qdone{text-align:center;padding:10px}
+  .qdone .big{font-family:var(--display);font-size:32px;font-weight:600;color:var(--emerald)}
+
+  .tex-fallback{font-family:var(--mono);font-size:14px;color:var(--ink)}
+  .eq .katex,.eq .katex-display{color:var(--ink)}
+  .eq:empty::after{content:"";display:none}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  a:focus-visible{outline:2px solid var(--emerald);outline-offset:3px;border-radius:6px}
+  .whatsnext{margin-top:30px;font-size:14px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;max-width:720px}
+  .whatsnext a{color:var(--emerald);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:50px;border-top:1px solid var(--line);padding-top:14px}
+  footer a{color:var(--muted)}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit8.html">← Unit 8</a>
+
+  <header class="reveal">
+    <h1>The Integral as <span class="em">Accumulation</span></h1>
+    <div class="sub">One idea runs under half of this unit: a definite integral adds up a <b>rate</b> to give a
+      <b>total change</b>. Net change, motion, and average value are all this one engine — here's how it works,
+      then you'll drill it.</div>
+  </header>
+
+  <!-- ===================== 1 · CORE IDEA (substance) ===================== -->
+  <h2 class="reveal"><span class="n">1</span> · Rate in, total out</h2>
+  <p class="lead reveal">Here's a question you already know how to answer with arithmetic: if water flows into a
+    tank at a steady <span class="mono">5</span> liters per minute for <span class="mono">3</span> minutes, how
+    much went in? You multiplied — <span class="mono">5 × 3 = 15</span> liters. Rate times time equals total.</p>
+  <p class="reveal">But what if the flow rate <i>changes</i> every instant — fast at first, then trickling, then
+    surging again? You can't just multiply, because there's no single rate to multiply by. This is the exact
+    problem the integral was built to solve: it's what "rate times time" becomes when the rate won't hold still.
+    Slice the time into tiny pieces so small the rate is nearly constant across each one, multiply rate by the
+    tiny time on each slice, and add up all those tiny totals. That sum — taken to the limit — <i>is</i> the
+    integral. So the integral of a rate isn't some abstract symbol; it's <b>the grown-up version of rate × time</b>.</p>
+
+  <div class="eq reveal" id="coreEq"></div>
+
+  <div class="dissect reveal">
+    <div class="dpiece"><div class="dlabel" style="color:var(--dist)">f′(t)</div>
+      <div class="dexpl">The <b>rate</b> — how fast the quantity is changing at the instant <span class="mono">t</span>. A flow rate, a velocity, a rate of growth. This is what you're given.</div></div>
+    <div class="dpiece"><div class="dlabel" style="color:var(--dist)">f′(t)&nbsp;dt</div>
+      <div class="dexpl">Rate times a <b>sliver of time</b> <span class="mono">dt</span> — the tiny bit of total change accumulated during that one instant. This is "rate × time" on a slice so small the rate barely moves.</div></div>
+    <div class="dpiece"><div class="dlabel" style="color:var(--muted)">∫ₐᵇ</div>
+      <div class="dexpl">The <b>sum of every sliver</b> from <span class="mono">a</span> to <span class="mono">b</span>. Add up all those tiny changes and you get the <b>net change</b> in the quantity over the whole interval.</div></div>
+    <div class="dpiece"><div class="dlabel" style="color:var(--fwd)">= f(b) − f(a)</div>
+      <div class="dexpl">And here's the payoff: that whole sum equals just the <b>ending amount minus the starting amount</b>. That's the Fundamental Theorem — you don't have to add up infinitely many slivers by hand, you just subtract two values.</div></div>
+  </div>
+
+  <p class="reveal">This is why the idea is so powerful: <b>you never need a formula for the quantity itself, only for
+    its rate.</b> You don't track the tank's water level moment by moment — you take the flow rate, integrate it,
+    and out comes the total added. A capacitor charging, a population growing, a car's odometer climbing: in every
+    case, <span class="em-text">total accumulated = integral of the rate</span>. Everything else on this page is
+    this one idea wearing a different costume.</p>
+
+  <!-- ===================== 2 · MOTION + THE SPLIT VISUAL ===================== -->
+  <h2 class="reveal"><span class="n">2</span> · Motion: where the rate is velocity</h2>
+  <p class="lead reveal">Now give that rate a specific job. <b>Velocity is the rate your position changes</b> — so by
+    the idea above, position is just the accumulation of velocity. Integrate velocity over some time and you get how
+    much position changed. Simple enough. But motion hides a fork in the road that costs students points on the exam
+    constantly, and it's worth slowing all the way down for.</p>
+  <p class="reveal">The fork is this: <b>which "how far" are you asking about?</b> There are two, and they're
+    different numbers. Imagine walking 3 steps forward, then 3 steps back. How far did you travel? Six steps — your
+    feet did real work. But where did you <i>end up</i>? Right where you started — net zero. Both answers are correct;
+    they're answering different questions. Velocity handles them with one small distinction.</p>
+
+  <div class="dissect reveal">
+    <div class="dpiece"><div class="dlabel" style="color:var(--fwd)">Displacement</div>
+      <div class="dexpl">Integrate velocity <b>exactly as it is</b>: <span class="mono">∫v dt</span>. When the particle moves backward, velocity is negative, so it <i>subtracts</i> from the total. You get the <b>net</b> result — where it ended up relative to the start. (In the walk: zero.)</div></div>
+    <div class="dpiece"><div class="dlabel" style="color:var(--dist)">Total distance</div>
+      <div class="dexpl">Integrate the <b>speed</b> instead: <span class="mono">∫|v| dt</span>. The absolute value flips backward motion to positive, so every bit of travel counts no matter the direction. You get <b>every inch covered</b>. (In the walk: six steps.)</div></div>
+  </div>
+  <p class="reveal" style="margin-bottom:0">They're equal only when the particle <i>never reverses</i>. The moment it
+    turns around, they split — and the visual below lets you watch exactly that happen. Sweep the slider: the two
+    numbers <b>start identical</b> and stay locked while the particle moves forward, then
+    <span style="color:var(--back)">pull apart</span> the instant it reverses.</p>
+  <div class="eq reveal" id="motionEq" style="margin-top:20px"></div>
+
+  <div class="split-tool reveal">
+    <div class="split-nums">
+      <div class="bignum disp" id="dispBox">
+        <div class="lbl">Displacement ∫v dt</div>
+        <div class="val" id="dispVal">0.00</div>
+        <div class="arr" id="dispArr" style="color:var(--fwd)">&nbsp;</div>
+      </div>
+      <div class="bignum dist" id="distBox">
+        <div class="lbl">Total distance ∫|v| dt</div>
+        <div class="val" id="distVal">0.00</div>
+        <div class="arr" id="distArr" style="color:var(--dist)">&nbsp;</div>
+      </div>
+    </div>
+    <div class="gap-badge" id="gapBadge">they're still equal — keep sweeping</div>
+    <div class="split-graph">
+      <svg class="viz" id="motionViz" viewBox="0 0 660 230" aria-label="Velocity graph with signed area"></svg>
+    </div>
+    <div class="controls">
+      <div class="ctrl" style="flex:1">Sweep time&nbsp; t = <span id="motTval" style="color:var(--emerald)">0.00</span>
+        <input type="range" id="motT" min="0" max="4" step="0.02" value="0">
+      </div>
+    </div>
+    <div class="hint">v(t) = (t−1)(t−3): forward, then backward (red), then forward again.</div>
+  </div>
+
+  <div class="stumble reveal"><b>Where students slip:</b> they compute <span class="mono">∫v dt</span> and call it the
+    distance. By <span class="mono">t = 4</span> above, that gives <span class="mono">4/3</span> — but the particle
+    actually travelled <span class="mono">4</span>, three times farther. The tell is always the same: <b>if velocity
+    changes sign anywhere on the interval, displacement and distance differ.</b> For distance, find where
+    <span class="mono">v = 0</span> (the turning points), split the integral there, and add the pieces as positive
+    values. Skipping that split is the single most common error in this whole unit.</div>
+
+  <!-- ===================== 3 · ACCUMULATION FUNCTION ===================== -->
+  <h2 class="reveal"><span class="n">3</span> · The accumulation function</h2>
+  <p class="lead reveal">So far we've integrated over a <i>fixed</i> interval to get one number. But what if you let
+    the finish line <b>move</b>? Fix the start at <span class="mono">a</span>, and let the upper limit slide. Now the
+    integral isn't a single value — it's a <b>function</b> of where you stop. That's the accumulation function: a
+    running total that grows (or shrinks) as you sweep to the right.</p>
+  <p class="reveal">The classic picture is a bank balance, or water in a tank. The <b>rate</b> is money flowing in
+    and out each day; the <b>accumulation function</b> is your balance over time. On days money flows in (positive
+    rate), the balance climbs. On days more flows out than in (negative rate), the balance drops. The rate drives
+    the total — and that relationship is the whole point.</p>
+
+  <div class="eq reveal" id="accEq"></div>
+
+  <p class="reveal">Watch the two graphs together below. The <b style="color:var(--dist)">top</b> is the rate
+    <span class="mono">f</span>; the <b style="color:var(--fwd)">bottom</b> is the accumulation
+    <span class="mono">F</span> being drawn as you sweep. Three things to notice — they're the entire concept:</p>
+
+  <div class="panel reveal" style="background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-top:18px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset">
+    <div class="acc-labels">
+      <div class="acc-lbl"><span class="acc-dot" style="background:var(--dist)"></span><span id="accRateLbl"></span></div>
+      <div class="acc-lbl"><span class="acc-dot" style="background:var(--fwd)"></span><span id="accFLbl"></span></div>
+    </div>
+    <svg class="viz" id="accViz" viewBox="0 0 660 360" aria-label="Rate function on top and its accumulation function building below"></svg>
+    <div class="controls">
+      <div class="ctrl" style="flex:1">Sweep&nbsp; x = <span id="accXval" style="color:var(--emerald)">0.00</span>
+        <input type="range" id="accX" min="0" max="6.28" step="0.02" value="0">
+      </div>
+    </div>
+    <div class="readouts">
+      <div class="ro acc"><div class="rl">Accumulated total F(x)</div><div class="rv" id="accVal">0.00</div><div class="rsub">= area under f from 0 to x</div></div>
+    </div>
+  </div>
+
+  <div class="dissect reveal">
+    <div class="dpiece"><div class="dlabel" style="color:var(--dist)">rate &gt; 0</div>
+      <div class="dexpl"><b>F rises.</b> When the top curve is above the axis, you're adding area, so the running total climbs.</div></div>
+    <div class="dpiece"><div class="dlabel" style="color:var(--back)">rate &lt; 0</div>
+      <div class="dexpl"><b>F falls.</b> When the top curve dips below the axis, you're subtracting area, so the total drops back down.</div></div>
+    <div class="dpiece"><div class="dlabel" style="color:var(--fwd)">rate = 0</div>
+      <div class="dexpl"><b>F turns.</b> Right where the rate crosses zero, F reaches a peak or a valley — because that's where it switches from adding to subtracting (or back). The rate hitting zero is F's slope hitting zero.</div></div>
+  </div>
+
+  <div class="insight reveal">That last point is the <b>Fundamental Theorem</b> staring back at you:
+    <span class="mono" style="color:var(--ink)">F′(x) = f(x)</span>. The rate <i>is</i> the slope of the accumulated
+    total. Where the rate is big and positive, F climbs steeply; where the rate is zero, F is momentarily flat. The
+    two graphs aren't just related — one is literally the slope-story of the other.</div>
+
+  <!-- ===================== 4 · AVERAGE VALUE (small diagram + substance) ===================== -->
+  <h2 class="reveal"><span class="n">4</span> · Average value: the total, spread flat</h2>
+  <p class="lead reveal">Think about how you average test scores: add them up, divide by how many there are. But a
+    function has <i>infinitely</i> many values across an interval — you can't "add them up and divide by how many."
+    So what could the average of a function even mean? Here's the move that rescues it: instead of averaging points,
+    ask about <b>area</b>.</p>
+  <p class="reveal">Picture the area under a wavy curve. Now ask: <b>what single flat height would trap that exact
+    same area over the same interval?</b> If you could press the wave down into a level rectangle without spilling
+    any area, the height of that rectangle is the average value. It's the "fair" constant — the steady level that
+    accounts for the same total as all the ups and downs combined. (Same logic as average speed: the one steady
+    speed that would've covered your trip's distance in the same time.)</p>
+
+  <div class="derive reveal">
+    <div class="derive-title">Deriving the formula</div>
+    <div class="dstep"><div class="dn">1</div><div class="dbody">Call the average height <b>c</b>. We want the rectangle of height <span class="mono">c</span> across the interval <span class="mono">[a,b]</span> to have the same area as the curve.</div></div>
+    <div class="dstep"><div class="dn">2</div><div class="dbody">The rectangle's area is height × width: <b><span class="mono">c · (b − a)</span></b>.</div></div>
+    <div class="dstep"><div class="dn">3</div><div class="dbody">The curve's area is the integral: <b><span class="mono">∫ₐᵇ f(x) dx</span></b>.</div></div>
+    <div class="dstep"><div class="dn">4</div><div class="dbody">Set them equal — that's the whole condition: <div class="dmath" id="avgDeriveEq"></div></div></div>
+    <div class="dstep"><div class="dn">5</div><div class="dbody">Solve for <span class="mono">c</span> by dividing both sides by <span class="mono">(b − a)</span>. That <i>is</i> the average-value formula — not memorized, but built.</div></div>
+  </div>
+
+  <div class="eq reveal" id="avgEq"></div>
+  <div class="dissect reveal">
+    <div class="dpiece"><div class="dlabel" style="color:var(--fwd)">∫ₐᵇ f dx</div>
+      <div class="dexpl">The <b>accumulated total</b> — the whole area under the curve. By itself this is a <i>total</i>, not an average.</div></div>
+    <div class="dpiece"><div class="dlabel" style="color:var(--vio)">1/(b−a)</div>
+      <div class="dexpl">Dividing by the <b>width</b> spreads that total evenly across the interval. Dividing a total by how much you spread it over is exactly what turns a total into an average — same as distance ÷ time giving average speed.</div></div>
+  </div>
+
+  <div class="stumble reveal"><b>The thing to remember:</b> an integral gives you a <i>total</i>, never an average on
+    its own. The division by <span class="mono">b − a</span> is the entire difference between "how much area" and
+    "what average height." Forgetting to divide is forgetting to average.</div>
+
+  <div class="panel reveal" style="background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin-top:18px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset">
+    <div class="av-wrap">
+      <svg id="avgViz" viewBox="0 0 380 240" aria-label="Average value equal-area rectangle"></svg>
+      <div class="av-text">
+        <p style="margin-top:0">See it directly: the <b style="color:var(--fwd)">area under the curve</b> and the
+          <b style="color:var(--fwd)">dashed rectangle</b> at the average height enclose <b>exactly the same area</b>.
+          The wave has been pressed flat into a level of equal size — that height is
+          <span class="mono">f<sub>avg</sub></span>.</p>
+        <p style="margin-bottom:0;font-size:13.5px">One guarantee worth knowing: the <b>Mean Value Theorem for
+          Integrals</b> says a continuous curve must actually <i>hit</i> its average height at some point on the
+          interval — the wave genuinely crosses the flat line, it isn't just an abstract average.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight reveal">Three ideas, one engine. <b>Net change</b> integrates a rate to get a total. <b>Motion</b>
+    is that with velocity as the rate — plus the displacement-vs-distance fork. <b>Average value</b> takes that total
+    and divides by the width. Once you see the integral as "add up a rate, slice by slice," all three stop being
+    separate formulas to memorize and become the same idea asked three ways.</div>
+
+  <!-- ===================== 4 · PRACTICE ===================== -->
+  <h2 class="reveal"><span class="n">5</span> · Drill it</h2>
+  <p class="lead reveal">Six questions across net change, the displacement-vs-distance trap, accumulation, and
+    average value. Each shows a worked explanation after you answer.</p>
+
+  <div class="quiz reveal" id="quiz">
+    <div class="qtop">
+      <span class="qscore" id="qScore">Score: 0 / 0</span>
+      <button class="qreset" id="qReset">↺ restart</button>
+    </div>
+    <div id="qBody">
+      <div class="qprompt" id="qPrompt"></div>
+      <div class="qctx" id="qCtx"></div>
+      <div class="qopts" id="qOpts"></div>
+      <div class="qfb" id="qFb"></div>
+      <button class="qnext" id="qNext">Next →</button>
+    </div>
+  </div>
+
+  <div class="whatsnext reveal">
+    Got it? The same "add up a rate" idea becomes geometric next: shading the region between two curves in
+    <a href="unit8-area.html">Area Between Curves</a>, or head back to <a href="unit8.html">Unit 8</a>.
+  </div>
+
+  <footer class="reveal">The Integral as Accumulation · Unit 8 · <a href="unit8.html">back to Unit 8</a> · part of the Visual AP Calculus guide.</footer>
+</div>
+
+<script>
+const NS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const FWD="#40c98a",FWDG="#5fe0a4",BACK="#e0644f",DIST="#e8a13c",VIO="#a892f0",MUT="#9a9183",LINE="#332e25",INK="#ece7dd",BG="#0d0c0a";
+
+function renderEqs(){
+  document.getElementById('coreEq').innerHTML=tex(String.raw`\int_a^b \textcolor{${DIST}}{f'(t)\,dt}=\textcolor{${FWD}}{f(b)-f(a)}`,"\u222b\u2090\u1d47 f\u2032(t) dt = f(b) \u2212 f(a)",true);
+  document.getElementById('motionEq').innerHTML=tex(String.raw`\text{displacement}=\textcolor{${FWD}}{\int_a^b v\,dt}\qquad \text{distance}=\textcolor{${DIST}}{\int_a^b |v|\,dt}`,"displacement = \u222bv dt   distance = \u222b|v| dt",true);
+  document.getElementById('avgEq').innerHTML=tex(String.raw`f_{\text{avg}}=\textcolor{${VIO}}{\dfrac{1}{b-a}}\,\textcolor{${FWD}}{\int_a^b f(x)\,dx}`,"f_avg = 1/(b\u2212a) \u00b7 \u222bf dx",true);
+  var ade=document.getElementById('avgDeriveEq'); if(ade) ade.innerHTML=tex(String.raw`c\,(b-a)=\int_a^b f(x)\,dx`,"c\u00b7(b\u2212a) = \u222b\u2090\u1d47 f(x) dx",false);
+  var ace=document.getElementById('accEq'); if(ace) ace.innerHTML=tex(String.raw`\textcolor{${FWD}}{F(x)}=\int_a^{\,x}\textcolor{${DIST}}{f(t)}\,dt`,"F(x) = \u222b\u2090\u02e3 f(t) dt",true);
+  var arl=document.getElementById('accRateLbl'); if(arl) arl.innerHTML=tex(String.raw`\text{rate}\;\; f(t)=\cos t+\tfrac{1}{2}`,"rate f(t) = cos t + 1/2",false);
+  var afl=document.getElementById('accFLbl'); if(afl) afl.innerHTML=tex(String.raw`\text{accumulated}\;\; F(x)=\int_0^{\,x} f(t)\,dt`,"accumulated F(x) = \u222b\u2080\u02e3 f(t) dt",false);
+}
+
+/* ===== THE SPLIT VISUAL — numbers are the star ===== */
+(function(){
+  const v=t=>t*t-4*t+3, V=t=>t**3/3-2*t*t+3*t;
+  const roots=[1,3];
+  const svg=document.getElementById('motionViz'),tEl=document.getElementById('motT'),tVal=document.getElementById('motTval');
+  const dispVal=document.getElementById('dispVal'),distVal=document.getElementById('distVal');
+  const dispArr=document.getElementById('dispArr'),distArr=document.getElementById('distArr');
+  const dispBox=document.getElementById('dispBox'),gapBadge=document.getElementById('gapBadge');
+  const W=660,H=230,padL=44,padR=22,padT=20,padB=40;
+  const tMin=0,tMax=4,vMin=-1.6,vMax=3.3;
+  const sx=t=>padL+(t-tMin)/(tMax-tMin)*(W-padL-padR);
+  const sy=val=>padT+(vMax-val)/(vMax-vMin)*(H-padT-padB);
+  const disp=T=>V(T)-V(0);
+  const dist=T=>{const p=[0,...roots.filter(r=>r<T),T];let d=0;for(let i=0;i<p.length-1;i++)d+=Math.abs(V(p[i+1])-V(p[i]));return d;};
+  let prevDisp=0;
+  function draw(){
+    const T=parseFloat(tEl.value);tVal.textContent=T.toFixed(2);svg.innerHTML="";
+    // gridline at zero
+    for(let g=-1;g<=3;g++){if(g!==0)svg.appendChild(el("line",{x1:padL,y1:sy(g),x2:W-padR,y2:sy(g),stroke:LINE,"stroke-width":1,opacity:.35}));}
+    // shaded signed area up to T
+    const bounds=[0,...roots.filter(r=>r<T),T];
+    for(let i=0;i<bounds.length-1;i++){const a=bounds[i],b=bounds[i+1],pos=v((a+b)/2)>=0;
+      let d="M "+sx(a)+" "+sy(0);for(let t=a;t<=b;t+=0.008)d+=" L "+sx(t)+" "+sy(v(t));d+=" L "+sx(b)+" "+sy(0)+" Z";
+      svg.appendChild(el("path",{d,fill:pos?FWD:BACK,opacity:.24}));}
+    svg.appendChild(el("line",{x1:padL,y1:sy(0),x2:W-padR,y2:sy(0),stroke:MUT,"stroke-width":1.5}));
+    // velocity curve segments
+    function curve(a,b,c,o){let d="M "+sx(a)+" "+sy(v(a));for(let t=a;t<=b;t+=0.008)d+=" L "+sx(t)+" "+sy(v(t));svg.appendChild(el("path",{d,fill:"none",stroke:c,"stroke-width":2.6,opacity:o,"stroke-linecap":"round"}));}
+    const ab=[0,1,3,4];
+    for(let i=0;i<ab.length-1;i++){const a=ab[i],b=ab[i+1],pos=v((a+b)/2)>=0;
+      if(T>=b)curve(a,b,pos?FWDG:BACK,1);else if(T<=a)curve(a,b,MUT,.25);else{curve(a,T,pos?FWDG:BACK,1);curve(T,b,MUT,.25);}}
+    svg.appendChild(el("line",{x1:sx(T),y1:padT,x2:sx(T),y2:H-padB,stroke:INK,"stroke-width":1.4,"stroke-dasharray":"4 3",opacity:.6}));
+    for(let t=0;t<=4;t++)svg.appendChild(el("text",{x:sx(t),y:H-padB+15,fill:MUT,"font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},t));
+    svg.appendChild(el("text",{x:padL+4,y:padT+10,fill:MUT,"font-size":10,"font-family":"var(--mono)"},"v(t)"));
+    // ----- the star: the numbers -----
+    const dv=disp(T), dt=dist(T);
+    dispVal.textContent=dv.toFixed(2); distVal.textContent=dt.toFixed(2);
+    // direction arrows + falling state
+    const movingBack = (T>1 && T<3);
+    if(T<=0.02){ dispArr.textContent="\u00a0"; distArr.textContent="\u00a0"; }
+    else if(movingBack){ dispArr.textContent="↓ falling"; dispArr.style.color=BACK; distArr.textContent="↑ rising"; distArr.style.color=DIST; dispBox.classList.add('falling'); }
+    else { dispArr.textContent="↑ rising"; dispArr.style.color=FWD; distArr.textContent="↑ rising"; distArr.style.color=DIST; dispBox.classList.remove('falling'); }
+    // gap badge
+    const gap = dt-dv;
+    if(T<=0.02) gapBadge.innerHTML="they start equal — keep sweeping";
+    else if(gap<0.01) gapBadge.innerHTML="still <b>equal</b> — the particle hasn't reversed yet";
+    else gapBadge.innerHTML="distance is now <b>"+gap.toFixed(2)+"</b> ahead of displacement";
+    prevDisp=dv;
+  }
+  tEl.addEventListener('input',draw);draw();
+})();
+
+/* ===== ACCUMULATION FUNCTION: two-panel (rate on top, F building below) ===== */
+(function(){
+  const f=t=>Math.cos(t)+0.5, F=x=>Math.sin(x)+0.5*x;
+  const svg=document.getElementById('accViz'); if(!svg) return;
+  const xEl=document.getElementById('accX'), xVal=document.getElementById('accXval');
+  const W=660,H=360,padL=46,padR=22;
+  const topT=18, topB=164;   // rate panel
+  const botT=198, botB=340;  // accumulation panel
+  const tMin=0,tMax=6.28;
+  const sx=t=>padL+(t-tMin)/(tMax-tMin)*(W-padL-padR);
+  const rMin=-0.7,rMax=1.7, ry=v=>topT+(rMax-v)/(rMax-rMin)*(topB-topT);
+  const fMin=-0.2,fMax=3.4, fy=v=>botT+(fMax-v)/(fMax-fMin)*(botB-botT);
+  const r1=Math.acos(-0.5), r2=2*Math.PI-Math.acos(-0.5); // zero crossings of f
+  function draw(){
+    const X=parseFloat(xEl.value); xVal.textContent=X.toFixed(2); svg.innerHTML="";
+    // ---- TOP: rate f ----
+    svg.appendChild(el("line",{x1:padL,y1:ry(0),x2:W-padR,y2:ry(0),stroke:MUT,"stroke-width":1.3}));
+    // shaded swept area split by sign
+    const bs=[0]; if(r1<X)bs.push(r1); if(r2<X)bs.push(r2); bs.push(X);
+    for(let i=0;i<bs.length-1;i++){const a=bs[i],b=bs[i+1],pos=f((a+b)/2)>=0;
+      let d="M "+sx(a)+" "+ry(0);for(let t=a;t<=b;t+=0.01)d+=" L "+sx(t)+" "+ry(f(t));d+=" L "+sx(b)+" "+ry(0)+" Z";
+      svg.appendChild(el("path",{d,fill:pos?FWD:BACK,opacity:.2}));}
+    // faint full rate + solid up to X
+    let dc="M "+sx(tMin)+" "+ry(f(tMin));for(let t=tMin;t<=tMax;t+=0.01)dc+=" L "+sx(t)+" "+ry(f(t));
+    svg.appendChild(el("path",{d:dc,fill:"none",stroke:MUT,"stroke-width":2,opacity:.28}));
+    let ds="M "+sx(0)+" "+ry(f(0));for(let t=0;t<=X;t+=0.01)ds+=" L "+sx(t)+" "+ry(f(t));
+    svg.appendChild(el("path",{d:ds,fill:"none",stroke:DIST,"stroke-width":2.6}));
+    // ---- BOTTOM: accumulation F ----
+    svg.appendChild(el("line",{x1:padL,y1:fy(0),x2:W-padR,y2:fy(0),stroke:LINE,"stroke-width":1,opacity:.5}));
+    let dF="M "+sx(0)+" "+fy(F(0));for(let t=0;t<=X;t+=0.01)dF+=" L "+sx(t)+" "+fy(F(t));
+    svg.appendChild(el("path",{d:dF,fill:"none",stroke:FWDG,"stroke-width":3,"stroke-linecap":"round"}));
+    let dFr="M "+sx(X)+" "+fy(F(X));for(let t=X;t<=tMax;t+=0.01)dFr+=" L "+sx(t)+" "+fy(F(t));
+    svg.appendChild(el("path",{d:dFr,fill:"none",stroke:MUT,"stroke-width":2,opacity:.26}));
+    svg.appendChild(el("circle",{cx:sx(X),cy:fy(F(X)),r:6,fill:FWDG,stroke:BG,"stroke-width":2}));
+    // guide lines at the zero-crossings (where F peaks/valleys), only once passed
+    [r1,r2].forEach(r=>{ if(r<=X){
+      svg.appendChild(el("line",{x1:sx(r),y1:topT,x2:sx(r),y2:botB,stroke:MUT,"stroke-width":1,"stroke-dasharray":"3 4",opacity:.4}));
+      svg.appendChild(el("text",{x:sx(r),y:botB+14,fill:MUT,"font-size":9.5,"text-anchor":"middle","font-family":"var(--mono)"},"f=0"));
+    }});
+    // sweep line
+    svg.appendChild(el("line",{x1:sx(X),y1:topT,x2:sx(X),y2:botB,stroke:INK,"stroke-width":1.3,"stroke-dasharray":"4 3",opacity:.5}));
+    document.getElementById('accVal').textContent=F(X).toFixed(2);
+  }
+  xEl.addEventListener('input',draw); draw();
+})();
+
+/* ===== AVERAGE VALUE small diagram ===== */
+(function(){
+  const f=x=>Math.sin(x)+1.5,F=x=>-Math.cos(x)+1.5*x;
+  const a=0,b=Math.PI,svg=document.getElementById('avgViz');
+  const W=380,H=240,padL=30,padR=16,padT=18,padB=28;
+  const xMin=0,xMax=Math.PI,yMin=0,yMax=3;
+  const sx=x=>padL+(x-xMin)/(xMax-xMin)*(W-padL-padR);
+  const sy=y=>padT+(yMax-y)/(yMax-yMin)*(H-padT-padB);
+  const avg=(F(b)-F(a))/(b-a);
+  let dA="M "+sx(a)+" "+sy(0);for(let x=a;x<=b;x+=0.01)dA+=" L "+sx(x)+" "+sy(f(x));dA+=" L "+sx(b)+" "+sy(0)+" Z";
+  svg.appendChild(el("path",{d:dA,fill:FWD,opacity:.18}));
+  svg.appendChild(el("rect",{x:sx(a),y:sy(avg),width:sx(b)-sx(a),height:sy(0)-sy(avg),fill:FWD,opacity:.10,stroke:FWDG,"stroke-width":2,"stroke-dasharray":"6 4"}));
+  svg.appendChild(el("line",{x1:padL,y1:sy(0),x2:W-padR,y2:sy(0),stroke:MUT,"stroke-width":1.4}));
+  let d="M "+sx(xMin)+" "+sy(f(xMin));for(let x=xMin;x<=xMax;x+=0.01)d+=" L "+sx(x)+" "+sy(f(x));
+  svg.appendChild(el("path",{d,fill:"none",stroke:INK,"stroke-width":2.6}));
+  svg.appendChild(el("text",{x:sx(b)-4,y:sy(avg)-7,fill:FWDG,"font-size":11,"text-anchor":"end","font-family":"var(--mono)"},"f_avg = "+avg.toFixed(2)));
+  svg.appendChild(el("text",{x:sx((a+b)/2),y:sy(0.3),fill:FWD,"font-size":11,"text-anchor":"middle","font-family":"var(--mono)"},"equal area"));
+})();
+
+/* ===== QUIZ ===== */
+const QUIZ=[
+  {p:"A reservoir fills at a rate of \\(r(t)=3t\\) liters/min. How much water is added over the first 2 minutes?",
+   ctx:"Net change = integral of the rate.",
+   opts:["6 liters","3 liters","12 liters","2 liters"],correct:0,
+   intro:"<b>Section 1:</b> total added = the integral of the rate.",
+   steps:[
+     {t:"Set up the integral of the rate over the interval.", m:"\\int_0^2 3t\\,dt"},
+     {t:"Find the antiderivative of \\(3t\\).", m:"\\tfrac{3}{2}t^2"},
+     {t:"Evaluate from 0 to 2.", m:"\\tfrac{3}{2}t^2\\Big|_0^2 = \\tfrac{3}{2}(4)-0 = 6"}
+   ],
+   key:"You never needed a formula for the water level itself \u2014 just its rate."},
+
+  {p:"A particle has velocity \\(v(t)=t-2\\) on \\([0,4]\\). What is its <b>displacement</b>?",
+   ctx:"Displacement integrates velocity as-is.",
+   opts:["0","4","8","2"],correct:0,
+   intro:"<b>Section 2:</b> displacement integrates velocity straight \u2014 backward motion subtracts.",
+   steps:[
+     {t:"Integrate velocity as-is over the interval.", m:"\\int_0^4 (t-2)\\,dt"},
+     {t:"Find the antiderivative.", m:"\\tfrac{t^2}{2}-2t"},
+     {t:"Evaluate from 0 to 4.", m:"\\left(\\tfrac{16}{2}-8\\right)-0 = 8-8 = 0"}
+   ],
+   key:"It drifts back for 2 seconds, then forward the same amount \u2014 net zero."},
+
+  {p:"Same particle, \\(v(t)=t-2\\) on \\([0,4]\\). What is the <b>total distance</b> travelled?",
+   ctx:"Distance integrates |v| \u2014 split where velocity changes sign.",
+   opts:["4","0","8","2"],correct:0,
+   intro:"<b>Section 2 trap:</b> velocity changes sign, so distance \u2260 displacement.",
+   steps:[
+     {t:"Find the turning point where velocity is zero.", m:"t-2=0 \\;\\Rightarrow\\; t=2"},
+     {t:"Integrate each piece and take absolute values.", m:"\\left|\\int_0^2(t-2)\\right| = 2,\\quad \\left|\\int_2^4(t-2)\\right| = 2"},
+     {t:"Add the pieces as positives.", m:"2+2 = 4"}
+   ],
+   key:"Displacement was 0, but it actually travelled 4 \u2014 the exact trap from section 2."},
+
+  {p:"What is the average value of \\(f(x)=x^2\\) on \\([0,3]\\)?",
+   ctx:"Average value = total \u00f7 width.",
+   opts:["3","9","1","27"],correct:0,
+   intro:"<b>Section 4:</b> average value = accumulated total divided by the width.",
+   steps:[
+     {t:"Find the accumulated total (the integral).", m:"\\int_0^3 x^2\\,dx = \\tfrac{x^3}{3}\\Big|_0^3 = 9"},
+     {t:"Divide by the width \\(b-a\\).", m:"\\tfrac{1}{3-0} = \\tfrac{1}{3}"},
+     {t:"Multiply to get the average height.", m:"\\tfrac{1}{3}\\cdot 9 = 3"}
+   ],
+   key:"Skipping the division leaves you at 9 \u2014 a total, not an average."},
+
+  {p:"If \\(F(x)=\\int_0^x 2t\\,dt\\), what is \\(F(3)\\)?",
+   ctx:"An accumulation function is the integral with a moving upper limit.",
+   opts:["9","6","3","18"],correct:0,
+   intro:"<b>Section 3:</b> an accumulation function is an integral whose top limit moves.",
+   steps:[
+     {t:"Integrate to get \\(F\\) as a function of \\(x\\).", m:"\\int_0^x 2t\\,dt = t^2\\Big|_0^x = x^2"},
+     {t:"Plug in \\(x=3\\).", m:"F(3) = 3^2 = 9"},
+     {t:"Check: the derivative gives back the rate.", m:"F'(x)=2x = f(x)"}
+   ],
+   key:"\\(F'=f\\): the rate is the slope of the accumulated total."},
+
+  {p:"Water leaks from a tank at \\(2\\) gal/hr for 3 hours. The tank started with 20 gallons. How much is left?",
+   ctx:"A leak is a negative rate; net change can shrink a quantity.",
+   opts:["14 gallons","26 gallons","6 gallons","17 gallons"],correct:0,
+   intro:"<b>Section 1:</b> a leak is just a negative rate, so net change is negative.",
+   steps:[
+     {t:"Write the rate (negative, since it's leaving).", m:"r(t) = -2"},
+     {t:"Net change is the integral of the rate.", m:"\\int_0^3 (-2)\\,dt = -6"},
+     {t:"Final = start + net change.", m:"20 + (-6) = 14"}
+   ],
+   key:"Net change works both directions \u2014 it can drain as easily as fill."}
+];
+(function(){
+  const QN=QUIZ.length;
+  let order=[], idx=0, score=0, answered=false;
+  const scoreEl=document.getElementById('qScore');
+  const bodyEl=document.getElementById('qBody');
+  let prompt,ctx,opts,fb,next;
+  function grab(){
+    prompt=document.getElementById('qPrompt'); ctx=document.getElementById('qCtx');
+    opts=document.getElementById('qOpts'); fb=document.getElementById('qFb'); next=document.getElementById('qNext');
+    next.addEventListener('click',onNext);
+  }
+  function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+  function mathify(html){return html.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return m;}});}
+  function render(){
+    answered=false; fb.innerHTML=""; next.style.display="none";
+    const q=QUIZ[order[idx]];
+    prompt.innerHTML=mathify(q.p); ctx.textContent=q.ctx;
+    const list=q.opts.map((t,i)=>({t,c:i===q.correct})); shuffle(list);
+    opts.innerHTML="";
+    list.forEach(o=>{const b=document.createElement('button');b.innerHTML=mathify(o.t);b.dataset.c=o.c;b.addEventListener('click',()=>pick(b));opts.appendChild(b);});
+    scoreEl.textContent="Score: "+score+" / "+idx;
+  }
+  function pick(btn){
+    if(answered)return; answered=true;
+    const q=QUIZ[order[idx]];
+    const correct=btn.dataset.c==="true";
+    [...opts.children].forEach(b=>{b.disabled=true; if(b.dataset.c==="true")b.classList.add('correct');});
+    if(correct)score++; else btn.classList.add('wrong');
+    var html="<div class='fb-intro'>"+(correct?"<b>Correct.</b> ":"<b>Not quite.</b> ")+mathify(q.intro)+"</div>";
+    q.steps.forEach(function(st,si){
+      html+="<div class='fb-step'><div class='fb-step-n'>"+(si+1)+"</div><div class='fb-step-body'>"
+          +"<div class='fb-step-t'>"+mathify(st.t)+"</div>"
+          +(st.m?"<div class='fb-step-m'>"+tex(st.m,st.m,true)+"</div>":"")
+          +"</div></div>";
+    });
+    html+="<div class='fb-key'>"+mathify(q.key)+"</div>";
+    fb.innerHTML=html;
+    scoreEl.textContent="Score: "+score+" / "+(idx+1);
+    next.textContent=idx<QN-1?"Next \u2192":"See result \u2192"; next.style.display="block";
+  }
+  function onNext(){
+    if(idx<QN-1){idx++;render();}
+    else{
+      const msg=score===QN?"Perfect \u2014 you've got the accumulation engine down.":score>=4?"Solid. Re-check the ones you missed.":"Worth another pass \u2014 the displacement-vs-distance split is the usual culprit.";
+      bodyEl.innerHTML='<div class="qdone"><div class="big">'+score+' / '+QN+'</div><p style="margin:10px auto 16px;max-width:420px">'+msg+'</p><button class="qreset" id="qReset2">\u21ba try again</button></div>';
+      document.getElementById('qReset2').addEventListener('click',restart);
+    }
+  }
+  function restart(){
+    order=shuffle([...Array(QN).keys()]); idx=0; score=0;
+    bodyEl.innerHTML='<div class="qprompt" id="qPrompt"></div><div class="qctx" id="qCtx"></div><div class="qopts" id="qOpts"></div><div class="qfb" id="qFb"></div><button class="qnext" id="qNext">Next \u2192</button>';
+    grab(); render();
+  }
+  document.getElementById('qReset').addEventListener('click',restart);
+  grab();
+  order=shuffle([...Array(QN).keys()]);
+  render();
+  // re-render the first question once KaTeX finishes loading (deferred CDN)
+  if(!window.katex){let _kt=0;const _ki=setInterval(function(){if(window.katex){clearInterval(_ki);if(!answered)render();}else if(++_kt>80)clearInterval(_ki);},100);}
+})();
+
+function boot(){ renderEqs(); }
+boot();
+// re-render once KaTeX finishes loading (it's deferred)
+if(window.addEventListener){
+  window.addEventListener('load', boot);
+  document.addEventListener('DOMContentLoaded', boot);
+}
+if(!window.katex){let tries=0;const t=setInterval(()=>{if(window.katex){clearInterval(t);renderEqs();}else if(++tries>60)clearInterval(t);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*45,400)+'ms';});
+</script>
+</body>
+</html>

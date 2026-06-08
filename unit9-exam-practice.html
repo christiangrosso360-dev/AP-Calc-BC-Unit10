@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Exam Practice — Mixed Review &amp; FRQ · Unit 9</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%2316140f%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%2340c98a%22%3E%26%23931%3B%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{ --approx:#3fb6d8; --emerald:#3fb6d8; --cyan:#3fb6d8; --true:#3fd0b0; --glow:rgba(63,182,216,.08); --wrap-max:820px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:680px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:720px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-top:18px} .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7);margin-top:14px}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:14px;text-align:left;transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--emerald);transform:translateY(-1px)} button:active{transform:translateY(0) scale(.99)} button:disabled{cursor:default}
+  .qtag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:3px 10px;margin-bottom:10px;background:var(--panel-2)}
+  .qprompt{font-size:15.5px;font-weight:500;margin:6px 0 4px;line-height:1.5}
+  .qmath{font-family:var(--mono);font-size:16px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center;margin:12px 0;overflow-x:auto} .qmath .katex{font-size:1.06em}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px}
+  @media(max-width:560px){.opts{grid-template-columns:1fr}}
+  .opts button{text-align:center;font-size:14.5px;padding:11px}
+  .opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv);font-weight:600}
+  .opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .fb{font-size:13.5px;line-height:1.55;margin-top:12px;background:var(--bg);border-radius:9px;padding:11px 13px;display:none} .fb.show{display:block} .fb .ftag{font-weight:600}
+  .fb .ftag.ok{color:var(--conv)} .fb .ftag.bad{color:var(--div)}
+  .next{background:var(--approx);color:#1a1408;border-color:var(--approx);font-weight:600;text-align:center;width:100%;box-shadow:0 8px 18px -10px var(--approx);margin-top:16px;display:none} .next.show{display:block}
+  .review-link{display:inline-block;margin-top:8px;font-size:12.5px;font-family:var(--mono);color:var(--emerald);text-decoration:none} .review-link:hover{text-decoration:underline}
+  /* FRQ */
+  .frq-given{background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+  .frq-given .katex{font-size:1.05em} .frq-given .gl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .frq-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .frq-tabs button{font-size:13px;padding:9px 13px;text-align:center;border-radius:9px}
+  .frq-tabs button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .frq-desc{font-size:13px;color:var(--muted);background:var(--bg);border-radius:9px;padding:9px 13px;margin-bottom:6px} .frq-desc b{color:var(--approx)}
+  .part{border-top:1px solid var(--line);padding:16px 0 4px} .part:first-child{border-top:none}
+  .part-h{display:flex;justify-content:space-between;align-items:center;gap:10px} .part-l{font-weight:600;font-size:14.5px;color:var(--ink)} .part-pts{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .part-q{font-size:14.5px;line-height:1.55;margin:8px 0 4px}
+  .frq-fields{display:flex;flex-direction:column;gap:10px;margin:4px 0 12px}
+  .frq-field{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .frq-flabel{font-size:14px;min-width:54px;color:var(--ink)} .frq-flabel .katex{font-size:1em}
+  .frq-input{font-family:var(--mono);font-size:14px;padding:8px 11px;border:1px solid var(--line);border-radius:8px;background:var(--panel-2);color:var(--ink);min-width:140px}
+  .frq-input:focus{outline:none;border-color:var(--emerald)} .frq-input.ok{border-color:var(--conv);background:rgba(63,208,176,.16)} .frq-input.no{border-color:var(--div);background:rgba(224,100,79,.16)}
+  .frq-check{background:var(--ink);color:var(--panel);border-color:var(--ink);font-size:13px;padding:8px 14px} .frq-check:hover{background:#d8d2c6} .frq-check:disabled{opacity:.5}
+  .frq-sol{display:none;margin-top:10px;font-size:13.5px;line-height:1.6;background:var(--bg);border-left:2px solid var(--emerald);border-radius:0 9px 9px 0;padding:11px 14px} .frq-sol.show{display:block}
+  .frq-sol .stepm{font-family:var(--mono);background:var(--panel-2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;margin:7px 0;overflow-x:auto;font-size:13px}
+  .rubric{margin-top:10px} .rubric-h{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .rubric label{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink);padding:5px 0;cursor:pointer} .rubric input{margin-top:3px;accent-color:var(--emerald)}
+  .reveal-sol{font-family:var(--mono);font-size:12.5px;color:var(--emerald);background:none;border:1px dashed var(--line-2);width:100%;text-align:center;margin-top:8px}
+  .scoreline{font-family:var(--mono);font-size:14px;color:var(--ink);background:var(--panel-2);border-radius:9px;padding:12px 14px;margin-top:14px;text-align:center} .scoreline b{color:var(--emerald)}
+  .weakrow{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:13.5px}
+  .weakbar{flex:1;height:8px;background:var(--panel-2);border-radius:5px;overflow:hidden} .weakbar i{display:block;height:100%;background:var(--emerald);border-radius:5px}
+  .weaklabel{min-width:160px;color:var(--ink)} .weakpct{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:48px;text-align:right}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  footer{color:var(--muted);font-size:12px;margin-top:50px;border-top:1px solid var(--line);padding-top:14px}
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit9.html">← Unit 9</a>
+  <header class="reveal">
+    <h1>Exam <span class="em">Practice</span></h1>
+    <div class="sub">Mixed multiple choice across all of Unit 9 — parametric calculus, vector-valued functions, polar graphing, and polar area, and
+      arc length — plus a free-response trainer built on real AP question shapes. Every answer is worked and verified.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    <b>How to use this.</b> The multiple choice pulls a fresh batch of 12 from a bank of 48, mixing every topic the way
+    the real exam does. Answer, read the worked explanation, and your weak spots surface at the bottom. Then train the
+    free-response format — one scenario, several chained parts — exactly how Section II works.
+  </div>
+
+  <h2 class="reveal">Mixed multiple choice</h2>
+  <div class="card reveal" id="mcCard">
+    <div class="row">
+      <span class="score" id="mcProgress">Question 1 of 12</span>
+      <span class="score" id="mcScore">Score: 0</span>
+    </div>
+    <div class="qtag" id="mcTag"></div>
+    <div class="qprompt" id="mcPrompt"></div>
+    <div class="qmath" id="mcMath"></div>
+    <div class="opts" id="mcOpts"></div>
+    <div class="fb" id="mcFb"></div>
+    <button class="next" id="mcNext">Next question →</button>
+    <div id="mcDone" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Free-response trainer <span style="font-family:var(--mono);font-size:13px;color:var(--approx);font-weight:400">· Section II style</span></h2>
+  <p class="lead reveal">One scenario, several chained parts — exactly how the real FRQ works. Pick a problem below; type
+    what you can, then check the worked solution and score your reasoning against the rubric.</p>
+  <div class="frq-tabs reveal" id="frqTabs"></div>
+  <div class="card reveal" id="frqCard">
+    <div class="frq-desc" id="frqDesc"></div>
+    <div class="frq-given">
+      <div class="gl">Given</div>
+      <div id="frqGiven"></div>
+      <div id="frqGivenNote" style="font-size:12.5px;color:var(--muted);margin-top:8px"></div>
+    </div>
+    <div id="frqParts"></div>
+    <div class="scoreline" id="frqScore" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Where you stand</h2>
+  <div class="card reveal" id="weakCard">
+    <div id="weakBody" style="font-size:14px;color:var(--muted)">Finish some multiple-choice questions and your topic breakdown shows up here.</div>
+  </div>
+
+  <footer class="reveal">Exam Practice · Unit 9 · part of the Visual AP Calculus guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+const TOPICS={
+  param:["Parametric calculus","unit9-parametric.html"],
+  vector:["Vector-valued functions","unit9-vectors.html"],
+  polar:["Polar graphing","unit9-polar-graphing.html"],
+  area:["Polar area","unit9-polar-area.html"]
+};
+
+// ===================== MC BANK (48, all verified in Node) =====================
+const MC=[
+ // ============ PARAMETRIC CALCULUS (12) ============
+ {topic:"param",calc:true,prompt:"A particle moves in the \\(xy\\)-plane so that at time \\(t\\) its velocity is \\(\\vec v(t)=\\langle t^2-4,\\ 2t\\rangle\\) for \\(0\\le t\\le 3\\). What is the total distance traveled by the particle over this interval?",
+  opts:[{t:"7.810"},{t:"9.487"},{t:"13.062",correct:true},{t:"18.000"}],
+  explain:`<b>Total distance is the integral of speed</b> — the <i>magnitude</i> of velocity — not the displacement: \\(\\text{dist}=\\displaystyle\\int_0^3\\sqrt{(t^2-4)^2+(2t)^2}\\,dt\\approx 13.062\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>9.487</b> is the magnitude of <i>displacement</i>, \\(\\sqrt{(-3)^2+9^2}=\\sqrt{90}\\) — you get it by integrating the components first, then taking the magnitude. It's wrong because the particle reverses \\(x\\)-direction at \\(t=2\\) (where \\(t^2-4=0\\)), so the path doubles back and the true length exceeds the net displacement.<br>• <b>7.810</b> is the instantaneous <i>speed at \\(t=3\\)</i>, \\(\\sqrt{5^2+6^2}\\) — computing speed but forgetting to integrate it.<br>• <b>18</b> integrates only the \\(y\\)-component \\(2t\\).<br><br><b>The principle:</b> distance integrates the magnitude; displacement takes the magnitude of the integral. They agree only when the motion never reverses.`},
+ {topic:"param",calc:true,prompt:"A particle moves along a curve with position \\((x(t),y(t))\\) where \\(\\dfrac{dx}{dt}=3t^2\\) and \\(\\dfrac{dy}{dt}=e^{t}\\). What is the speed of the particle at \\(t=1.5\\)?",
+  opts:[{t:"4.482"},{t:"8.102",correct:true},{t:"11.234"},{t:"65.652"}],
+  explain:`<b>Speed is the magnitude of the velocity vector:</b> \\(\\sqrt{(dx/dt)^2+(dy/dt)^2}\\).<br>At \\(t=1.5\\): \\(\\dfrac{dx}{dt}=3(1.5)^2=6.75\\), \\(\\dfrac{dy}{dt}=e^{1.5}\\approx 4.482\\). So speed \\(=\\sqrt{6.75^2+4.482^2}=\\sqrt{65.65}\\approx 8.102\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>4.482</b> is \\(e^{1.5}\\) — reporting only the \\(y\\)-component as if it were the speed.<br>• <b>65.652</b> is the value <i>under</i> the radical, \\(6.75^2+4.482^2\\) — forgetting to take the square root.<br>• <b>11.234</b> adds the components \\(6.75+4.482\\) instead of using the Pythagorean combination.<br><br><b>The principle:</b> speed combines both component rates through a square root — it is never a single component, and never their plain sum.`},
+ {topic:"param",prompt:"A curve is defined by \\(x=t^2,\\ y=\\ln t\\) for \\(t\\ge 1\\). Which of the following expressions gives the length of the curve from \\(t=1\\) to \\(t=3\\)?",
+  opts:[{t:"\\displaystyle\\int_1^3\\sqrt{4t^2+\\tfrac{1}{t^2}}\\,dt",correct:true},{t:"\\displaystyle\\int_1^3\\sqrt{t^4+(\\ln t)^2}\\,dt"},{t:"\\displaystyle\\int_1^3\\sqrt{4t^2+\\tfrac{1}{t}}\\,dt"},{t:"\\displaystyle\\int_1^3\\left(2t+\\tfrac{1}{t}\\right)dt"}],
+  explain:`<b>Arc length</b> uses the <i>derivatives</i>, each squared, under one root: \\(\\displaystyle\\int_1^3\\sqrt{(dx/dt)^2+(dy/dt)^2}\\,dt\\).<br>Here \\(\\dfrac{dx}{dt}=2t\\) and \\(\\dfrac{dy}{dt}=\\dfrac1t\\), so the integrand is \\(\\sqrt{(2t)^2+\\left(\\tfrac1t\\right)^2}=\\sqrt{4t^2+\\tfrac{1}{t^2}}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• \\(\\sqrt{t^4+(\\ln t)^2}\\) squared the <i>functions</i> \\(x\\) and \\(y\\) instead of their derivatives.<br>• \\(\\sqrt{4t^2+\\tfrac1t}\\) forgot to square \\(\\dfrac{dy}{dt}=\\dfrac1t\\) (it should be \\(\\tfrac{1}{t^2}\\)).<br>• \\(\\int(2t+\\tfrac1t)\\,dt\\) dropped the squares and the root entirely — just adding the derivatives.<br><br><b>The principle:</b> the arc-length integrand is always \\(\\sqrt{(x')^2+(y')^2}\\); the most common errors are squaring the wrong thing or losing the root.`},
+ {topic:"param",prompt:"A curve is defined parametrically by \\(x=t^3-t\\) and \\(y=t^2+t\\). What is \\(\\dfrac{dy}{dx}\\) at \\(t=2\\)?",
+  opts:[{t:"\\dfrac{5}{11}",correct:true},{t:"\\dfrac{11}{5}"},{t:"\\dfrac{4}{6}"},{t:"5"}],
+  explain:`<b>Parametric slope</b> is \\(\\dfrac{dy}{dx}=\\dfrac{dy/dt}{dx/dt}\\) — you cannot differentiate \\(y\\) with respect to \\(x\\) directly here.<br>\\(\\dfrac{dy}{dt}=2t+1\\) and \\(\\dfrac{dx}{dt}=3t^2-1\\). At \\(t=2\\): \\(\\dfrac{2(2)+1}{3(4)-1}=\\dfrac{5}{11}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac{11}{5}\\)</b> flips the ratio — that's \\(\\dfrac{dx}{dy}\\), not \\(\\dfrac{dy}{dx}\\).<br>• <b>\\(\\tfrac{4}{6}\\)</b> uses \\(2t=4\\) and \\(3t-... \\) (mis-differentiating, dropping the \\(+1\\) and the exponent).<br>• <b>5</b> reports only \\(\\dfrac{dy}{dt}\\) at \\(t=2\\), forgetting to divide by \\(\\dfrac{dx}{dt}\\).<br><br><b>The principle:</b> the slope of a parametric curve is a ratio of rates; keep \\(dy/dt\\) on top and never forget the denominator.`},
+ {topic:"param",prompt:"For the curve \\(x=t^2,\\ y=t^4\\), what is \\(\\dfrac{d^2y}{dx^2}\\)?",
+  opts:[{t:"2",correct:true},{t:"12t^2"},{t:"4t"},{t:"\\dfrac{4t}{2t}"}],
+  explain:`<b>The second derivative is the parametric rule applied to the slope:</b> \\(\\dfrac{d^2y}{dx^2}=\\dfrac{\\frac{d}{dt}\\!\\left[\\frac{dy}{dx}\\right]}{dx/dt}\\) — <i>not</i> \\(\\dfrac{d^2y/dt^2}{d^2x/dt^2}\\).<br>First the slope: \\(\\dfrac{dy}{dx}=\\dfrac{4t^3}{2t}=2t^2\\). Then \\(\\dfrac{d}{dt}(2t^2)=4t\\). Divide by \\(\\dfrac{dx}{dt}=2t\\): \\(\\dfrac{4t}{2t}=2\\) (constant!).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(12t^2\\)</b> is \\(\\dfrac{d^2y}{dt^2}\\) — the classic error of using second \\(t\\)-derivatives directly.<br>• <b>\\(4t\\)</b> stops at \\(\\dfrac{d}{dt}\\!\\left[\\frac{dy}{dx}\\right]\\) without dividing by \\(\\dfrac{dx}{dt}\\).<br>• <b>\\(\\tfrac{4t}{2t}\\)</b> is correct before simplifying — but it reduces to \\(2\\).<br><br><b>The principle:</b> always differentiate the <i>slope</i> with respect to \\(t\\), then divide by \\(dx/dt\\) again.`},
+ {topic:"param",calc:false,prompt:"A particle moves along a curve with \\(x(t)=t^2-4t\\). For which values of \\(t\\) is the particle moving to the <b>left</b>?",
+  opts:[{t:"t\\lt 2",correct:true},{t:"t\\gt 2"},{t:"t\\lt 0"},{t:"t=2"}],
+  explain:`<b>"Moving left" means the \\(x\\)-coordinate is decreasing</b>, i.e. \\(\\dfrac{dx}{dt}\\lt 0\\).<br>\\(\\dfrac{dx}{dt}=2t-4\\). Solving \\(2t-4\\lt 0\\) gives \\(t\\lt 2\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(t\\gt 2\\)</b> is where \\(\\dfrac{dx}{dt}\\gt 0\\) — moving <i>right</i>, the opposite.<br>• <b>\\(t=2\\)</b> is the single instant the motion is vertical (\\(\\dfrac{dx}{dt}=0\\)), not an interval of leftward motion.<br>• <b>\\(t\\lt 0\\)</b> isn't in the domain \\(t\\ge 0\\) and doesn't follow from the sign analysis.<br><br><b>The principle:</b> horizontal direction is governed by the sign of \\(dx/dt\\) alone — left when negative, right when positive.`},
+ {topic:"param",calc:false,prompt:"A particle moves with velocity \\(\\vec v(t)=\\langle 2t,\\ 3\\rangle\\). At what time \\(t\\gt 0\\) is the speed of the particle equal to \\(5\\)?",
+  opts:[{t:"t=2",correct:true},{t:"t=1"},{t:"t=\\sqrt{5}"},{t:"t=4"}],
+  explain:`<b>Set the speed equal to 5 and solve.</b> Speed \\(=\\sqrt{(2t)^2+3^2}=\\sqrt{4t^2+9}\\).<br>\\(\\sqrt{4t^2+9}=5\\Rightarrow 4t^2+9=25\\Rightarrow 4t^2=16\\Rightarrow t=2\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(t=1\\)</b> solves \\(2t=... \\) by ignoring the \\(3\\) and the squaring (treating speed as just \\(2t\\)).<br>• <b>\\(t=\\sqrt5\\)</b> comes from \\(4t^2=20\\) — forgetting to subtract the \\(9\\).<br>• <b>\\(t=4\\)</b> solves \\(2t=... \\) linearly without squaring.<br><br><b>The principle:</b> speed equations require squaring both components, summing, and rooting — then solve. Don't shortcut a single component.`},
+ {topic:"param",prompt:"For a particle with position \\((x(t),y(t))\\), the expression \\(\\displaystyle\\int_a^b\\sqrt{\\left(\\tfrac{dx}{dt}\\right)^2+\\left(\\tfrac{dy}{dt}\\right)^2}\\,dt\\) represents which of the following?",
+  opts:[{t:"The total distance traveled (arc length) on \\([a,b]\\)",correct:true},{t:"The displacement of the particle on \\([a,b]\\)"},{t:"The average speed on \\([a,b]\\)"},{t:"The acceleration at time \\(b\\)"}],
+  explain:`<b>The integrand \\(\\sqrt{(x')^2+(y')^2}\\) is the speed</b> (magnitude of velocity), and the integral of speed over a time interval is the <b>total distance traveled</b> — equivalently, the arc length of the path.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Displacement</b> would be \\(\\big\\langle\\int x'\\,dt,\\ \\int y'\\,dt\\big\\rangle\\) (a vector, integrating the components separately) — not the integral of the magnitude.<br>• <b>Average speed</b> would divide this integral by the elapsed time \\((b-a)\\).<br>• <b>Acceleration</b> involves second derivatives, not this integral.<br><br><b>The principle:</b> recognize the speed integrand on sight — its definite integral is always a length (distance), with units of position, not position-per-time.`},
+ {topic:"param",calc:false,prompt:"A particle has \\(\\dfrac{dx}{dt}=6t\\), and at \\(t=1\\) its position has \\(x=4\\). What is the \\(x\\)-coordinate at \\(t=2\\)?",
+  opts:[{t:"13",correct:true},{t:"12"},{t:"10"},{t:"24"}],
+  explain:`<b>Recover position by integrating velocity and using the initial condition.</b> \\(x(t)=\\displaystyle\\int 6t\\,dt=3t^2+C\\). Apply \\(x(1)=4\\): \\(3(1)+C=4\\Rightarrow C=1\\), so \\(x(t)=3t^2+1\\). Then \\(x(2)=3(4)+1=13\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>12</b> is \\(3t^2\\) at \\(t=2\\) — forgetting the constant \\(C=1\\) (the initial condition).<br>• <b>10</b> uses \\(x(2)-x(1)=12-3=9\\) added wrong, or mis-evaluates.<br>• <b>24</b> is \\(\\dfrac{dx}{dt}=6t\\) at \\(t=2\\) — reporting velocity, not position.<br><br><b>The principle:</b> position is the antiderivative of velocity <i>plus</i> the constant fixed by the initial condition — dropping \\(C\\) is the classic error.`},
+ {topic:"param",calc:false,prompt:"A curve is given by \\(x=t^2,\\ y=t^3-3t\\). At which value of \\(t\\) does the curve have a horizontal tangent line?",
+  opts:[{t:"t=1",correct:true},{t:"t=0"},{t:"t=\\sqrt{3}"},{t:"t=3"}],
+  explain:`<b>Horizontal tangent</b> requires \\(\\dfrac{dy}{dt}=0\\) while \\(\\dfrac{dx}{dt}\\neq 0\\).<br>\\(\\dfrac{dy}{dt}=3t^2-3=0\\Rightarrow t^2=1\\Rightarrow t=1\\) (taking the value with \\(t\\ge 0\\)). Check \\(\\dfrac{dx}{dt}=2t=2\\neq 0\\). ✓<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(t=0\\)</b> is where \\(\\dfrac{dx}{dt}=0\\) — that's a <i>vertical</i> tangent, not horizontal.<br>• <b>\\(t=\\sqrt3\\)</b> mis-solves \\(3t^2-3=0\\) (it gives \\(t^2=1\\), not \\(3\\)).<br>• <b>\\(t=3\\)</b> doesn't zero \\(\\dfrac{dy}{dt}\\).<br><br><b>The principle:</b> horizontal ⇔ \\(dy/dt=0\\); vertical ⇔ \\(dx/dt=0\\). Always confirm the other derivative isn't also zero.`},
+ {topic:"param",calc:false,prompt:"The parametric equations \\(x=2+3\\cos t,\\ y=-1+3\\sin t\\) describe which curve?",
+  opts:[{t:"A circle centered at \\((2,-1)\\) with radius \\(3\\)",correct:true},{t:"A circle centered at \\((-2,1)\\) with radius \\(3\\)"},{t:"An ellipse centered at \\((2,-1)\\)"},{t:"A circle centered at the origin with radius \\(3\\)"}],
+  explain:`<b>Isolate the trig functions and use \\(\\cos^2 t+\\sin^2 t=1\\).</b> From the equations, \\(\\cos t=\\dfrac{x-2}{3}\\) and \\(\\sin t=\\dfrac{y+1}{3}\\). Squaring and adding: \\(\\left(\\dfrac{x-2}{3}\\right)^2+\\left(\\dfrac{y+1}{3}\\right)^2=1\\), i.e. \\((x-2)^2+(y+1)^2=9\\) — a circle, center \\((2,-1)\\), radius \\(3\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Center \\((-2,1)\\)</b> flips the signs — the center is read from \\(x-2\\) and \\(y+1\\) as \\((+2,-1)\\).<br>• <b>Ellipse</b> would require different coefficients on \\(\\cos t\\) and \\(\\sin t\\); here both are \\(3\\), giving a circle.<br>• <b>Origin</b> ignores the \\(+2\\) and \\(-1\\) shifts.<br><br><b>The principle:</b> \\(x=h+a\\cos t,\\ y=k+a\\sin t\\) is a circle of radius \\(a\\) centered at \\((h,k)\\); equal amplitudes ⇒ circle, unequal ⇒ ellipse.`},
+ {topic:"param",calc:true,prompt:"A particle moves along the cycloid \\(x=t-\\sin t,\\ y=1-\\cos t\\). What is the total distance traveled by the particle from \\(t=0\\) to \\(t=2\\pi\\)?",
+  opts:[{t:"2\\pi"},{t:"4"},{t:"8",correct:true},{t:"16"}],
+  explain:`<b>Total distance is \\(\\displaystyle\\int_0^{2\\pi}\\sqrt{(x')^2+(y')^2}\\,dt\\).</b> Here \\(x'=1-\\cos t,\\ y'=\\sin t\\). Then \\((x')^2+(y')^2=(1-\\cos t)^2+\\sin^2 t=2-2\\cos t\\). Using \\(1-\\cos t=2\\sin^2\\tfrac t2\\), the integrand is \\(\\sqrt{4\\sin^2\\tfrac t2}=2\\left|\\sin\\tfrac t2\\right|\\). Integrating over \\([0,2\\pi]\\) gives \\(8\\) — the famous arc length of one cycloid arch.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(2\\pi\\)</b> is the horizontal distance the wheel rolls — the change in \\(x\\), not the path length.<br>• <b>4</b> integrates only part, or drops the factor of 2.<br>• <b>16</b> doubles the correct arch length.<br><br><b>The principle:</b> even a "simple-looking" parametric path can have an arc length unrelated to its width; you must integrate the speed. (One cycloid arch is exactly \\(8r\\).)`},
+
+ // ============ VECTOR-VALUED FUNCTIONS (12) ============
+ {topic:"vector",calc:true,prompt:"At time \\(t\\), a particle moving in the \\(xy\\)-plane has velocity vector \\(\\vec v(t)=\\langle\\cos(t^2),\\ e^{0.5t}\\rangle\\). What is the acceleration vector at \\(t=1.2\\)?",
+  opts:[{t:"\\langle -0.313,\\ 0.911\\rangle",correct:true},{t:"\\langle 0.130,\\ 3.320\\rangle"},{t:"\\langle -2.4\\sin(1.44),\\ e^{0.6}\\rangle"},{t:"\\langle 0.911,\\ -0.313\\rangle"}],
+  explain:`<b>Acceleration is the derivative of velocity</b>, component-wise (chain rule on each): \\(\\vec a(t)=\\big\\langle -2t\\sin(t^2),\\ 0.5\\,e^{0.5t}\\big\\rangle\\).<br>At \\(t=1.2\\): \\(-2(1.2)\\sin(1.44)\\approx -0.313\\) and \\(0.5\\,e^{0.6}\\approx 0.911\\). So \\(\\vec a(1.2)\\approx\\langle -0.313,\\ 0.911\\rangle\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\langle 0.130,\\ 3.320\\rangle\\)</b> is the <i>velocity</i> \\(\\vec v(1.2)=\\langle\\cos(1.44),\\ e^{0.6}\\rangle\\) — not its derivative.<br>• <b>\\(\\langle -2.4\\sin(1.44),\\ e^{0.6}\\rangle\\)</b> forgot the \\(0.5\\) chain-rule factor on the \\(y\\)-component (and left \\(x\\) unevaluated).<br>• The last choice swaps the components.<br><br><b>The principle:</b> differentiate each component separately, and don't forget the chain-rule factors (\\(2t\\) from \\(t^2\\), \\(0.5\\) from \\(0.5t\\)).`},
+ {topic:"vector",calc:true,prompt:"A particle has velocity \\(\\vec v(t)=\\langle\\cos(t^2),\\ e^{0.5t}\\rangle\\) for \\(t\\ge 0\\). What is the speed of the particle at \\(t=1.2\\)?",
+  opts:[{t:"1.827",correct:true},{t:"3.337"},{t:"3.450"},{t:"0.911"}],
+  explain:`<b>Speed is the magnitude of velocity:</b> \\(|\\vec v(1.2)|=\\sqrt{\\cos^2(1.44)+\\left(e^{0.6}\\right)^2}=\\sqrt{0.017+3.320}\\approx 1.827\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>3.337</b> is the value under the radical, \\(\\cos^2(1.44)+e^{1.2}\\) — forgetting the square root.<br>• <b>0.911</b> is roughly \\(e^{0.6}/2\\) or a single mis-evaluated piece.<br>• <b>3.450</b> adds the components without squaring/rooting.<br><br><b>The principle:</b> speed always combines components via \\(\\sqrt{v_x^2+v_y^2}\\); the most common slip is stopping before the square root.`},
+ {topic:"vector",calc:true,prompt:"A particle moves with velocity \\(\\vec v(t)=\\langle 2t-2,\\ 3-t\\rangle\\) for \\(0\\le t\\le 3\\). What is the total distance traveled?",
+  opts:[{t:"3.000"},{t:"7.706",correct:true},{t:"3.354"},{t:"10.500"}],
+  explain:`<b>Total distance is the integral of speed:</b> \\(\\displaystyle\\int_0^3\\sqrt{(2t-2)^2+(3-t)^2}\\,dt\\approx 7.706\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>3.354</b> is the magnitude of <i>displacement</i>, \\(\\big|\\langle 3,\\ 1.5\\rangle\\big|=\\sqrt{11.25}\\) — integrating the components first (the particle reverses \\(x\\)-direction at \\(t=1\\), so distance \\(\\gt\\) displacement).<br>• <b>3.000</b> is the \\(x\\)-displacement \\(\\int_0^3(2t-2)\\,dt\\) alone.<br>• <b>10.500</b> integrates without the square root.<br><br><b>The principle:</b> distance integrates the magnitude of velocity; whenever a component changes sign, distance strictly exceeds the displacement magnitude.`},
+ {topic:"vector",calc:false,prompt:"A particle has \\(\\dfrac{dx}{dt}=4t\\), and at \\(t=0\\) the particle is at \\(x=3\\). What is the \\(x\\)-coordinate at \\(t=2\\)?",
+  opts:[{t:"11",correct:true},{t:"8"},{t:"16"},{t:"19"}],
+  explain:`<b>Integrate velocity, then apply the initial condition.</b> \\(x(t)=\\displaystyle\\int 4t\\,dt=2t^2+C\\). With \\(x(0)=3\\): \\(C=3\\), so \\(x(t)=2t^2+3\\). Then \\(x(2)=2(4)+3=11\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>8</b> is \\(2t^2\\) at \\(t=2\\) — dropping the initial value \\(C=3\\).<br>• <b>16</b> is the velocity \\(4t\\) at \\(t=... \\) or \\(2\\cdot 8\\), confusing rate with position.<br>• <b>19</b> mis-adds (e.g. \\(2t^2+3\\) with \\(t^2=8\\)).<br><br><b>The principle:</b> the new position equals the antiderivative evaluated, with \\(C\\) pinned by the starting point — the initial condition is not optional.`},
+ {topic:"vector",prompt:"A particle has velocity \\(\\vec v(t)=\\langle t^2,\\ \\sqrt{t}\\rangle\\) for \\(t\\ge 0\\). Which expression gives the total distance traveled from \\(t=1\\) to \\(t=4\\)?",
+  opts:[{t:"\\displaystyle\\int_1^4\\sqrt{t^4+t}\\,dt",correct:true},{t:"\\displaystyle\\int_1^4\\left(t^2+\\sqrt{t}\\right)dt"},{t:"\\sqrt{\\left(\\textstyle\\int_1^4 t^2 dt\\right)^2+\\left(\\textstyle\\int_1^4\\sqrt{t}\\,dt\\right)^2}"},{t:"\\displaystyle\\int_1^4\\sqrt{t^4+t^2}\\,dt"}],
+  explain:`<b>Distance is the integral of speed</b> \\(=\\displaystyle\\int_1^4\\sqrt{(t^2)^2+(\\sqrt t)^2}\\,dt=\\int_1^4\\sqrt{t^4+t}\\,dt\\) (since \\((\\sqrt t)^2=t\\)).<br><br><b>Why each distractor is a specific mistake:</b><br>• \\(\\int(t^2+\\sqrt t)\\,dt\\) drops the squares and the root — just integrating the components added.<br>• The <b>third choice</b> computes the <i>displacement magnitude</i> (integrate each component, then take the magnitude) — that's not the path length.<br>• \\(\\sqrt{t^4+t^2}\\) squared \\(\\sqrt t\\) incorrectly as \\(t^2\\).<br><br><b>The principle:</b> distance puts the magnitude <i>inside</i> the integral; displacement puts it <i>outside</i>. Watch \\((\\sqrt t)^2=t\\).`},
+ {topic:"vector",prompt:"For a particle with velocity \\(\\vec v(t)\\), the integral \\(\\displaystyle\\int_a^b\\vec v(t)\\,dt\\) gives which of the following?",
+  opts:[{t:"The displacement (net change in position) over \\([a,b]\\)",correct:true},{t:"The total distance traveled over \\([a,b]\\)"},{t:"The average velocity over \\([a,b]\\)"},{t:"The change in speed over \\([a,b]\\)"}],
+  explain:`<b>Integrating the velocity vector gives the displacement</b> — the net change in position, \\(\\vec r(b)-\\vec r(a)\\). It's a vector.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Total distance</b> requires integrating the <i>magnitude</i> \\(|\\vec v|\\), not \\(\\vec v\\) itself — the absolute value makes reversals add instead of cancel.<br>• <b>Average velocity</b> would divide this by \\((b-a)\\).<br>• <b>Change in speed</b> is \\(|\\vec v(b)|-|\\vec v(a)|\\), unrelated to this integral.<br><br><b>The principle:</b> \\(\\int\\vec v\\,dt\\) = displacement (vector, can cancel); \\(\\int|\\vec v|\\,dt\\) = distance (scalar, always accumulates).`},
+ {topic:"vector",calc:false,prompt:"A particle has velocity \\(\\vec v(t)=\\langle t,\\ t^2-3\\rangle\\). What is the speed of the particle at \\(t=2\\)?",
+  opts:[{t:"\\sqrt{5}",correct:true},{t:"3"},{t:"\\sqrt{29}"},{t:"\\langle 2,1\\rangle"}],
+  explain:`<b>Evaluate velocity at \\(t=2\\), then take the magnitude.</b> \\(\\vec v(2)=\\langle 2,\\ 2^2-3\\rangle=\\langle 2,\\ 1\\rangle\\). Speed \\(=\\sqrt{2^2+1^2}=\\sqrt5\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>3</b> adds the components \\(2+1\\) instead of using the Pythagorean magnitude.<br>• <b>\\(\\sqrt{29}\\)</b> uses \\(\\langle 2,5\\rangle\\) — forgetting the \\(-3\\) in \\(t^2-3\\) (so \\(\\sqrt{4+25}\\)).<br>• <b>\\(\\langle 2,1\\rangle\\)</b> is the velocity vector itself, not the speed (a scalar).<br><br><b>The principle:</b> evaluate first, then take \\(\\sqrt{v_x^2+v_y^2}\\); speed is a single nonnegative number.`},
+ {topic:"vector",calc:false,prompt:"If \\(\\vec r(t)=\\langle t^3,\\ \\cos t\\rangle\\), what is the acceleration vector \\(\\vec a(t)\\)?",
+  opts:[{t:"\\langle 6t,\\ -\\cos t\\rangle",correct:true},{t:"\\langle 3t^2,\\ -\\sin t\\rangle"},{t:"\\langle 6t,\\ \\cos t\\rangle"},{t:"\\langle 6t,\\ \\sin t\\rangle"}],
+  explain:`<b>Acceleration is the second derivative of position</b>, component-wise. First \\(\\vec v=\\vec r\\,'=\\langle 3t^2,\\ -\\sin t\\rangle\\); then \\(\\vec a=\\vec v\\,'=\\langle 6t,\\ -\\cos t\\rangle\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\langle 3t^2,\\ -\\sin t\\rangle\\)</b> is the <i>velocity</i> — only one derivative taken.<br>• <b>\\(\\langle 6t,\\ \\cos t\\rangle\\)</b> mishandles the second derivative of \\(\\cos t\\): \\(\\dfrac{d}{dt}(-\\sin t)=-\\cos t\\), not \\(+\\cos t\\).<br>• <b>\\(\\langle 6t,\\ \\sin t\\rangle\\)</b> has the wrong sign throughout the \\(y\\)-derivative chain.<br><br><b>The principle:</b> differentiate twice, tracking signs carefully: \\(\\cos t\\to-\\sin t\\to-\\cos t\\).`},
+ {topic:"vector",calc:false,prompt:"A particle has constant acceleration \\(\\vec a(t)=\\langle 6t,\\ 4\\rangle\\) and velocity \\(\\vec v(0)=\\langle 1,\\ -2\\rangle\\). Find \\(\\vec v(t)\\).",
+  opts:[{t:"\\langle 3t^2+1,\\ 4t-2\\rangle",correct:true},{t:"\\langle 3t^2,\\ 4t\\rangle"},{t:"\\langle 6,\\ 0\\rangle"},{t:"\\langle 3t^2-2,\\ 4t+1\\rangle"}],
+  explain:`<b>Integrate acceleration and apply the initial velocity.</b> \\(\\displaystyle\\int\\langle 6t,4\\rangle\\,dt=\\langle 3t^2,\\ 4t\\rangle+\\vec C\\). With \\(\\vec v(0)=\\langle 1,-2\\rangle\\), \\(\\vec C=\\langle 1,-2\\rangle\\). So \\(\\vec v(t)=\\langle 3t^2+1,\\ 4t-2\\rangle\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\langle 3t^2,\\ 4t\\rangle\\)</b> dropped the constant vector from the initial condition.<br>• <b>\\(\\langle 6,\\ 0\\rangle\\)</b> differentiated instead of integrating.<br>• <b>\\(\\langle 3t^2-2,\\ 4t+1\\rangle\\)</b> swapped the two initial-condition components.<br><br><b>The principle:</b> velocity is the antiderivative of acceleration plus the constant fixed by \\(\\vec v(0)\\) — match each component to the right initial value.`},
+ {topic:"vector",calc:false,prompt:"A particle has velocity \\(\\vec v(t)=\\langle e^{t},\\ e^{-t}\\rangle\\). What is the speed at \\(t=0\\)?",
+  opts:[{t:"\\sqrt{2}",correct:true},{t:"2"},{t:"0"},{t:"1"}],
+  explain:`<b>At \\(t=0\\):</b> \\(\\vec v(0)=\\langle e^0,\\ e^0\\rangle=\\langle 1,\\ 1\\rangle\\). Speed \\(=\\sqrt{1^2+1^2}=\\sqrt2\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>2</b> adds the components \\(1+1\\) instead of using the root of the sum of squares.<br>• <b>0</b> assumes \\(e^t\\) and \\(e^{-t}\\) cancel — but speed combines their squares; it's never zero here.<br>• <b>1</b> reads only one component.<br><br><b>The principle:</b> evaluate the components at the instant, then \\(\\sqrt{v_x^2+v_y^2}\\). \\(e^0=1\\) for both.`},
+ {topic:"vector",calc:false,prompt:"A particle moves with velocity \\(\\vec v(t)=\\langle t^2-1,\\ t-1\\rangle\\). At what time is the particle at rest (velocity \\(=\\vec 0\\))?",
+  opts:[{t:"t=1",correct:true},{t:"t=-1"},{t:"t=1\\text{ and }t=-1"},{t:"\\text{never}"}],
+  explain:`<b>"At rest" means BOTH components of velocity are zero simultaneously.</b> Solve \\(t^2-1=0\\Rightarrow t=\\pm 1\\), and \\(t-1=0\\Rightarrow t=1\\). The only \\(t\\) satisfying <i>both</i> is \\(t=1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(t=-1\\)</b> zeros only the \\(x\\)-component; there \\(\\vec v(-1)=\\langle 0,-2\\rangle\\neq\\vec 0\\).<br>• <b>"\\(t=1\\) and \\(t=-1\\)"</b> lists every root of either component, but rest requires them to vanish <i>together</i>.<br>• <b>"never"</b> overlooks that \\(t=1\\) does work for both.<br><br><b>The principle:</b> a particle is at rest only where the velocity vector is the zero vector — every component must be zero at the same \\(t\\).`},
+ {topic:"vector",calc:false,prompt:"At a certain instant, a particle has velocity \\(\\vec v=\\langle 2,\\ -3\\rangle\\) and acceleration \\(\\vec a=\\langle 1,\\ 1\\rangle\\). Is the particle speeding up or slowing down at that instant?",
+  opts:[{t:"Slowing down (\\(\\vec v\\cdot\\vec a\\lt 0\\))",correct:true},{t:"Speeding up (\\(\\vec v\\cdot\\vec a\\gt 0\\))"},{t:"Neither; speed is constant"},{t:"Cannot be determined without more information"}],
+  explain:`<b>Speeding up vs. slowing down is governed by the sign of \\(\\vec v\\cdot\\vec a\\)</b> (equivalently, whether \\(\\tfrac{d}{dt}|\\vec v|\\) is \\(+\\) or \\(-\\)). Compute the dot product: \\(\\vec v\\cdot\\vec a=(2)(1)+(-3)(1)=-1\\lt 0\\), so the speed is <b>decreasing</b> — slowing down.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Speeding up</b> would need \\(\\vec v\\cdot\\vec a\\gt 0\\); here it's negative.<br>• <b>Constant speed</b> needs \\(\\vec v\\cdot\\vec a=0\\) (acceleration perpendicular to velocity); here it isn't.<br>• It <i>can</i> be determined — the dot product is exactly the test.<br><br><b>The principle:</b> \\(\\vec v\\cdot\\vec a\\gt 0\\) ⇒ speeding up, \\(\\lt 0\\) ⇒ slowing down, \\(=0\\) ⇒ instantaneously constant speed. This is the vector analog of "\\(v\\) and \\(a\\) same sign."`},
+
+ // ============ POLAR GRAPHING (12) ============
+ {topic:"polar",calc:false,prompt:"For the polar curve \\(r=2+2\\cos\\theta\\), find the slope \\(\\dfrac{dy}{dx}\\) of the tangent line at \\(\\theta=\\dfrac{\\pi}{2}\\).",
+  opts:[{t:"1",correct:true},{t:"-1"},{t:"0"},{t:"\\text{undefined}"}],
+  explain:`<b>Polar tangent slope:</b> with \\(x=r\\cos\\theta,\\ y=r\\sin\\theta\\), \\(\\dfrac{dy}{dx}=\\dfrac{r'\\sin\\theta+r\\cos\\theta}{r'\\cos\\theta-r\\sin\\theta}\\).<br>Here \\(r=2+2\\cos\\theta,\\ r'=-2\\sin\\theta\\). At \\(\\theta=\\tfrac\\pi2\\): \\(r=2,\\ r'=-2\\). Numerator \\(=(-2)(1)+(2)(0)=-2\\); denominator \\(=(-2)(0)-(2)(1)=-2\\). So \\(\\dfrac{dy}{dx}=\\dfrac{-2}{-2}=1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> assumes the numerator alone (or uses \\(\\dfrac{dr}{d\\theta}=0\\) as the slope, a classic confusion).<br>• <b>undefined</b> would need the denominator zero; here it's \\(-2\\).<br>• <b>\\(-1\\)</b> is a sign error in numerator or denominator.<br><br><b>The principle:</b> the slope is \\(\\dfrac{dy/d\\theta}{dx/d\\theta}\\) using the full product-rule derivatives — never just \\(\\dfrac{dr}{d\\theta}\\).`},
+ {topic:"polar",calc:false,prompt:"How many petals does the rose \\(r=4\\cos(6\\theta)\\) have?",
+  opts:[{t:"12",correct:true},{t:"6"},{t:"36"},{t:"24"}],
+  explain:`<b>Petal rule:</b> for \\(r=a\\cos(k\\theta)\\), if \\(k\\) is <b>even</b> the rose has \\(2k\\) petals; if \\(k\\) is <b>odd</b>, \\(k\\) petals. Here \\(k=6\\) is even, so \\(2(6)=12\\) petals.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>6</b> applies the odd-\\(k\\) rule by mistake.<br>• <b>36</b> is \\(k^2\\).<br>• <b>24</b> is \\(4k\\) (doubling twice, or multiplying by the amplitude).<br><br><b>The principle:</b> even \\(k\\) ⇒ \\(2k\\) petals (the negative-\\(r\\) sweeps create the extra set); odd \\(k\\) ⇒ \\(k\\) petals (negative-\\(r\\) retraces the same ones).`},
+ {topic:"polar",calc:true,prompt:"At what angle \\(\\theta\\) in \\(\\left(0,\\dfrac{\\pi}{2}\\right)\\) does the curve \\(r=1+\\cos\\theta\\) have a horizontal tangent line?",
+  opts:[{t:"\\dfrac{\\pi}{3}",correct:true},{t:"\\dfrac{\\pi}{2}"},{t:"\\dfrac{\\pi}{6}"},{t:"\\dfrac{\\pi}{4}"}],
+  explain:`<b>Horizontal tangent</b> ⇔ \\(\\dfrac{dy}{d\\theta}=0\\) (with \\(\\dfrac{dx}{d\\theta}\\neq 0\\)), where \\(y=r\\sin\\theta=(1+\\cos\\theta)\\sin\\theta\\).<br>\\(\\dfrac{dy}{d\\theta}=\\cos\\theta+\\cos 2\\theta=0\\). Using \\(\\cos 2\\theta=2\\cos^2\\theta-1\\): \\(2\\cos^2\\theta+\\cos\\theta-1=0\\Rightarrow(2\\cos\\theta-1)(\\cos\\theta+1)=0\\). In \\((0,\\tfrac\\pi2)\\), \\(\\cos\\theta=\\tfrac12\\Rightarrow\\theta=\\tfrac\\pi3\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac\\pi2\\)</b> is where \\(\\dfrac{dx}{d\\theta}=0\\) tends to occur — a <i>vertical</i> tangent direction, not horizontal.<br>• <b>\\(\\tfrac\\pi6,\\tfrac\\pi4\\)</b> don't satisfy \\(\\dfrac{dy}{d\\theta}=0\\).<br><br><b>The principle:</b> for polar tangents, differentiate \\(y=r\\sin\\theta\\) (not just \\(r\\)); horizontal ⇔ \\(dy/d\\theta=0\\).`},
+ {topic:"polar",calc:false,prompt:"Convert the polar point \\(\\left(-3,\\ \\dfrac{2\\pi}{3}\\right)\\) to rectangular coordinates.",
+  opts:[{t:"\\left(\\tfrac{3}{2},\\ -\\tfrac{3\\sqrt3}{2}\\right)",correct:true},{t:"\\left(-\\tfrac{3}{2},\\ \\tfrac{3\\sqrt3}{2}\\right)"},{t:"\\left(-\\tfrac{3}{2},\\ -\\tfrac{3\\sqrt3}{2}\\right)"},{t:"\\left(\\tfrac{3\\sqrt3}{2},\\ -\\tfrac{3}{2}\\right)"}],
+  explain:`<b>Use</b> \\(x=r\\cos\\theta,\\ y=r\\sin\\theta\\) directly — the negative \\(r\\) is handled by the formula. \\(x=-3\\cos\\tfrac{2\\pi}{3}=-3\\left(-\\tfrac12\\right)=\\tfrac32\\); \\(y=-3\\sin\\tfrac{2\\pi}{3}=-3\\left(\\tfrac{\\sqrt3}{2}\\right)=-\\tfrac{3\\sqrt3}{2}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\left(-\\tfrac32,\\tfrac{3\\sqrt3}{2}\\right)\\)</b> ignored the negative \\(r\\) (used \\(r=3\\)) — flipping both signs.<br>• <b>\\(\\left(-\\tfrac32,-\\tfrac{3\\sqrt3}{2}\\right)\\)</b> got \\(x\\) wrong by mishandling \\(\\cos\\tfrac{2\\pi}{3}\\)'s sign.<br>• The last choice swaps \\(\\sin\\) and \\(\\cos\\).<br><br><b>The principle:</b> plug \\(r\\) (sign included) straight into \\(x=r\\cos\\theta,\\ y=r\\sin\\theta\\); don't separately "fix" the negative radius.`},
+ {topic:"polar",calc:false,prompt:"Which of the following polar curves is a limaçon with an <b>inner loop</b>?",
+  opts:[{t:"r=1+2\\cos\\theta",correct:true},{t:"r=2+\\cos\\theta"},{t:"r=2+2\\cos\\theta"},{t:"r=2\\cos\\theta"}],
+  explain:`<b>Classify \\(r=a\\pm b\\cos\\theta\\) by the ratio \\(\\dfrac ab\\):</b> inner loop if \\(\\dfrac ab\\lt 1\\); cardioid if \\(=1\\); dimpled if \\(1\\le\\dfrac ab\\lt 2\\); convex if \\(\\ge 2\\). For \\(r=1+2\\cos\\theta\\), \\(\\dfrac ab=\\dfrac12\\lt 1\\) ⇒ <b>inner loop</b> (the radius goes negative over part of the sweep, drawing the loop).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(2+\\cos\\theta\\)</b>: \\(\\dfrac ab=2\\) ⇒ convex limaçon (no dimple, no loop).<br>• <b>\\(2+2\\cos\\theta\\)</b>: \\(\\dfrac ab=1\\) ⇒ cardioid.<br>• <b>\\(2\\cos\\theta\\)</b> is a circle.<br><br><b>The principle:</b> the inner loop appears exactly when \\(a\\lt b\\), because then \\(r\\) becomes negative for some angles.`},
+ {topic:"polar",calc:false,prompt:"For the rose \\(r=3\\sin(2\\theta)\\), what is the value of \\(r\\) at \\(\\theta=\\dfrac{\\pi}{4}\\), and what does this point represent?",
+  opts:[{t:"r=3, the tip of a petal",correct:true},{t:"r=0, the pole"},{t:"r=3, a point where the curve crosses itself"},{t:"r=1.5, the midpoint of a petal"}],
+  explain:`<b>Evaluate:</b> \\(r=3\\sin\\!\\left(2\\cdot\\tfrac\\pi4\\right)=3\\sin\\tfrac\\pi2=3\\). Since \\(\\sin\\) reaches its maximum of \\(1\\) at \\(\\tfrac\\pi2\\), this is the largest \\(r\\) on that petal — the <b>tip</b>.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(r=0\\) (pole)</b> happens where \\(\\sin 2\\theta=0\\) (e.g. \\(\\theta=0,\\tfrac\\pi2\\)), the petal <i>edges</i>, not \\(\\theta=\\tfrac\\pi4\\).<br>• <b>"crosses itself"</b> — rose petals meet only at the pole, not at a tip.<br>• <b>\\(r=1.5\\)</b> mis-evaluates \\(\\sin\\tfrac\\pi2\\) as \\(\\tfrac12\\).<br><br><b>The principle:</b> for \\(r=a\\sin(k\\theta)\\), the petal tip is where the sine hits \\(\\pm1\\) (max \\(|r|\\)); the pole is where the sine is \\(0\\).`},
+ {topic:"polar",calc:false,prompt:"For a polar curve \\(r=f(\\theta)\\), the quantity \\(\\dfrac{dr}{d\\theta}\\) represents which of the following?",
+  opts:[{t:"The rate at which the distance from the origin changes as \\(\\theta\\) increases",correct:true},{t:"The slope of the tangent line to the curve"},{t:"The rate at which the angle changes"},{t:"The area swept out by the curve"}],
+  explain:`<b>\\(r\\) is the distance from the origin, so \\(\\dfrac{dr}{d\\theta}\\) is how fast that distance changes as the angle sweeps.</b> If \\(\\dfrac{dr}{d\\theta}\\gt 0\\) the curve is spiraling outward; if \\(\\lt 0\\), inward.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Slope of the tangent line</b> is \\(\\dfrac{dy}{dx}=\\dfrac{r'\\sin\\theta+r\\cos\\theta}{r'\\cos\\theta-r\\sin\\theta}\\) — a much more involved expression. Confusing \\(\\dfrac{dr}{d\\theta}\\) with the slope is the single most common polar error.<br>• <b>Rate the angle changes</b> would be \\(\\dfrac{d\\theta}{dt}\\), a time derivative.<br>• <b>Area</b> involves \\(\\tfrac12\\int r^2\\,d\\theta\\).<br><br><b>The principle:</b> \\(\\dfrac{dr}{d\\theta}\\) measures radial change only; it is <i>not</i> the slope of the curve in the plane.`},
+ {topic:"polar",calc:true,prompt:"At what angle \\(\\theta\\) in \\(\\left(0,\\pi\\right)\\) does the cardioid \\(r=1+\\cos\\theta\\) have a vertical tangent line (other than at the pole)?",
+  opts:[{t:"\\dfrac{2\\pi}{3}",correct:true},{t:"\\dfrac{\\pi}{2}"},{t:"\\dfrac{\\pi}{3}"},{t:"\\dfrac{5\\pi}{6}"}],
+  explain:`<b>Vertical tangent</b> ⇔ \\(\\dfrac{dx}{d\\theta}=0\\) (with \\(\\dfrac{dy}{d\\theta}\\neq 0\\)), where \\(x=r\\cos\\theta=(1+\\cos\\theta)\\cos\\theta\\).<br>\\(\\dfrac{dx}{d\\theta}=-\\sin\\theta-2\\cos\\theta\\sin\\theta=-\\sin\\theta(1+2\\cos\\theta)=0\\). In \\((0,\\pi)\\), \\(\\sin\\theta\\neq 0\\), so \\(1+2\\cos\\theta=0\\Rightarrow\\cos\\theta=-\\tfrac12\\Rightarrow\\theta=\\tfrac{2\\pi}{3}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac\\pi3\\)</b> uses \\(\\cos\\theta=+\\tfrac12\\) (sign error) and is actually a <i>horizontal</i>-tangent angle.<br>• <b>\\(\\tfrac\\pi2\\)</b> zeros \\(\\dfrac{dy}{d\\theta}\\)-type expressions, not \\(\\dfrac{dx}{d\\theta}\\).<br>• <b>\\(\\tfrac{5\\pi}{6}\\)</b> doesn't satisfy \\(\\cos\\theta=-\\tfrac12\\).<br><br><b>The principle:</b> vertical ⇔ \\(dx/d\\theta=0\\); differentiate \\(x=r\\cos\\theta\\) with the product rule, factor, and solve.`},
+ {topic:"polar",calc:false,prompt:"Over the interval \\(0\\le\\theta\\le 2\\pi\\), how many times does the circle \\(r=2\\cos\\theta\\) trace itself?",
+  opts:[{t:"Twice",correct:true},{t:"Once"},{t:"Three times"},{t:"It does not close"}],
+  explain:`<b>\\(r=2\\cos\\theta\\) is a circle that completes once over \\([0,\\pi]\\).</b> On \\((\\tfrac\\pi2,\\tfrac{3\\pi}{2})\\), \\(\\cos\\theta\\lt 0\\) so \\(r\\lt 0\\), and those negative-\\(r\\) points <i>retrace</i> the same circle. Over the full \\([0,2\\pi]\\), the circle is therefore drawn <b>twice</b>.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Once</b> is the answer for \\([0,\\pi]\\), not \\([0,2\\pi]\\) — and assuming "once" over \\([0,2\\pi]\\) is what leads to double-counting area.<br>• <b>Three times / does not close</b> don't match the curve's behavior.<br><br><b>The principle:</b> circles like \\(r=a\\cos\\theta\\) close in \\(\\pi\\) radians; using \\(2\\pi\\) traces them twice — a frequent source of area errors.`},
+ {topic:"polar",calc:false,prompt:"Convert the rectangular point \\((-1,\\ 1)\\) to polar coordinates with \\(r\\gt 0\\) and \\(0\\le\\theta\\lt 2\\pi\\).",
+  opts:[{t:"\\left(\\sqrt2,\\ \\tfrac{3\\pi}{4}\\right)",correct:true},{t:"\\left(\\sqrt2,\\ \\tfrac{\\pi}{4}\\right)"},{t:"\\left(2,\\ \\tfrac{3\\pi}{4}\\right)"},{t:"\\left(\\sqrt2,\\ -\\tfrac{\\pi}{4}\\right)"}],
+  explain:`<b>Compute \\(r=\\sqrt{x^2+y^2}\\) and place \\(\\theta\\) in the correct quadrant.</b> \\(r=\\sqrt{(-1)^2+1^2}=\\sqrt2\\). The point \\((-1,1)\\) is in the <b>second quadrant</b>, so \\(\\theta=\\tfrac{3\\pi}{4}\\) (the reference angle is \\(\\tfrac\\pi4\\), adjusted into QII).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac\\pi4\\)</b> is the bare \\(\\tan^{-1}\\!\\left(\\tfrac{1}{-1}\\right)\\) output without fixing the quadrant — it points into QI, the wrong place.<br>• <b>\\(r=2\\)</b> forgot the square root.<br>• <b>\\(-\\tfrac\\pi4\\)</b> is outside \\([0,2\\pi)\\) and the wrong quadrant.<br><br><b>The principle:</b> \\(\\tan^{-1}(y/x)\\) only gives a reference angle; always check which quadrant \\((x,y)\\) lies in and adjust \\(\\theta\\).`},
+ {topic:"polar",calc:false,prompt:"For the limaçon \\(r=3+2\\sin\\theta\\), what is the maximum distance from the origin to a point on the curve, and at what angle does it occur?",
+  opts:[{t:"r=5 at \\theta=\\tfrac{\\pi}{2}",correct:true},{t:"r=1 at \\theta=\\tfrac{3\\pi}{2}"},{t:"r=5 at \\theta=0"},{t:"r=3 at \\theta=0"}],
+  explain:`<b>\\(r\\) is the distance from the origin, so maximize \\(r=3+2\\sin\\theta\\).</b> The maximum of \\(\\sin\\theta\\) is \\(1\\), at \\(\\theta=\\tfrac\\pi2\\), giving \\(r=3+2(1)=5\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(r=1\\) at \\(\\tfrac{3\\pi}{2}\\)</b> is the <i>minimum</i> distance (where \\(\\sin\\theta=-1\\)).<br>• <b>\\(r=5\\) at \\(\\theta=0\\)</b> has the right \\(r\\) but wrong angle — at \\(\\theta=0\\), \\(\\sin\\theta=0\\) gives \\(r=3\\).<br>• <b>\\(r=3\\) at \\(\\theta=0\\)</b> is just the value at \\(\\theta=0\\), not the maximum.<br><br><b>The principle:</b> to extremize the distance, extremize \\(r(\\theta)\\); for \\(a+b\\sin\\theta\\) the max is \\(a+b\\) at \\(\\theta=\\tfrac\\pi2\\), min \\(a-b\\) at \\(\\tfrac{3\\pi}{2}\\).`},
+ {topic:"polar",calc:false,prompt:"At what smallest angle \\(\\theta\\gt 0\\) does the curve \\(r=2\\cos(3\\theta)\\) pass through the pole?",
+  opts:[{t:"\\dfrac{\\pi}{6}",correct:true},{t:"\\dfrac{\\pi}{2}"},{t:"\\dfrac{\\pi}{3}"},{t:"\\dfrac{\\pi}{12}"}],
+  explain:`<b>The curve is at the pole when \\(r=0\\):</b> \\(2\\cos(3\\theta)=0\\Rightarrow 3\\theta=\\tfrac\\pi2\\Rightarrow\\theta=\\tfrac\\pi6\\). These pole-crossings are exactly the petal boundaries.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac\\pi2\\)</b> solves \\(\\cos\\theta=0\\) forgetting the factor of \\(3\\) inside.<br>• <b>\\(\\tfrac\\pi3\\)</b> solves \\(3\\theta=\\pi\\) (the next crossing, not the smallest).<br>• <b>\\(\\tfrac{\\pi}{12}\\)</b> solves \\(3\\theta=\\tfrac\\pi4\\), which gives \\(\\cos\\tfrac\\pi4\\neq 0\\).<br><br><b>The principle:</b> set the whole \\(r\\)-expression to zero and solve including the inner coefficient; \\(\\cos(3\\theta)=0\\) at \\(3\\theta=\\tfrac\\pi2,\\tfrac{3\\pi}{2},\\dots\\)`},
+
+ // ============ POLAR AREA (12) ============
+ {topic:"area",calc:false,prompt:"Which of the following expressions gives the area of <b>one petal</b> of the rose \\(r=4\\cos(3\\theta)\\)?",
+  opts:[{t:"\\dfrac{1}{2}\\displaystyle\\int_{-\\pi/6}^{\\pi/6}\\big(4\\cos 3\\theta\\big)^2\\,d\\theta",correct:true},{t:"\\dfrac{1}{2}\\displaystyle\\int_{0}^{2\\pi}\\big(4\\cos 3\\theta\\big)^2\\,d\\theta"},{t:"\\displaystyle\\int_{-\\pi/6}^{\\pi/6}\\big(4\\cos 3\\theta\\big)^2\\,d\\theta"},{t:"\\dfrac{1}{2}\\displaystyle\\int_{-\\pi/3}^{\\pi/3}\\big(4\\cos 3\\theta\\big)^2\\,d\\theta"}],
+  explain:`<b>Two things must be right: the \\(\\tfrac12 r^2\\) form and the petal's limits.</b> One petal spans consecutive pole-crossings: \\(4\\cos 3\\theta=0\\Rightarrow 3\\theta=\\pm\\tfrac\\pi2\\Rightarrow\\theta=\\pm\\tfrac\\pi6\\). So area \\(=\\tfrac12\\displaystyle\\int_{-\\pi/6}^{\\pi/6}(4\\cos 3\\theta)^2\\,d\\theta\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Limits \\(0\\) to \\(2\\pi\\)</b> sweep <i>all</i> petals (and retrace) — that's the whole-rose attempt, not one petal.<br>• <b>Missing the \\(\\tfrac12\\)</b> (third choice) doubles the area — the most common polar-area slip.<br>• <b>Limits \\(\\pm\\tfrac\\pi3\\)</b> span two petals' worth of angle.<br><br><b>The principle:</b> for one petal, integrate \\(\\tfrac12 r^2\\) between adjacent \\(r=0\\) angles — never \\(0\\) to \\(2\\pi\\), and never drop the \\(\\tfrac12\\).`},
+ {topic:"area",calc:false,prompt:"What is the area of one loop of the lemniscate \\(r^2=18\\cos(2\\theta)\\)?",
+  opts:[{t:"9",correct:true},{t:"18",correct:false},{t:"\\dfrac{9}{2}"},{t:"36"}],
+  explain:`<b>Because the equation gives \\(r^2\\) directly, the area formula simplifies beautifully:</b> \\(A=\\tfrac12\\displaystyle\\int r^2\\,d\\theta=\\tfrac12\\int 18\\cos(2\\theta)\\,d\\theta\\). One loop runs where \\(r^2\\ge 0\\): \\(\\cos 2\\theta\\ge 0\\) on \\(\\left[-\\tfrac\\pi4,\\tfrac\\pi4\\right]\\). So \\(A=\\tfrac12\\int_{-\\pi/4}^{\\pi/4}18\\cos 2\\theta\\,d\\theta=9\\left[\\tfrac{\\sin 2\\theta}{2}\\right]_{-\\pi/4}^{\\pi/4}=9\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>18</b> forgets the \\(\\tfrac12\\) in the area formula.<br>• <b>\\(\\tfrac92\\)</b> mishandles the antiderivative of \\(\\cos 2\\theta\\) (forgets to divide by 2) — or uses half the interval.<br>• <b>36</b> drops the \\(\\tfrac12\\) and doubles via wrong limits.<br><br><b>The principle:</b> when given \\(r^2\\), substitute it straight into \\(\\tfrac12\\int r^2\\,d\\theta\\); the loop's limits are where \\(r^2=0\\).`},
+ {topic:"area",calc:false,prompt:"Find the area of the region inside \\(r=2+\\cos\\theta\\) and outside \\(r=1\\).",
+  opts:[{t:"\\dfrac{7\\pi}{2}",correct:true},{t:"\\dfrac{9\\pi}{2}"},{t:"3\\pi"},{t:"\\dfrac{7\\pi}{4}"}],
+  explain:`<b>The curves don't intersect</b> (\\(2+\\cos\\theta\\) ranges over \\([1,3]\\) and only touches \\(r=1\\) at \\(\\theta=\\pi\\)), so the outer curve is \\(2+\\cos\\theta\\) and the inner is \\(1\\) over the full \\([0,2\\pi]\\): \\(A=\\tfrac12\\displaystyle\\int_0^{2\\pi}\\big[(2+\\cos\\theta)^2-1^2\\big]\\,d\\theta\\).<br>Expand: \\((2+\\cos\\theta)^2-1=4+4\\cos\\theta+\\cos^2\\theta-1=3+4\\cos\\theta+\\cos^2\\theta\\). Integrating over \\([0,2\\pi]\\): \\(3(2\\pi)+0+\\pi=7\\pi\\); times \\(\\tfrac12\\) gives \\(\\tfrac{7\\pi}{2}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac{9\\pi}{2}\\)</b> forgets to subtract the inner region (used \\((2+\\cos\\theta)^2\\) alone: \\(\\tfrac12(8\\pi+\\pi)=\\tfrac{9\\pi}{2}\\)).<br>• <b>\\(3\\pi\\)</b> drops the \\(\\cos^2\\) contribution.<br>• <b>\\(\\tfrac{7\\pi}{4}\\)</b> applies an extra \\(\\tfrac12\\).<br><br><b>The principle:</b> area between curves is \\(\\tfrac12\\int(r_{\\text{out}}^2-r_{\\text{in}}^2)\\,d\\theta\\); subtract the squares and integrate the \\(\\cos^2\\) term with the half-angle identity.`},
+ {topic:"area",calc:false,prompt:"The region \\(R\\) lies inside the circle \\(r=3\\sin\\theta\\) and outside the cardioid \\(r=1+\\sin\\theta\\). Which expression gives the area of \\(R\\)?",
+  opts:[{t:"\\dfrac{1}{2}\\displaystyle\\int_{\\pi/6}^{5\\pi/6}\\big[(3\\sin\\theta)^2-(1+\\sin\\theta)^2\\big]\\,d\\theta",correct:true},{t:"\\dfrac{1}{2}\\displaystyle\\int_{0}^{\\pi}\\big[(3\\sin\\theta)^2-(1+\\sin\\theta)^2\\big]\\,d\\theta"},{t:"\\dfrac{1}{2}\\displaystyle\\int_{\\pi/6}^{5\\pi/6}\\big(3\\sin\\theta-(1+\\sin\\theta)\\big)^2\\,d\\theta"},{t:"\\dfrac{1}{2}\\displaystyle\\int_{\\pi/6}^{5\\pi/6}\\big[(1+\\sin\\theta)^2-(3\\sin\\theta)^2\\big]\\,d\\theta"}],
+  explain:`<b>Find the limits from the intersection, then subtract outer² − inner².</b> Setting \\(3\\sin\\theta=1+\\sin\\theta\\Rightarrow\\sin\\theta=\\tfrac12\\Rightarrow\\theta=\\tfrac\\pi6,\\tfrac{5\\pi}{6}\\). Over that interval the circle \\(3\\sin\\theta\\) is outer, so \\(A=\\tfrac12\\int_{\\pi/6}^{5\\pi/6}\\big[(3\\sin\\theta)^2-(1+\\sin\\theta)^2\\big]\\,d\\theta\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Limits \\(0\\) to \\(\\pi\\)</b> are the circle's own span, ignoring where the two curves actually cross.<br>• <b>\\((r_{\\text{out}}-r_{\\text{in}})^2\\)</b> squares the difference instead of differencing the squares — the signature polar mistake, since \\((a-b)^2\\neq a^2-b^2\\).<br>• <b>Reversed order</b> \\((r_{\\text{in}}^2-r_{\\text{out}}^2)\\) gives a negative area.<br><br><b>The principle:</b> limits come from \\(r_1=r_2\\); the integrand is (outer)² − (inner)², squares first.`},
+ {topic:"area",calc:false,prompt:"What is the total area enclosed by the rose \\(r=2\\sin(3\\theta)\\)?",
+  opts:[{t:"\\pi",correct:true},{t:"3\\pi"},{t:"\\dfrac{\\pi}{3}"},{t:"2\\pi"}],
+  explain:`<b>A rose \\(r=a\\sin(k\\theta)\\) with odd \\(k\\) has \\(k\\) petals.</b> Here \\(k=3\\), so 3 petals. One petal (from \\(\\theta=0\\) to \\(\\tfrac\\pi3\\)) has area \\(\\tfrac12\\int_0^{\\pi/3}(2\\sin 3\\theta)^2\\,d\\theta=\\tfrac12\\int_0^{\\pi/3}4\\sin^2 3\\theta\\,d\\theta=\\tfrac\\pi3\\). Total \\(=3\\cdot\\tfrac\\pi3=\\pi\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac\\pi3\\)</b> is the area of <i>one</i> petal — forgetting to multiply by the 3 petals.<br>• <b>\\(3\\pi\\)</b> triples incorrectly (e.g. dropping the \\(\\tfrac12\\) then multiplying).<br>• <b>\\(2\\pi\\)</b> uses \\(2k\\) petals (the even-\\(k\\) rule) by mistake.<br><br><b>The principle:</b> compute one petal with the \\(r=0\\) limits, then multiply by the correct petal count (odd \\(k\\Rightarrow k\\)).`},
+ {topic:"area",calc:true,prompt:"The region \\(R\\) lies inside both the circle \\(r=2\\) and the circle \\(r=4\\cos\\theta\\). The area of \\(R\\) is given by \\(\\dfrac{1}{2}\\int_{-\\pi/3}^{\\pi/3}2^2\\,d\\theta+2\\cdot\\dfrac{1}{2}\\int_{\\pi/3}^{\\pi/2}(4\\cos\\theta)^2\\,d\\theta\\). What is this area?",
+  opts:[{t:"\\dfrac{8\\pi}{3}-2\\sqrt3",correct:true},{t:"\\dfrac{4\\pi}{3}",correct:false},{t:"4\\pi-2\\sqrt3"},{t:"\\dfrac{8\\pi}{3}+2\\sqrt3"}],
+  explain:`<b>This is the "area common to two curves" split.</b> The curves meet at \\(\\theta=\\pm\\tfrac\\pi3\\) (from \\(4\\cos\\theta=2\\)). For \\(|\\theta|\\lt\\tfrac\\pi3\\) the circle \\(r=2\\) is the inner boundary; beyond that, \\(r=4\\cos\\theta\\) is.<br><b>First piece:</b> \\(\\tfrac12\\int_{-\\pi/3}^{\\pi/3}4\\,d\\theta=\\tfrac12\\cdot 4\\cdot\\tfrac{2\\pi}{3}=\\tfrac{4\\pi}{3}\\).<br><b>Second piece</b> (using \\(\\cos^2\\theta=\\tfrac{1+\\cos2\\theta}{2}\\)): \\(\\int_{\\pi/3}^{\\pi/2}16\\cos^2\\theta\\,d\\theta=8\\left[\\theta+\\tfrac{\\sin 2\\theta}{2}\\right]_{\\pi/3}^{\\pi/2}=\\tfrac{4\\pi}{3}-2\\sqrt3\\).<br><b>Total:</b> \\(\\tfrac{4\\pi}{3}+\\tfrac{4\\pi}{3}-2\\sqrt3=\\tfrac{8\\pi}{3}-2\\sqrt3\\approx 4.91\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac{4\\pi}{3}\\)</b> includes only the first piece — forgetting the two outer caps.<br>• <b>\\(4\\pi-2\\sqrt3\\)</b> mis-adds the \\(\\theta\\)-terms.<br>• <b>\\(+2\\sqrt3\\)</b> flips the sign of the \\(\\sin\\tfrac{2\\pi}{3}\\) term.<br><br><b>The principle:</b> overlapping regions split at the intersection; each sub-region is bounded by whichever curve is closer to the pole there.`},
+ {topic:"area",calc:true,prompt:"What is the area of one petal of the rose \\(r=4\\sin(2\\theta)\\)?",
+  opts:[{t:"2\\pi",correct:true},{t:"\\pi",correct:false},{t:"4\\pi"},{t:"8"}],
+  explain:`<b>One petal of \\(r=4\\sin 2\\theta\\) spans \\([0,\\tfrac\\pi2]\\)</b> (where \\(\\sin 2\\theta\\ge 0\\), i.e. between \\(r=0\\) at \\(\\theta=0\\) and \\(\\theta=\\tfrac\\pi2\\)). Area \\(=\\tfrac12\\int_0^{\\pi/2}(4\\sin 2\\theta)^2\\,d\\theta=8\\int_0^{\\pi/2}\\sin^2 2\\theta\\,d\\theta=8\\cdot\\tfrac\\pi4=2\\pi\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\pi\\)</b> uses wrong limits (e.g. \\([0,\\tfrac\\pi4]\\), half the petal).<br>• <b>\\(4\\pi\\)</b> drops the \\(\\tfrac12\\), doubling the result.<br>• <b>8</b> is \\(\\int_0^{\\pi/2}(4\\sin 2\\theta)^2\\) before applying \\(\\tfrac12\\) and the \\(\\sin^2\\) average — a partial computation.<br><br><b>The principle:</b> petal limits are adjacent \\(r=0\\) angles; integrate \\(\\tfrac12 r^2\\) and use \\(\\sin^2 u=\\tfrac{1-\\cos 2u}{2}\\).`},
+ {topic:"area",calc:false,prompt:"Which expression gives the area enclosed by the <b>inner loop</b> of the limaçon \\(r=1+2\\cos\\theta\\)?",
+  opts:[{t:"\\dfrac{1}{2}\\displaystyle\\int_{2\\pi/3}^{4\\pi/3}\\big(1+2\\cos\\theta\\big)^2\\,d\\theta",correct:true},{t:"\\dfrac{1}{2}\\displaystyle\\int_{0}^{2\\pi}\\big(1+2\\cos\\theta\\big)^2\\,d\\theta"},{t:"\\dfrac{1}{2}\\displaystyle\\int_{0}^{\\pi}\\big(1+2\\cos\\theta\\big)^2\\,d\\theta"},{t:"\\dfrac{1}{2}\\displaystyle\\int_{\\pi/3}^{2\\pi/3}\\big(1+2\\cos\\theta\\big)^2\\,d\\theta"}],
+  explain:`<b>The inner loop is traced where \\(r\\lt 0\\), bounded by the angles where \\(r=0\\).</b> \\(1+2\\cos\\theta=0\\Rightarrow\\cos\\theta=-\\tfrac12\\Rightarrow\\theta=\\tfrac{2\\pi}{3},\\tfrac{4\\pi}{3}\\). The loop is swept as \\(\\theta\\) goes between these, so area \\(=\\tfrac12\\int_{2\\pi/3}^{4\\pi/3}(1+2\\cos\\theta)^2\\,d\\theta\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(0\\) to \\(2\\pi\\)</b> would give the entire limaçon (outer region included), not just the inner loop.<br>• <b>\\(0\\) to \\(\\pi\\)</b> is an arbitrary half, not aligned to the \\(r=0\\) angles.<br>• <b>\\(\\tfrac\\pi3\\) to \\(\\tfrac{2\\pi}{3}\\)</b> uses one wrong endpoint (\\(\\tfrac\\pi3\\) isn't where \\(r=0\\)).<br><br><b>The principle:</b> the inner loop's limits are exactly the two \\(r=0\\) angles; integrating \\(\\tfrac12 r^2\\) between them captures the loop (the square handles the negative \\(r\\) automatically).`},
+ {topic:"area",calc:false,prompt:"What is the area of one petal of the rose \\(r=3\\cos(2\\theta)\\)?",
+  opts:[{t:"\\dfrac{9\\pi}{8}",correct:true},{t:"\\dfrac{9\\pi}{4}"},{t:"\\dfrac{9\\pi}{16}"},{t:"\\dfrac{3\\pi}{2}"}],
+  explain:`<b>One petal spans the \\(r=0\\) angles:</b> \\(3\\cos 2\\theta=0\\Rightarrow 2\\theta=\\pm\\tfrac\\pi2\\Rightarrow\\theta=\\pm\\tfrac\\pi4\\). Area \\(=\\tfrac12\\int_{-\\pi/4}^{\\pi/4}(3\\cos 2\\theta)^2\\,d\\theta=\\tfrac12\\int_{-\\pi/4}^{\\pi/4}9\\cos^2 2\\theta\\,d\\theta\\). With \\(\\cos^2 u=\\tfrac{1+\\cos 2u}{2}\\), the integral of \\(\\cos^2 2\\theta\\) over \\([-\\tfrac\\pi4,\\tfrac\\pi4]\\) is \\(\\tfrac\\pi4\\), so \\(A=\\tfrac12\\cdot 9\\cdot\\tfrac\\pi4=\\tfrac{9\\pi}{8}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac{9\\pi}{4}\\)</b> forgets the \\(\\tfrac12\\) from the area formula.<br>• <b>\\(\\tfrac{9\\pi}{16}\\)</b> halves once too often.<br>• <b>\\(\\tfrac{3\\pi}{2}\\)</b> mishandles the \\(\\cos^2\\) integration (or uses \\(a\\) instead of \\(a^2\\)).<br><br><b>The principle:</b> integrate \\(\\tfrac12 r^2\\) over one petal's \\(r=0\\)-to-\\(r=0\\) span; the \\(\\cos^2\\) term contributes its average of \\(\\tfrac12\\) times the interval length.`},
+ {topic:"area",calc:false,prompt:"For a polar curve \\(r=f(\\theta)\\), the expression \\(\\dfrac{1}{2}\\displaystyle\\int_\\alpha^\\beta\\big[f(\\theta)\\big]^2\\,d\\theta\\) represents which of the following?",
+  opts:[{t:"The area swept out by the radius as \\(\\theta\\) goes from \\(\\alpha\\) to \\(\\beta\\)",correct:true},{t:"The arc length of the curve from \\(\\alpha\\) to \\(\\beta\\)"},{t:"The average value of \\(r\\) on \\([\\alpha,\\beta]\\)"},{t:"The slope of the curve at \\(\\beta\\)"}],
+  explain:`<b>\\(\\tfrac12 r^2\\,d\\theta\\) is the area of a thin circular sector</b>, so the integral \\(\\tfrac12\\int_\\alpha^\\beta r^2\\,d\\theta\\) accumulates those sectors into the <b>area swept</b> by the radius between \\(\\alpha\\) and \\(\\beta\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Arc length</b> would be \\(\\int\\sqrt{r^2+(r')^2}\\,d\\theta\\) — a different integrand entirely (and units of length, not area).<br>• <b>Average value of \\(r\\)</b> would be \\(\\tfrac{1}{\\beta-\\alpha}\\int r\\,d\\theta\\) (no square, no \\(\\tfrac12\\)).<br>• <b>Slope</b> is a derivative, not an integral.<br><br><b>The principle:</b> recognize \\(\\tfrac12\\int r^2\\,d\\theta\\) on sight as polar <i>area</i> — the square and the \\(\\tfrac12\\) come from the sector, and the result has units of area.`},
+ {topic:"area",calc:true,prompt:"The region \\(R\\) lies inside both circles \\(r=3\\sin\\theta\\) and \\(r=3\\cos\\theta\\). What is the area of \\(R\\)?",
+  opts:[{t:"\\dfrac{9(\\pi-2)}{8}",correct:true},{t:"\\dfrac{9\\pi}{8}"},{t:"\\dfrac{9\\pi}{4}"},{t:"\\dfrac{9(\\pi-2)}{4}"}],
+  explain:`<b>The two circles intersect at \\(\\theta=\\tfrac\\pi4\\)</b> (where \\(3\\sin\\theta=3\\cos\\theta\\)) and at the pole. By symmetry about \\(\\theta=\\tfrac\\pi4\\), the overlap is twice the area swept by \\(r=3\\sin\\theta\\) from \\(0\\) to \\(\\tfrac\\pi4\\): \\(A=2\\cdot\\tfrac12\\int_0^{\\pi/4}(3\\sin\\theta)^2\\,d\\theta=9\\int_0^{\\pi/4}\\sin^2\\theta\\,d\\theta\\). With \\(\\sin^2\\theta=\\tfrac{1-\\cos 2\\theta}{2}\\): \\(=9\\cdot\\tfrac12\\left[\\theta-\\tfrac{\\sin 2\\theta}{2}\\right]_0^{\\pi/4}=\\tfrac92\\left(\\tfrac\\pi4-\\tfrac12\\right)=\\tfrac{9(\\pi-2)}{8}\\approx 1.28\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac{9\\pi}{8}\\)</b> drops the \\(-\\tfrac12\\) from the \\(\\sin 2\\theta\\) evaluation (forgetting that term).<br>• <b>\\(\\tfrac{9\\pi}{4}\\)</b> is the area of a full circle of radius \\(\\tfrac32\\) — not the overlap.<br>• <b>\\(\\tfrac{9(\\pi-2)}{4}\\)</b> forgets a factor of \\(\\tfrac12\\).<br><br><b>The principle:</b> for symmetric overlaps, integrate one curve up to the line of symmetry and double; the bounding curve switches at the intersection angle.`},
+ {topic:"area",calc:true,prompt:"Find the area of the region inside the cardioid \\(r=2+2\\cos\\theta\\) and outside the circle \\(r=2\\).",
+  opts:[{t:"8+\\pi",correct:true},{t:"\\pi",correct:false},{t:"8",correct:false},{t:"8+2\\pi"}],
+  explain:`<b>Find where they meet, then integrate outer² − inner² over that range.</b> \\(2+2\\cos\\theta=2\\Rightarrow\\cos\\theta=0\\Rightarrow\\theta=\\pm\\tfrac\\pi2\\). Between these the cardioid is outside the circle, so \\(A=\\tfrac12\\int_{-\\pi/2}^{\\pi/2}\\big[(2+2\\cos\\theta)^2-2^2\\big]\\,d\\theta\\).<br>Expand: \\((2+2\\cos\\theta)^2-4=8\\cos\\theta+4\\cos^2\\theta\\). Integrating over \\([-\\tfrac\\pi2,\\tfrac\\pi2]\\): \\(\\int 8\\cos\\theta=16\\) and \\(\\int 4\\cos^2\\theta=2\\pi\\). So \\(A=\\tfrac12(16+2\\pi)=8+\\pi\\approx 11.14\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>8</b> drops the \\(\\cos^2\\) (the \\(\\pi\\) term).<br>• <b>\\(\\pi\\)</b> keeps only the \\(\\cos^2\\) part, losing the \\(8\\) from \\(\\int 8\\cos\\theta\\).<br>• <b>\\(8+2\\pi\\)</b> forgets the outer \\(\\tfrac12\\) on the \\(\\cos^2\\) piece.<br><br><b>The principle:</b> intersection gives the limits; integrand is (outer)² − (inner)²; integrate the \\(\\cos\\theta\\) and \\(\\cos^2\\theta\\) terms carefully over the symmetric interval.`}
+];
+
+// ===================== MC ENGINE (batches of 12) =====================
+let mcBatch=[], mcIdx=0, mcScore=0, mcAnswered=false;
+const stats={};
+Object.keys(TOPICS).forEach(k=>stats[k]={right:0,total:0});
+
+function mathify(h){return (h||"").replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return m;}});}
+// Decide how to render an MC option: embedded inline-math or prose -> mathify as-is; pure math -> wrap in \( \).
+function renderOpt(t){
+  if(t.indexOf("\\(")>=0) return mathify(t);                 // already has inline math (text+math mix)
+  // Pure math if it has LaTeX structure markers (commands, sup/sub, etc.). Prose otherwise.
+  if(/[\\^_{}]/.test(t)){
+    try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return t;}
+  }
+  // no LaTeX markers: simple numeric/symbolic (e.g. "3", "0,4") -> render as math; wordy -> render as text
+  if(/[A-Za-z]{2,}/.test(t)) return mathify(t);              // prose like "Slowing down", "15 ft/s"
+  try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return t;}
+}
+
+function newBatch(){
+  mcBatch=shuffle(MC).slice(0,12); mcIdx=0; mcScore=0;
+  document.getElementById('mcDone').style.display='none';
+  document.getElementById('mcTag').style.display='';
+  document.getElementById('mcPrompt').style.display='';
+  document.getElementById('mcOpts').style.display='';
+  renderMC();
+}
+function renderMC(){
+  mcAnswered=false;
+  const q=mcBatch[mcIdx];
+  document.getElementById('mcProgress').textContent="Question "+(mcIdx+1)+" of "+mcBatch.length;
+  document.getElementById('mcScore').textContent="Score: "+mcScore;
+  document.getElementById('mcTag').textContent=TOPICS[q.topic][0];
+  document.getElementById('mcPrompt').innerHTML=mathify(q.prompt);
+  const mm=document.getElementById('mcMath');
+  if(q.math){mm.style.display='';mm.innerHTML=tex(q.math,q.math,true);}else{mm.style.display='none';}
+  const opts=document.getElementById('mcOpts'); opts.innerHTML="";
+  const list=shuffle(q.opts.map((o,i)=>({...o})));
+  list.forEach(o=>{const b=document.createElement('button');b.innerHTML=renderOpt(o.t);b.dataset.correct=!!o.correct;b.onclick=()=>pickMC(b,q);opts.appendChild(b);});
+  const fb=document.getElementById('mcFb');fb.className="fb";fb.innerHTML="";
+  document.getElementById('mcNext').className="next";
+}
+function pickMC(btn,q){
+  if(mcAnswered)return; mcAnswered=true;
+  const correct=btn.dataset.correct==="true";
+  stats[q.topic].total++; if(correct){stats[q.topic].right++;mcScore++;}
+  [...document.getElementById('mcOpts').children].forEach(b=>{b.disabled=true;if(b.dataset.correct==="true")b.classList.add('correct');});
+  if(!correct)btn.classList.add('wrong');
+  const fb=document.getElementById('mcFb');
+  fb.className="fb show";
+  fb.innerHTML='<span class="ftag '+(correct?'ok':'bad')+'">'+(correct?'Correct. ':'Not quite. ')+'</span>'+mathify(q.explain)+
+    '<br><a class="review-link" href="'+TOPICS[q.topic][1]+'">Review: '+TOPICS[q.topic][0]+' →</a>';
+  document.getElementById('mcScore').textContent="Score: "+mcScore;
+  const nx=document.getElementById('mcNext'); nx.className="next show";
+  nx.textContent = mcIdx<mcBatch.length-1 ? "Next question →" : "See batch results →";
+  renderWeak();
+}
+document.getElementById('mcNext').onclick=()=>{
+  if(mcIdx<mcBatch.length-1){mcIdx++;renderMC();}
+  else{
+    document.getElementById('mcTag').style.display='none';
+    document.getElementById('mcPrompt').style.display='none';
+    document.getElementById('mcMath').style.display='none';
+    document.getElementById('mcOpts').style.display='none';
+    document.getElementById('mcFb').className="fb";
+    document.getElementById('mcNext').className="next";
+    const pct=Math.round(100*mcScore/mcBatch.length);
+    const msg=pct>=85?"Exam-ready across the board.":pct>=65?"Solid — clean up the misses below.":"Keep drilling; your weak topics are flagged below.";
+    const d=document.getElementById('mcDone');
+    d.style.display='block';
+    d.innerHTML='<div style="text-align:center;padding:10px"><div style="font-family:var(--display);font-size:34px;font-weight:600;color:var(--emerald)">'+mcScore+' / '+mcBatch.length+'</div><p style="color:var(--muted);margin:8px auto 16px;max-width:420px;font-size:14px">'+msg+'</p></div>';
+    const r=document.createElement('button');r.className="next show";r.style.maxWidth="240px";r.style.margin="4px auto 0";r.textContent="↺ Get a new batch of 12";r.onclick=newBatch;d.appendChild(r);
+    document.getElementById('mcProgress').textContent="Batch complete";
+  }
+};
+
+// ===================== WEAK-SPOTS =====================
+function renderWeak(){
+  const rows=Object.keys(TOPICS).filter(k=>stats[k].total>0);
+  const body=document.getElementById('weakBody');
+  if(!rows.length){return;}
+  rows.sort((a,b)=>(stats[a].right/stats[a].total)-(stats[b].right/stats[b].total));
+  body.innerHTML=rows.map(k=>{
+    const s=stats[k],pct=Math.round(100*s.right/s.total);
+    return '<div class="weakrow"><span class="weaklabel">'+TOPICS[k][0]+'</span><span class="weakbar"><i style="width:'+pct+'%"></i></span><span class="weakpct">'+s.right+'/'+s.total+'</span></div>';
+  }).join('')+'<p style="font-size:12.5px;color:var(--muted);margin-top:12px">Lowest topics first. Tap a topic in the question feedback to jump to its lesson.</p>';
+}
+
+// ===================== FRQ TRAINER =====================
+function frqNorm(s){return (s||"").toLowerCase().replace(/\s+/g,"").replace(/−/g,"-").replace(/·/g,"*").replace(/\{|\}/g,"");}
+const FRQS=[
+ { label:"Vector Motion",
+   desc:"<b>Acceleration → distance → direction with justification → position.</b> The classic calculator-active particle-motion problem from Section II, worth 9 points. Parts B and D require evaluating integrals on a calculator; part C asks for a justification, exactly as the readers expect.",
+   given:"\\vec v(t)=\\big\\langle\\, t^{2}-4,\\ \\ 2\\sin t\\,\\big\\rangle,\\qquad 0\\le t\\le 4",
+   givenNote:"A particle moving in the xy-plane has velocity vector v(t) = ⟨t² − 4, 2 sin t⟩ for 0 ≤ t ≤ 4. At time t = 0, the particle is at position (3, −1). A graphing calculator is required for parts B and D.",
+   givenFall:"v(t) = ⟨t²−4, 2 sin t⟩ for 0 ≤ t ≤ 4; position (3, −1) at t = 0.",
+  parts:[
+   {pl:"Part A",pts:2,topic:"vector",q:"Find the acceleration vector \\(\\vec a(3)\\).",
+    fields:[{label:"\\vec a(3)=",hint:"e.g. <6, -1.980>",match:s=>{const n=frqNorm(s);return ["<6,-1.98>","<6,-1.980>","(6,-1.98)","(6,-1.980)","6,-1.98","6,-1.980","\\langle6,-1.98\\rangle","\\langle6,-1.980\\rangle"].includes(n);}}],
+    sol:`<b>Acceleration is the component-wise derivative of velocity:</b> \\(\\vec a(t)=\\langle x''(t),\\ y''(t)\\rangle\\).<br><b>Differentiate each component</b> of \\(\\vec v(t)=\\langle t^2-4,\\ 2\\sin t\\rangle\\): \\(\\dfrac{d}{dt}(t^2-4)=2t\\) and \\(\\dfrac{d}{dt}(2\\sin t)=2\\cos t\\). So \\(\\vec a(t)=\\langle 2t,\\ 2\\cos t\\rangle\\).<br><b>Evaluate at \\(t=3\\):</b> \\(\\vec a(3)=\\langle 2(3),\\ 2\\cos 3\\rangle=\\langle 6,\\ -1.980\\rangle\\) (since \\(\\cos 3\\approx-0.990\\)).<br><br><b>Scoring:</b> one point for differentiating to the acceleration vector \\(\\langle 2t,\\ 2\\cos t\\rangle\\), one for the correct evaluation. A common slip is reporting \\(\\vec v(3)\\) instead of \\(\\vec a(3)\\) — read whether the question asks for velocity or acceleration.`,
+    rubric:["Differentiated to \\(\\vec a(t)=\\langle 2t,\\ 2\\cos t\\rangle\\)","Evaluated \\(\\vec a(3)=\\langle 6,\\ -1.980\\rangle\\)"]},
+   {pl:"Part B",pts:2,topic:"vector",q:"Find the total distance traveled by the particle over the interval \\(0\\le t\\le 4\\).",
+    fields:[{label:"\\text{distance}=",hint:"e.g. 17.664",match:s=>{const n=frqNorm(s);return ["17.664","17.66","17.663","17.665","17.662"].includes(n);}}],
+    sol:`<b>Total distance is the integral of speed</b> — the magnitude of the velocity vector — over the interval: \\(\\text{distance}=\\displaystyle\\int_0^4\\sqrt{\\big(x'(t)\\big)^2+\\big(y'(t)\\big)^2}\\,dt=\\int_0^4\\sqrt{(t^2-4)^2+(2\\sin t)^2}\\,dt\\).<br><b>Evaluate on a calculator:</b> \\(\\approx 17.664\\).<br><br><b>Scoring:</b> one point for the integral of speed with correct integrand and limits, one for the value. The single most common error is integrating the components to get displacement instead of integrating the magnitude — note the \\(x\\)-velocity \\(t^2-4\\) changes sign at \\(t=2\\), so the path length exceeds the net displacement.`,
+    rubric:["Set up \\(\\displaystyle\\int_0^4\\sqrt{(t^2-4)^2+(2\\sin t)^2}\\,dt\\)","Evaluated \\(\\approx 17.664\\)"]},
+   {pl:"Part C",pts:3,topic:"vector",q:"Is the particle moving left or right at \\(t=3\\)? Find the time \\(t\\) in \\([0,4]\\) at which the particle is farthest to the left, and justify your answer.",
+    fields:[{label:"\\text{at }t=3:",hint:"left or right",match:s=>{const n=frqNorm(s);return ["right","movingright","moving right".replace(/\s+/g,'')].includes(n);}},{label:"\\text{farthest left at }t=",hint:"a number",match:s=>["2","t=2"].includes(frqNorm(s))}],
+    sol:`<b>Horizontal direction is governed by the sign of the \\(x\\)-velocity</b> \\(x'(t)=t^2-4\\).<br><b>At \\(t=3\\):</b> \\(x'(3)=9-4=5\\gt 0\\), so the \\(x\\)-coordinate is increasing — the particle is <b>moving right</b>.<br><b>Farthest left</b> means the \\(x\\)-coordinate is at its minimum, which occurs where \\(x'(t)\\) changes from negative to positive. Solve \\(x'(t)=t^2-4=0\\Rightarrow t=2\\) (in \\([0,4]\\)). For \\(0\\lt t\\lt 2\\), \\(x'(t)\\lt 0\\) (moving left); for \\(2\\lt t\\lt 4\\), \\(x'(t)\\gt 0\\) (moving right). Since \\(x\\) decreases then increases, the particle is <b>farthest to the left at \\(t=2\\)</b>.<br><br><b>Scoring:</b> one point for the direction at \\(t=3\\) (with the sign of \\(x'(3)\\)), one for finding \\(t=2\\), one for the justification that \\(x'\\) changes sign \\(-\\) to \\(+\\) there. An answer of \\(t=2\\) with no sign analysis earns the point for the value but not the justification.`,
+    rubric:["\\(x'(3)=5\\gt 0\\), so moving right","Solved \\(x'(t)=t^2-4=0\\) to get \\(t=2\\)","Justified \\(t=2\\) is the minimum: \\(x'\\) changes from \\(-\\) to \\(+\\)"]},
+   {pl:"Part D",pts:2,topic:"vector",q:"Find the \\(x\\)-coordinate of the particle's position at \\(t=2\\).",
+    fields:[{label:"x(2)=",hint:"e.g. -2.333",match:s=>{const n=frqNorm(s);return ["-2.333","-2.33","-2.334","-7/3"].includes(n);}}],
+    sol:`<b>Recover position from velocity using the initial condition</b> and the net-change form \\(x(2)=x(0)+\\displaystyle\\int_0^2 x'(t)\\,dt\\).<br><b>Set up</b> with \\(x(0)=3\\): \\(x(2)=3+\\displaystyle\\int_0^2 (t^2-4)\\,dt\\).<br><b>Evaluate:</b> \\(\\displaystyle\\int_0^2(t^2-4)\\,dt=\\Big[\\tfrac{t^3}{3}-4t\\Big]_0^2=\\tfrac{8}{3}-8=-\\tfrac{16}{3}\\). So \\(x(2)=3-\\tfrac{16}{3}=-\\tfrac{7}{3}\\approx -2.333\\).<br><br><b>Scoring:</b> one point for the accumulation setup \\(x(0)+\\int_0^2 x'(t)\\,dt\\) (the initial condition must appear), one for the value. Dropping the initial position \\(3\\) — reporting only the integral \\(-\\tfrac{16}{3}\\) — is the classic error.`,
+    rubric:["Set up \\(x(2)=3+\\displaystyle\\int_0^2 (t^2-4)\\,dt\\) (initial condition included)","Evaluated \\(x(2)=-\\tfrac{7}{3}\\approx -2.333\\)"]}
+  ]},
+
+ { label:"Parametric Curve",
+   desc:"<b>Slope & tangent line → concavity → vertical/horizontal tangents → arc-length setup.</b> A no-calculator parametric-calculus problem worth 9 points. Every answer is exact; part D asks you to <i>set up but not evaluate</i> the arc-length integral, a standard Section II move.",
+   given:"x(t)=t^{2}-4t,\\qquad y(t)=t^{3}-3t",
+   givenNote:"A curve C is defined by the parametric equations x(t) = t² − 4t and y(t) = t³ − 3t. No calculator is allowed on this problem.",
+   givenFall:"x(t) = t² − 4t, y(t) = t³ − 3t (no calculator).",
+  parts:[
+   {pl:"Part A",pts:2,topic:"param",q:"Find \\(\\dfrac{dy}{dx}\\) as a function of \\(t\\), and write an equation for the line tangent to \\(C\\) at the point where \\(t=0\\).",
+    fields:[{label:"\\left.\\dfrac{dy}{dx}\\right|_{t=0}=",hint:"a number",match:s=>{const n=frqNorm(s);return ["3/4","0.75",".75"].includes(n);}},{label:"\\text{tangent: }y=",hint:"e.g. (3/4)x",match:s=>{const n=frqNorm(s);return ["(3/4)x","3/4x","0.75x",".75x","3x/4"].includes(n);}}],
+    sol:`<b>Parametric slope is the ratio of the rates:</b> \\(\\dfrac{dy}{dx}=\\dfrac{dy/dt}{dx/dt}\\). With \\(\\dfrac{dx}{dt}=2t-4\\) and \\(\\dfrac{dy}{dt}=3t^2-3\\), \\(\\dfrac{dy}{dx}=\\dfrac{3t^2-3}{2t-4}\\).<br><b>At \\(t=0\\):</b> slope \\(=\\dfrac{3(0)-3}{2(0)-4}=\\dfrac{-3}{-4}=\\dfrac{3}{4}\\). The point is \\(\\big(x(0),y(0)\\big)=(0,0)\\).<br><b>Tangent line:</b> \\(y-0=\\dfrac{3}{4}(x-0)\\Rightarrow y=\\dfrac{3}{4}x\\).<br><br><b>Scoring:</b> one point for \\(\\dfrac{dy}{dx}=\\dfrac{3t^2-3}{2t-4}\\), one for the tangent line (correct slope <i>and</i> point). A frequent error is using \\(\\dfrac{dx}{dy}\\) (the reciprocal) for the slope.`,
+    rubric:["\\(\\dfrac{dy}{dx}=\\dfrac{3t^2-3}{2t-4}\\)","At \\(t=0\\): slope \\(\\tfrac34\\), point \\((0,0)\\), so \\(y=\\tfrac34 x\\)"]},
+   {pl:"Part B",pts:2,topic:"param",q:"Find \\(\\dfrac{d^{2}y}{dx^{2}}\\) at \\(t=0\\). Is the curve concave up or concave down at this point?",
+    fields:[{label:"\\left.\\dfrac{d^{2}y}{dx^{2}}\\right|_{t=0}=",hint:"e.g. -3/32",match:s=>{const n=frqNorm(s);return ["-3/32","-0.09375","-0.094","-0.0938"].includes(n);}},{label:"\\text{concavity:}",hint:"up or down",match:s=>["down","concavedown"].includes(frqNorm(s))}],
+    sol:`<b>The second derivative uses the parametric rule on the slope:</b> \\(\\dfrac{d^2y}{dx^2}=\\dfrac{\\frac{d}{dt}\\!\\left[\\frac{dy}{dx}\\right]}{dx/dt}\\) — <i>not</i> \\(\\dfrac{d^2y/dt^2}{d^2x/dt^2}\\).<br><b>Differentiate the slope</b> \\(\\dfrac{dy}{dx}=\\dfrac{3t^2-3}{2t-4}\\) with the quotient rule: \\(\\dfrac{d}{dt}\\!\\left[\\dfrac{3t^2-3}{2t-4}\\right]=\\dfrac{(6t)(2t-4)-(3t^2-3)(2)}{(2t-4)^2}\\). At \\(t=0\\): \\(\\dfrac{0-(-6)}{16}=\\dfrac{6}{16}=\\dfrac{3}{8}\\).<br><b>Divide by \\(\\dfrac{dx}{dt}\\big|_{0}=-4\\):</b> \\(\\dfrac{d^2y}{dx^2}=\\dfrac{3/8}{-4}=-\\dfrac{3}{32}\\).<br>Since \\(-\\tfrac{3}{32}\\lt 0\\), the curve is <b>concave down</b> at \\(t=0\\).<br><br><b>Scoring:</b> one point for \\(\\dfrac{d}{dt}\\!\\left[\\frac{dy}{dx}\\right]=\\tfrac38\\) at \\(t=0\\), one for dividing by \\(\\dfrac{dx}{dt}\\) and concluding concave down. Using \\(\\dfrac{d^2y/dt^2}{d^2x/dt^2}\\) is the classic mistake.`,
+    rubric:["\\(\\dfrac{d}{dt}\\!\\left[\\frac{dy}{dx}\\right]=\\tfrac38\\) at \\(t=0\\)","\\(\\dfrac{d^2y}{dx^2}=\\dfrac{3/8}{-4}=-\\tfrac{3}{32}\\lt 0\\Rightarrow\\) concave down"]},
+   {pl:"Part C",pts:3,topic:"param",q:"Find the \\(t\\)-value at which \\(C\\) has a vertical tangent line and give the point \\((x,y)\\); then find the \\(t\\)-values at which \\(C\\) has a horizontal tangent line.",
+    fields:[{label:"\\text{vertical at }t=",hint:"a number",match:s=>["2","t=2"].includes(frqNorm(s))},{label:"\\text{point }(x,y)=",hint:"e.g. (-4,2)",match:s=>{const n=frqNorm(s);return ["(-4,2)","-4,2"].includes(n);}},{label:"\\text{horizontal at }t=",hint:"e.g. 1, -1",match:s=>{const n=frqNorm(s);return ["1,-1","-1,1","±1","1,-1".replace('-','-')].includes(n);}}],
+    sol:`<b>Vertical tangent</b> ⇔ \\(\\dfrac{dx}{dt}=0\\) while \\(\\dfrac{dy}{dt}\\neq 0\\). Solve \\(\\dfrac{dx}{dt}=2t-4=0\\Rightarrow t=2\\). Check \\(\\dfrac{dy}{dt}\\big|_{2}=3(4)-3=9\\neq 0\\) ✓. The point is \\(\\big(x(2),y(2)\\big)=(4-8,\\ 8-6)=(-4,2)\\).<br><b>Horizontal tangent</b> ⇔ \\(\\dfrac{dy}{dt}=0\\) while \\(\\dfrac{dx}{dt}\\neq 0\\). Solve \\(\\dfrac{dy}{dt}=3t^2-3=0\\Rightarrow t=\\pm 1\\). Check \\(\\dfrac{dx}{dt}\\big|_{1}=-2\\neq 0\\) and \\(\\dfrac{dx}{dt}\\big|_{-1}=-6\\neq 0\\) ✓.<br><br><b>Scoring:</b> one point for the vertical tangent \\(t=2\\) (with \\(\\tfrac{dy}{dt}\\neq 0\\)) and its point, one for the horizontal \\(t=\\pm 1\\), one for verifying \\(\\tfrac{dx}{dt}\\neq 0\\) there so they are genuine horizontal tangents. The subtle point this curve avoids: \\(\\tfrac{dx}{dt}\\) and \\(\\tfrac{dy}{dt}\\) never vanish at the same \\(t\\), so every candidate is a true tangent.`,
+    rubric:["Vertical: \\(\\dfrac{dx}{dt}=0\\) at \\(t=2\\); point \\((-4,2)\\)","Horizontal: \\(\\dfrac{dy}{dt}=0\\) at \\(t=1\\) and \\(t=-1\\)","Verified \\(\\dfrac{dx}{dt}\\neq 0\\) at \\(t=\\pm1\\) (genuine horizontal tangents)"]},
+   {pl:"Part D",pts:2,topic:"param",q:"Write, but do not evaluate, an integral expression that gives the length of the curve \\(C\\) from \\(t=0\\) to \\(t=3\\).",
+    fields:[{label:"L=",hint:"e.g. integral_0^3 sqrt(...) dt",match:s=>{const n=frqNorm(s);return ["\\int_0^3\\sqrt{(2t-4)^2+(3t^2-3)^2}dt","int_0^3sqrt((2t-4)^2+(3t^2-3)^2)dt","\\int_0^3\\sqrt{(2t-4)^2+(3t^2-3)^2}\\,dt"].includes(n);}}],
+    sol:`<b>Arc length for a parametric curve</b> integrates speed: \\(L=\\displaystyle\\int_{a}^{b}\\sqrt{\\left(\\dfrac{dx}{dt}\\right)^2+\\left(\\dfrac{dy}{dt}\\right)^2}\\,dt\\).<br><b>Substitute</b> \\(\\dfrac{dx}{dt}=2t-4\\), \\(\\dfrac{dy}{dt}=3t^2-3\\), and limits \\(0\\) to \\(3\\):<br>\\[L=\\int_0^3\\sqrt{(2t-4)^2+(3t^2-3)^2}\\,dt.\\]<br>(The problem says <i>do not evaluate</i>; for reference this is \\(\\approx 24.07\\).)<br><br><b>Scoring:</b> one point for the correct arc-length form with limits \\(0\\) to \\(3\\), one for the correct integrand \\(\\sqrt{(2t-4)^2+(3t^2-3)^2}\\). Squaring the functions instead of their derivatives, or dropping the square root, loses the integrand point.`,
+    rubric:["Arc-length form \\(\\displaystyle\\int_0^3\\sqrt{(dx/dt)^2+(dy/dt)^2}\\,dt\\) with limits \\(0\\) to \\(3\\)","Correct integrand \\(\\sqrt{(2t-4)^2+(3t^2-3)^2}\\)"]}
+  ]},
+
+ { label:"Polar Curve",
+   desc:"<b>Area enclosed → tangent slope → \\(dr/d\\theta\\) interpretation → maximum distance.</b> A calculator-active single-polar-curve problem worth 9 points, including a 'find and interpret' part where you explain a rate in a complete sentence — exactly the kind of justification AP readers look for.",
+   given:"r=3+2\\sin\\theta,\\qquad 0\\le\\theta\\le 2\\pi",
+   givenNote:"The polar curve C is given by r = 3 + 2 sin θ for 0 ≤ θ ≤ 2π. A graphing calculator is required.",
+   givenFall:"r = 3 + 2 sin θ for 0 ≤ θ ≤ 2π.",
+  parts:[
+   {pl:"Part A",pts:3,topic:"area",q:"Find the area of the region enclosed by \\(C\\).",
+    fields:[{label:"\\text{area}=",hint:"e.g. 34.558",match:s=>{const n=frqNorm(s);return ["34.558","34.56","34.557","34.559","11π","11pi"].includes(n);}}],
+    sol:`<b>Polar area is</b> \\(A=\\dfrac{1}{2}\\displaystyle\\int_{\\alpha}^{\\beta} r^2\\,d\\theta\\). The full curve is swept once over \\([0,2\\pi]\\), so \\(A=\\dfrac12\\displaystyle\\int_0^{2\\pi}(3+2\\sin\\theta)^2\\,d\\theta\\).<br><b>Evaluate</b> (by hand or calculator): expand \\((3+2\\sin\\theta)^2=9+12\\sin\\theta+4\\sin^2\\theta\\). Over \\([0,2\\pi]\\), \\(\\int 9\\,d\\theta=18\\pi\\), \\(\\int 12\\sin\\theta\\,d\\theta=0\\), and \\(\\int 4\\sin^2\\theta\\,d\\theta=4\\pi\\) (using \\(\\sin^2\\theta=\\tfrac{1-\\cos2\\theta}{2}\\)). So \\(A=\\dfrac12(18\\pi+4\\pi)=11\\pi\\approx 34.558\\).<br><br><b>Scoring:</b> one point for the area integral with the \\(\\tfrac12\\) and correct limits, one for the correct integrand \\((3+2\\sin\\theta)^2\\), one for the value. Forgetting the \\(\\tfrac12\\) (giving \\(22\\pi\\)) is the most common error.`,
+    rubric:["\\(A=\\dfrac12\\displaystyle\\int_0^{2\\pi}(3+2\\sin\\theta)^2\\,d\\theta\\)","Expanded and integrated correctly","\\(A=11\\pi\\approx 34.558\\)"]},
+   {pl:"Part B",pts:2,topic:"polar",q:"Find the slope of the line tangent to \\(C\\) at \\(\\theta=\\dfrac{\\pi}{6}\\).",
+    fields:[{label:"\\text{slope}=",hint:"e.g. -8.660",match:s=>{const n=frqNorm(s);return ["-8.66","-8.660","-8.661","-5√3","-5sqrt(3)","-5sqrt3"].includes(n);}}],
+    sol:`<b>Convert to \\(x,y\\) and use the parametric slope.</b> With \\(x=r\\cos\\theta\\), \\(y=r\\sin\\theta\\), \\(\\dfrac{dy}{dx}=\\dfrac{r'\\sin\\theta+r\\cos\\theta}{r'\\cos\\theta-r\\sin\\theta}\\), where \\(r'=\\dfrac{dr}{d\\theta}=2\\cos\\theta\\).<br><b>At \\(\\theta=\\tfrac{\\pi}{6}\\):</b> \\(r=3+2\\sin\\tfrac\\pi6=4\\) and \\(r'=2\\cos\\tfrac\\pi6=\\sqrt3\\).<br>Numerator \\(=\\sqrt3\\cdot\\tfrac12+4\\cdot\\tfrac{\\sqrt3}{2}=\\tfrac{5\\sqrt3}{2}\\); denominator \\(=\\sqrt3\\cdot\\tfrac{\\sqrt3}{2}-4\\cdot\\tfrac12=\\tfrac32-2=-\\tfrac12\\). So \\(\\dfrac{dy}{dx}=\\dfrac{5\\sqrt3/2}{-1/2}=-5\\sqrt3\\approx-8.660\\).<br><br><b>Scoring:</b> one point for the polar slope formula with \\(r'=2\\cos\\theta\\), one for the value. Using \\(\\dfrac{dr}{d\\theta}\\) as the slope (a frequent confusion) earns neither point.`,
+    rubric:["Slope \\(\\dfrac{dy}{dx}=\\dfrac{r'\\sin\\theta+r\\cos\\theta}{r'\\cos\\theta-r\\sin\\theta}\\) with \\(r'=2\\cos\\theta\\)","At \\(\\theta=\\tfrac\\pi6\\): slope \\(=-5\\sqrt3\\approx-8.660\\)"]},
+   {pl:"Part C",pts:2,topic:"polar",q:"Find \\(\\dfrac{dr}{d\\theta}\\) at \\(\\theta=\\dfrac{\\pi}{3}\\). Using a complete sentence, interpret the meaning of this value in the context of the curve.",
+    fields:[{label:"\\left.\\dfrac{dr}{d\\theta}\\right|_{\\pi/3}=",hint:"a number",match:s=>["1","\\dfrac{dr}{d\\theta}=1".replace(/\s+/g,'')].includes(frqNorm(s))}],
+    sol:`<b>Differentiate \\(r\\) with respect to \\(\\theta\\):</b> \\(\\dfrac{dr}{d\\theta}=2\\cos\\theta\\). At \\(\\theta=\\tfrac{\\pi}{3}\\): \\(2\\cos\\tfrac\\pi3=2\\cdot\\tfrac12=1\\).<br><b>Interpretation:</b> Since \\(r\\) is the distance from the origin to the curve, \\(\\dfrac{dr}{d\\theta}=1\\) at \\(\\theta=\\tfrac\\pi3\\) means that at that angle the distance from the origin is <b>increasing at a rate of \\(1\\) unit per radian</b> as \\(\\theta\\) increases.<br><br><b>Scoring:</b> one point for the value \\(\\dfrac{dr}{d\\theta}=1\\), one for an interpretation in context that mentions the <i>distance from the origin increasing</i> (a complete sentence). Calling \\(\\dfrac{dr}{d\\theta}\\) the slope of the curve loses the interpretation point — it is the rate of change of the radius, not the tangent slope.`,
+    rubric:["\\(\\dfrac{dr}{d\\theta}=2\\cos\\theta\\); at \\(\\theta=\\tfrac\\pi3\\) it equals \\(1\\)","Interpreted in a sentence: the distance from the origin is increasing at \\(1\\) unit per radian"]},
+   {pl:"Part D",pts:2,topic:"polar",q:"Find the maximum distance from the origin to a point on \\(C\\) and the value of \\(\\theta\\) at which it occurs, then give the rectangular coordinates of that point.",
+    fields:[{label:"r_{\\max}=",hint:"a number",match:s=>["5","r=5"].includes(frqNorm(s))},{label:"(x,y)=",hint:"e.g. (0,5)",match:s=>{const n=frqNorm(s);return ["(0,5)","0,5"].includes(n);}}],
+    sol:`<b>The distance from the origin is \\(r\\) itself, so maximize \\(r=3+2\\sin\\theta\\).</b> Since \\(\\sin\\theta\\) has maximum value \\(1\\) at \\(\\theta=\\tfrac{\\pi}{2}\\), the maximum distance is \\(r=3+2(1)=5\\), occurring at \\(\\theta=\\tfrac\\pi2\\).<br><b>Rectangular coordinates:</b> \\(x=r\\cos\\theta=5\\cos\\tfrac\\pi2=0\\), \\(y=r\\sin\\theta=5\\sin\\tfrac\\pi2=5\\). The point is \\((0,5)\\).<br><br><b>Scoring:</b> one point for \\(r_{\\max}=5\\) at \\(\\theta=\\tfrac\\pi2\\), one for the rectangular point \\((0,5)\\). Maximizing the <i>area integrand</i> or solving \\(\\tfrac{dr}{d\\theta}=0\\) without checking it is a maximum are common missteps.`,
+    rubric:["Max \\(r\\) when \\(\\sin\\theta=1\\): \\(r=5\\) at \\(\\theta=\\tfrac\\pi2\\)","Rectangular point \\((0,5)\\)"]}
+  ]},
+
+ { label:"Two Polar Curves",
+   desc:"<b>Intersection → area inside one/outside the other → area-inside-both setup → tangent slope.</b> A calculator-active two-curve polar problem worth 9 points. Part C asks you to <i>set up but not evaluate</i> the inside-both area — the hardest setup on the polar exam, because the bounding curve changes.",
+   given:"r_1=3\\sin\\theta\\quad(\\text{circle}),\\qquad r_2=1+\\sin\\theta\\quad(\\text{cardioid})",
+   givenNote:"The circle r = 3 sin θ and the cardioid r = 1 + sin θ intersect in the upper half-plane. A graphing calculator is required for parts B and D.",
+   givenFall:"Circle r = 3 sin θ and cardioid r = 1 + sin θ.",
+  parts:[
+   {pl:"Part A",pts:2,topic:"polar",q:"Find the values of \\(\\theta\\) in \\([0,\\pi]\\) at which the two curves intersect away from the pole, and the value of \\(r\\) at those points.",
+    fields:[{label:"\\theta=",hint:"e.g. pi/6, 5pi/6",match:s=>{const n=frqNorm(s);return ["π/6,5π/6","pi/6,5pi/6","π/6and5π/6","5π/6,π/6"].includes(n);}},{label:"r=",hint:"a number",match:s=>{const n=frqNorm(s);return ["1.5","3/2"].includes(n);}}],
+    sol:`<b>Set the radii equal</b> to find the intersection angles: \\(3\\sin\\theta=1+\\sin\\theta\\Rightarrow 2\\sin\\theta=1\\Rightarrow\\sin\\theta=\\tfrac12\\). In \\([0,\\pi]\\) this gives \\(\\theta=\\tfrac{\\pi}{6}\\) and \\(\\theta=\\tfrac{5\\pi}{6}\\).<br><b>Value of \\(r\\):</b> at either angle, \\(r=3\\sin\\theta=3\\cdot\\tfrac12=1.5\\) (equivalently \\(1+\\sin\\theta=1.5\\)).<br><br><b>Scoring:</b> one point for the equation \\(3\\sin\\theta=1+\\sin\\theta\\) and \\(\\sin\\theta=\\tfrac12\\), one for both angles with \\(r=1.5\\). Both curves also pass through the pole, but at different \\(\\theta\\)-values, so the pole is found graphically, not by setting the radii equal.`,
+    rubric:["Set \\(3\\sin\\theta=1+\\sin\\theta\\Rightarrow\\sin\\theta=\\tfrac12\\)","\\(\\theta=\\tfrac\\pi6,\\ \\tfrac{5\\pi}{6}\\) with \\(r=1.5\\)"]},
+   {pl:"Part B",pts:3,topic:"area",q:"Find the area of the region that is inside the circle \\(r=3\\sin\\theta\\) and outside the cardioid \\(r=1+\\sin\\theta\\).",
+    fields:[{label:"\\text{area}=",hint:"e.g. 3.142",match:s=>{const n=frqNorm(s);return ["3.142","3.141","3.1416","π","pi","3.14"].includes(n);}}],
+    sol:`<b>Use</b> \\(A=\\dfrac12\\displaystyle\\int_{\\alpha}^{\\beta}\\big(r_{\\text{out}}^2-r_{\\text{in}}^2\\big)\\,d\\theta\\), with limits from the intersection angles found in Part A.<br>Between \\(\\theta=\\tfrac{\\pi}{6}\\) and \\(\\tfrac{5\\pi}{6}\\), the circle \\(3\\sin\\theta\\) is the outer curve and the cardioid \\(1+\\sin\\theta\\) is the inner, so<br>\\[A=\\dfrac12\\int_{\\pi/6}^{5\\pi/6}\\Big[(3\\sin\\theta)^2-(1+\\sin\\theta)^2\\Big]\\,d\\theta\\approx 3.142.\\]<br>(Exactly \\(\\pi\\).)<br><br><b>Scoring:</b> one point for the limits \\(\\tfrac\\pi6\\) to \\(\\tfrac{5\\pi}{6}\\), one for the integrand \\((\\text{outer})^2-(\\text{inner})^2\\) in the right order, one for the value. Squaring the <i>difference</i> \\((r_{\\text{out}}-r_{\\text{in}})^2\\) instead of the difference of squares is the signature polar-area error.`,
+    rubric:["Limits \\(\\tfrac\\pi6\\) to \\(\\tfrac{5\\pi}{6}\\) from the intersection","Integrand \\(\\tfrac12\\big[(3\\sin\\theta)^2-(1+\\sin\\theta)^2\\big]\\)","Evaluated \\(\\approx 3.142\\) (i.e. \\(\\pi\\))"]},
+   {pl:"Part C",pts:2,topic:"area",q:"Write, but do not evaluate, an integral expression that gives the area of the region inside both curves.",
+    fields:[{label:"\\text{area}=",hint:"a sum of integrals",match:s=>{const n=frqNorm(s);return n.includes("3sin")&&n.includes("1+sin")&&n.includes("\\int")||n.includes("int");}}],
+    sol:`<b>The region inside both is bounded by whichever curve is closer to the pole, and that switches at the intersection angles.</b><br>• For \\(0\\le\\theta\\le\\tfrac\\pi6\\) and \\(\\tfrac{5\\pi}{6}\\le\\theta\\le\\pi\\), the circle \\(3\\sin\\theta\\) is the inner (smaller) curve.<br>• For \\(\\tfrac\\pi6\\le\\theta\\le\\tfrac{5\\pi}{6}\\), the cardioid \\(1+\\sin\\theta\\) is the inner curve.<br>So the area inside both is the three-piece sum<br>\\[A=\\dfrac12\\int_0^{\\pi/6}(3\\sin\\theta)^2 d\\theta+\\dfrac12\\int_{\\pi/6}^{5\\pi/6}(1+\\sin\\theta)^2 d\\theta+\\dfrac12\\int_{5\\pi/6}^{\\pi}(3\\sin\\theta)^2 d\\theta.\\]<br>(Do not evaluate; for reference this equals \\(\\tfrac{5\\pi}{4}\\approx 3.927\\).)<br><br><b>Scoring:</b> one point for recognizing the boundary switches (circle near \\(\\theta=0\\) and \\(\\theta=\\pi\\), cardioid in the middle), one for the correct three-piece integral with \\(\\tfrac12\\) and proper limits. Writing a single integral of one curve over \\([0,\\pi]\\) misses the switch and loses both points.`,
+    rubric:["Recognized the inner curve switches at \\(\\theta=\\tfrac\\pi6,\\tfrac{5\\pi}{6}\\) (circle near \\(0\\) and \\(\\pi\\), cardioid between)","Correct three-piece sum with \\(\\tfrac12\\) and limits \\(0\\to\\tfrac\\pi6\\), \\(\\tfrac\\pi6\\to\\tfrac{5\\pi}{6}\\), \\(\\tfrac{5\\pi}{6}\\to\\pi\\)"]},
+   {pl:"Part D",pts:2,topic:"polar",q:"Find the slope of the line tangent to the circle \\(r=3\\sin\\theta\\) at \\(\\theta=\\dfrac{\\pi}{3}\\).",
+    fields:[{label:"\\text{slope}=",hint:"e.g. -1.732",match:s=>{const n=frqNorm(s);return ["-1.732","-1.73","-1.733","-√3","-sqrt(3)","-sqrt3"].includes(n);}}],
+    sol:`<b>Use the polar slope formula</b> \\(\\dfrac{dy}{dx}=\\dfrac{r'\\sin\\theta+r\\cos\\theta}{r'\\cos\\theta-r\\sin\\theta}\\) with \\(r=3\\sin\\theta\\) and \\(r'=3\\cos\\theta\\).<br><b>At \\(\\theta=\\tfrac{\\pi}{3}\\):</b> \\(r=3\\sin\\tfrac\\pi3=\\tfrac{3\\sqrt3}{2}\\), \\(r'=3\\cos\\tfrac\\pi3=\\tfrac32\\).<br>Numerator \\(=\\tfrac32\\cdot\\tfrac{\\sqrt3}{2}+\\tfrac{3\\sqrt3}{2}\\cdot\\tfrac12=\\tfrac{3\\sqrt3}{4}+\\tfrac{3\\sqrt3}{4}=\\tfrac{3\\sqrt3}{2}\\); denominator \\(=\\tfrac32\\cdot\\tfrac12-\\tfrac{3\\sqrt3}{2}\\cdot\\tfrac{\\sqrt3}{2}=\\tfrac34-\\tfrac94=-\\tfrac64=-\\tfrac32\\). So \\(\\dfrac{dy}{dx}=\\dfrac{3\\sqrt3/2}{-3/2}=-\\sqrt3\\approx-1.732\\).<br><br><b>Scoring:</b> one point for the slope formula with \\(r'=3\\cos\\theta\\), one for the value \\(-\\sqrt3\\). (Note: \\(r=3\\sin\\theta\\) is a circle through the origin; the tangent slope still requires the full polar formula, not \\(\\tfrac{dr}{d\\theta}\\).)`,
+    rubric:["Polar slope formula with \\(r'=3\\cos\\theta\\)","At \\(\\theta=\\tfrac\\pi3\\): slope \\(=-\\sqrt3\\approx-1.732\\)"]}
+  ]}
+];
+
+let frqActive=0;
+function buildFrqTabs(){
+  const t=document.getElementById('frqTabs');t.innerHTML="";
+  FRQS.forEach((f,i)=>{const b=document.createElement('button');b.textContent=f.label;if(i===frqActive)b.classList.add('on');b.onclick=()=>{frqActive=i;buildFrqTabs();renderFRQ();};t.appendChild(b);});
+}
+function renderFRQ(){
+  const f=FRQS[frqActive];
+  document.getElementById('frqDesc').innerHTML=mathify(f.desc);
+  document.getElementById('frqGiven').innerHTML=tex(f.given,f.givenFall,true);
+  document.getElementById('frqGivenNote').textContent=f.givenNote;
+  document.getElementById('frqScore').style.display='none';
+  const wrap=document.getElementById('frqParts');wrap.innerHTML="";
+  f.parts.forEach((p,pi)=>{
+    const div=document.createElement('div');div.className="part";
+    let fieldsHtml='<div class="frq-fields">';
+    p.fields.forEach((fl,fi)=>{
+      fieldsHtml+='<div class="frq-field"><span class="frq-flabel">'+tex(fl.label,fl.label,false)+'</span>'+
+        '<input class="frq-input" id="f'+pi+'_'+fi+'" placeholder="'+(fl.hint||'')+'" autocomplete="off"></div>';
+    });
+    fieldsHtml+='</div>';
+    let rubricHtml='<div class="rubric"><div class="rubric-h">Score your reasoning ('+p.pts+' pt'+(p.pts>1?'s':'')+')</div>';
+    p.rubric.forEach((r,ri)=>{rubricHtml+='<label><input type="checkbox" id="r'+pi+'_'+ri+'" onchange="updFrqScore()"> <span>'+mathify(r)+'</span></label>';});
+    rubricHtml+='</div>';
+    div.innerHTML='<div class="part-h"><span class="part-l">'+p.pl+'</span><span class="part-pts">'+p.pts+' pt'+(p.pts>1?'s':'')+'</span></div>'+
+      '<div class="part-q">'+mathify(p.q)+'</div>'+fieldsHtml+
+      '<button class="frq-check" onclick="checkFrqPart('+pi+')">Check answer</button>'+
+      '<button class="reveal-sol" onclick="document.getElementById(\'sol'+pi+'\').classList.add(\'show\');this.style.display=\'none\'">show worked solution</button>'+
+      '<div class="frq-sol" id="sol'+pi+'">'+mathify(p.sol)+rubricHtml+'</div>';
+    wrap.appendChild(div);
+  });
+}
+function checkFrqPart(pi){
+  const p=FRQS[frqActive].parts[pi];
+  p.fields.forEach((fl,fi)=>{
+    const inp=document.getElementById('f'+pi+'_'+fi);
+    if(!inp.value.trim()){inp.classList.remove('ok','no');return;}
+    const ok=fl.match(inp.value);
+    inp.classList.toggle('ok',ok);inp.classList.toggle('no',!ok);
+  });
+  document.getElementById('sol'+pi).classList.add('show');
+}
+function updFrqScore(){
+  const f=FRQS[frqActive];let got=0,tot=0;
+  f.parts.forEach((p,pi)=>{tot+=p.pts;let checked=0;p.rubric.forEach((r,ri)=>{const c=document.getElementById('r'+pi+'_'+ri);if(c&&c.checked)checked++;});got+=Math.round(p.pts*checked/p.rubric.length);});
+  const sl=document.getElementById('frqScore');sl.style.display='block';
+  sl.innerHTML='Self-scored: <b>'+got+' / '+tot+'</b> points'+(got===tot?' — full marks. ':' ')+'<span style="color:var(--muted);font-size:12.5px">(check rubric boxes for each part you earned)</span>';
+}
+window.checkFrqPart=checkFrqPart;window.updFrqScore=updFrqScore;
+
+// ===================== BOOT =====================
+function boot(){newBatch();buildFrqTabs();renderFRQ();}
+boot();
+if(window.addEventListener)window.addEventListener('load',()=>{if(window.katex){newBatch();renderFRQ();}});
+if(!window.katex){let t=0;const iv=setInterval(()=>{if(window.katex){clearInterval(iv);newBatch();renderFRQ();}else if(++t>60)clearInterval(iv);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*40,360)+'ms';});
+</script>
+</body>
+</html>
