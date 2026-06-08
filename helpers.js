@@ -19,3 +19,23 @@ function tex(latex, fallback, display){
 /* Wrap a LaTeX fragment in a color, for color-coded formulas.
    Returns a \textcolor{...}{...} string to embed inside other LaTeX. */
 const cc = (hex, body) => `\\textcolor{${hex}}{${body}}`;
+
+/* ============================================================
+   progress recorder — quietly notes which lesson/exam/sheet
+   pages you've opened, so the hub can offer "continue where you
+   left off" and per-unit progress. Stored locally (this origin
+   only) under vcalc:v1; never leaves the browser.
+   ============================================================ */
+(function(){
+  try{
+    var K='vcalc:v1';
+    var s=JSON.parse(localStorage.getItem(K)||'{}');
+    s.visited=s.visited||{};
+    var f=(location.pathname.split('/').pop()||'').toLowerCase();
+    if(f && f!=='index.html' && f.indexOf('-standalone')<0 && f.indexOf('.html')>=0){
+      s.visited[f]=Date.now();
+      s.last=f;
+      localStorage.setItem(K, JSON.stringify(s));
+    }
+  }catch(e){}
+})();
