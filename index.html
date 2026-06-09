@@ -51,6 +51,20 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
   .wrap{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 28px}
 
+  /* reduced-motion note — shown only when the visitor's system has motion turned off */
+  .motion-note{display:none}
+  .mn-ico{color:var(--gold-glow);font-size:15px;line-height:1;flex-shrink:0;margin-top:1px}
+  .mn-txt{flex:1}
+  .mn-txt b{color:var(--text);font-weight:600}
+  .mn-x{flex-shrink:0;background:none;border:0;color:var(--faint);font-size:21px;line-height:1;cursor:pointer;padding:0 2px;transition:color .3s}
+  .mn-x:hover{color:var(--text)}
+  @media (prefers-reduced-motion:reduce){
+    .motion-note{display:flex;align-items:flex-start;gap:12px;margin:16px 0 2px;padding:12px 16px;
+      border:1px solid var(--line-2);border-radius:13px;
+      background:linear-gradient(180deg,var(--ink-1),var(--panel));
+      color:var(--muted);font-size:13.5px;line-height:1.55}
+  }
+
   /* ---------- top bar ---------- */
   .topbar{display:flex;align-items:center;justify-content:space-between;padding:24px 0 0}
   .brand{display:flex;align-items:center;gap:11px;text-decoration:none}
@@ -391,6 +405,12 @@
       <span class="wordmark">Visual <b>Calculus</b></span>
     </a>
     <span class="top-tag">AP&nbsp;·&nbsp;BC</span>
+  </div>
+
+  <div class="motion-note" role="note">
+    <span class="mn-ico" aria-hidden="true">&#10022;</span>
+    <span class="mn-txt">Your device has <b>reduced motion</b> turned on, so the animated visuals on this page are shown as stills. Everything still works &mdash; switch motion back on in your system's accessibility settings to watch them play.</span>
+    <button type="button" class="mn-x" aria-label="Dismiss this note">&times;</button>
   </div>
 
   <!-- ===================== HERO ===================== -->
@@ -951,6 +971,9 @@
   else if('IntersectionObserver' in window){ new IntersectionObserver(function(es){es.forEach(function(e){ e.isIntersecting?start():stop(); });},{threshold:0.04}).observe(cv); }
   else { start(); }
 })();
+
+/* dismiss the reduced-motion note */
+(function(){var n=document.querySelector('.motion-note');if(!n)return;var x=n.querySelector('.mn-x');if(x)x.addEventListener('click',function(){n.style.display='none';});})();
 </script>
 </body>
 </html>
