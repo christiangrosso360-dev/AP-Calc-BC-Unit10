@@ -30,8 +30,7 @@
     /* course house accent: champagne gold */
     --gold:#d8b873; --gold-glow:#efd49b; --gold-deep:#a8893f;
     /* per-unit signature colors */
-    --u7:#de5360;
---u8:#40c98a; --u8b:#5fe0a4;
+    --u8:#40c98a; --u8b:#5fe0a4;
     --u9:#3fb6d8; --u9b:#6dd4ef;
     --u10:#a98cf0; --u10b:#c4adff;
     --crimson:#e0644f;
@@ -194,13 +193,7 @@
   .go .arr{transition:transform .4s cubic-bezier(.16,.8,.3,1)}
   .card:hover .go .arr{transform:translateX(6px)}
   /* per-card color binding */
-  .u7{--cardc:var(--u7);--cardglow:rgba(222,83,96,.20)}
-.u7:hover{border-color:rgba(222,83,96,.42);box-shadow:0 30px 66px -40px rgba(0,0,0,.92),0 0 50px -26px rgba(222,83,96,.4)}
-.u7:hover .card-art{border-color:rgba(222,83,96,.25)}
-.u7:hover .card-art svg{filter:drop-shadow(0 0 12px rgba(222,83,96,.5))}
-.u7:hover .uname{text-shadow:0 0 22px rgba(222,83,96,.5)}
-.u7:hover .chip{border-color:rgba(222,83,96,.34);color:#f0a8ae}
-.u8{--cardc:var(--u8);--cardglow:rgba(64,201,138,.20)}
+  .u8{--cardc:var(--u8);--cardglow:rgba(64,201,138,.20)}
   .u8:hover{border-color:rgba(64,201,138,.42);box-shadow:0 30px 66px -40px rgba(0,0,0,.92),0 0 50px -26px rgba(64,201,138,.4)}
   .u8:hover .card-art{border-color:rgba(64,201,138,.25)} .u8:hover .card-art svg{filter:drop-shadow(0 0 12px rgba(64,201,138,.5))}
   .u8:hover .uname{text-shadow:0 0 22px rgba(64,201,138,.5)} .u8:hover .chip{border-color:rgba(64,201,138,.34);color:#9adcbd}
@@ -430,8 +423,8 @@
         <a class="hero-cta" href="#readyGroup">Explore the units <span class="arr" aria-hidden="true">&#8595;</span></a>
         <div class="meta">
           <div><div class="n" data-count="10">10</div><div class="l">Units</div></div>
-          <div><div class="n"><em data-count="4">4</em></div><div class="l">Ready now</div></div>
-          <div><div class="n" data-count="19">19</div><div class="l">Lessons</div></div>
+          <div><div class="n"><em data-count="3">3</em></div><div class="l">Ready now</div></div>
+          <div><div class="n" data-count="14">14</div><div class="l">Lessons</div></div>
         </div>
       </div>
       <div class="hero-chips">
@@ -468,7 +461,7 @@
   <div class="group-fade" id="readyGroup">
     <div class="sec-head">
       <div class="t"><span class="sn">01</span>Start here</div>
-      <h2>Four units, ready to use</h2>
+      <h2>Three units, ready to use</h2>
       <p class="sub">Each is a complete guide &mdash; interactive lessons, a full exam-style practice set, and a one-page cheat sheet.</p>
     </div>
     <div class="router" id="router">
@@ -481,19 +474,6 @@
       <div class="ans" id="routerAns"></div>
     </div>
     <div class="grid">
-      <!-- Unit 7 -->
-      <a class="card u7" href="unit7.html">
-        <div class="card-art" aria-hidden="true">
-          <svg viewBox="0 0 150 118" width="150" height="118" fill="none"><path d="M27.9 82.5 L43.2 87.0" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M30.9 53.5 L40.2 66.5" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M32.6 27.8 L38.5 42.7" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M48.3 87.7 L63.2 81.8" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M49.2 55.4 L62.3 64.6" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M51.9 28.3 L59.7 42.2" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M70.6 90.7 L81.4 78.8" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M68.0 60.0 L84.0 60.0" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M70.6 29.3 L81.4 41.2" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M92.3 91.7 L100.1 77.8" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M89.7 64.6 L102.8 55.4" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M88.8 32.3 L103.7 38.2" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M113.5 92.2 L119.4 77.3" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M111.8 66.5 L121.1 53.5" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path d="M108.8 37.5 L124.1 33.0" stroke="currentColor" stroke-width="1.4" opacity=".34" stroke-linecap="round"/><path class="cdraw" pathLength="1" d="M 32.7 35.6 L 36.4 42.5 L 40.2 48.2 L 43.9 52.9 L 47.7 56.6 L 51.4 59.5 L 55.2 61.7 L 59.0 63.3 L 62.7 64.3 L 66.5 64.9 L 70.2 65.0 L 74.0 64.8 L 77.7 64.2 L 81.5 63.3 L 85.2 62.2 L 89.0 60.9 L 92.8 59.4 L 96.5 57.7 L 100.3 55.8 L 104.0 53.9 L 107.8 51.8 L 111.5 49.6 L 115.3 47.3 L 119.0 44.9 L 122.8 42.5" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none"/><circle cx="122.8" cy="42.5" r="3.4" fill="currentColor"/></svg>
-        </div>
-        <div class="card-body">
-          <div class="unum">Unit 07</div>
-          <h3 class="uname">Differential Equations</h3>
-          <p class="udesc">Slope fields, separable equations, exponential &amp; logistic growth, and Euler&rsquo;s method &mdash; rates of change made something you can watch unfold.</p>
-          <div class="chips"><span class="chip">Slope fields</span><span class="chip">Separable</span><span class="chip">Exponential</span><span class="chip">Euler</span></div>
-          <span class="go">Open unit <span class="arr">&#8594;</span></span>
-        </div>
-      </a>
       <!-- Unit 8 -->
       <a class="card u8" href="unit8.html">
         <div class="card-art" aria-hidden="true">
@@ -570,7 +550,7 @@
     </div>
     <div class="progress-wrap">
       <div class="progress-track"><div class="progress-fill"></div></div>
-      <div class="progress-label"><b>4</b> of 10 units ready</div>
+      <div class="progress-label"><b>3</b> of 10 units ready</div>
     </div>
     <div class="road">
       <div class="rrow soon"><span class="rnum">01</span><span class="rdot"></span><span class="rtitle">Limits &amp; Continuity<span class="rwhat">Limits, one&#8209;sided behavior, continuity, and the squeeze theorem.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
@@ -579,7 +559,7 @@
       <div class="rrow soon"><span class="rnum">04</span><span class="rdot"></span><span class="rtitle">Contextual Applications of Differentiation<span class="rwhat">Related rates, motion along a line, and linear approximation in context.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
       <div class="rrow soon"><span class="rnum">05</span><span class="rdot"></span><span class="rtitle">Analytical Applications of Differentiation<span class="rwhat">The Mean Value Theorem, curve sketching, optimization, and concavity.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
       <div class="rrow soon"><span class="rnum">06</span><span class="rdot"></span><span class="rtitle">Integration &amp; Accumulation of Change<span class="rwhat">Antiderivatives, the Fundamental Theorem, Riemann sums, and u&#8209;substitution.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
-      <a class="rrow live" href="unit7.html" style="--rc:var(--u7)"><span class="rnum">07</span><span class="rdot"></span><span class="rtitle">Differential Equations<span class="rsub">5 lessons · exam · cheat sheet</span></span><span class="pill ready">Ready</span><span class="rarr">&#8594;</span></a>
+      <div class="rrow next" style="--rc:var(--gold)"><span class="rnum">07</span><span class="rdot"></span><span class="rtitle">Differential Equations<span class="rwhat">Slope fields, separable equations, exponential models, and Euler&rsquo;s method.</span></span><span class="pill next">Next up</span><span class="rarr">&#8594;</span></div>
       <a class="rrow live" href="unit8.html" style="--rc:var(--u8)"><span class="rnum">08</span><span class="rdot"></span><span class="rtitle">Applications of Integration<span class="rsub">5 lessons · exam · cheat sheet</span></span><span class="pill ready">Ready</span><span class="rarr">&#8594;</span></a>
       <a class="rrow live" href="unit9.html" style="--rc:var(--u9)"><span class="rnum">09</span><span class="rdot"></span><span class="rtitle">Parametric, Polar &amp; Vector&#8209;Valued Functions<span class="rsub">4 lessons · exam · cheat sheet</span></span><span class="pill ready">Ready</span><span class="rarr">&#8594;</span></a>
       <a class="rrow live" href="unit10.html" style="--rc:var(--u10)"><span class="rnum">10</span><span class="rdot"></span><span class="rtitle">Infinite Sequences &amp; Series<span class="rsub">5 lessons · exam · cheat sheet</span></span><span class="pill ready">Ready</span><span class="rarr">&#8594;</span></a>
