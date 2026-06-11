@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unit 7 Cheat Sheet — every formula + when to use it · Differential Equations</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23160f10%22/%3E%3Ctext%20x%3D%2216%22%20y%3D%2223%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20font-family%3D%22Georgia%2Cserif%22%20font-weight%3D%22700%22%20fill%3D%22%23de5360%22%3E%E2%88%82%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{ --emerald:#de5360; --emerald-glow:#f0828d; --approx:#de5360; --amber:#e8a13c; --rose:#e0644f; --violet:#a892f0; --faint:#7a7163; --wrap-max:1100px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:10px;max-width:680px;line-height:1.6}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}
+  .tool-btn{font-family:var(--mono);font-size:12.5px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-2);border-radius:9px;padding:9px 15px;cursor:pointer;text-decoration:none;transition:border-color .2s,color .2s}
+  .tool-btn:hover{border-color:var(--emerald);color:var(--emerald-glow)}
+
+  /* dense topic grid */
+  /* two explicit columns: left holds 8.1-8.3 + the reminders filler, right holds area/cross-sec/solids */
+  .sheet{column-count:2;column-gap:16px;margin-top:8px}
+  .col{display:flex;flex-direction:column;gap:16px;min-width:0}
+  @media(max-width:760px){.sheet{column-count:1}}
+  .block.span2{margin-top:0}
+  .arc-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px}
+  @media(max-width:760px){.arc-cols{grid-template-columns:1fr}}
+  .block{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset;break-inside:avoid;margin-bottom:16px}
+  .block.span2{grid-column:1 / -1}
+  .block h3{font-family:var(--display);font-weight:600;font-size:17px;color:var(--ink);margin:0 0 3px;display:flex;align-items:baseline;gap:10px}
+  .block h3 a{color:inherit;text-decoration:none;border-bottom:1px dashed var(--line-2);transition:border-color .2s,color .2s}
+  .block h3 a:hover{color:var(--emerald-glow);border-color:var(--emerald)}
+  .block .tno{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--emerald);font-weight:400}
+  .block .blurb{font-size:12.5px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+
+  .f{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin:8px 0;overflow-x:auto;overflow-y:hidden}
+  .f .katex{color:var(--ink);font-size:1.02em}
+  .f .flab{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+
+  .mini{font-size:12.5px;color:var(--muted);line-height:1.55;margin:8px 0 0}
+  .mini b{color:var(--ink)} .mini .am{color:var(--amber)} .mini .ro{color:var(--rose)}
+
+  /* decision callouts — the standout part */
+  .decide{background:rgba(64,201,138,.06);border:1px solid rgba(64,201,138,.25);border-radius:10px;padding:12px 14px;margin-top:12px}
+  .decide .dh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--emerald);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+  .decide .dh::before{content:"◆";font-size:9px}
+  .branch{display:flex;gap:10px;font-size:12.5px;color:var(--ink);padding:5px 0;align-items:flex-start;line-height:1.45}
+  .branch .cond{font-family:var(--mono);color:var(--emerald-glow);flex-shrink:0;min-width:96px}
+  .branch .res{color:var(--muted)}
+
+  /* traps */
+  .traps{background:rgba(224,100,79,.06);border-left:2px solid var(--rose);border-radius:0 9px 9px 0;padding:10px 14px;margin-top:12px}
+  .traps .th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+  .traps ul{margin:0;padding-left:16px} .traps li{font-size:12.5px;color:var(--muted);line-height:1.55;margin:3px 0} .traps li b{color:var(--ink)}
+
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .55s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}}
+  footer{color:var(--muted);font-size:12px;margin-top:46px;border-top:1px solid var(--line);padding-top:14px} footer a{color:var(--emerald);text-decoration:none}
+
+  /* closing band */
+  .closer{margin-top:18px;background:linear-gradient(110deg, rgba(31,157,110,.10), var(--panel-2) 60%, var(--panel));border:1px solid rgba(64,201,138,.3);border-radius:16px;padding:26px 28px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .closer-line{display:flex;gap:18px;align-items:flex-start}
+  .big-idea-mark{font-family:var(--display);font-size:46px;line-height:.9;color:var(--emerald);flex-shrink:0;opacity:.85}
+  .closer-line p{font-size:15px;color:var(--ink);line-height:1.65;margin:2px 0 0} .closer-line p b{color:var(--emerald-glow)}
+  .closer-jump{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+  .jump-primary{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:13.5px;font-weight:600;color:#1a1408;background:var(--emerald);border-radius:10px;padding:11px 18px;text-decoration:none;box-shadow:0 8px 20px -10px var(--emerald);transition:transform .2s,box-shadow .2s}
+  .jump-primary:hover{transform:translateY(-2px);box-shadow:0 12px 26px -10px var(--emerald)} .jump-primary span{transition:transform .2s} .jump-primary:hover span{transform:translateX(4px)}
+  .jump-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .jump-row a{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line-2);border-radius:30px;padding:6px 13px;text-decoration:none;transition:border-color .2s,color .2s}
+  .jump-row a:hover{border-color:var(--emerald);color:var(--emerald-glow)}
+  @media(max-width:560px){.closer-line{flex-direction:column;gap:8px}.big-idea-mark{font-size:36px}}
+
+  /* print: clean white reference */
+  @media print{
+    @page{margin:1.2cm}
+    body{background:#fff!important;color:#111!important}
+    .backlink,.toolbar,.sub,.scroll-cue,footer a,.closer-jump{display:none!important}
+    .block{background:#fff!important;border:1px solid #bbb!important;box-shadow:none!important;break-inside:avoid}
+    .f{background:#f7f7f5!important;border-color:#ccc!important}
+    .f .katex{color:#111!important}
+    .decide{background:#f0faf5!important;border-color:#9bd}
+    .traps{background:#fdf2f0!important}
+    .closer{background:#f0faf5!important;border-color:#9bd!important}
+    .closer-line p,.big-idea-mark{color:#111!important}.big-idea-mark{color:#0a7!important}
+    h1,.block h3,.block .blurb,.mini,.branch,.traps li{color:#111!important}
+    .tno,.decide .dh,.branch .cond{color:#0a7!important}
+    .sheet{column-gap:10px}
+    .reveal{animation:none;opacity:1}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit7.html">← Unit 7</a>
+  <header class="reveal">
+    <h1>Unit 7 <span class="em">Cheat Sheet</span></h1>
+    <div class="sub">Every formula in Differential Equations — and, more importantly, <b>when to use which</b>.
+      The places points slip away (which model, separable or not, over- vs. under-estimate, exponential vs. logistic)
+      are exactly where each block ends with the decision that picks the right tool.</div>
+    <div class="toolbar">
+      <button class="tool-btn" onclick="window.print()">⎙ Print / save as PDF</button>
+      <a class="tool-btn" href="unit7-exam-practice.html">→ Test yourself</a>
+    </div>
+  </header>
+
+  <div class="sheet">
+    <div class="block reveal">
+      <h3><a href="equations-of-change.html">Equations of Change</a> <span class="tno">7.1 – 7.2</span></h3>
+      <p class="blurb">Turn a sentence about how something changes into a differential equation.</p>
+      <div class="f"><div class="flab">rate proportional to the amount</div><div id="f_propto"></div></div>
+      <div class="f"><div class="flab">proportional to the difference from M</div><div id="f_cooling"></div></div>
+      <div class="decide"><div class="dh">Translating a model</div>
+        <div class="branch"><span class="cond">∝ the amount</span><span class="res">→ \(ky\) (exponential)</span></div>
+        <div class="branch"><span class="cond">∝ difference from M</span><span class="res">→ \(k(y-M)\); equilibrium at \(y=M\)</span></div>
+        <div class="branch"><span class="cond">constant rate</span><span class="res">→ \(k\) alone (linear change)</span></div>
+      </div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Verify by substituting.</b> \(y=f(x)\) is a solution only if both sides match for <i>all</i> \(x\).</li>
+        <li>"Proportional to ___" means \(k\times\) that quantity — never \(+k\).</li>
+      </ul></div>
+    </div>
+    <div class="block reveal">
+      <h3><a href="slope-fields.html">Slope Fields</a> <span class="tno">7.3</span></h3>
+      <p class="blurb">A picture of every solution at once — a tiny segment of slope at each point.</p>
+      <div class="f"><div class="flab">segment slope at a point</div><div id="f_sf"></div></div>
+      <p class="mini"><b>Zero slope</b> (horizontal) where \(f=0\); <b>undefined</b> (vertical) where a denominator \(=0\).</p>
+      <div class="decide"><div class="dh">Match a field to its DE</div>
+        <div class="branch"><span class="cond">same down columns</span><span class="res">→ depends on \(x\) only</span></div>
+        <div class="branch"><span class="cond">same across rows</span><span class="res">→ depends on \(y\) only (autonomous)</span></div>
+        <div class="branch"><span class="cond">horizontal here</span><span class="res">→ set \(f=0\) for the isocline, then test a point's sign</span></div>
+      </div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li>Don't swap <b>columns</b> (x-only) and <b>rows</b> (y-only) — always confirm with one test point.</li>
+      </ul></div>
+    </div>
+    <div class="block reveal">
+      <h3><a href="eulers-method.html">Euler's Method</a> <span class="tno">7.5</span></h3>
+      <p class="blurb">Approximate a solution by walking short tangent-line steps.</p>
+      <div class="f"><div class="flab">one step</div><div id="f_euler"></div></div>
+      <p class="mini"><b>Recompute the slope</b> at every new point; advance \(x\) by \(h\) each step. <b>Error \(\propto h\)</b> — quarter the step, quarter the error.</p>
+      <div class="decide"><div class="dh">Over- or under-estimate?</div>
+        <div class="branch"><span class="cond">concave up</span><span class="res">→ underestimate (tangents below the curve)</span></div>
+        <div class="branch"><span class="cond">concave down</span><span class="res">→ overestimate (tangents above)</span></div>
+      </div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Don't reuse the first slope</b> — it changes at each new point.</li>
+        <li>Count the steps to reach the target: \(n=\dfrac{x_{\text{end}}-x_0}{h}\).</li>
+      </ul></div>
+    </div>
+    <div class="block reveal" style="border-color:rgba(222,83,96,.28)">
+      <h3 style="border:none">Before you solve <span class="tno">every problem</span></h3>
+      <p class="blurb" style="margin-bottom:10px">A 20-second checklist that catches most lost points.</p>
+      <div class="decide" style="margin-top:0"><div class="dh">Always</div>
+        <div class="branch"><span class="cond">name the type</span><span class="res">→ separable? exponential? logistic?</span></div>
+        <div class="branch"><span class="cond">use the IC</span><span class="res">→ pin the constant before simplifying too far</span></div>
+        <div class="branch"><span class="cond">read the ask</span><span class="res">→ a value, a time, a rate, or a limit?</span></div>
+      </div>
+      <p class="mini"><b>Calculator section?</b> Set up the exact equation or integral, then solve numerically — you still earn the setup points even if the algebra is ugly.</p>
+    </div>
+    <div class="block reveal">
+      <h3>Three kinds of growth <span class="tno">at a glance</span></h3>
+      <p class="blurb">Tell the models apart by what the rate is proportional to.</p>
+      <div class="decide"><div class="dh">Rate → shape</div>
+        <div class="branch"><span class="cond">constant</span><span class="res">→ \(y'=k\): a straight line</span></div>
+        <div class="branch"><span class="cond">∝ the amount</span><span class="res">→ \(y'=ky\): exponential, doubles forever</span></div>
+        <div class="branch"><span class="cond">∝ room left</span><span class="res">→ \(y'=kP\!\left(1-\tfrac{P}{L}\right)\): logistic S-curve to \(L\)</span></div>
+        <div class="branch"><span class="cond">∝ gap to \(M\)</span><span class="res">→ \(y'=k(y-M)\): levels off at \(M\)</span></div>
+      </div>
+      <p class="mini"><b>Spot it fast:</b> a ceiling means logistic or bounded; no ceiling means exponential.</p>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li>Exponential and logistic look identical <b>early</b> — only the long run reveals the ceiling.</li>
+      </ul></div>
+    </div>
+    <div class="block reveal">
+      <h3><a href="separation-of-variables.html">Separation of Variables</a> <span class="tno">7.6 – 7.7</span></h3>
+      <p class="blurb">All the \(y\)'s on one side, all the \(x\)'s on the other, then integrate.</p>
+      <div class="f"><div class="flab">separate, then integrate both sides</div><div id="f_sep"></div></div>
+      <p class="mini">One \(+C\); apply the <b>initial condition</b>, then solve for \(y\). Keep \(|\,\cdot\,|\) in logs — exponentiating turns \(+C\) into \(\times A\).</p>
+      <div class="decide"><div class="dh">Is it separable?</div>
+        <div class="branch"><span class="cond">a product \(g(x)h(y)\)</span><span class="res">→ yes, divide by \(h(y)\)</span></div>
+        <div class="branch"><span class="cond">a sum like \(x+y\)</span><span class="res">→ no, separation fails</span></div>
+      </div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li>For \(y^2=\dots\), pick the <b>branch</b> (\(\pm\)) matching the initial sign of \(y\).</li>
+        <li><b>Domain:</b> the largest interval around \(x_0\) where the solution stays defined.</li>
+      </ul></div>
+    </div>
+    <div class="block reveal">
+      <h3><a href="growth-models.html">Exponential Growth &amp; Decay</a> <span class="tno">7.8</span></h3>
+      <p class="blurb">When the rate is proportional to the amount, change is exponential.</p>
+      <div class="f"><div class="flab">solve \(y'=ky\)</div><div id="f_exp"></div></div>
+      <div class="f"><div class="flab">half-life &amp; doubling time</div><div id="f_half"></div></div>
+      <p class="mini"><b>Relative rate</b> \(\tfrac{y'}{y}=k\) is constant. <b>Solve for \(t\):</b> isolate \(e^{kt}\), take \(\ln\), divide by \(k\).</p>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li>Exponential growth <b>multiplies</b> by a fixed factor per interval — it is not linear \((y_0+kt)\).</li>
+      </ul></div>
+    </div>
+    <div class="block reveal">
+      <h3><a href="growth-models.html">Logistic Model</a> <span class="tno">7.9</span></h3>
+      <p class="blurb">Growth that speeds up, then levels off at a carrying capacity — the S-curve.</p>
+      <div class="f"><div class="flab">logistic differential equation</div><div id="f_log"></div></div>
+      <div class="f"><div class="flab">explicit solution</div><div id="f_logsol"></div></div>
+      <p class="mini"><b>Capacity</b> \(L\); equilibria \(P=0,\ P=L\). <b>Fastest</b> at \(P=\tfrac{L}{2}\), max rate \(\tfrac{kL}{4}\). As \(t\to\infty\), \(P\to L\) and \(\tfrac{dP}{dt}\to 0\).</p>
+      <div class="decide"><div class="dh">Reading a logistic problem</div>
+        <div class="branch"><span class="cond">the ceiling</span><span class="res">→ \(L\) (factor \(kP(1-P/L)\))</span></div>
+        <div class="branch"><span class="cond">fastest growth</span><span class="res">→ \(P=L/2\)</span></div>
+        <div class="branch"><span class="cond">value at time \(t\)</span><span class="res">→ build \(P(t)\), \(A=\tfrac{L-P_0}{P_0}\)</span></div>
+      </div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li>Solutions <b>inflect at \(L/2\)</b> — not concave up throughout.</li>
+        <li>Early on it mimics exponential, but bends toward \(L\) — don't project it straight up.</li>
+      </ul></div>
+    </div>
+    <div class="block reveal">
+      <h3><a href="unit7-exam-practice.html">AP-style asks</a> <span class="tno">on the exam</span></h3>
+      <p class="blurb">What the question is really asking — and the move that answers it.</p>
+      <div class="decide"><div class="dh">The ask → the move</div>
+        <div class="branch"><span class="cond">value at time \(t\)</span><span class="res">→ plug \(t\) into the solution \(y(t)\)</span></div>
+        <div class="branch"><span class="cond">when it reaches \(X\)</span><span class="res">→ set \(y(t)=X\), solve for \(t\) with \(\ln\)</span></div>
+        <div class="branch"><span class="cond">average value</span><span class="res">→ \(\dfrac{1}{b-a}\displaystyle\int_a^b y\,dt\)</span></div>
+        <div class="branch"><span class="cond">rate right now</span><span class="res">→ read \(\dfrac{dy}{dt}\) straight from the DE</span></div>
+      </div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Don't re-solve</b> for an instantaneous rate — the DE already gives it.</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <div class="closer reveal">
+    <div class="closer-line">
+      <span class="big-idea-mark">∂</span>
+      <p>All of Unit 7 is one idea: <b>a differential equation states the rule of change</b> — solving it, or just
+        reading its slope field, turns that rule into the actual function. Growth, decay, motion, populations: same
+        move every time. Name the model, use the condition, answer the ask.</p>
+    </div>
+    <div class="closer-jump">
+      <a href="unit7-exam-practice.html" class="jump-primary">Test yourself on the exam set <span>→</span></a>
+      <div class="jump-row">
+        <a href="equations-of-change.html">Equations of Change</a>
+        <a href="slope-fields.html">Slope Fields</a>
+        <a href="eulers-method.html">Euler's Method</a>
+        <a href="separation-of-variables.html">Separation</a>
+        <a href="growth-models.html">Growth Models</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="reveal">Unit 7 Cheat Sheet · Differential Equations · <a href="unit7.html">back to the unit</a> · print-friendly.</footer>
+</div>
+
+<script>
+function renderSheet(){
+  const R=String.raw;
+  const put=(id,tex_,fb)=>{const e=document.getElementById(id);if(e)e.innerHTML=tex(tex_,fb||tex_,true);};
+  put('f_propto', R`\dfrac{dy}{dt}=ky`, "dy/dt = k y");
+  put('f_cooling', R`\dfrac{dy}{dt}=k\,(y-M)`, "dy/dt = k(y − M)");
+  put('f_sf', R`\text{at }(x,y):\ \ \text{slope}=\dfrac{dy}{dx}=f(x,y)`, "slope = dy/dx = f(x,y)");
+  put('f_euler', R`y_{n+1}=y_n+h\,f(x_n,y_n)`, "y_(n+1) = y_n + h·f(x_n,y_n)");
+  put('f_sep', R`\int\dfrac{dy}{h(y)}=\int g(x)\,dx`, "∫ dy/h(y) = ∫ g(x) dx");
+  put('f_exp', R`\dfrac{dy}{dt}=ky\ \Longrightarrow\ y=y_0e^{kt}`, "dy/dt = ky  ⇒  y = y0 e^(kt)");
+  put('f_half', R`T_{1/2}=\dfrac{\ln 2}{|k|}\qquad T_{\text{double}}=\dfrac{\ln 2}{k}`, "half-life = ln2/|k|;  doubling = ln2/k");
+  put('f_log', R`\dfrac{dP}{dt}=kP\!\left(1-\dfrac{P}{L}\right)`, "dP/dt = kP(1 − P/L)");
+  put('f_logsol', R`P(t)=\dfrac{L}{1+Ae^{-kt}},\qquad A=\dfrac{L-P_0}{P_0}`, "P(t) = L/(1 + A e^(−kt)),  A = (L − P0)/P0");
+}
+function mathifyInline(){
+  document.querySelectorAll('.mini,.branch .res,.branch .cond,.traps li,.blurb').forEach(node=>{
+    if(node.dataset.done)return;
+    node.innerHTML=node.innerHTML.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):m;}catch(e){return m;}});
+    node.dataset.done="1";
+  });
+}
+function boot(){renderSheet();mathifyInline();}
+boot();
+if(window.addEventListener)window.addEventListener('load',boot);
+if(!window.katex){let t=0;const iv=setInterval(()=>{if(window.katex){clearInterval(iv);boot();}else if(++t>60)clearInterval(iv);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*40,320)+'ms';});
+</script>
+</body>
+</html>
