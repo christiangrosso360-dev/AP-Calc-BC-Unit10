@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unit 6 Cheat Sheet — every formula + when to use it · Integration &amp; Accumulation</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23101420%27%2F%3E%3Cg%20fill%3D%27%235f7ff2%27%3E%3Crect%20x%3D%276%27%20y%3D%2718%27%20width%3D%274.6%27%20height%3D%278%27%20rx%3D%271%27%20opacity%3D%27.55%27%2F%3E%3Crect%20x%3D%2712%27%20y%3D%2714%27%20width%3D%274.6%27%20height%3D%2712%27%20rx%3D%271%27%20opacity%3D%27.75%27%2F%3E%3Crect%20x%3D%2718%27%20y%3D%2710%27%20width%3D%274.6%27%20height%3D%2716%27%20rx%3D%271%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M5%2017%20C%2012%2010%2C%2020%206%2C%2027%207%27%20stroke%3D%27%238fa6f7%27%20stroke-width%3D%272%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  /* alias emerald -> Unit 6 crimson so the shared cheat-sheet styling carries over */
+  :root{ --emerald:#5f7ff2; --emerald-glow:#fb8590; --approx:#5f7ff2; --amber:#e8a13c; --rose:#e0644f; --violet:#a892f0; --wrap-max:1100px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:10px;max-width:700px;line-height:1.6}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}
+  .tool-btn{font-family:var(--mono);font-size:12.5px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-2);border-radius:9px;padding:9px 15px;cursor:pointer;text-decoration:none;transition:border-color .2s,color .2s}
+  .tool-btn:hover{border-color:var(--emerald);color:var(--emerald-glow)}
+
+  .sheet{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px}
+  .col{display:flex;flex-direction:column;gap:16px;min-width:0}
+  @media(max-width:760px){.sheet{grid-template-columns:1fr}}
+  .block{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .block.span2{grid-column:1 / -1}
+  .block h3{font-family:var(--display);font-weight:600;font-size:17px;color:var(--ink);margin:0 0 3px;display:flex;align-items:baseline;gap:10px}
+  .block h3 a{color:inherit;text-decoration:none;border-bottom:1px dashed var(--line-2);transition:border-color .2s,color .2s}
+  .block h3 a:hover{color:var(--emerald-glow);border-color:var(--emerald)}
+  .block .tno{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--emerald);font-weight:400}
+  .block .blurb{font-size:12.5px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+
+  .f{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin:8px 0;overflow-x:auto;overflow-y:hidden}
+  .f .katex{color:var(--ink);font-size:1.02em}
+  .f .flab{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+
+  .mini{font-size:12.5px;color:var(--muted);line-height:1.55;margin:8px 0 0}
+  .mini b{color:var(--ink)} .mini .am{color:var(--amber)} .mini .ro{color:var(--rose)} .mini .cy{color:var(--emerald-glow)}
+
+  .decide{background:rgba(222,83,96,.06);border:1px solid rgba(222,83,96,.25);border-radius:10px;padding:12px 14px;margin-top:12px}
+  .decide .dh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--emerald);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+  .decide .dh::before{content:"\25C6";font-size:9px}
+  .branch{display:flex;gap:10px;font-size:12.5px;color:var(--ink);padding:5px 0;align-items:flex-start;line-height:1.45}
+  .branch .cond{font-family:var(--mono);color:var(--emerald-glow);flex-shrink:0;min-width:104px}
+  .branch .res{color:var(--muted)}
+
+  .traps{background:rgba(224,100,79,.06);border-left:2px solid var(--rose);border-radius:0 9px 9px 0;padding:10px 14px;margin-top:12px}
+  .traps .th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+  .traps ul{margin:0;padding-left:16px} .traps li{font-size:12.5px;color:var(--muted);line-height:1.55;margin:3px 0} .traps li b{color:var(--ink)}
+
+  /* model / phrase gallery */
+  .gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  @media(max-width:420px){.gallery{grid-template-columns:1fr}}
+  .gcard{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+  .gcard .gname{font-family:var(--mono);font-size:10.5px;color:var(--emerald-glow);margin-bottom:3px}
+  .gcard .geq{font-size:12px;color:var(--ink)} .gcard .gnote{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .55s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}}
+  footer{color:var(--muted);font-size:12px;margin-top:46px;border-top:1px solid var(--line);padding-top:14px} footer a{color:var(--emerald);text-decoration:none}
+
+  .closer{margin-top:18px;background:linear-gradient(110deg, rgba(222,83,96,.12), var(--panel-2) 60%, var(--panel));border:1px solid rgba(222,83,96,.3);border-radius:16px;padding:26px 28px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .closer-line{display:flex;gap:18px;align-items:flex-start}
+  .big-idea-mark{font-family:var(--display);font-size:42px;line-height:.95;color:var(--emerald);flex-shrink:0;opacity:.85}
+  .closer-line p{font-size:15px;color:var(--ink);line-height:1.65;margin:2px 0 0} .closer-line p b{color:var(--emerald-glow)}
+  .closer-jump{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+  .jump-primary{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:13.5px;font-weight:600;color:#2a0a0c;background:var(--emerald);border-radius:10px;padding:11px 18px;text-decoration:none;box-shadow:0 8px 20px -10px var(--emerald);transition:transform .2s,box-shadow .2s}
+  .jump-primary:hover{transform:translateY(-2px);box-shadow:0 12px 26px -10px var(--emerald)} .jump-primary span{transition:transform .2s} .jump-primary:hover span{transform:translateX(4px)}
+  .jump-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .jump-row a{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line-2);border-radius:30px;padding:6px 13px;text-decoration:none;transition:border-color .2s,color .2s}
+  .jump-row a:hover{border-color:var(--emerald);color:var(--emerald-glow)}
+  @media(max-width:560px){.closer-line{flex-direction:column;gap:8px}.big-idea-mark{font-size:34px}}
+
+  @media print{
+    @page{margin:1.2cm}
+    body{background:#fff!important;color:#111!important}
+    .backlink,.toolbar,.sub,.scroll-cue,footer a,.closer-jump{display:none!important}
+    .block{background:#fff!important;border:1px solid #bbb!important;box-shadow:none!important;break-inside:avoid}
+    .f,.gcard{background:#f7f7f5!important;border-color:#ccc!important}
+    .f .katex{color:#111!important}
+    .decide{background:#fdeeef!important;border-color:#e3a6ab}
+    .traps{background:#fdf2f0!important}
+    .closer{background:#fdeeef!important;border-color:#e3a6ab!important}
+    .closer-line p,.big-idea-mark{color:#111!important}.big-idea-mark{color:#b23440!important}
+    h1,.block h3,.block .blurb,.mini,.branch,.traps li,.gcard .geq,.gcard .gnote{color:#111!important}
+    .tno,.decide .dh,.branch .cond,.gcard .gname{color:#b23440!important}
+    .sheet{gap:10px}.col{gap:10px}
+    .reveal{animation:none;opacity:1}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit6.html">← Unit 6</a>
+  <header class="reveal">
+    <h1>Unit 6 <span class="em">Cheat Sheet</span></h1>
+    <div class="sub">Integration &amp; Accumulation of Change — every formula, every decision rule, and every trap from the five lessons, on one printable page. Each block title links back to its lesson.</div>
+    <div class="toolbar">
+      <button class="tool-btn" onclick="window.print()">⎙ Print / save as PDF</button>
+      <a class="tool-btn" href="unit6-exam-practice.html">→ Test yourself</a>
+    </div>
+  </header>
+
+  <div class="sheet">
+    <div class="col">
+      <!-- RIEMANN SUMS -->
+    <div class="block reveal">
+      <h3><a href="riemann-sums.html">Riemann Sums</a> <span class="tno">6.1 – 6.2</span></h3>
+      <p class="blurb">Chop the interval, sample a height on each piece, sum the rectangles. Every method is a choice of <i>where to sample</i>.</p>
+      <div class="f"><div class="flab">the sum</div><div id="f_rsum"></div></div>
+      <div class="decide"><div class="dh">Over or under?</div>
+        <div class="branch"><span class="cond">\(f\) increasing</span><span class="res">Left under · Right over (decreasing flips both)</span></div>
+        <div class="branch"><span class="cond">\(f\) concave up</span><span class="res">Trapezoid over · Midpoint under (concave down flips both)</span></div>
+        <div class="branch"><span class="cond">error scaling</span><span class="res">L/R \(\sim 1/n\); M/T \(\sim 1/n^2\) — doubling \(n\) halves vs quarters</span></div>
+      </div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Tables have unequal widths.</b> \(\Delta t\) comes from the \(t\)-values, never from dividing the range evenly.</li>
+        <li><b>Midpoint is not exact</b> — only usually better. Direction decides L/R; concavity decides M/T.</li>
+      </ul></div>
+    </div>
+      <!-- DEFINITE INTEGRAL -->
+    <div class="block reveal">
+      <h3><a href="riemann-sums.html">The Definite Integral</a> <span class="tno">6.3</span></h3>
+      <p class="blurb">Take \(n\to\infty\) and the staircase becomes the exact signed area — the limit IS the definition.</p>
+      <div class="f"><div class="flab">definition</div><div id="f_defint"></div></div>
+      <p class="mini"><b>Reading a limit as an integral:</b> the constant inside the sample point is \(a\); the coefficient of \(k/n\) is the interval length, and over \(n\) it is \(\Delta x\).</p>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Units multiply:</b> integrand units \(\times\) \(dx\) units — (gal/min)·min = gal. The fastest answer-checker on the exam.</li>
+        <li><b>Below the axis counts negative.</b> "Area" questions and "integral" questions can differ.</li>
+      </ul></div>
+    </div>
+      <!-- FTC 1 -->
+    <div class="block reveal">
+      <h3><a href="fundamental-theorem.html">FTC Part 1</a> <span class="tno">6.4</span></h3>
+      <p class="blurb">Differentiating an accumulation undoes it: evaluate the integrand at the bound — no antidifferentiation happens.</p>
+      <div class="f"><div class="flab">the theorem</div><div id="f_ftc1"></div></div>
+      <div class="f"><div class="flab">chain version</div><div id="f_ftc1c"></div></div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>The chain factor \(u'(x)\)</b> is the most-forgotten point on this question type.</li>
+        <li><b>A variable LOWER bound costs one minus sign:</b> \(\int_x^a=-\int_a^x\).</li>
+      </ul></div>
+    </div>
+      <!-- ACCUMULATION FUNCTION -->
+    <div class="block reveal">
+      <h3><a href="fundamental-theorem.html">The Accumulation Function</a> <span class="tno">6.5 – 6.6</span></h3>
+      <p class="blurb">Everything about \(g\) reads one derivative <i>down</i> on \(f\).</p>
+      <div class="f"><div class="flab">the dictionary</div><div id="f_g"></div></div>
+      <div class="decide"><div class="dh">Graph-reading dictionary</div>
+        <div class="branch"><span class="cond">sign of \(f\)</span><span class="res">direction of \(g\) (\(f>0\Rightarrow g\) rises)</span></div>
+        <div class="branch"><span class="cond">\(f\) crosses \(+\to-\)</span><span class="res">local <b>max</b> of \(g\) (\(-\to+\): min)</span></div>
+        <div class="branch"><span class="cond">\(f\) changes direction</span><span class="res">inflection of \(g\)</span></div>
+      </div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Slope vs value:</b> where \(f\) peaks, \(g\) climbs <i>fastest</i> — not where \(g\) is biggest.</li>
+        <li><b>\(g(a)=0\) is free</b> — the first row of every candidates table.</li>
+      </ul></div>
+    </div>
+      <!-- FTC 2 -->
+    <div class="block reveal">
+      <h3><a href="fundamental-theorem.html">FTC Part 2 &amp; Properties</a> <span class="tno">6.7</span></h3>
+      <p class="blurb">Any antiderivative, evaluated at both ends. The \(+C\) cancels itself.</p>
+      <div class="f"><div class="flab">evaluation</div><div id="f_ftc2"></div></div>
+      <div class="f"><div class="flab">properties</div><div id="f_props"></div></div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Both bounds, always</b> — \(F(b)\) alone is the classic dropped point.</li>
+        <li><b>\(\int_a^a=0\)</b> needs no work, and \(\int_b^a=-\int_a^b\): bounds are oriented.</li>
+      </ul></div>
+    </div>
+      <!-- DECK -->
+    <div class="block reveal">
+      <h3><a href="antiderivatives.html">The Antiderivative Deck</a> <span class="tno">6.8</span></h3>
+      <p class="blurb">Twelve cards — every integration technique exists to reduce a stranger to one of these.</p>
+      <div class="f"><div class="flab">the cards</div><div id="f_deck"></div></div>
+      <div class="f"><div class="flab">more cards</div><div id="f_deck2"></div></div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>\(+C\) on every indefinite integral</b> — a real rubric point.</li>
+        <li><b>\(\ln|x|\), with the absolute value</b> — it's what lets the antiderivative live on the negative side.</li>
+      </ul></div>
+    </div>
+    </div>
+    <div class="col">
+      <!-- U-SUB -->
+    <div class="block reveal">
+      <h3><a href="antiderivatives.html">u-Substitution</a> <span class="tno">6.9</span></h3>
+      <p class="blurb">The chain rule, rewound: find a composition whose inside's derivative is standing right there.</p>
+      <div class="f"><div class="flab">the machine</div><div id="f_usub"></div></div>
+      <p class="mini"><b>The fingerprint check comes first, always:</b> in \(\int x\,e^{x^2}dx\), the \(x\) is the fingerprint of \(x^2\). Constants adjust with \(du\) — the missing 3 in \(du=3x^2dx\) costs a \(\tfrac13\), never a 3.</p>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Definite integrals convert the bounds</b> through \(u(x)\) and finish entirely in u-world.</li>
+        <li><b>No leftover x's</b> — if an \(x\) survives the substitution, the u was wrong (or the technique is).</li>
+      </ul></div>
+    </div>
+      <!-- RATIONAL TREE -->
+    <div class="block reveal">
+      <h3><a href="antiderivatives.html">Rational Integrands</a> <span class="tno">6.10</span></h3>
+      <p class="blurb">One quadratic-under-a-fraction, four fates. Run the checks <i>in order</i>.</p>
+      <div class="decide"><div class="dh">The decision tree</div>
+        <div class="branch"><span class="cond">top-heavy?</span><span class="res">long divide first — like \(\tfrac{17}{5}=3+\tfrac25\)</span></div>
+        <div class="branch"><span class="cond">numerator \(\approx Q'\)?</span><span class="res">u-sub \(\to\ln|Q|\)</span></div>
+        <div class="branch"><span class="cond">\(Q\) factors?</span><span class="res">partial fractions (6.12)</span></div>
+        <div class="branch"><span class="cond">irreducible?</span><span class="res">complete the square \(\to\) arctan</span></div>
+      </div>
+      <div class="f"><div class="flab">the arctan card</div><div id="f_arctan"></div></div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>The \(\tfrac1a\) out front</b> is the most-dropped constant in the unit.</li>
+        <li><b>The discriminant decides the branch:</b> \(x^2-1\Rightarrow\) PF and logs; \(x^2+1\Rightarrow\) arctan.</li>
+      </ul></div>
+    </div>
+      <!-- PARTS -->
+    <div class="block reveal">
+      <h3><a href="parts-partial-fractions.html">Integration by Parts</a> <span class="tno">6.11 · BC</span></h3>
+      <p class="blurb">The product rule, rewound — a <i>trade</i>, and the skill is trading down.</p>
+      <div class="f"><div class="flab">the trade</div><div id="f_parts"></div></div>
+      <p class="mini"><b>LIATE</b> (Log, Inverse trig, Algebraic, Trig, Exponential): u = earliest (it dies under differentiation), dv = latest (it integrates forever). <b>Tabular:</b> polynomial dies → differentiate down, integrate down, signs \(+,-,+,-\), multiply the diagonals \(\searrow\). <b>Cyclic</b> (\(e^x\sin x\)): when the original returns, name it \(I\) and solve.</p>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>dv includes the dx</b> — every time.</li>
+        <li><b>Run the table to 0</b> — stopping at the constant silently drops the last term.</li>
+      </ul></div>
+    </div>
+      <!-- PARTIAL FRACTIONS -->
+    <div class="block reveal">
+      <h3><a href="parts-partial-fractions.html">Partial Fractions</a> <span class="tno">6.12 · BC</span></h3>
+      <p class="blurb">Un-adding a fraction: distinct linear factors split into deck cards.</p>
+      <div class="f"><div class="flab">template → answer</div><div id="f_pf"></div></div>
+      <p class="mini"><b>Cover-up:</b> to find \(A\), cover its factor and evaluate the survivors at that factor's root — one line per constant, no systems.</p>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Top-light fractions only</b> — divide first if improper.</li>
+        <li><b>Check the fingerprint first:</b> \(\int\!\tfrac{x}{x^2-4}dx\) <i>looks</i> like PF but is a one-line u-sub: \(\tfrac12\ln|x^2-4|\).</li>
+      </ul></div>
+    </div>
+      <!-- IMPROPER -->
+    <div class="block reveal">
+      <h3><a href="improper-integrals.html">Improper Integrals</a> <span class="tno">6.13 · BC</span></h3>
+      <p class="blurb">An ordinary integral plus a limit — swap the bad endpoint for a variable and let it run.</p>
+      <div class="f"><div class="flab">definition</div><div id="f_imp"></div></div>
+      <div class="f"><div class="flab">p-test, both regimes</div><div id="f_ptest"></div></div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Write the limit</b> — it's a scored step, and "diverges" is a complete answer.</li>
+        <li><b>Scan for interior asymptotes:</b> \(\int_{-1}^{1}x^{-2}dx=-2\) is the unit's most famous nonsense. Split at the blow-up; BOTH halves must converge.</li>
+        <li><b>\(1/x\) is the anchor:</b> it diverges in both regimes — \(p>1\) wins at \(\infty\), \(p<1\) wins near 0.</li>
+      </ul></div>
+    </div>
+      <!-- TECHNIQUE CHOICE -->
+    <div class="block reveal">
+      <h3><a href="improper-integrals.html">Choosing the Technique</a> <span class="tno">6.14 · BC</span></h3>
+      <p class="blurb">The unit's real final skill: five seconds of diagnosis before any computation.</p>
+      <div class="decide"><div class="dh">The five-second scan</div>
+        <div class="branch"><span class="cond">fingerprint pair?</span><span class="res">u-substitution — check this FIRST, even on products</span></div>
+        <div class="branch"><span class="cond">unrelated product?</span><span class="res">parts (tabular if a polynomial dies)</span></div>
+        <div class="branch"><span class="cond">rational?</span><span class="res">divide · ln · PF · arctan — run the 6.10 tree</span></div>
+        <div class="branch"><span class="cond">\(\infty\) or a blow-up?</span><span class="res">limit first, then everything above applies inside it</span></div>
+      </div>
+      <div class="traps"><div class="th">trap</div><ul>
+        <li><b>Technique tunnel vision:</b> just learned PF, so everything looks like PF. The scan order protects you.</li>
+        <li><b>Techniques compose:</b> \(\int_2^\infty\!\tfrac{dx}{x\ln^2 x}\) is a u-sub <i>inside</i> a limit.</li>
+      </ul></div>
+    </div>
+    </div>
+  </div>
+
+  <div class="closer reveal">
+    <div class="closer-line">
+      <span class="big-idea-mark">∫</span>
+      <p>Unit 6 is one idea wearing five outfits: <b>accumulation</b>. Rectangles approximate it, the limit defines it, the Fundamental Theorem connects it to derivatives, the toolkit — u-sub, parts, partial fractions — reduces strangers to the twelve cards, and the limit handles the infinite. Diagnose first, compute second, and verify by differentiating: the unit grades the <i>decisions</i> as much as the algebra.</p>
+    </div>
+    <div class="closer-jump">
+      <a href="unit6-exam-practice.html" class="jump-primary">Test yourself on the exam set <span>→</span></a>
+      <div class="jump-row">
+        <a href="riemann-sums.html">6.1–6.3 Riemann</a><a href="fundamental-theorem.html">6.4–6.7 FTC</a><a href="antiderivatives.html">6.8–6.10 Antiderivatives</a><a href="parts-partial-fractions.html">6.11–6.12 Parts &amp; PF</a><a href="improper-integrals.html">6.13–6.14 Improper</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="reveal">Unit 6 Cheat Sheet · Integration &amp; Accumulation of Change — Riemann sums, the Fundamental Theorem, the antiderivative toolkit, parts &amp; partial fractions, improper integrals · <a href="unit6.html">back to the unit</a> · print-friendly.</footer>
+</div>
+
+<script>
+function renderSheet(){
+  const R=String.raw;
+  const put=(id,tex_,fb)=>{const e=document.getElementById(id);if(e)e.innerHTML=tex(tex_,fb||tex_,true);};
+  put('f_rsum', R`R_n=\sum_{k=1}^{n}f(x_k)\,\Delta x,\qquad \Delta x=\frac{b-a}{n}`, "R = Σ f(x_k)·Δx, Δx=(b−a)/n");
+  put('f_defint', R`\int_a^b f(x)\,dx=\lim_{n\to\infty}\sum_{k=1}^{n}f(x_k)\,\Delta x`, "∫ f dx = lim Σ f Δx");
+  put('f_ftc1', R`\frac{d}{dx}\int_a^{x}f(t)\,dt=f(x)`, "d/dx ∫ₐˣ f = f(x)");
+  put('f_ftc1c', R`\frac{d}{dx}\int_a^{u(x)}f(t)\,dt=f\bigl(u(x)\bigr)\,u'(x)`, "d/dx ∫ᵃᵘ f = f(u)·u′");
+  put('f_g', R`g(x)=\int_0^{x}f(t)\,dt\;\Rightarrow\;g'=f,\quad g''=f'`, "g=∫f ⇒ g′=f, g″=f′");
+  put('f_ftc2', R`\int_a^b f(x)\,dx=F(b)-F(a)`, "∫ f = F(b) − F(a)");
+  put('f_props', R`\int_b^a=-\int_a^b\qquad \int_a^c+\int_c^b=\int_a^b\qquad \int kf=k\!\int f`, "flip = −; split; constants out");
+  put('f_deck', R`\int x^n dx=\tfrac{x^{n+1}}{n+1}\quad \int\tfrac{dx}{x}=\ln|x|\quad \int e^x dx=e^x\quad \int a^x dx=\tfrac{a^x}{\ln a}`, "power, ln|x|, e^x, a^x/ln a");
+  put('f_deck2', R`\int\sin=-\cos\quad \int\cos=\sin\quad \int\sec^2=\tan\quad \int\tfrac{dx}{1+x^2}=\arctan x\quad \int\tfrac{dx}{\sqrt{1-x^2}}=\arcsin x`, "−cos, sin, tan, arctan, arcsin");
+  put('f_usub', R`\int f\bigl(g(x)\bigr)g'(x)\,dx=\int f(u)\,du`, "∫ f(g)·g′ dx = ∫ f(u) du");
+  put('f_arctan', R`\int\frac{dx}{u^2+a^2}=\frac1a\arctan\frac{u}{a}+C`, "(1/a)·arctan(u/a)+C");
+  put('f_parts', R`\int u\,dv=uv-\int v\,du`, "∫u dv = uv − ∫v du");
+  put('f_pf', R`\frac{px+q}{(x-a)(x-b)}=\frac{A}{x-a}+\frac{B}{x-b}\;\to\;A\ln|x-a|+B\ln|x-b|+C`, "A/(x−a)+B/(x−b) → logs");
+  put('f_imp', R`\int_1^{\infty}f\,dx=\lim_{b\to\infty}\int_1^{b}f\,dx\qquad \int_0^{1}=\lim_{a\to0^+}\int_a^{1}`, "∫→∞ = lim of ∫→b; blow-up: approach from inside");
+  put('f_ptest', R`\int_1^{\infty}\frac{dx}{x^p}:\;p>1\;\checkmark\;\Bigl(=\tfrac{1}{p-1}\Bigr)\qquad \int_0^{1}\frac{dx}{x^p}:\;p<1\;\checkmark\;\Bigl(=\tfrac{1}{1-p}\Bigr)`, "p>1 at ∞; p<1 near 0; p=1 fails both");
+}
+function mathifyInline(){
+  document.querySelectorAll('.mini,.branch .res,.branch .cond,.traps li,.gcard .geq,.gcard .gnote,.sub,.closer-line p,.blurb').forEach(node=>{
+    if(node.dataset.done)return;
+    node.innerHTML=node.innerHTML.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):m;}catch(e){return m;}});
+    node.dataset.done="1";
+  });
+}
+function boot(){renderSheet();mathifyInline();}
+boot();
+if(window.addEventListener)window.addEventListener('load',boot);
+if(!window.katex){let t=0;const iv=setInterval(()=>{if(window.katex){clearInterval(iv);boot();}else if(++t>60)clearInterval(iv);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*40,320)+'ms';});
+</script>
+</body>
+</html>

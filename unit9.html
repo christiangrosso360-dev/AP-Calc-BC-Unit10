@@ -362,75 +362,79 @@
 </div>
 
 <script>
-/* ---------- hero motif: a parametric curve traces out, while a faint polar rose sweeps behind it ---------- */
+/* ---------- hero motif: a parametric curve traces out with its velocity
+   vector riding the moving point; a faint polar rose sits behind ---------- */
 (function(){
   const cv=document.getElementById('heroCanvas'); if(!cv) return;
   const ctx=cv.getContext('2d');
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let W,H,DPR;
+  let W,H,DPR,t=0,raf=null;
   function resize(){
     DPR=Math.min(window.devicePixelRatio||1,2);
     W=cv.clientWidth; H=cv.clientHeight;
     cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
   }
-  // center of the motif, biased toward the right of the hero
-  function cx(){ return W*0.72; }
-  function cy(){ return H*0.5; }
-  const A=()=>Math.min(W,H)*0.30;   // scale
-  // parametric lissajous x=sin(3t), y=sin(2t)
-  function px(t){ return cx() + A()*Math.sin(3*t); }
-  function py(t){ return cy() - A()*Math.sin(2*t); }
-  // polar rose r=cos(2θ) (4 petals), faint background
-  function rose(theta){ return A()*1.08*Math.cos(2*theta); }
-
-  let t=0, raf=null;
+  const clamp=x=>Math.max(0,Math.min(1,x));
+  const TAU=Math.PI*2, CY='63,182,216', GLOW='109,212,239';
+  const cx=()=>W*0.72, cy=()=>H*0.5, A=()=>Math.min(W,H)*0.30;
+  const px=s=>cx()+A()*Math.sin(3*s);
+  const py=s=>cy()-A()*Math.sin(2*s);
+  const rose=a=>A()*1.08*Math.cos(2*a);
   function frame(){
     ctx.clearRect(0,0,W,H);
-
-    // faint polar rose behind (full, static-ish, slow shimmer)
-    ctx.lineWidth=1.4; ctx.lineCap='round';
-    ctx.strokeStyle='rgba(63,182,216,0.13)';
+    const period=8400, tt = reduce ? 6600 : (t%period);
+    const envA = reduce ? 1 : Math.min(1, tt/600, (period-tt)/600);
+    const reveal = reduce ? 1 : clamp((tt-300)/6000);
+    const tMax=TAU*reveal;
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    // faint polar rose behind
+    ctx.globalAlpha=envA*0.13; ctx.lineWidth=1.4; ctx.strokeStyle='rgba('+CY+',1)';
     ctx.beginPath();
-    for(let a=0;a<=Math.PI*2+0.02;a+=0.02){
-      const r=rose(a);
-      const x=cx()+r*Math.cos(a), y=cy()-r*Math.sin(a);
-      if(a===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    for(let a=0;a<=TAU+0.02;a+=0.02){
+      const r=rose(a), x=cx()+r*Math.cos(a), y=cy()-r*Math.sin(a);
+      a===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
     }
     ctx.stroke();
-
-    // the parametric trace, drawn up to current t (loops)
-    const tMax = t % (Math.PI*2);
-    ctx.lineWidth=2.4;
-    ctx.strokeStyle='rgba(63,182,216,0.62)';
+    // ghost of the full lissajous so it never looks empty
+    ctx.globalAlpha=envA*0.09; ctx.lineWidth=1;
     ctx.beginPath();
-    let started=false;
-    for(let s=0;s<=tMax;s+=0.012){
-      const x=px(s), y=py(s);
-      if(!started){ ctx.moveTo(x,y); started=true; } else ctx.lineTo(x,y);
-    }
+    for(let s=0;s<=TAU+0.02;s+=0.02){ const x=px(s),y=py(s); s===0?ctx.moveTo(x,y):ctx.lineTo(x,y); }
     ctx.stroke();
-
-    // ghost of the full curve (very faint) so it doesn't look empty at start
-    ctx.lineWidth=1; ctx.strokeStyle='rgba(63,182,216,0.08)';
-    ctx.beginPath();
-    for(let s=0;s<=Math.PI*2+0.02;s+=0.02){
-      const x=px(s), y=py(s);
-      if(s===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    // the trace: glow pass + main pass
+    ctx.globalAlpha=envA;
+    function trace(wd,col){
+      ctx.lineWidth=wd; ctx.strokeStyle=col;
+      ctx.beginPath(); let st=false;
+      for(let s=0;s<=tMax;s+=0.012){ const x=px(s),y=py(s); st?ctx.lineTo(x,y):(ctx.moveTo(x,y),st=true); }
+      if(st) ctx.stroke();
     }
-    ctx.stroke();
-
-    // the moving point + glow ring
+    trace(6.5,'rgba('+GLOW+',0.28)');
+    trace(2.4,'rgba('+CY+',0.85)');
+    // moving point + glow ring + velocity vector
     const hx=px(tMax), hy=py(tMax);
-    ctx.beginPath(); ctx.arc(hx,hy,9,0,Math.PI*2);
-    ctx.strokeStyle='rgba(109,212,239,0.35)'; ctx.lineWidth=1.5; ctx.stroke();
-    ctx.beginPath(); ctx.arc(hx,hy,4,0,Math.PI*2);
-    ctx.fillStyle='rgba(109,212,239,0.95)'; ctx.fill();
-
-    t += 0.018;
-    raf=requestAnimationFrame(frame);
+    let vx=3*Math.cos(3*tMax), vy=-2*Math.cos(2*tMax);
+    const vl=Math.hypot(vx,vy)||1, L=Math.min(W,H)*0.085;
+    vx=vx/vl*L; vy=vy/vl*L;
+    if(reveal<1 || reduce){
+      ctx.globalAlpha=envA*0.9; ctx.strokeStyle='rgba('+GLOW+',1)'; ctx.lineWidth=1.9;
+      ctx.beginPath(); ctx.moveTo(hx,hy); ctx.lineTo(hx+vx,hy+vy); ctx.stroke();
+      const ang=Math.atan2(vy,vx), ah=7;
+      ctx.beginPath();
+      ctx.moveTo(hx+vx,hy+vy);
+      ctx.lineTo(hx+vx-ah*Math.cos(ang-0.45), hy+vy-ah*Math.sin(ang-0.45));
+      ctx.moveTo(hx+vx,hy+vy);
+      ctx.lineTo(hx+vx-ah*Math.cos(ang+0.45), hy+vy-ah*Math.sin(ang+0.45));
+      ctx.stroke();
+      const g=ctx.createRadialGradient(hx,hy,0,hx,hy,14);
+      g.addColorStop(0,'rgba('+GLOW+',0.5)'); g.addColorStop(1,'rgba('+GLOW+',0)');
+      ctx.globalAlpha=envA; ctx.fillStyle=g; ctx.beginPath(); ctx.arc(hx,hy,14,0,TAU); ctx.fill();
+      ctx.fillStyle='rgba('+GLOW+',0.95)'; ctx.beginPath(); ctx.arc(hx,hy,4,0,TAU); ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    t+=16; raf=requestAnimationFrame(frame);
   }
   resize(); window.addEventListener('resize', resize);
-  if(reduce){ t=Math.PI*2; frame(); cancelAnimationFrame(raf); } else { frame(); }
+  if(reduce){ frame(); cancelAnimationFrame(raf); raf=null; } else { frame(); }
 })();
 
 /* ---------- group fade-in on scroll (calm, once) ---------- */

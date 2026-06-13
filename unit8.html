@@ -385,55 +385,72 @@
 </div>
 
 <script>
-/* ---------- hero motif: a region between two curves that fills with emerald,
-   faint vertical slices sweeping (the area / integration idea), biased right ---------- */
+/* ---------- hero motif: a solid of revolution sweeps itself into being —
+   washer cross-sections stack left to right along the axis ---------- */
 (function(){
   const cv=document.getElementById('heroCanvas'); if(!cv) return;
   const ctx=cv.getContext('2d');
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let W,H,DPR;
+  let W,H,DPR,t=0,raf=null;
   function resize(){
     DPR=Math.min(window.devicePixelRatio||1,2);
     W=cv.clientWidth; H=cv.clientHeight;
     cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0);
   }
-  // two curves across the canvas; we shade between them and animate slices
-  function topY(x){ return H*0.46 + Math.sin(x*0.011+0.3)*H*0.16 - Math.cos(x*0.006)*H*0.05; }
-  function botY(x){ return H*0.74 + Math.sin(x*0.009+1.7)*H*0.07; }
-  let t=0, raf=null;
+  const clamp=x=>Math.max(0,Math.min(1,x));
+  const TAU=Math.PI*2, EM='64,201,138', GLOW='95,224,164';
   function frame(){
     ctx.clearRect(0,0,W,H);
-    const x0=W*0.30, x1=W*0.99;
-    // filled region
-    ctx.beginPath();
-    ctx.moveTo(x0, topY(x0));
-    for(let x=x0;x<=x1;x+=6) ctx.lineTo(x, topY(x));
-    for(let x=x1;x>=x0;x-=6) ctx.lineTo(x, botY(x));
-    ctx.closePath();
-    const g=ctx.createLinearGradient(0,0,0,H);
-    g.addColorStop(0,'rgba(64,201,138,0.13)');
-    g.addColorStop(1,'rgba(64,201,138,0.03)');
-    ctx.fillStyle=g; ctx.fill();
-    // curves
-    ctx.lineWidth=2; ctx.lineCap='round';
-    ctx.strokeStyle='rgba(95,224,164,0.6)';
-    ctx.beginPath(); ctx.moveTo(x0,topY(x0));
-    for(let x=x0;x<=x1;x+=6) ctx.lineTo(x,topY(x)); ctx.stroke();
-    ctx.strokeStyle='rgba(154,145,131,0.35)';
-    ctx.beginPath(); ctx.moveTo(x0,botY(x0));
-    for(let x=x0;x<=x1;x+=6) ctx.lineTo(x,botY(x)); ctx.stroke();
-    // sweeping slices (the dx strips)
-    const span=x1-x0, gap=34;
-    const off=(t*0.6)%gap;
-    ctx.strokeStyle='rgba(64,201,138,0.22)'; ctx.lineWidth=1;
-    for(let x=x0+off; x<=x1; x+=gap){
-      ctx.beginPath(); ctx.moveTo(x, topY(x)); ctx.lineTo(x, botY(x)); ctx.stroke();
+    const x0=W*0.34, x1=W*0.97, ay=H*0.52;
+    const r=x=>{ const u=(x-x0)/(x1-x0); return H*(0.135+0.075*Math.sin(u*5.1+0.55)+0.03*Math.sin(u*11+2.2)); };
+    const period=7200, tt = reduce ? 5600 : (t%period);
+    const envA = reduce ? 1 : Math.min(1, tt/600, (period-tt)/600);
+    const reveal = reduce ? 1 : clamp((tt-300)/4400);
+    const ease = reveal*reveal*(3-2*reveal);
+    const xs = x0+(x1-x0)*ease;
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    // axis of revolution
+    ctx.globalAlpha=envA*0.3; ctx.strokeStyle='rgba(154,145,131,1)'; ctx.lineWidth=1;
+    ctx.setLineDash([5,6]);
+    ctx.beginPath(); ctx.moveTo(x0-W*0.02,ay); ctx.lineTo(x1+W*0.01,ay); ctx.stroke();
+    ctx.setLineDash([]);
+    // ghost of the full silhouette so it never looks empty
+    ctx.globalAlpha=envA*0.13; ctx.strokeStyle='rgba('+EM+',1)'; ctx.lineWidth=1.4;
+    ctx.beginPath(); for(let x=x0;x<=x1;x+=7){ const y=ay-r(x); x===x0?ctx.moveTo(x,y):ctx.lineTo(x,y);} ctx.stroke();
+    ctx.beginPath(); for(let x=x0;x<=x1;x+=7){ const y=ay+r(x); x===x0?ctx.moveTo(x,y):ctx.lineTo(x,y);} ctx.stroke();
+    // washer cross-sections stacked behind the sweep
+    ctx.globalAlpha=envA*0.2; ctx.strokeStyle='rgba('+EM+',1)'; ctx.lineWidth=1.1;
+    const gap=Math.max(34,W*0.045);
+    for(let x=x0;x<=xs-8;x+=gap){
+      const ry=r(x);
+      ctx.beginPath(); ctx.ellipse(x,ay,ry*0.18,ry,0,0,TAU); ctx.stroke();
     }
-    t+=1;
-    raf=requestAnimationFrame(frame);
+    // revealed silhouette: glow pass + main pass
+    function sil(off,wd,col){
+      ctx.lineWidth=wd; ctx.strokeStyle=col;
+      ctx.beginPath(); for(let x=x0;x<=xs;x+=6){ const y=ay-r(x); x===x0?ctx.moveTo(x,y):ctx.lineTo(x,y);} ctx.stroke();
+      ctx.beginPath(); for(let x=x0;x<=xs;x+=6){ const y=ay+r(x); x===x0?ctx.moveTo(x,y):ctx.lineTo(x,y);} ctx.stroke();
+    }
+    ctx.globalAlpha=envA;
+    sil(0,6.5,'rgba('+GLOW+',0.32)');
+    sil(0,2.3,'rgba('+GLOW+',0.92)');
+    // the sweeping washer itself
+    const rs=r(xs);
+    ctx.globalAlpha=envA*0.85; ctx.strokeStyle='rgba('+GLOW+',1)'; ctx.lineWidth=1.8;
+    ctx.beginPath(); ctx.ellipse(xs,ay,rs*0.18,rs,0,0,TAU); ctx.stroke();
+    // head dot riding the top curve
+    if(!reduce && reveal<1){
+      const hx=xs, hy=ay-rs;
+      const g=ctx.createRadialGradient(hx,hy,0,hx,hy,15);
+      g.addColorStop(0,'rgba('+GLOW+',0.5)'); g.addColorStop(1,'rgba('+GLOW+',0)');
+      ctx.globalAlpha=envA; ctx.fillStyle=g; ctx.beginPath(); ctx.arc(hx,hy,15,0,TAU); ctx.fill();
+      ctx.fillStyle='rgba('+GLOW+',1)'; ctx.beginPath(); ctx.arc(hx,hy,3.2,0,TAU); ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    t+=16; raf=requestAnimationFrame(frame);
   }
   resize(); window.addEventListener('resize', resize);
-  if(reduce){ frame(); cancelAnimationFrame(raf); } else { frame(); }
+  if(reduce){ frame(); cancelAnimationFrame(raf); raf=null; } else { frame(); }
 })();
 
 /* ---------- group fade-in on scroll (calm, once) ---------- */

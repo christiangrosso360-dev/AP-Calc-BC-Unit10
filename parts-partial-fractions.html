@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Integration by Parts &amp; Partial Fractions — The BC Machinery · Unit 6 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23101420%27%2F%3E%3Cg%20fill%3D%27%235f7ff2%27%3E%3Crect%20x%3D%276%27%20y%3D%2718%27%20width%3D%274.6%27%20height%3D%278%27%20rx%3D%271%27%20opacity%3D%27.55%27%2F%3E%3Crect%20x%3D%2712%27%20y%3D%2714%27%20width%3D%274.6%27%20height%3D%2712%27%20rx%3D%271%27%20opacity%3D%27.75%27%2F%3E%3Crect%20x%3D%2718%27%20y%3D%2710%27%20width%3D%274.6%27%20height%3D%2716%27%20rx%3D%271%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M5%2017%20C%2012%2010%2C%2020%206%2C%2027%207%27%20stroke%3D%27%238fa6f7%27%20stroke-width%3D%272%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<script>
+/* fallback for previewing without helpers.js — the repo's helpers.js takes precedence when present */
+if(typeof tex==="undefined"){
+  window.tex=function(latex,fallback,display){
+    if(window.katex){ try{ return katex.renderToString(latex,{displayMode:!!display,throwOnError:false}); }catch(e){} }
+    return '<span class="tex-fallback">'+(fallback||latex)+'</span>';
+  };
+}
+</script>
+<style>
+  :root{ --approx:#5f7ff2; --gold:#5f7ff2; --true:#3fd0b0;
+         --glow:rgba(95,127,242,.08); --wrap-max:1060px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block;border-radius:10px}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:8px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button:disabled:hover{border-color:var(--line);transform:none}
+  .sb-name{font-weight:600;font-size:13.5px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .callout{margin-top:12px;font-size:13.5px;min-height:20px;color:var(--ink);
+    border-left:3px solid var(--gold);padding-left:12px;opacity:0;transition:opacity .3s}
+  .callout.show{opacity:1}
+  .whypanel .why-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+  .why-step{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .why-step:last-child{border-bottom:none}
+  .why-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .why-t{font-size:13px;line-height:1.5}
+  .why-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;overflow-x:auto}
+  .stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .stat:last-child{border-bottom:none}
+  .stat .k{color:var(--muted)}
+  .stat .v{font-family:var(--mono);color:var(--ink)}
+  .sumline{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;overflow-x:auto;min-height:46px;font-size:14px}
+  .anatomy{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:820px}
+  .anatomy .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .maprow{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .maprow:last-child{border-bottom:none}
+  .maprow .ph{color:var(--ink);flex:1 1 auto;line-height:1.45}
+  .maprow .sy{font-family:var(--mono);color:var(--muted);flex:none}
+  .concepts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.concepts{grid-template-columns:1fr}}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s,box-shadow .2s}
+  .concept:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(43,41,37,.45)}
+  .concept h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .concept p{font-size:13.5px;margin:6px 0;color:var(--ink)}
+  .concept .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;text-align:center;overflow-x:auto}
+  .key{color:var(--approx);font-weight:600}
+  .whatsnext{max-width:700px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  button:focus-visible, a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  .prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .prob-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--approx);font-weight:600}
+  .prob-q{font-size:14.5px;line-height:1.65;margin:6px 0 12px}
+  .soltoggle{font-size:13px;padding:7px 14px}
+  .sol{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .sol.show{display:block}
+  .mistakes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){.mistakes{grid-template-columns:1fr}}
+  .mistake{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--div);border-radius:10px;padding:13px 16px}
+  .mistake h4{margin:0 0 4px;font-size:14px;font-family:var(--display)}
+  .mistake p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+  .tipbox{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:780px}
+  .tipbox h4{margin:0 0 8px;font-size:14px;font-family:var(--display);color:var(--approx)}
+  .tipbox ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+  .tipbox li{margin:5px 0}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .qtag{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button{font-size:14px;padding:11px 14px}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px;line-height:1.5}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+  .bc-badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#0d1330;
+    background:var(--approx);border-radius:14px;padding:3px 11px;font-weight:600;vertical-align:middle;margin-left:10px}
+  /* tabular method table */
+  .ttab{border-collapse:collapse;margin:6px auto;font-size:15px}
+  .ttab th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);font-weight:500;
+    padding:6px 18px;border-bottom:1px solid var(--line)}
+  .ttab td{padding:9px 18px;text-align:center;font-size:15.5px}
+  .ttab td.sg{color:var(--approx);font-family:var(--mono);font-weight:600;font-size:14px}
+  .ttab td.ar{color:var(--true);font-family:var(--mono);font-size:15px;padding:0 4px}
+  .ttab tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit6.html">← Unit 6 Guide</a>
+  <header class="reveal">
+    <h1>Parts &amp; <span class="em">Partial Fractions</span><span class="bc-badge">BC ONLY</span></h1>
+    <div class="sub">Two integrals u-substitution can't touch: products, and rational functions whose
+      denominators factor. u-sub undoes the chain rule — but products were never the chain rule's
+      department. This is the heavy machinery.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    Two new reversals. <b>Integration by parts</b> runs the <i>product rule</i> backward — it doesn't solve an
+    integral so much as <b>trade it for a different one</b>, and the skill is trading down. <b>Partial
+    fractions</b> un-adds a rational function — a fraction whose denominator factors is secretly a <b>sum of
+    deck-card fractions</b>, and algebra recovers the pieces. Both end, as always, on cards you already own.
+  </div>
+
+  <h2 class="reveal">Where parts comes from — the product rule, rewound</h2>
+  <p class="lead reveal">Same move as last lesson, different rule. Differentiate a product and two terms come
+    out; integrate that equation and rearrange, and you get a machine for trading one integral for another.</p>
+
+  <div class="anatomy reveal">
+    <div class="m-big" id="prFwd"></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Integrate both sides</b> — the left side collapses by the Fundamental Theorem, and the two right-hand pieces appear:</span><span class="sy" id="prInt"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Rearrange</b> — solve for the piece you were stuck on. This is the formula, and it's a TRADE: you pay ∫u dv and receive uv − ∫v du:</span><span class="sy" id="prForm"></span></div>
+    <div class="maprow"><span class="ph">The trade is only worth making if the NEW integral ∫v du is easier — which is the whole question of choosing u and dv</span><span class="sy" id="prGoal"></span></div>
+  </div>
+
+  <h2 class="reveal">Choosing u — LIATE, and why it works</h2>
+  <p class="lead reveal">The trade improves when <b>u gets simpler under differentiation</b> (its job is to
+    die) and <b>dv is something you can actually integrate</b>. Rank function types by how eagerly they
+    simplify when differentiated, and you get the classic priority list:</p>
+
+  <div class="anatomy reveal" style="max-width:780px">
+    <div class="m-big" style="font-family:var(--mono);font-size:15px;letter-spacing:.04em">
+      <b style="color:var(--approx)">L</b>ogs · <b style="color:var(--approx)">I</b>nverse trig ·
+      <b style="color:var(--approx)">A</b>lgebraic · <b style="color:var(--approx)">T</b>rig ·
+      <b style="color:var(--approx)">E</b>xponential</div>
+    <div class="maprow"><span class="ph"><b>u = the earliest type on the list.</b> Logs and inverse trig differentiate into algebra (ln x → 1/x) — they simplify dramatically, but are painful to integrate. Perfect u material.</span><span class="sy">u dies ↓</span></div>
+    <div class="maprow"><span class="ph"><b>dv = the latest type.</b> Exponentials and trig integrate without complaint, forever (eˣ → eˣ). Perfect dv material — and remember dv must swallow the dx.</span><span class="sy">dv recycles ∞</span></div>
+    <div class="maprow"><span class="ph">It's a principle, not a spell: u should simplify when differentiated, dv should be integrable. LIATE is just that principle pre-sorted.</span><span class="sy">why &gt; what</span></div>
+  </div>
+
+  <h2 class="reveal" style="font-size:17px;margin-top:26px">Feel the trade — cast it yourself</h2>
+  <p class="lead reveal" style="margin-top:6px">The formula doesn't care which factor you call u — but the
+    integral does. Pick a casting and the page runs that round of parts <i>honestly</i>. Try both for each
+    integral: one trade improves things, the other makes them visibly worse.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="m-big" id="btHead"></div>
+        <div class="quiz-opts" id="btOpts" style="grid-template-columns:1fr 1fr"></div>
+        <div class="callout" id="btCall"></div>
+        <button class="next" id="btNext" style="margin-top:12px;width:100%;display:none">Next integral →</button>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card whypanel">
+        <div class="why-title">That round of parts, run honestly</div>
+        <div id="btWork"><div class="why-t" style="padding:8px 0;color:var(--muted)">Pick a casting to see where the trade lands.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The recipe, stepped</h2>
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="sumline" id="ipSum"></div>
+        <div class="controls">
+          <button class="play" id="ipStep">step →</button>
+          <button id="ipReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="ipRead">press step</span>
+        </div>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, shown</div>
+        <div id="ipSteps"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick an integral</div>
+        <div class="series-btns" id="ipBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">Watch the second one —
+          LIATE puts the log ahead of the polynomial, which surprises most students. And the third has no
+          visible product at all… until you invent one.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The tabular method — repeated parts, compressed</h2>
+  <p class="lead reveal">When u is a <b>polynomial</b> (it differentiates to zero in a few steps) and dv
+    <b>integrates forever</b> (eˣ, sin, cos), parts will need several rounds — and every round is the same
+    bookkeeping. The tabular method runs all the rounds at once: differentiate down the left column until you
+    hit 0, integrate down the right, attach alternating signs, and multiply along the <b>diagonals</b>. Build
+    it live:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="m-big" id="tbHead"></div>
+        <div style="overflow-x:auto"><table class="ttab" id="tbTable"></table></div>
+        <div class="sumline" id="tbSum"></div>
+        <div class="controls">
+          <button class="play" id="tbStep">step →</button>
+          <button id="tbReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="tbRead">press step</span>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card whypanel">
+        <div class="why-title">What each step is doing</div>
+        <div id="tbSteps"></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="label">When tabular applies</div>
+        <div class="stat"><span class="k">u column</span><span class="v">polynomial → dies at 0</span></div>
+        <div class="stat"><span class="k">dv column</span><span class="v">eˣ / sin / cos → forever</span></div>
+        <div class="stat"><span class="k">signs</span><span class="v">+ − + − …</span></div>
+        <div class="stat"><span class="k">read the answer</span><span class="v">along the diagonals ↘</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal" style="font-size:17px;margin-top:26px">Now you build one — ∫ x² sin x dx</h2>
+  <p class="lead reveal" style="margin-top:6px">Same machine, your hands. Each press asks for the next cell —
+    and the antiderivative column of sin x is exactly where sign errors breed: sin → −cos → −sin → cos.
+    The signs in the left column come free; the cells don't.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="m-big" id="trHead"></div>
+        <div style="overflow-x:auto"><table class="ttab" id="trTable"></table></div>
+        <div class="sumline" id="trSum"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="qtext" id="trQ" style="font-size:14px"></div>
+        <div class="quiz-opts" id="trOpts" style="grid-template-columns:1fr 1fr 1fr"></div>
+        <div class="feedback" id="trFb" style="min-height:22px"></div>
+        <button class="next" id="trNext" style="margin-top:12px;width:100%;display:none">↺ run it again</button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The cyclic case — when the integral comes back</h2>
+  <p class="lead reveal">∫eˣ sin x dx breaks the LIATE worldview: neither factor ever dies. Run parts twice
+    and something strange happens — <b>the original integral reappears on the right side</b>. That's not
+    failure; it's the mechanism. Name it and solve for it like any unknown.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="sumline" id="cySum"></div>
+        <div class="controls">
+          <button class="play" id="cyStep">step →</button>
+          <button id="cyReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="cyRead">press step</span>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card whypanel">
+        <div class="why-title">The work, shown</div>
+        <div id="cySteps"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Partial fractions — un-adding a fraction</h2>
+  <p class="lead reveal">Adding fractions is something you've done since grade school:
+    1/(x+1) + 2/(x+3) combines into one big fraction. Partial fractions runs that <b>backward</b>: a rational
+    function whose denominator <b>factors into distinct linear pieces</b> is secretly such a sum, every piece
+    is the deck's ∫du/u card, and algebra recovers them. This also completes Lesson 3's decision tree — the
+    "it factors" branch finally has its answer.</p>
+
+  <div class="anatomy reveal">
+    <div class="m-big" id="pfMain"></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">The template:</b> one constant over each distinct linear factor. (BC scope: nonrepeating linear factors — that's all the exam asks.)</span><span class="sy" id="pfTpl"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">The cover-up shortcut:</b> to find A, cover its factor in the original and evaluate what's left at that factor's root. Each constant in one line, no systems of equations.</span><span class="sy" id="pfCov"></span></div>
+    <div class="maprow"><span class="ph">The completed decision tree for any rational integrand:</span><span class="sy" id="pfTree"></span></div>
+  </div>
+
+  <h2 class="reveal" style="font-size:17px;margin-top:26px">The cover-up, performed</h2>
+  <p class="lead reveal" style="margin-top:6px">The trick is named after a physical gesture — so perform it.
+    <b>Click a factor</b> in the denominator: it gets covered, and the survivors are evaluated at that
+    factor's root. Each constant falls out in one line.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div style="display:flex;flex-direction:column;align-items:center;padding:10px 0 4px">
+          <div style="font-size:22px;padding:2px 8px" id="cuNum"></div>
+          <div style="height:2px;background:var(--ink);width:240px;border-radius:1px;margin:6px 0"></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="cuF1" style="font-size:18px;padding:8px 14px"></button>
+            <button id="cuF2" style="font-size:18px;padding:8px 14px"></button>
+          </div>
+        </div>
+        <div class="callout show" id="cuCall">Click (x + 1) or (x + 3) to cover it.</div>
+        <div class="controls"><button id="cuReset">↺ reset</button>
+          <div style="flex:1"></div><span class="readout" id="cuRead">0 of 2 constants found</span></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card whypanel">
+        <div class="why-title">What the cover-up computes</div>
+        <div id="cuWork"><div class="why-t" style="padding:8px 0;color:var(--muted)">Cover a factor to see its constant fall out.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="sumline" id="pfSum"></div>
+        <div class="controls">
+          <button class="play" id="pfStep">step →</button>
+          <button id="pfReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="pfRead">press step</span>
+        </div>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, shown</div>
+        <div id="pfSteps"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick a fraction</div>
+        <div class="series-btns" id="pfBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">The second one is the
+          full exam gauntlet: top-heavy AND factorable — division first, then partial fractions on the
+          remainder. Two costumes, removed in order.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The machinery on one card</h2>
+  <div class="anatomy reveal">
+    <div class="m-big" id="anatMain"></div>
+    <div class="maprow"><span class="ph">Tabular schema — differentiate down, integrate down, alternate signs, multiply diagonals</span><span class="sy" id="anatTab"></span></div>
+    <div class="maprow"><span class="ph">Cyclic integrals — when the original returns, name it I and solve algebraically</span><span class="sy" id="anatCyc"></span></div>
+    <div class="maprow"><span class="ph">Partial fractions template for distinct linear factors</span><span class="sy" id="anatPF"></span></div>
+  </div>
+
+  <h2 class="reveal">The ideas everything else builds on</h2>
+  <div class="concepts reveal">
+    <div class="concept">
+      <h3>Parts is a trade, not a solution</h3>
+      <p>∫u dv buys you uv − ∫v du. The trade is good only if the <span class="key">new integral is
+        easier</span> — if it got worse, your u and dv are backwards.</p>
+      <div class="m" id="c1"></div>
+    </div>
+    <div class="concept">
+      <h3>u dies, dv recycles</h3>
+      <p>Pick u to <span class="key">simplify under differentiation</span> and dv to be integrable. LIATE is
+        this principle alphabetized — and dv always includes the dx.</p>
+      <div class="m" id="c2"></div>
+    </div>
+    <div class="concept">
+      <h3>Tabular = parts on repeat</h3>
+      <p>Nothing new — just every round of parts at once. Valid exactly when the u-column
+        <span class="key">reaches zero</span>.</p>
+      <div class="m" id="c3"></div>
+    </div>
+    <div class="concept">
+      <h3>Factor first, always</h3>
+      <p>Rational integrand? Check the denominator: <span class="key">factors → partial fractions</span>;
+        won't factor → complete the square. And if the numerator is the denominator's derivative, it was a
+        one-line u-sub all along.</p>
+      <div class="m" id="c4"></div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Your turn</h2>
+  <p class="lead reveal">Five problems in the exam's voice — including one trap. Try each before revealing.</p>
+  <div class="reveal" id="practice"></div>
+
+  <h2 class="reveal">Quick quiz</h2>
+  <p class="lead reveal">Eight fast checks across the whole lesson.</p>
+  <div class="card reveal" id="quizCard">
+    <div class="row" style="margin-bottom:12px">
+      <div class="qtag" id="qProgress">Question 1 of 8</div>
+      <span class="score" id="qScore">Score: 0 / 0</span>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="next" id="qNext" style="margin-top:14px;width:100%;display:none">Next question →</button>
+  </div>
+
+  <h2 class="reveal">Common mistakes &amp; exam tips</h2>
+  <div class="mistakes reveal">
+    <div class="mistake"><h4>u and dv backwards</h4><p>Pick u = eˣ and the new integral is WORSE than the old one. If ∫v du looks harder than what you started with, stop and swap — the formula isn't wrong, the casting is.</p></div>
+    <div class="mistake"><h4>dv forgot its dx</h4><p>dv is a chunk of the integrand INCLUDING dx. Splitting ∫x eˣ dx as u = x, dv = eˣ (no dx) makes v meaningless. Write dv = eˣ dx every time.</p></div>
+    <div class="mistake"><h4>Sign slips in the tabular</h4><p>The signs alternate starting from + and attach to the DIAGONAL products. Writing them next to the derivatives and then multiplying straight across is the classic way to lose every other sign.</p></div>
+    <div class="mistake"><h4>Stopping the table early</h4><p>The tabular column must run until the derivative is exactly 0. Stopping at the constant (instead of differentiating it once more) silently drops the last term.</p></div>
+    <div class="mistake"><h4>Partial fractions on the wrong fraction</h4><p>PF needs a FACTORABLE denominator and a top-light fraction. Top-heavy? Divide first. Won't factor? That's completing the square. Check both before writing A and B.</p></div>
+    <div class="mistake"><h4>Panicking in the cycle</h4><p>When ∫eˣ sin x reappears, students think they went in a circle and start over with different choices — forever. The reappearance IS the solution: name it I, collect, divide.</p></div>
+  </div>
+  <div class="tipbox reveal">
+    <h4>On the AP exam</h4>
+    <ul>
+      <li>Write the casting explicitly on FRQs: &ldquo;u = x, dv = eˣ dx, du = dx, v = eˣ&rdquo; — the setup line is a scored step.</li>
+      <li>Tabular is fully accepted work — but label the columns and show the diagonal products, not just the final answer.</li>
+      <li>Cover-up is legal and fast for finding A and B, but write one line of evidence: &ldquo;at x = −1: A = (3(−1)+5)/(−1+3) = 1&rdquo;.</li>
+      <li>Before any technique on a rational function, spend five seconds on the denominator: factor? derivative-of-denominator numerator? top-heavy? The diagnosis is worth more than the computation.</li>
+    </ul>
+  </div>
+
+  <div class="whatsnext reveal">
+    The toolkit is complete — every kind of integrand the BC exam can throw now has a technique. One frontier
+    remains: integrals that run to <b>infinity</b>, or across a point where the function blows up.
+    <a href="improper-integrals.html">Improper Integrals</a> closes the unit — and opens the door to
+    Unit 10's series. Or head back to the <a href="unit6.html">Unit 6 Guide</a>.
+  </div>
+
+  <footer class="reveal">Parts &amp; Partial Fractions · part of the Unit 6 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+
+const T=(s)=>tex(s,s,false);
+const fmt=(v,d=2)=>{const s=v.toFixed(d); return s==="-0.00"?"0.00":s;};
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ======================= 1 · PRODUCT RULE REWOUND + LIATE ======================= */
+function renderPR(){
+  const fwd="\\frac{d}{dx}\\bigl[u\\,v\\bigr]=u'v+u\\,v'";
+  const n0=document.getElementById("prFwd"); if(n0) n0.innerHTML=tex(fwd,fwd,true);
+  const n1=document.getElementById("prInt"); if(n1) n1.innerHTML=T("uv=\\int v\\,du+\\int u\\,dv");
+  const n2=document.getElementById("prForm"); if(n2) n2.innerHTML=T("\\int u\\,dv=uv-\\int v\\,du");
+  const n3=document.getElementById("prGoal"); if(n3) n3.innerHTML=T("\\int v\\,du \\prec \\int u\\,dv");
+}
+
+/* ======================= 1b · FEEL THE BAD TRADE ======================= */
+const BT=[
+ { head:"\\int x\\,e^x\\,dx",
+   opts:[
+    {u:"u=x", good:true,
+     work:[{t:"Casting: u = x dies under differentiation; dv = eˣdx integrates for free.",m:"u=x,\\ dv=e^x dx\\Rightarrow du=dx,\\ v=e^x"},
+           {t:"The trade:",m:"\\int x e^x dx = x e^x-\\int e^x\\,dx"}],
+     verdict:"The new integral is ∫eˣ — finishable on sight. The polynomial died, exactly as LIATE promised."},
+    {u:"u=e^x", good:false,
+     work:[{t:"Casting: u = eˣ never dies; dv = x dx integrates UP a degree.",m:"u=e^x,\\ dv=x\\,dx\\Rightarrow du=e^x dx,\\ v=\\tfrac{x^2}{2}"},
+           {t:"The trade, run honestly:",m:"\\int x e^x dx = \\tfrac{x^2}{2}e^x-\\int \\tfrac{x^2}{2}\\,e^x dx"}],
+     verdict:"Look at the new integral: x became x². The trade made things WORSE — and another round would give x³. This is what a backwards casting feels like."}
+ ]},
+ { head:"\\int x\\ln x\\,dx",
+   opts:[
+    {u:"u=\\ln x", good:true,
+     work:[{t:"LIATE: the Log outranks the Algebraic. u = ln x; its derivative is pure algebra.",m:"u=\\ln x,\\ dv=x\\,dx\\Rightarrow du=\\tfrac{dx}{x},\\ v=\\tfrac{x^2}{2}"},
+           {t:"The trade — the 1/x eats a power of x and the log is GONE:",m:"\\tfrac{x^2}{2}\\ln x-\\int\\tfrac{x}{2}\\,dx=\\tfrac{x^2}{2}\\ln x-\\tfrac{x^2}{4}+C"}],
+     verdict:"Log eliminated in one round; power rule mops up. That's the whole reason logs sit first in LIATE."},
+    {u:"u=x", good:false,
+     work:[{t:"Casting u = x forces dv = ln x dx — which means you must integrate ln x JUST TO FIND v.",m:"u=x,\\ dv=\\ln x\\,dx\\Rightarrow du=dx,\\ v=x\\ln x-x"},
+           {t:"The trade, run honestly:",m:"x(x\\ln x-x)-\\int (x\\ln x-x)\\,dx"}],
+     verdict:"Two problems: finding v required a parts problem of its own — and the new integral still contains ∫x ln x, the thing you started with. You paid and received the same debt back."}
+ ]},
+ { head:"\\int x\\cos x\\,dx",
+   opts:[
+    {u:"u=x", good:true,
+     work:[{t:"Algebraic before Trig: u = x.",m:"u=x,\\ dv=\\cos x\\,dx\\Rightarrow du=dx,\\ v=\\sin x"},
+           {t:"The trade:",m:"x\\sin x-\\int\\sin x\\,dx=x\\sin x+\\cos x+C"}],
+     verdict:"One round, done — the x is gone and a deck card remains."},
+    {u:"u=\\cos x", good:false,
+     work:[{t:"u = cos x just rotates under differentiation; dv = x dx climbs a degree.",m:"u=\\cos x,\\ dv=x\\,dx\\Rightarrow du=-\\sin x\\,dx,\\ v=\\tfrac{x^2}{2}"},
+           {t:"The trade, run honestly:",m:"\\tfrac{x^2}{2}\\cos x+\\int\\tfrac{x^2}{2}\\sin x\\,dx"}],
+     verdict:"Degree up, trig still there, and a minus sign to babysit. Strictly worse on every axis."}
+ ]}
+];
+let btI=0, btTried=0;
+function renderBT(fresh){
+  const item=BT[btI];
+  document.getElementById("btHead").innerHTML=tex(item.head,item.head,true);
+  const box=document.getElementById("btOpts");
+  if(fresh){ box.innerHTML=""; btTried=0;
+    document.getElementById("btCall").classList.remove("show");
+    document.getElementById("btNext").style.display="none";
+    document.getElementById("btWork").innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Pick a casting to see where the trade lands.</div>';
+    shuf(item.opts).forEach(o=>{
+      const b=document.createElement("button"); b.style.textAlign="center"; b.innerHTML=T(o.u);
+      b.onclick=()=>{
+        if(b.disabled) return;
+        b.disabled=true; b.classList.add(o.good?"correct":"wrong"); btTried++;
+        document.getElementById("btWork").innerHTML=o.work.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+        const call=document.getElementById("btCall");
+        call.innerHTML=(o.good?'<span style="color:var(--conv);font-weight:600">Good trade.</span> ':'<span style="color:var(--div);font-weight:600">Bad trade.</span> ')+'<span style="color:var(--muted)">'+o.verdict+(btTried<2?' — now try the other casting.':'')+'</span>';
+        call.classList.add("show");
+        if(btTried>=1) document.getElementById("btNext").style.display="block";
+      };
+      box.appendChild(b);
+    });
+  }
+}
+document.getElementById("btNext").onclick=()=>{ btI=(btI+1)%BT.length; renderBT(true); };
+
+/* ======================= 2 · PARTS RECIPE STEPPER ======================= */
+const IP=[
+ { name:"The clean one", sub:"∫ x eˣ dx", head:"\\int x\\,e^x\\,dx",
+   steps:[
+    {t:"Cast the parts. LIATE: x is Algebraic, eˣ is Exponential — Algebraic comes first, so u = x. Everything else (including dx) is dv.",
+     m:"u=x,\\quad dv=e^x dx\\;\\Rightarrow\\; du=dx,\\quad v=e^x"},
+    {t:"Run the trade: ∫u dv = uv − ∫v du. The new integral is just ∫eˣ — strictly easier. Good trade.",
+     m:"\\int x e^x dx = x e^x-\\int e^x\\,dx"},
+    {t:"Finish with a deck card.",
+     m:"=x e^x-e^x+C=(x-1)e^x+C"},
+    {t:"Verify by differentiating — product rule gives back the integrand:",
+     m:"\\tfrac{d}{dx}(x-1)e^x=e^x+(x-1)e^x=x e^x\\;\\checkmark"}],
+   fin:"\\int x e^x dx=(x-1)e^x+C" },
+ { name:"The log wins", sub:"∫ x² ln x dx", head:"\\int x^2\\ln x\\,dx",
+   steps:[
+    {t:"The surprise: most students grab u = x². But LIATE puts Logs FIRST — ln x simplifies beautifully under differentiation (→ 1/x) and is miserable to integrate. u = ln x.",
+     m:"u=\\ln x,\\quad dv=x^2 dx\\;\\Rightarrow\\; du=\\tfrac{dx}{x},\\quad v=\\tfrac{x^3}{3}"},
+    {t:"Trade — and watch the 1/x from du annihilate the x³ down to x²… then x³/3 · 1/x = x²/3. The log is GONE from the new integral.",
+     m:"\\int x^2\\ln x\\,dx=\\tfrac{x^3}{3}\\ln x-\\int \\tfrac{x^3}{3}\\cdot\\tfrac{1}{x}\\,dx=\\tfrac{x^3}{3}\\ln x-\\tfrac13\\int x^2dx"},
+    {t:"Power rule closes it.",
+     m:"=\\tfrac{x^3}{3}\\ln x-\\tfrac{x^3}{9}+C"},
+    {t:"Verify: the x²/3 terms cancel and the integrand returns.",
+     m:"\\tfrac{d}{dx}\\Bigl[\\tfrac{x^3}{3}\\ln x-\\tfrac{x^3}{9}\\Bigr]=x^2\\ln x+\\tfrac{x^2}{3}-\\tfrac{x^2}{3}=x^2\\ln x\\;\\checkmark"}],
+   fin:"\\int x^2\\ln x\\,dx=\\tfrac{x^3}{3}\\ln x-\\tfrac{x^3}{9}+C" },
+ { name:"The invisible product", sub:"∫ ln x dx", head:"\\int \\ln x\\,dx",
+   steps:[
+    {t:"No product in sight — so invent one: ln x is secretly (ln x)·1. Cast u = ln x (the only candidate that simplifies) and dv = 1·dx.",
+     m:"u=\\ln x,\\quad dv=dx\\;\\Rightarrow\\; du=\\tfrac{dx}{x},\\quad v=x"},
+    {t:"Trade. The x and the 1/x meet in the new integral and cancel to… 1.",
+     m:"\\int\\ln x\\,dx=x\\ln x-\\int x\\cdot\\tfrac{1}{x}\\,dx=x\\ln x-\\int 1\\,dx"},
+    {t:"Finish.",
+     m:"=x\\ln x-x+C"},
+    {t:"Verify — the classic everyone should memorize after deriving it once:",
+     m:"\\tfrac{d}{dx}\\bigl[x\\ln x-x\\bigr]=\\ln x+1-1=\\ln x\\;\\checkmark"}],
+   fin:"\\int\\ln x\\,dx=x\\ln x-x+C" }
+];
+let ipKey=0, ipN=0;
+function renderIP(){
+  const e=IP[ipKey];
+  const panel=document.getElementById("ipSteps"), read=document.getElementById("ipRead"), sum=document.getElementById("ipSum");
+  if(ipN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Cast u and dv → trade → finish → verify.</div>';
+  else panel.innerHTML=e.steps.slice(0,ipN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+  read.textContent=ipN===0?"press step":(ipN<e.steps.length?"step "+ipN+" of "+e.steps.length:"done");
+  const tx=ipN>=e.steps.length?e.fin:e.head+"\\;=\\;?";
+  sum.innerHTML=tex(tx,tx,true);
+  document.querySelectorAll("#ipBtns button").forEach((b,i)=>b.classList.toggle("on",i===ipKey));
+}
+document.getElementById("ipStep").onclick=()=>{ if(ipN<IP[ipKey].steps.length){ ipN++; renderIP(); } };
+document.getElementById("ipReset").onclick=()=>{ ipN=0; renderIP(); };
+const ipBtns=document.getElementById("ipBtns");
+IP.forEach((e,i)=>{ const b=document.createElement("button");
+  b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+  b.onclick=()=>{ ipKey=i; ipN=0; renderIP(); };
+  ipBtns.appendChild(b); });
+
+/* ======================= 3 · TABULAR METHOD, BUILT LIVE ======================= */
+/* ∫x³eˣ: rows of (sign, derivative, antiderivative); answer reads along diagonals */
+const TB={
+  head:"\\int x^3 e^x\\,dx",
+  rows:[ {s:"+",d:"x^3",a:"e^x"}, {s:"-",d:"3x^2",a:"e^x"}, {s:"+",d:"6x",a:"e^x"}, {s:"-",d:"6",a:"e^x"}, {s:"",d:"0",a:"e^x"} ],
+  terms:["+\\,x^3e^x","-\\,3x^2e^x","+\\,6x\\,e^x","-\\,6e^x"],
+  fin:"\\int x^3e^x dx=e^x\\bigl(x^3-3x^2+6x-6\\bigr)+C",
+  notes:[
+   "Row 1 — the starting cast: u = x³ in the derivative column, dv = eˣ in the antiderivative column, sign +.",
+   "Differentiate the left entry, integrate the right, flip the sign. (This row IS one round of parts.)",
+   "Again. The polynomial is dying on schedule: x³ → 3x² → 6x.",
+   "Again — down to the constant 6. One more differentiation will kill it.",
+   "The left column hits 0: STOP. The table is complete — never stop before the zero.",
+   "Read the answer along the DIAGONALS ↘: each sign·derivative pairs with the antiderivative one row DOWN.",
+   "Collect — four rounds of integration by parts, done in one table."
+  ]
+};
+let tbN=0;
+function renderTB(){
+  document.getElementById("tbHead").innerHTML=tex(TB.head,TB.head,true);
+  const tbl=document.getElementById("tbTable"), sum=document.getElementById("tbSum"),
+        panel=document.getElementById("tbSteps"), read=document.getElementById("tbRead");
+  const rowsShown=Math.min(TB.rows.length, tbN);
+  let h='<tr><th>sign</th><th>derivatives of x³</th><th></th><th>antiderivatives of eˣ</th></tr>';
+  for(let i=0;i<rowsShown;i++){
+    const r=TB.rows[i], fresh=(i===rowsShown-1&&tbN<=TB.rows.length)?' class="fresh"':'';
+    const showAr = tbN>=6 && i<TB.rows.length-1;   /* arrows appear at the diagonal step */
+    h+='<tr'+fresh+'><td class="sg">'+r.s+'</td><td>'+T(r.d)+'</td><td class="ar">'+(showAr?"\u2198":"")+'</td><td>'+T(r.a)+'</td></tr>';
+  }
+  tbl.innerHTML=h;
+  /* sum line assembles at steps 6 (diagonals) and 7 (final) */
+  if(tbN<6){ sum.innerHTML='<span style="color:var(--muted)">the answer will read along the diagonals…</span>'; }
+  else if(tbN===6){ const tx=TB.terms.join("")+"\\;+\\;C"; sum.innerHTML=tex(tx,tx,true); }
+  else { sum.innerHTML=tex(TB.fin,TB.fin,true); }
+  /* notes panel */
+  if(tbN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Each press builds one piece of the table.</div>';
+  else panel.innerHTML=TB.notes.slice(0,Math.min(tbN,TB.notes.length)).map((t,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div class="why-t">'+t+'</div></div>').join("");
+  read.textContent=tbN===0?"press step":(tbN<7?"step "+tbN+" of 7":"done — four rounds of parts, one table");
+}
+document.getElementById("tbStep").onclick=()=>{ if(tbN<7){ tbN++; renderTB(); } };
+document.getElementById("tbReset").onclick=()=>{ tbN=0; renderTB(); };
+
+/* ======================= 3b · TABULAR TRAINER ======================= */
+const TR={
+  head:"\\int x^2\\sin x\\,dx",
+  rows:[{s:"+",d:"x^2",a:"\\sin x"}],   /* filled in as the user answers */
+  prompts:[
+   {fill:{r:1,col:"d"}, q:"Row 2, derivative column: differentiate x².",
+    opts:[{h:"2x",ok:true},{h:"x",ok:false},{h:"2x^2",ok:false}],
+    fb:"d/dx x² = 2x — the polynomial marching toward zero."},
+   {fill:{r:1,col:"a"}, q:"Row 2, antiderivative column: integrate sin x.",
+    opts:[{h:"-\\cos x",ok:true},{h:"\\cos x",ok:false},{h:"-\\sin x",ok:false}],
+    fb:"∫sin x = −cos x. The minus comes from the deck card — forgetting it here poisons every diagonal below."},
+   {fill:{r:2,col:"d"}, q:"Row 3, derivative column: differentiate 2x.",
+    opts:[{h:"2",ok:true},{h:"0",ok:false},{h:"x^2",ok:false}],
+    fb:"2x → 2. Not zero yet — one more row to go."},
+   {fill:{r:2,col:"a"}, q:"Row 3, antiderivative column: integrate −cos x.",
+    opts:[{h:"-\\sin x",ok:true},{h:"\\sin x",ok:false},{h:"\\cos x",ok:false}],
+    fb:"∫(−cos x) = −sin x — the minus rides along. This cell is the #1 sign-error site in the whole method."},
+   {fill:{r:3,col:"d"}, q:"Row 4, derivative column: differentiate 2.",
+    opts:[{h:"0",ok:true},{h:"2",ok:false},{h:"2x",ok:false}],
+    fb:"The constant dies: 0. NOW the table is allowed to stop."},
+   {fill:{r:3,col:"a"}, q:"Row 4, antiderivative column: integrate −sin x.",
+    opts:[{h:"\\cos x",ok:true},{h:"-\\cos x",ok:false},{h:"-\\sin x",ok:false}],
+    fb:"∫(−sin x) = +cos x — two minuses met and cancelled. Full chain: sin → −cos → −sin → cos."},
+   {fill:null, q:"Read the diagonals ↘ with signs +, −, +. The answer is:",
+    opts:[{h:"-x^2\\cos x+2x\\sin x+2\\cos x+C",ok:true},
+          {h:"x^2\\cos x-2x\\sin x-2\\cos x+C",ok:false},
+          {h:"-x^2\\cos x-2x\\sin x+2\\cos x+C",ok:false}],
+    fb:"+x²(−cos x) − 2x(−sin x) + 2(cos x): the table's minuses and the signs column interleave to give −x²cos x + 2x sin x + 2cos x + C. Verify: differentiate it and x²sin x returns."}
+  ],
+  rowData:[{s:"+",d:"x^2",a:"\\sin x"},{s:"-",d:"2x",a:"-\\cos x"},{s:"+",d:"2",a:"-\\sin x"},{s:"",d:"0",a:"\\cos x"}]
+};
+let trN=0, trLock=false;
+function renderTRtable(){
+  const tbl=document.getElementById("trTable");
+  let h='<tr><th>sign</th><th>derivatives</th><th></th><th>antiderivatives</th></tr>';
+  /* a cell is shown if it's the seed row, or its fill-step index < trN */
+  for(let r=0;r<TR.rowData.length;r++){
+    const rd=TR.rowData[r];
+    const dKnown = r===0 || TR.prompts.findIndex(p=>p.fill&&p.fill.r===r&&p.fill.col==="d")<trN;
+    const aKnown = r===0 || TR.prompts.findIndex(p=>p.fill&&p.fill.r===r&&p.fill.col==="a")<trN;
+    if(!dKnown&&!aKnown) continue;
+    const showAr = trN>=TR.prompts.length && r<TR.rowData.length-1;
+    h+='<tr><td class="sg">'+rd.s+'</td><td>'+(dKnown?T(rd.d):'<span style="color:var(--muted)">?</span>')+'</td><td class="ar">'+(showAr?"\u2198":"")+'</td><td>'+(aKnown?T(rd.a):'<span style="color:var(--muted)">?</span>')+'</td></tr>';
+  }
+  tbl.innerHTML=h;
+  const sum=document.getElementById("trSum");
+  if(trN>=TR.prompts.length){ const tx="\\int x^2\\sin x\\,dx=-x^2\\cos x+2x\\sin x+2\\cos x+C"; sum.innerHTML=tex(tx,tx,true); }
+  else sum.innerHTML='<span style="color:var(--muted)">fill the table, then read the diagonals…</span>';
+}
+function renderTR(){
+  document.getElementById("trHead").innerHTML=tex(TR.head,TR.head,true);
+  renderTRtable();
+  const qEl=document.getElementById("trQ"), box=document.getElementById("trOpts"), fb=document.getElementById("trFb");
+  if(trN>=TR.prompts.length){
+    qEl.textContent="Table complete — diagonals read, answer assembled.";
+    box.innerHTML=""; document.getElementById("trNext").style.display="block";
+    return;
+  }
+  document.getElementById("trNext").style.display="none";
+  trLock=false;
+  const p=TR.prompts[trN];
+  qEl.textContent=p.q; fb.innerHTML=""; box.innerHTML="";
+  shuf(p.opts).forEach(o=>{
+    const b=document.createElement("button"); b.style.textAlign="center"; b.innerHTML=T(o.h);
+    b.onclick=()=>{
+      if(trLock) return;
+      if(o.ok){ trLock=true; b.classList.add("correct");
+        [...box.children].forEach(bb=>bb.disabled=true);
+        fb.innerHTML='<span style="color:var(--conv);font-weight:600">✓</span> <span style="color:var(--muted)">'+p.fb+'</span>';
+        setTimeout(()=>{ trN++; renderTR(); },1300);
+      } else { b.classList.add("wrong"); b.disabled=true;
+        fb.innerHTML='<span style="color:var(--div);font-weight:600">✗</span> <span style="color:var(--muted)">'+p.fb+'</span>'; }
+    };
+    box.appendChild(b);
+  });
+}
+document.getElementById("trNext").onclick=()=>{ trN=0; renderTR(); };
+
+/* ======================= 4 · THE CYCLIC CASE ======================= */
+const CY={
+  head:"\\int e^x\\sin x\\,dx",
+  fin:"\\int e^x\\sin x\\,dx=\\tfrac{e^x(\\sin x-\\cos x)}{2}+C",
+  steps:[
+   {t:"Round 1 of parts. Neither factor dies (eˣ recycles, sin x just rotates), so pick u = sin x, dv = eˣdx and see where it goes.",
+    m:"I=\\int e^x\\sin x\\,dx=e^x\\sin x-\\int e^x\\cos x\\,dx"},
+   {t:"Round 2 on the NEW integral — same casting discipline (u = cos x, dv = eˣdx). Keep your u-choices consistent between rounds or the two rounds will undo each other.",
+    m:"\\int e^x\\cos x\\,dx=e^x\\cos x+\\int e^x\\sin x\\,dx"},
+   {t:"Substitute round 2 into round 1 — and there it is: the ORIGINAL integral, back on the right side. This is the moment students panic. Don't. It returning IS the mechanism.",
+    m:"I=e^x\\sin x-e^x\\cos x-\\underbrace{\\int e^x\\sin x\\,dx}_{=\\,I}"},
+   {t:"It's just an equation now. The unknown is I — collect it on the left and divide.",
+    m:"2I=e^x(\\sin x-\\cos x)\\;\\Rightarrow\\; I=\\tfrac{e^x(\\sin x-\\cos x)}{2}+C"},
+   {t:"Verify by differentiating — the cos terms cancel and the integrand returns:",
+    m:"\\tfrac{d}{dx}\\tfrac{e^x(\\sin x-\\cos x)}{2}=\\tfrac{e^x(\\sin x-\\cos x)+e^x(\\cos x+\\sin x)}{2}=e^x\\sin x\\;\\checkmark"}]
+};
+let cyN=0;
+function renderCY(){
+  const panel=document.getElementById("cySteps"), read=document.getElementById("cyRead"), sum=document.getElementById("cySum");
+  if(cyN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Parts twice → the original returns → solve for it.</div>';
+  else panel.innerHTML=CY.steps.slice(0,cyN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+  read.textContent=cyN===0?"press step":(cyN<CY.steps.length?"step "+cyN+" of "+CY.steps.length:"done");
+  const tx=cyN>=CY.steps.length?CY.fin:CY.head+"\\;=\\;?";
+  sum.innerHTML=tex(tx,tx,true);
+}
+document.getElementById("cyStep").onclick=()=>{ if(cyN<CY.steps.length){ cyN++; renderCY(); } };
+document.getElementById("cyReset").onclick=()=>{ cyN=0; renderCY(); };
+
+/* ======================= 5 · PARTIAL FRACTIONS ======================= */
+function renderPFhead(){
+  const main="\\frac{1}{x+1}+\\frac{2}{x+3}\\;\\xrightarrow{\\;\\text{add}\\;}\\;\\frac{3x+5}{(x+1)(x+3)}\\;\\xrightarrow{\\;\\text{un-add}\\;}\\;\\frac{1}{x+1}+\\frac{2}{x+3}";
+  const n0=document.getElementById("pfMain"); if(n0) n0.innerHTML=tex(main,main,true);
+  const n1=document.getElementById("pfTpl"); if(n1) n1.innerHTML=T("\\tfrac{px+q}{(x-a)(x-b)}=\\tfrac{A}{x-a}+\\tfrac{B}{x-b}");
+  const n2=document.getElementById("pfCov"); if(n2) n2.innerHTML=T("A=\\tfrac{p\\,a+q}{a-b}\\ \\text{(evaluate at the root)}");
+  const n3=document.getElementById("pfTree"); if(n3) n3.innerHTML=T("\\text{heavy}\\Rightarrow\\div\\quad P{\\approx}Q'\\Rightarrow\\ln\\quad \\text{factors}\\Rightarrow\\text{PF}\\quad \\text{else}\\Rightarrow\\arctan");
+}
+const PF=[
+ { name:"Un-add it", sub:"∫ (3x+5)/((x+1)(x+3)) dx", head:"\\int\\frac{3x+5}{(x+1)(x+3)}\\,dx",
+   steps:[
+    {t:"Denominator already factored, top-light — straight to the template: one constant per factor.",
+     m:"\\frac{3x+5}{(x+1)(x+3)}=\\frac{A}{x+1}+\\frac{B}{x+3}"},
+    {t:"Cover-up for A: cover (x+1) in the original and evaluate the rest at its root x = −1.",
+     m:"A=\\frac{3(-1)+5}{(-1)+3}=\\frac{2}{2}=1"},
+    {t:"Cover-up for B: cover (x+3), evaluate at x = −3.",
+     m:"B=\\frac{3(-3)+5}{(-3)+1}=\\frac{-4}{-2}=2"},
+    {t:"Now it's two deck cards — each piece is ∫du/u.",
+     m:"\\int\\!\\Bigl(\\frac{1}{x+1}+\\frac{2}{x+3}\\Bigr)dx=\\ln|x+1|+2\\ln|x+3|+C"}],
+   fin:"\\int\\frac{3x+5}{(x+1)(x+3)}dx=\\ln|x+1|+2\\ln|x+3|+C" },
+ { name:"The full gauntlet", sub:"∫ (x²+x−1)/(x²−1) dx", head:"\\int\\frac{x^2+x-1}{x^2-1}\\,dx",
+   steps:[
+    {t:"Diagnose: degree 2 over degree 2 — TOP-HEAVY. Divide before anything else.",
+     m:"\\frac{x^2+x-1}{x^2-1}=1+\\frac{x}{x^2-1}"},
+    {t:"The remainder's denominator FACTORS: x²−1 = (x−1)(x+1). So the remainder gets partial fractions.",
+     m:"\\frac{x}{(x-1)(x+1)}=\\frac{A}{x-1}+\\frac{B}{x+1}"},
+    {t:"Cover-up, twice: at x = 1 and at x = −1.",
+     m:"A=\\frac{1}{1+1}=\\tfrac12,\\qquad B=\\frac{-1}{-1-1}=\\tfrac12"},
+    {t:"Integrate the three pieces — a constant and two logs.",
+     m:"\\int\\!\\Bigl(1+\\tfrac{1/2}{x-1}+\\tfrac{1/2}{x+1}\\Bigr)dx=x+\\tfrac12\\ln|x-1|+\\tfrac12\\ln|x+1|+C"},
+    {t:"Optional polish: the two half-logs combine.",
+     m:"=x+\\tfrac12\\ln\\bigl|x^2-1\\bigr|+C"}],
+   fin:"\\int\\frac{x^2+x-1}{x^2-1}dx=x+\\tfrac12\\ln|x^2-1|+C" }
+];
+let pfKey=0, pfN=0;
+function renderPF(){
+  const e=PF[pfKey];
+  const panel=document.getElementById("pfSteps"), read=document.getElementById("pfRead"), sum=document.getElementById("pfSum");
+  if(pfN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Diagnose → template → cover-up → deck cards.</div>';
+  else panel.innerHTML=e.steps.slice(0,pfN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+  read.textContent=pfN===0?"press step":(pfN<e.steps.length?"step "+pfN+" of "+e.steps.length:"done");
+  const tx=pfN>=e.steps.length?e.fin:e.head+"\\;=\\;?";
+  sum.innerHTML=tex(tx,tx,true);
+  document.querySelectorAll("#pfBtns button").forEach((b,i)=>b.classList.toggle("on",i===pfKey));
+}
+document.getElementById("pfStep").onclick=()=>{ if(pfN<PF[pfKey].steps.length){ pfN++; renderPF(); } };
+document.getElementById("pfReset").onclick=()=>{ pfN=0; renderPF(); };
+const pfBtns=document.getElementById("pfBtns");
+PF.forEach((e,i)=>{ const b=document.createElement("button");
+  b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+  b.onclick=()=>{ pfKey=i; pfN=0; renderPF(); };
+  pfBtns.appendChild(b); });
+
+/* ======================= 5b · THE COVER-UP MACHINE ======================= */
+const CU={ done:{f1:false,f2:false} };
+function cuWorkRow(which){
+  if(which==="f1") return {t:"Covered (x + 1). Its root is x = −1 — evaluate everything that survives there:",
+    m:"A=\\frac{3(-1)+5}{(-1)+3}=\\frac{2}{2}=1"};
+  return {t:"Covered (x + 3). Its root is x = −3 — evaluate the survivors there:",
+    m:"B=\\frac{3(-3)+5}{(-3)+1}=\\frac{-4}{-2}=2"};
+}
+function renderCU(){
+  document.getElementById("cuNum").innerHTML=T("3x+5");
+  const f1=document.getElementById("cuF1"), f2=document.getElementById("cuF2");
+  f1.innerHTML=CU.done.f1?'<span style="font-family:var(--mono);font-size:12px;letter-spacing:.05em">COVERED</span>':T("(x+1)");
+  f2.innerHTML=CU.done.f2?'<span style="font-family:var(--mono);font-size:12px;letter-spacing:.05em">COVERED</span>':T("(x+3)");
+  f1.classList.toggle("on",CU.done.f1); f2.classList.toggle("on",CU.done.f2);
+  const n=(CU.done.f1?1:0)+(CU.done.f2?1:0);
+  document.getElementById("cuRead").textContent=n+" of 2 constants found";
+  const work=[];
+  if(CU.done.f1) work.push(cuWorkRow("f1"));
+  if(CU.done.f2) work.push(cuWorkRow("f2"));
+  const panel=document.getElementById("cuWork");
+  if(!work.length){ panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Cover a factor to see its constant fall out.</div>'; }
+  else {
+    let html=work.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+    if(n===2){ html+='<div class="why-step"><div class="why-n">∴</div><div><div class="why-t">Both constants found — the fraction un-adds, and each piece is a deck card:</div><div class="why-m">'+T("\\frac{3x+5}{(x+1)(x+3)}=\\frac{1}{x+1}+\\frac{2}{x+3}\\;\\to\\;\\ln|x+1|+2\\ln|x+3|+C")+'</div></div></div>'; }
+    panel.innerHTML=html;
+  }
+  document.getElementById("cuCall").textContent = n===0?"Click (x + 1) or (x + 3) to cover it."
+    : n===1?"One down — cover the other factor.":"That's the whole method: cover, evaluate at the root, write the constant.";
+}
+document.getElementById("cuF1").onclick=()=>{ CU.done.f1=true; renderCU(); };
+document.getElementById("cuF2").onclick=()=>{ CU.done.f2=true; renderCU(); };
+document.getElementById("cuReset").onclick=()=>{ CU.done={f1:false,f2:false}; renderCU(); };
+
+/* ======================= anatomy + concepts ======================= */
+function renderAnatomy(){
+  const main="\\int u\\,dv\\;=\\;uv-\\int v\\,du";
+  document.getElementById("anatMain").innerHTML=tex(main,main,true);
+  document.getElementById("anatTab").innerHTML=T("+,-,+,-\\ \\text{down};\\ \\times\\ \\text{along}\\ \\searrow");
+  document.getElementById("anatCyc").innerHTML=T("I=\\cdots-I\\Rightarrow 2I=\\cdots");
+  document.getElementById("anatPF").innerHTML=T("\\tfrac{A}{x-a}+\\tfrac{B}{x-b}\\to A\\ln|x-a|+B\\ln|x-b|");
+}
+function renderConcepts(){
+  const c1=document.getElementById("c1"); if(c1) c1.innerHTML=tex("\\int u\\,dv=uv-\\int v\\,du","∫u dv = uv − ∫v du");
+  const c2=document.getElementById("c2"); if(c2) c2.innerHTML=tex("u:\\ \\text{L I A T E}\\ \\to\\ \\text{earliest};\\quad dv\\ \\text{includes}\\ dx","u: LIATE earliest; dv includes dx");
+  const c3=document.getElementById("c3"); if(c3) c3.innerHTML=tex("\\text{poly}\\downarrow 0\\ \\big|\\ e^x\\ \\text{forever}\\ \\Rightarrow\\ \\text{tabular}","poly dies | e^x forever → tabular");
+  const c4=document.getElementById("c4"); if(c4) c4.innerHTML=tex("x^2-1\\Rightarrow\\text{PF};\\qquad x^2+1\\Rightarrow\\arctan","x²−1 → PF; x²+1 → arctan");
+}
+
+/* ======================= practice ======================= */
+const PRAC=[
+ { tag:"The seed, harvested", q:()=>'Lessons 2 and 3 both previewed it — now do it properly. Find '+T("\\int x\\cos x\\,dx")+' by parts.',
+   sol:[{t:"LIATE: x (Algebraic) before cos x (Trig). Cast:",m:"u=x,\\ dv=\\cos x\\,dx\\Rightarrow du=dx,\\ v=\\sin x"},
+        {t:"Trade and finish:",m:"x\\sin x-\\int\\sin x\\,dx=x\\sin x+\\cos x+C"},
+        {t:"Verify: d/dx gives sin x + x cos x − sin x = x cos x. ✓ — the mystery candidate from Lesson 3's checker, finally explained.",m:""}] },
+ { tag:"Tabular workout", q:()=>'Use the tabular method on '+T("\\int x^2 e^{2x}\\,dx")+' — careful: the antiderivative column picks up factors of \u00bd.',
+   sol:[{t:"Derivatives: x², 2x, 2, 0. Antiderivatives of e²ˣ: e²ˣ/2, e²ˣ/4, e²ˣ/8. Signs +, −, +.",m:"\\begin{matrix}+&x^2&e^{2x}/2\\\\-&2x&e^{2x}/4\\\\+&2&e^{2x}/8\\end{matrix}"},
+        {t:"Diagonals:",m:"\\tfrac{x^2e^{2x}}{2}-\\tfrac{2x\\,e^{2x}}{4}+\\tfrac{2e^{2x}}{8}=e^{2x}\\Bigl(\\tfrac{x^2}{2}-\\tfrac{x}{2}+\\tfrac14\\Bigr)+C"}] },
+ { tag:"Definite parts", q:()=>'Evaluate '+T("\\int_1^{e}\\ln x\\,dx")+' exactly.',
+   sol:[{t:"From the lesson: ∫ln x dx = x ln x − x. Evaluate at the bounds:",m:"\\bigl[x\\ln x-x\\bigr]_1^{e}=(e\\cdot 1-e)-(0-1)"},
+        {t:"Both e-terms cancel; only the 1 survives.",m:"=0-(-1)=1"}] },
+ { tag:"Cover-up speed run", q:()=>'Find '+T("\\int\\frac{dx}{x^2-x-6}")+'.',
+   sol:[{t:"Factor: x² − x − 6 = (x − 3)(x + 2). Template with A over each:",m:"\\tfrac{1}{(x-3)(x+2)}=\\tfrac{A}{x-3}+\\tfrac{B}{x+2}"},
+        {t:"Cover-up: at x = 3, A = 1/(3+2) = 1/5; at x = −2, B = 1/(−2−3) = −1/5.",m:"A=\\tfrac15,\\quad B=-\\tfrac15"},
+        {t:"Two logs:",m:"\\tfrac15\\ln|x-3|-\\tfrac15\\ln|x+2|+C=\\tfrac15\\ln\\Bigl|\\tfrac{x-3}{x+2}\\Bigr|+C"}] },
+ { tag:"The trap", q:()=>'Find '+T("\\int\\frac{x}{x^2-4}\\,dx")+' — and think before you write any A\u2019s and B\u2019s.',
+   sol:[{t:"It LOOKS like partial fractions (the denominator factors!). But run the decision tree's first check: is the numerator a multiple of the denominator's derivative? d/dx(x²−4) = 2x — and the numerator is x. Yes.",m:"u=x^2-4,\\quad x\\,dx=\\tfrac{du}{2}"},
+        {t:"One line, no A and B:",m:"\\tfrac12\\int\\tfrac{du}{u}=\\tfrac12\\ln|x^2-4|+C"},
+        {t:"Partial fractions would have gotten the same answer in five lines. The diagnosis check is worth real exam minutes.",m:""}] }
+];
+function renderPractice(){
+  document.getElementById("practice").innerHTML=PRAC.map((p,i)=>{
+    const steps=p.sol.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+    return '<div class="prob"><div class="prob-tag">'+p.tag+'</div><div class="prob-q">'+p.q()+'</div>'
+      +'<button class="soltoggle" data-i="'+i+'">Show solution</button>'
+      +'<div class="sol" id="sol'+i+'">'+steps+'</div></div>';
+  }).join("");
+  document.querySelectorAll(".soltoggle").forEach(btn=>{ btn.onclick=()=>{ const i=btn.getAttribute("data-i"), s=document.getElementById("sol"+i);
+    btn.textContent=s.classList.toggle("show")?"Hide solution":"Show solution"; }; });
+}
+
+/* ======================= quiz ======================= */
+const QUIZ=[
+ { q:()=>'The integration-by-parts formula is:',
+   opts:[{h:()=>T("\\int u\\,dv=uv-\\int v\\,du"),ok:true},{h:()=>T("\\int u\\,dv=uv+\\int v\\,du"),ok:false},{h:()=>T("\\int u\\,dv=u'v-uv'"),ok:false},{h:()=>T("\\int u\\,dv=\\int u\\int dv"),ok:false}],
+   fb:"The product rule, integrated and rearranged. The minus sign is what makes it a trade — and the last option is the ∫fg ≠ (∫f)(∫g) myth from Lesson 2." },
+ { q:()=>'For '+T("\\int x^4\\ln x\\,dx")+', LIATE says u =',
+   opts:[{h:()=>T("\\ln x"),ok:true},{h:()=>T("x^4"),ok:false},{h:()=>T("x^4\\ln x"),ok:false},{h:()=>T("dx"),ok:false}],
+   fb:"Logs outrank Algebraic — ln x differentiates into algebra (1/x) and is painful to integrate, the perfect u. Grabbing the polynomial is the most common parts mistake on this exact shape." },
+ { q:()=>'The tabular method is valid when:',
+   opts:[{h:()=>"one factor differentiates to 0 and the other integrates repeatedly",ok:true},{h:()=>"both factors are polynomials",ok:false},{h:()=>"the integral is definite",ok:false},{h:()=>"any time parts applies",ok:false}],
+   fb:"Tabular IS repeated parts — it needs the u-column to terminate at 0 (a polynomial) while the dv-column keeps integrating (eˣ, sin, cos). Cyclic cases like eˣsin x never terminate, so the table never ends." },
+ { q:()=>'In a tabular setup, the answer is read by multiplying:',
+   opts:[{h:()=>"diagonally ↘, with alternating signs",ok:true},{h:()=>"straight across each row",ok:false},{h:()=>"down each column",ok:false},{h:()=>"only the first and last rows",ok:false}],
+   fb:"Each signed derivative pairs with the antiderivative one row DOWN. Multiplying straight across is the classic sign-and-term disaster." },
+ { q:()=>'While integrating '+T("\\int e^x\\cos x\\,dx")+' by parts twice, the original integral reappears. You should:',
+   opts:[{h:()=>"call it I and solve the equation algebraically",ok:true},{h:()=>"start over with different u and dv",ok:false},{h:()=>"conclude the integral has no elementary answer",ok:false},{h:()=>"add +C and stop",ok:false}],
+   fb:"The reappearance is the mechanism, not a failure: I = stuff − I gives 2I = stuff. Starting over with swapped choices just walks the same circle backward." },
+ { q:()=>'By cover-up, in '+T("\\frac{7x+2}{(x-2)(x+5)}=\\frac{A}{x-2}+\\frac{B}{x+5}")+', A =',
+   opts:[{h:()=>T("\\tfrac{16}{7}"),ok:true},{h:()=>T("\\tfrac{16}{3}"),ok:false},{h:()=>T("7"),ok:false},{h:()=>T("-\\tfrac{33}{7}"),ok:false}],
+   fb:"Cover (x−2), evaluate at x = 2: (7·2+2)/(2+5) = 16/7. (−33/7 is B, evaluated at −5.)" },
+ { q:()=>'Partial fractions (BC scope) directly applies to '+T("\\int\\frac{dx}{Q(x)}")+' when Q:',
+   opts:[{h:()=>"factors into distinct linear factors",ok:true},{h:()=>"is any quadratic",ok:false},{h:()=>"is irreducible",ok:false},{h:()=>"has degree ≥ 2",ok:false}],
+   fb:"Factors → partial fractions → logs. Irreducible (won't factor) → complete the square → arctan. The discriminant decides which branch you're on." },
+ { q:()=>'Before using partial fractions on '+T("\\int\\frac{x^3}{x^2-9}\\,dx")+', you must first:',
+   opts:[{h:()=>"long-divide — the fraction is top-heavy",ok:true},{h:()=>"complete the square",ok:false},{h:()=>"substitute u = x³",ok:false},{h:()=>"nothing — apply the template directly",ok:false}],
+   fb:"Degree 3 over degree 2: improper. The PF template only works on top-light fractions — divide first (the quotient is x, remainder 9x), THEN un-add the remainder." }
+];
+let qi=0, qScore=0, qDone=0, qAnswered=false;
+const qOpts=document.getElementById("qOpts"), qFb=document.getElementById("qFb"), qNext=document.getElementById("qNext");
+function renderQuiz(){
+  qAnswered=false; const item=QUIZ[qi];
+  document.getElementById("qText").innerHTML=item.q();
+  document.getElementById("qProgress").textContent="Question "+(qi+1)+" of "+QUIZ.length;
+  document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+  qFb.innerHTML=""; qNext.style.display="none";
+  qNext.textContent = qi<QUIZ.length-1 ? "Next question →" : "Restart quiz ↺";
+  qOpts.innerHTML="";
+  const sopts=shuf(item.opts);
+  sopts.forEach((o)=>{ const b=document.createElement("button"); b.innerHTML=o.h();
+    b.onclick=()=>{ if(qAnswered)return; qAnswered=true; qDone++;
+      [...qOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(sopts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ qScore++; b.classList.add("correct"); qFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ Correct.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      else { b.classList.add("wrong"); qFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not quite.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+      qNext.style.display="block"; };
+    qOpts.appendChild(b); });
+}
+qNext.onclick=()=>{ if(qi<QUIZ.length-1){ qi++; } else { qi=0; qScore=0; qDone=0; } renderQuiz(); };
+
+/* ======================= init + KaTeX refresh ======================= */
+function refreshAll(){ renderPR(); renderBT(true); renderIP(); renderTB(); renderTR(); renderCY(); renderPFhead(); renderCU(); renderPF(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); }
+renderPR(); renderBT(true); renderIP(); renderTB(); renderTR(); renderCY(); renderPFhead(); renderCU(); renderPF(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); refreshAll(); }
+  else if(++tries>40) clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.animationDelay=Math.min(i*30,440)+'ms'; });
+
+</script>
+</body>
+</html>

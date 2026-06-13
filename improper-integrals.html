@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Improper Integrals &amp; Choosing Your Weapon · Unit 6 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23101420%27%2F%3E%3Cg%20fill%3D%27%235f7ff2%27%3E%3Crect%20x%3D%276%27%20y%3D%2718%27%20width%3D%274.6%27%20height%3D%278%27%20rx%3D%271%27%20opacity%3D%27.55%27%2F%3E%3Crect%20x%3D%2712%27%20y%3D%2714%27%20width%3D%274.6%27%20height%3D%2712%27%20rx%3D%271%27%20opacity%3D%27.75%27%2F%3E%3Crect%20x%3D%2718%27%20y%3D%2710%27%20width%3D%274.6%27%20height%3D%2716%27%20rx%3D%271%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M5%2017%20C%2012%2010%2C%2020%206%2C%2027%207%27%20stroke%3D%27%238fa6f7%27%20stroke-width%3D%272%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<script>
+/* fallback for previewing without helpers.js — the repo's helpers.js takes precedence when present */
+if(typeof tex==="undefined"){
+  window.tex=function(latex,fallback,display){
+    if(window.katex){ try{ return katex.renderToString(latex,{displayMode:!!display,throwOnError:false}); }catch(e){} }
+    return '<span class="tex-fallback">'+(fallback||latex)+'</span>';
+  };
+}
+</script>
+<style>
+  :root{ --approx:#5f7ff2; --gold:#5f7ff2; --true:#3fd0b0;
+         --glow:rgba(95,127,242,.08); --wrap-max:1060px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block;border-radius:10px}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:8px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button:disabled:hover{border-color:var(--line);transform:none}
+  .sb-name{font-weight:600;font-size:13.5px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .callout{margin-top:12px;font-size:13.5px;min-height:20px;color:var(--ink);
+    border-left:3px solid var(--gold);padding-left:12px;opacity:0;transition:opacity .3s}
+  .callout.show{opacity:1}
+  .whypanel .why-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+  .why-step{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .why-step:last-child{border-bottom:none}
+  .why-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .why-t{font-size:13px;line-height:1.5}
+  .why-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;overflow-x:auto}
+  .stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .stat:last-child{border-bottom:none}
+  .stat .k{color:var(--muted)}
+  .stat .v{font-family:var(--mono);color:var(--ink)}
+  .sumline{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;overflow-x:auto;min-height:46px;font-size:14px}
+  .anatomy{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:820px}
+  .anatomy .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .maprow{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .maprow:last-child{border-bottom:none}
+  .maprow .ph{color:var(--ink);flex:1 1 auto;line-height:1.45}
+  .maprow .sy{font-family:var(--mono);color:var(--muted);flex:none}
+  .concepts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.concepts{grid-template-columns:1fr}}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s,box-shadow .2s}
+  .concept:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(43,41,37,.45)}
+  .concept h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .concept p{font-size:13.5px;margin:6px 0;color:var(--ink)}
+  .concept .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;text-align:center;overflow-x:auto}
+  .key{color:var(--approx);font-weight:600}
+  .whatsnext{max-width:700px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  button:focus-visible, a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  .prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .prob-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--approx);font-weight:600}
+  .prob-q{font-size:14.5px;line-height:1.65;margin:6px 0 12px}
+  .soltoggle{font-size:13px;padding:7px 14px}
+  .sol{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .sol.show{display:block}
+  .mistakes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){.mistakes{grid-template-columns:1fr}}
+  .mistake{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--div);border-radius:10px;padding:13px 16px}
+  .mistake h4{margin:0 0 4px;font-size:14px;font-family:var(--display)}
+  .mistake p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+  .tipbox{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:780px}
+  .tipbox h4{margin:0 0 8px;font-size:14px;font-family:var(--display);color:var(--approx)}
+  .tipbox ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+  .tipbox li{margin:5px 0}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .qtag{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button{font-size:14px;padding:11px 14px}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px;line-height:1.5}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+  .bc-badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#0d1330;
+    background:var(--approx);border-radius:14px;padding:3px 11px;font-weight:600;vertical-align:middle;margin-left:10px}
+  /* tabular method table */
+  .ttab{border-collapse:collapse;margin:6px auto;font-size:15px}
+  .ttab th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);font-weight:500;
+    padding:6px 18px;border-bottom:1px solid var(--line)}
+  .ttab td{padding:9px 18px;text-align:center;font-size:15.5px}
+  .ttab td.sg{color:var(--approx);font-family:var(--mono);font-weight:600;font-size:14px}
+  .ttab td.ar{color:var(--true);font-family:var(--mono);font-size:15px;padding:0 4px}
+  .ttab tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+
+  input[type=range]{flex:1 1 120px;min-width:90px;accent-color:var(--approx);cursor:pointer}
+  .nval{font-family:var(--mono);font-size:12.5px;color:var(--ink);min-width:46px;text-align:right}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--muted)}
+  .legend b{display:inline-block;width:14px;height:4px;border-radius:2px;margin-right:5px;vertical-align:middle}
+  .struck{position:relative;opacity:.85}
+  .struck::after{content:"";position:absolute;left:6%;right:6%;top:50%;height:2.5px;background:var(--div);border-radius:2px;transform:rotate(-2deg)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit6.html">← Unit 6 Guide</a>
+  <header class="reveal">
+    <h1>Improper Integrals &amp; <span class="em">Choosing Your Weapon</span><span class="bc-badge">BC ONLY</span></h1>
+    <div class="sub">Every integral so far had finite bounds and a finite integrand. This closer breaks both
+      rules — bounds that run to infinity, functions that blow up — and then hands you the unit's real final
+      skill: looking at any integral and knowing, in five seconds, which machine to reach for.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    An improper integral is an ordinary integral <b>plus a limit</b> — nothing more. Replace the bad endpoint
+    (∞, or the blow-up point) with a variable, integrate normally, then <b>take the limit</b>. If the limit
+    exists, the integral <b>converges</b> to that number; if not, it <b>diverges</b> — and "diverges" is a
+    complete, correct answer.
+  </div>
+
+  <h2 class="reveal">Infinite region, finite area</h2>
+  <p class="lead reveal">The whole subject in one paradox. Two nearly identical curves on [1, ∞):
+    <b>1/x²</b> and <b>1/x</b>. Both regions are infinitely long. Push the right edge out and watch the race:
+    one area <b>saturates</b> — an infinite region holding exactly one unit of paint — while the other grinds
+    upward past any number you name.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <svg id="rcA" viewBox="0 0 270 230" preserveAspectRatio="xMidYMid meet" style="flex:1 1 240px"></svg>
+          <svg id="rcB" viewBox="0 0 270 230" preserveAspectRatio="xMidYMid meet" style="flex:1 1 240px"></svg>
+        </div>
+        <div class="controls">
+          <span style="font-size:12.5px;color:var(--muted)">push b →</span>
+          <input type="range" id="rcS" min="0.05" max="3" step="0.01" value="0.8" aria-label="upper bound, log scale">
+          <span class="nval" id="rcBv">b = 6.3</span>
+        </div>
+        <div class="callout show" id="rcCall"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The race</div>
+        <div class="stat"><span class="k">∫₁ᵇ dx/x² = 1 − 1/b</span><span class="v" id="rcA2">—</span></div>
+        <div class="stat"><span class="k">its destination</span><span class="v" style="color:var(--true)">1 — converges</span></div>
+        <div class="stat"><span class="k">∫₁ᵇ dx/x = ln b</span><span class="v" id="rcA1">—</span></div>
+        <div class="stat"><span class="k">its destination</span><span class="v" style="color:var(--div)">∞ — diverges</span></div>
+        <div class="stat"><span class="k">left to collect, 1/x² tail</span><span class="v" id="rcT2" style="color:var(--true)">—</span></div>
+        <div class="stat"><span class="k">left to collect, 1/x tail</span><span class="v" style="color:var(--div)">∞ — always</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          The difference is the <b>tail</b>: 1/x² thins fast enough that what's left beyond b shrinks to
+          nothing; 1/x doesn't, and the leftovers add up forever. "Converges" means the running total has a
+          destination.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The mechanics — an integral plus a limit</h2>
+  <div class="anatomy reveal">
+    <div class="m-big" id="defMain"></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">The move:</b> swap the bad endpoint for a variable, integrate as usual, take the limit. Writing the limit explicitly is a <b>scored step</b> on FRQs — skipping straight to "plugging in ∞" loses the point.</span><span class="sy" id="def1"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Blow-ups count too:</b> if the integrand has a vertical asymptote at an endpoint, the same move applies — approach the bad point from inside the interval.</span><span class="sy" id="def2"></span></div>
+    <div class="maprow"><span class="ph">Converges = the limit exists (a number). Diverges = it doesn't. Both are final answers.</span><span class="sy" id="def3"></span></div>
+  </div>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="imPlot" viewBox="0 0 560 240" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="sumline" id="imSum"></div>
+        <div class="controls">
+          <button class="play" id="imStep">step →</button>
+          <button id="imRun">▶ run the limit</button>
+          <button id="imReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="imRead">press step</span>
+        </div>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, shown</div>
+        <div id="imSteps"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick an integral</div>
+        <div class="series-btns" id="imBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">The third looks
+          completely ordinary — finite bounds, innocent integrand. Look closer at x = 0.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The p-test — one dial, two regimes</h2>
+  <p class="lead reveal">Every example so far was 1/x to some power. Make the power a dial and the whole
+    theory appears: <b>∫₁^∞ dx/xᵖ converges exactly when p &gt; 1</b>, and near zero the rule
+    <b>flips</b> — ∫₀¹ dx/xᵖ needs p &lt; 1. At infinity you need a <i>thin tail</i>; at zero you need a
+    <i>mild spike</i>. And p = 1 loses on both ends.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="pPlot" viewBox="0 0 560 270" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <button id="pModeI" class="on">at infinity: [1, ∞)</button>
+          <button id="pModeZ">near zero: (0, 1]</button>
+          <span style="font-size:12.5px;color:var(--muted);margin-left:8px">p =</span>
+          <input type="range" id="pSlide" min="0.2" max="3" step="0.05" value="2" style="flex:0 1 140px" aria-label="exponent p">
+          <span class="nval" id="pVal">2.00</span>
+        </div>
+        <div class="callout show" id="pCall"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The verdict</div>
+        <div class="stat"><span class="k">regime</span><span class="v" id="pReg">at infinity</span></div>
+        <div class="stat"><span class="k">rule here</span><span class="v" id="pRule">converges iff p &gt; 1</span></div>
+        <div class="stat"><span class="k">this p</span><span class="v" id="pVerd">—</span></div>
+        <div class="stat"><span class="k">value (if convergent)</span><span class="v" id="pNum">—</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          Hold this dial in your head — in Unit 10 it returns as the <b>p-series</b> test, deciding
+          Σ1/nᵖ with the exact same knife edge at p = 1.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The trap — the asymptote hiding inside</h2>
+  <p class="lead reveal">The most dangerous improper integrals don't look improper. Watch what happens if you
+    run FTC on ∫₋₁¹ dx/x² without looking at the integrand:</p>
+
+  <div class="anatomy reveal">
+    <div class="m-big struck" id="trapBad"></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--div)">Stop.</b> 1/x² is positive everywhere — its integral cannot be negative. The computation above is fluent, confident, and <b>meaningless</b>.</span><span class="sy" id="trap1"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">The diagnosis:</b> there's a vertical asymptote at x = 0, <i>inside</i> the interval. FTC requires a continuous integrand on [a, b] — that hypothesis just failed, silently.</span><span class="sy" id="trap2"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">The correct treatment:</b> split at the blow-up and give each half its own limit. Here both halves diverge — the honest answer is that the integral diverges.</span><span class="sy" id="trap3"></span></div>
+    <div class="maprow"><span class="ph">The habit this buys you: <b>scan the whole interval for blow-ups before integrating</b>. Five seconds, every time.</span><span class="sy" id="trap4"></span></div>
+  </div>
+
+  <div class="grid reveal" style="margin-top:16px">
+    <div class="left">
+      <div class="card">
+        <svg id="trapPlot" viewBox="0 0 560 250" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <button class="play" id="trapRun">▶ approach the asymptote</button>
+          <button id="trapReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="trapRead">a = 0.50</span>
+        </div>
+        <div class="callout show" id="trapCall">Each half stops a distance a short of the blow-up. Press play and close the gap.</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The honest computation</div>
+        <div class="stat"><span class="k">left half: ∫₋₁⁻ᵃ dx/x²</span><span class="v" id="trapL">—</span></div>
+        <div class="stat"><span class="k">right half: ∫ₐ¹ dx/x²</span><span class="v" id="trapR">—</span></div>
+        <div class="stat"><span class="k">each equals</span><span class="v">1/a − 1</span></div>
+        <div class="stat"><span class="k">verdict</span><span class="v" style="color:var(--div)">diverges</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          Both halves blow up together — and ONE would have been enough to sink the integral. There's no
+          cancellation rescue here: these are areas of a positive function, all the same sign, piling up
+          without bound on both sides of the asymptote.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Which machinery? — the unit, in eight integrals</h2>
+  <p class="lead reveal">Topic 6.14 is the real boss fight: not doing the techniques, but <b>choosing</b>
+    them. Eight integrals, four weapons each. Diagnose before you compute — every wrong answer below is a
+    technique that <i>looks</i> right.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="row" style="margin-bottom:8px">
+          <div class="qtag" id="sgProg">Integral 1 of 8</div>
+          <span class="score" id="sgScore">Score: 0 / 0</span>
+        </div>
+        <div class="m-big" id="sgHead"></div>
+        <div class="qtext" style="font-size:14px;margin-bottom:10px">First move?</div>
+        <div class="quiz-opts" id="sgOpts"></div>
+        <div class="feedback" id="sgFb"></div>
+        <button class="next" id="sgNext" style="margin-top:12px;width:100%;display:none">Next integral →</button>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card whypanel">
+        <div class="why-title">The tell, and the first move</div>
+        <div id="sgWork"><div class="why-t" style="padding:8px 0;color:var(--muted)">Pick a weapon to see the diagnosis.</div></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="label">The five-second scan</div>
+        <div class="stat"><span class="k">fingerprint pair?</span><span class="v">u-sub</span></div>
+        <div class="stat"><span class="k">unrelated product?</span><span class="v">parts / tabular</span></div>
+        <div class="stat"><span class="k">rational? check Q:</span><span class="v">÷ · ln · PF · arctan</span></div>
+        <div class="stat"><span class="k">∞ or blow-up?</span><span class="v">limit first</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The closer on one card</h2>
+  <div class="anatomy reveal">
+    <div class="m-big" id="anatMain"></div>
+    <div class="maprow"><span class="ph">Blow-up at an endpoint — approach it from inside</span><span class="sy" id="anatB"></span></div>
+    <div class="maprow"><span class="ph">The p-test, both regimes — and p = 1 fails both</span><span class="sy" id="anatP"></span></div>
+    <div class="maprow"><span class="ph">Interior asymptote — split first, then limit each piece</span><span class="sy" id="anatS"></span></div>
+  </div>
+
+  <h2 class="reveal">The ideas everything else builds on</h2>
+  <div class="concepts reveal">
+    <div class="concept">
+      <h3>Integral + limit</h3>
+      <p>That's the entire definition. The limit is <span class="key">written, not implied</span> — it's a
+        rubric point, and "plugging in ∞" is not a number operation.</p>
+      <div class="m" id="c1"></div>
+    </div>
+    <div class="concept">
+      <h3>Convergence is a destination</h3>
+      <p>Converges = the running total <span class="key">has a limit</span>. Diverges = it doesn't.
+        Divergence is an answer, not a failure to find one.</p>
+      <div class="m" id="c2"></div>
+    </div>
+    <div class="concept">
+      <h3>The knife edge flips</h3>
+      <p>At ∞ you need p <span class="key">&gt;</span> 1 (thin tail); near 0 you need p
+        <span class="key">&lt;</span> 1 (mild spike). Same dial, opposite directions — and 1/x loses both.</p>
+      <div class="m" id="c3"></div>
+    </div>
+    <div class="concept">
+      <h3>Scan before you integrate</h3>
+      <p>FTC needs a continuous integrand on the <span class="key">whole interval</span>. Five seconds of
+        looking for blow-ups beats a fluent, confident, wrong computation.</p>
+      <div class="m" id="c4"></div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Your turn</h2>
+  <p class="lead reveal">Five problems — limits written out, verdicts justified. Try before revealing.</p>
+  <div class="reveal" id="practice"></div>
+
+  <h2 class="reveal">Quick quiz</h2>
+  <p class="lead reveal">Eight fast checks across the whole lesson.</p>
+  <div class="card reveal" id="quizCard">
+    <div class="row" style="margin-bottom:12px">
+      <div class="qtag" id="qProgress">Question 1 of 8</div>
+      <span class="score" id="qScore">Score: 0 / 0</span>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="next" id="qNext" style="margin-top:14px;width:100%;display:none">Next question →</button>
+  </div>
+
+  <h2 class="reveal">Common mistakes &amp; exam tips</h2>
+  <div class="mistakes reveal">
+    <div class="mistake"><h4>Plugging ∞ in like a number</h4><p>Write the limit: lim_{b→∞} [F(x)]₁ᵇ. The exam awards the limit notation specifically — and ∞ − ∞, 1/∞ and friends need limit reasoning, not arithmetic.</p></div>
+    <div class="mistake"><h4>Missing the interior blow-up</h4><p>∫₋₁¹ dx/x² = −2 is the unit's most famous wrong answer. Scan the interval for asymptotes BEFORE touching FTC — continuity on [a, b] is a hypothesis, not a decoration.</p></div>
+    <div class="mistake"><h4>p-test direction confusion</h4><p>p &gt; 1 at infinity, p &lt; 1 near zero. If you remember one anchor, make it 1/x: it diverges in BOTH regimes, so the convergent side is always away from it.</p></div>
+    <div class="mistake"><h4>Treating "diverges" as failure</h4><p>Students who compute lim ln b = ∞ then erase and try another technique. Divergence IS the answer — state it and move on.</p></div>
+    <div class="mistake"><h4>Splitting and only checking one half</h4><p>An interior asymptote splits the integral in two, and BOTH halves must converge. One divergent half sinks the whole thing — no cancelling +∞ against −∞.</p></div>
+    <div class="mistake"><h4>Technique tunnel vision</h4><p>Just learned partial fractions, so everything looks like partial fractions. Run the five-second scan first: fingerprint → u-sub; unrelated product → parts; THEN the rational-function tree.</p></div>
+  </div>
+  <div class="tipbox reveal">
+    <h4>On the AP exam</h4>
+    <ul>
+      <li>Show the limit conversion explicitly: &ldquo;∫₁^∞ = lim_{b→∞} ∫₁ᵇ&rdquo; — it's a scored step, every time.</li>
+      <li>Justify convergence verdicts in words: &ldquo;converges because lim_{b→∞}(1 − 1/b) = 1&rdquo; — a bare number doesn't earn the point.</li>
+      <li>Before integrating ANY rational or root integrand on a closed interval, scan for asymptotes inside it.</li>
+      <li>Technique selection is tested directly in MC — practice the five-second scan until the diagnosis is faster than the computation.</li>
+    </ul>
+  </div>
+
+  <div class="whatsnext reveal">
+    That's the unit — accumulation built from rectangles, the Fundamental Theorem connecting it to
+    derivatives, and a complete toolkit for the hunt. Prove it on the
+    <a href="unit6-exam-practice.html">Unit 6 Exam Practice</a> capstone — and when the p-test's knife edge
+    returns in Unit 10's infinite series, you'll already own it. Back to the
+    <a href="unit6.html">Unit 6 Guide</a>.
+  </div>
+
+  <footer class="reveal">Improper Integrals &amp; Choosing Your Weapon · part of the Unit 6 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const T=(s)=>tex(s,s,false);
+const fmt=(v,d=2)=>{const s=v.toFixed(d); return s==="-0.00"?"0.00":s;};
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mapper(dom,yr,W,H,P){ const x0=dom[0],x1=dom[1],y0=yr[0],y1=yr[1];
+  return { sx:x=>P+((x-x0)/(x1-x0))*(W-2*P), sy:v=>H-P-((v-y0)/(y1-y0))*(H-2*P), x0,x1,y0,y1 }; }
+function drawAxes(svg,M,W,H,P,xt,yt){ const sx=M.sx, sy=M.sy;
+  for(let g=0;g<=yt;g++){ const yy=M.y0+(g/yt)*(M.y1-M.y0), py=sy(yy);
+    svg.appendChild(el("line",{x1:P,y1:py,x2:W-P,y2:py,stroke:"#222838"}));
+    svg.appendChild(el("text",{x:P-6,y:py+3,fill:"#5d6276","font-size":9.5,"text-anchor":"end","font-family":"var(--mono)"},(+yy.toFixed(2)).toString())); }
+  for(let g=0;g<=xt;g++){ const xx=M.x0+(g/xt)*(M.x1-M.x0), px=sx(xx);
+    svg.appendChild(el("text",{x:px,y:H-P+14,fill:"#5d6276","font-size":9.5,"text-anchor":"middle","font-family":"var(--mono)"},(+xx.toFixed(1)).toString())); }
+  svg.appendChild(el("line",{x1:P,y1:sy(Math.max(0,M.y0)),x2:W-P,y2:sy(Math.max(0,M.y0)),stroke:"#39415c","stroke-width":1.2}));
+  svg.appendChild(el("line",{x1:P,y1:sy(M.y1),x2:P,y2:sy(M.y0),stroke:"#39415c","stroke-width":1.2}));
+}
+function curveStr(f,a,b,M,N=160){ let d="";
+  for(let k=0;k<=N;k++){ const x=a+(b-a)*k/N; d+=(k?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(Math.min(f(x),M.y1)).toFixed(1)+" "; }
+  return d; }
+function areaPath(f,a,b,M,N=80){ let d="M"+M.sx(a).toFixed(1)+" "+M.sy(0).toFixed(1)+" ";
+  for(let k=0;k<=N;k++){ const x=a+(b-a)*k/N; d+="L"+M.sx(x).toFixed(1)+" "+M.sy(Math.min(f(x),M.y1)).toFixed(1)+" "; }
+  return d+"L"+M.sx(b).toFixed(1)+" "+M.sy(0).toFixed(1)+" Z"; }
+
+/* ======================= 1 · THE RACE ======================= */
+let rcS=0.8;
+const rcA=document.getElementById("rcA"), rcB=document.getElementById("rcB");
+const rcM=mapper([1,12],[0,1.15],270,230,30);
+function renderRC(){
+  const b=Math.pow(10,rcS);
+  rcA.innerHTML=""; rcB.innerHTML="";
+  drawAxes(rcA,rcM,270,230,30,3,2); drawAxes(rcB,rcM,270,230,30,3,2);
+  rcA.appendChild(el("text",{x:34,y:14,fill:"#8d93a8","font-size":10,"font-family":"var(--mono)"},"1/x\u00b2 \u2014 the thin tail"));
+  rcB.appendChild(el("text",{x:34,y:14,fill:"#8d93a8","font-size":10,"font-family":"var(--mono)"},"1/x \u2014 the fat tail"));
+  const bV=Math.min(b,12);
+  rcA.appendChild(el("path",{d:areaPath(x=>1/(x*x),1,bV,rcM),fill:"rgba(63,208,176,.30)"}));
+  rcB.appendChild(el("path",{d:areaPath(x=>1/x,1,bV,rcM),fill:"rgba(224,100,79,.30)"}));
+  /* the tail: everything beyond b, dimmed */
+  if(bV<11.9){
+    rcA.appendChild(el("path",{d:areaPath(x=>1/(x*x),bV,12,rcM),fill:"rgba(63,208,176,.10)",stroke:"rgba(63,208,176,.45)","stroke-width":1,"stroke-dasharray":"3 4"}));
+    rcB.appendChild(el("path",{d:areaPath(x=>1/x,bV,12,rcM),fill:"rgba(224,100,79,.10)",stroke:"rgba(224,100,79,.45)","stroke-width":1,"stroke-dasharray":"3 4"}));
+    const tx=(bV+12)/2;
+    rcA.appendChild(el("text",{x:rcM.sx(tx),y:rcM.sy(0)-8,fill:"#5d6276","font-size":9.5,"text-anchor":"middle","font-family":"var(--mono)"},"the tail"));
+    rcB.appendChild(el("text",{x:rcM.sx(tx),y:rcM.sy(0)-8,fill:"#5d6276","font-size":9.5,"text-anchor":"middle","font-family":"var(--mono)"},"the tail"));
+  }
+  rcA.appendChild(el("path",{d:curveStr(x=>1/(x*x),1,12,rcM),fill:"none",stroke:"#3fd0b0","stroke-width":2.3,"stroke-linecap":"round"}));
+  rcB.appendChild(el("path",{d:curveStr(x=>1/x,1,12,rcM),fill:"none",stroke:"#e0644f","stroke-width":2.3,"stroke-linecap":"round"}));
+  if(b<=12){ [rcA,rcB].forEach(s=>s.appendChild(el("line",{x1:rcM.sx(b),y1:rcM.sy(1.15),x2:rcM.sx(b),y2:rcM.sy(0),stroke:"#7e859c","stroke-width":1.1,"stroke-dasharray":"4 4",opacity:.85}))); }
+  else { [rcA,rcB].forEach(s=>s.appendChild(el("text",{x:270-34,y:230-44,fill:"#7e859c","font-size":10,"text-anchor":"end","font-family":"var(--mono)"},"b \u2192 "+Math.round(b)))); }
+  const a2=1-1/b, a1=Math.log(b);
+  document.getElementById("rcBv").textContent="b = "+(b<100?fmt(b,1):Math.round(b));
+  document.getElementById("rcA2").textContent=fmt(a2,4);
+  document.getElementById("rcA1").textContent=fmt(a1,4);
+  document.getElementById("rcT2").textContent="1/b = "+fmt(1/b,4)+" \u2192 0";
+  document.getElementById("rcCall").textContent = b<20
+    ? "Both areas growing \u2014 push further."
+    : (b<400 ? "The teal area has nearly stopped: only "+fmt(1/b,4)+" left to ever collect. The red one is still climbing with no plan to stop."
+             : "b = "+Math.round(b)+": teal is pinned at "+fmt(a2,4)+" \u2014 within "+fmt(1/b,4)+" of its destination 1. Red has reached "+fmt(a1,2)+" and will pass ANY number you name. Same picture, opposite fates.");
+}
+document.getElementById("rcS").addEventListener("input",e=>{ rcS=+e.target.value; renderRC(); });
+
+/* ======================= 2 · MECHANICS ======================= */
+function renderDef(){
+  const main="\\int_1^{\\infty}\\!f(x)\\,dx\\;=\\;\\lim_{b\\to\\infty}\\int_1^{b}\\!f(x)\\,dx";
+  const n0=document.getElementById("defMain"); if(n0) n0.innerHTML=tex(main,main,true);
+  const n1=document.getElementById("def1"); if(n1) n1.innerHTML=T("\\infty\\to b,\\ \\text{then}\\ b\\to\\infty");
+  const n2=document.getElementById("def2"); if(n2) n2.innerHTML=T("\\int_0^1=\\lim_{a\\to 0^+}\\int_a^1");
+  const n3=document.getElementById("def3"); if(n3) n3.innerHTML=T("\\lim\\ \\text{exists}\\Leftrightarrow\\text{converges}");
+}
+const IM=[
+ { name:"Converges", sub:"\u222b\u2081^\u221e dx/x\u00b2", head:"\\int_1^{\\infty}\\frac{dx}{x^2}",
+   steps:[
+    {t:"Replace \u221e with b and write the limit \u2014 this line is a scored step.",m:"\\lim_{b\\to\\infty}\\int_1^{b}x^{-2}\\,dx"},
+    {t:"Integrate normally \u2014 power rule.",m:"\\lim_{b\\to\\infty}\\Bigl[-\\tfrac{1}{x}\\Bigr]_1^{b}=\\lim_{b\\to\\infty}\\Bigl(1-\\tfrac{1}{b}\\Bigr)"},
+    {t:"Take the limit: 1/b dies. The infinite region holds exactly one unit of area.",m:"=1\\quad\\text{(converges)}"}],
+   fin:"\\int_1^{\\infty}\\frac{dx}{x^2}=1" },
+ { name:"Diverges", sub:"\u222b\u2081^\u221e dx/x", head:"\\int_1^{\\infty}\\frac{dx}{x}",
+   steps:[
+    {t:"Same setup \u2014 variable bound, limit written.",m:"\\lim_{b\\to\\infty}\\int_1^{b}\\frac{dx}{x}=\\lim_{b\\to\\infty}\\bigl[\\ln x\\bigr]_1^{b}"},
+    {t:"Evaluate: ln b, with no ceiling.",m:"\\lim_{b\\to\\infty}\\ln b=\\infty"},
+    {t:"The limit does not exist as a number \u2014 the integral DIVERGES. That is the final answer; nothing went wrong.",m:"\\text{diverges}"}],
+   fin:"\\int_1^{\\infty}\\frac{dx}{x}\\ \\text{diverges}" },
+ { name:"The hidden one", sub:"\u222b\u2080\u00b9 dx/\u221ax", head:"\\int_0^{1}\\frac{dx}{\\sqrt{x}}",
+   steps:[
+    {t:"Finite bounds, innocent look \u2014 but 1/\u221ax blows up at x = 0. The LEFT endpoint is the bad one: approach it from inside.",m:"\\lim_{a\\to 0^+}\\int_a^{1}x^{-1/2}\\,dx"},
+    {t:"Integrate \u2014 power rule lifts the exponent to +\u00bd.",m:"\\lim_{a\\to 0^+}\\Bigl[2\\sqrt{x}\\Bigr]_a^{1}=\\lim_{a\\to 0^+}\\bigl(2-2\\sqrt{a}\\bigr)"},
+    {t:"\u221aa dies as a \u2192 0\u207a. An infinitely TALL region with finite area \u2014 the mirror image of the 1/x\u00b2 story.",m:"=2\\quad\\text{(converges)}"}],
+   fin:"\\int_0^{1}\\frac{dx}{\\sqrt{x}}=2" }
+];
+const IMPLOT=[
+ { dom:[1,12], yr:[0,1.15], f:x=>1/(x*x), mode:"b",
+   bOf:e=>Math.pow(10, 0.08+(3-0.08)*e), val:b=>1-1/b,
+   tag:b=>"\u222b\u2081\u1d47 = "+(1-1/b).toFixed(4)+"  \u2192  1",
+   endText:"pinned at 1.0000 \u2014 the limit exists. Converged." },
+ { dom:[1,12], yr:[0,1.15], f:x=>1/x, mode:"b",
+   bOf:e=>Math.pow(10, 0.08+(3-0.08)*e), val:b=>Math.log(b),
+   tag:b=>"\u222b\u2081\u1d47 = ln b = "+Math.log(b).toFixed(3)+"  \u2192  \u221e",
+   endText:"ln 1000 \u2248 6.91 \u2014 still climbing, forever. Diverges." },
+ { dom:[0,1], yr:[0,6], f:x=>1/Math.sqrt(x), mode:"a",
+   bOf:e=>Math.pow(10, -0.3-2.4*e), val:a=>2-2*Math.sqrt(a),
+   tag:a=>"\u222b\u2090\u00b9 = "+(2-2*Math.sqrt(a)).toFixed(4)+"  \u2192  2",
+   endText:"a \u2192 0\u207a from inside: the area closes onto 2. Converged." }
+];
+let imKey=0, imN=0, imAnimT=0, imRAF=null;
+const imPlot=document.getElementById("imPlot");
+function renderIMplot(){
+  const cfg=IMPLOT[imKey];
+  const M=mapper(cfg.dom,cfg.yr,560,240,38);
+  imPlot.innerHTML="";
+  drawAxes(imPlot,M,560,240,38,cfg.mode==="b"?3:4,2);
+  const p=cfg.bOf(imAnimT);
+  let lo,hi;
+  if(cfg.mode==="b"){ lo=1; hi=Math.min(p,cfg.dom[1]); }
+  else { lo=Math.max(p,0.0008); hi=1; }
+  if(hi>lo+1e-6) imPlot.appendChild(el("path",{d:areaPath(cfg.f,lo,hi,M,120),fill:"rgba(95,127,242,.30)"}));
+  imPlot.appendChild(el("path",{d:curveStr(cfg.f,Math.max(cfg.dom[0],0.004),cfg.dom[1],M,220),fill:"none",stroke:"#5f7ff2","stroke-width":2.5,"stroke-linecap":"round"}));
+  const mark=cfg.mode==="b"?Math.min(p,cfg.dom[1]):Math.max(p,0.004);
+  imPlot.appendChild(el("line",{x1:M.sx(mark),y1:M.sy(M.y1),x2:M.sx(mark),y2:M.sy(0),stroke:"#7e859c","stroke-width":1.1,"stroke-dasharray":"4 4",opacity:.85}));
+  imPlot.appendChild(el("text",{x:560-44,y:16,fill:"#e2e6f2","font-size":11,"text-anchor":"end","font-family":"var(--mono)"},cfg.tag(p)));
+  if(cfg.mode==="b"&&p>cfg.dom[1]) imPlot.appendChild(el("text",{x:560-44,y:240-44,fill:"#7e859c","font-size":10,"text-anchor":"end","font-family":"var(--mono)"},"b \u2192 "+Math.round(p)));
+  if(cfg.mode==="a") imPlot.appendChild(el("text",{x:M.sx(0.06),y:240-44,fill:"#7e859c","font-size":10,"font-family":"var(--mono)"},"a = "+p.toFixed(3)));
+}
+function imStopAnim(){ if(imRAF){ cancelAnimationFrame(imRAF); imRAF=null; } document.getElementById("imRun").disabled=false; }
+document.getElementById("imRun").onclick=()=>{
+  if(imRAF) return;
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ imAnimT=1; renderIMplot(); document.getElementById("imRead").textContent=IMPLOT[imKey].endText; return; }
+  document.getElementById("imRun").disabled=true;
+  const t0=performance.now(), DUR=3500;
+  const step=(now)=>{ const pr=Math.min(1,(now-t0)/DUR); imAnimT=pr*pr*(3-2*pr);
+    renderIMplot();
+    if(pr<1){ imRAF=requestAnimationFrame(step); }
+    else { imRAF=null; document.getElementById("imRun").disabled=false;
+      document.getElementById("imRead").textContent=IMPLOT[imKey].endText; } };
+  imRAF=requestAnimationFrame(step);
+};
+function renderIM(){
+  const e=IM[imKey];
+  const panel=document.getElementById("imSteps"), read=document.getElementById("imRead"), sum=document.getElementById("imSum");
+  if(imN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Variable bound \u2192 integrate \u2192 limit \u2192 verdict.</div>';
+  else panel.innerHTML=e.steps.slice(0,imN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+  read.textContent=imN===0?"press step":(imN<e.steps.length?"step "+imN+" of "+e.steps.length:"done");
+  const tx=imN>=e.steps.length?e.fin:e.head+"\\;=\\;?";
+  sum.innerHTML=tex(tx,tx,true);
+  document.querySelectorAll("#imBtns button").forEach((b,i)=>b.classList.toggle("on",i===imKey));
+  renderIMplot();
+}
+document.getElementById("imStep").onclick=()=>{ if(imN<IM[imKey].steps.length){ imN++; renderIM(); } };
+document.getElementById("imReset").onclick=()=>{ imStopAnim(); imN=0; imAnimT=0; renderIM(); };
+const imBtns=document.getElementById("imBtns");
+IM.forEach((e,i)=>{ const b=document.createElement("button");
+  b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+  b.onclick=()=>{ imStopAnim(); imKey=i; imN=0; imAnimT=0; renderIM(); };
+  imBtns.appendChild(b); });
+
+/* ======================= 3 · THE p-TEST DIAL ======================= */
+let pP=2, pMode="inf";
+const pPlot=document.getElementById("pPlot");
+function renderP(){
+  pPlot.innerHTML="";
+  const inf=pMode==="inf";
+  const M=inf?mapper([1,12],[0,1.6],560,270,38):mapper([0,1],[0,6],560,270,38);
+  drawAxes(pPlot,M,560,270,38,inf?3:4,2);
+  const f=x=>1/Math.pow(x,pP);
+  const a=inf?1:0.02, b=inf?12:1;
+  const conv = inf ? pP>1 : pP<1;
+  pPlot.appendChild(el("path",{d:areaPath(f,a,b,M,140),fill:conv?"rgba(63,208,176,.30)":"rgba(224,100,79,.30)"}));
+  pPlot.appendChild(el("path",{d:curveStr(f,a,b,M,200),fill:"none",stroke:conv?"#3fd0b0":"#e0644f","stroke-width":2.5,"stroke-linecap":"round"}));
+  pPlot.appendChild(el("text",{x:44,y:16,fill:"#8d93a8","font-size":11,"font-family":"var(--mono)"},
+    "1/x^p,  p = "+fmt(pP)+(inf?"  on [1, \u221e)":"  on (0, 1]")));
+  document.getElementById("pVal").textContent=fmt(pP);
+  document.getElementById("pReg").textContent=inf?"at infinity":"near zero";
+  document.getElementById("pRule").textContent=inf?"converges iff p > 1":"converges iff p < 1";
+  const knife=Math.abs(pP-1)<0.025;
+  document.getElementById("pVerd").textContent=knife?"p = 1 \u2014 the knife edge":(conv?"converges":"diverges");
+  document.getElementById("pVerd").style.color=knife?"var(--gold)":(conv?"var(--true)":"var(--div)");
+  document.getElementById("pNum").textContent=conv&&!knife?(inf?"1/(p\u22121) = "+fmt(1/(pP-1),3):"1/(1\u2212p) = "+fmt(1/(1-pP),3)):"\u2014";
+  document.getElementById("pCall").textContent = knife
+    ? "p = 1: 1/x. The single curve that loses BOTH races \u2014 ln b at infinity, ln a at zero, divergent each way."
+    : inf
+      ? (conv?"Tail thin enough: beyond any b only "+fmt(1/((pP-1)*Math.pow(8,pP-1)),3)+"-ish remains past x = 8, and it keeps shrinking. Converges to 1/(p\u22121)."
+             :"The tail is too fat \u2014 the leftover area past every b refuses to shrink to zero. Diverges.")
+      : (conv?"The spike is mild: it climbs to infinity but so steeply-thinly that the area under it stays finite. Converges to 1/(1\u2212p)."
+             :"Too violent a spike at 0 \u2014 the area near the asymptote piles up without bound. Diverges.");
+}
+document.getElementById("pSlide").addEventListener("input",e=>{ pP=+e.target.value; renderP(); });
+document.getElementById("pModeI").onclick=()=>{ pMode="inf"; document.getElementById("pModeI").classList.add("on"); document.getElementById("pModeZ").classList.remove("on"); renderP(); };
+document.getElementById("pModeZ").onclick=()=>{ pMode="zero"; document.getElementById("pModeZ").classList.add("on"); document.getElementById("pModeI").classList.remove("on"); renderP(); };
+
+/* ======================= 4 · THE TRAP ======================= */
+function renderTrap(){
+  const bad="\\int_{-1}^{1}\\frac{dx}{x^2}\\;\\overset{?}{=}\\;\\Bigl[-\\frac{1}{x}\\Bigr]_{-1}^{1}=(-1)-(1)=-2";
+  const n0=document.getElementById("trapBad"); if(n0) n0.innerHTML=tex(bad,bad,true);
+  const n1=document.getElementById("trap1"); if(n1) n1.innerHTML=T("\\tfrac{1}{x^2}>0\\ \\Rightarrow\\ \\int>0");
+  const n2=document.getElementById("trap2"); if(n2) n2.innerHTML=T("x=0\\in(-1,1)");
+  const n3=document.getElementById("trap3"); if(n3) n3.innerHTML=T("\\int_{-1}^{0^-}+\\int_{0^+}^{1}\\ \\to\\ \\text{diverges}");
+  const n4=document.getElementById("trap4"); if(n4) n4.innerHTML=T("\\text{scan }[a,b]\\text{ first}");
+}
+
+/* ======================= 4b · THE TRAP, PERFORMED ======================= */
+let trapA=0.5, trapRAF=null;
+const trapPlot=document.getElementById("trapPlot");
+const trapM=mapper([-1.05,1.05],[0,8],560,250,38);
+function renderTrapPlot(){
+  trapPlot.innerHTML="";
+  drawAxes(trapPlot,trapM,560,250,38,4,2);
+  const f=x=>1/(x*x);
+  const a=trapA;
+  trapPlot.appendChild(el("path",{d:areaPath(f,-1,-a,trapM,90),fill:"rgba(224,100,79,.30)"}));
+  trapPlot.appendChild(el("path",{d:areaPath(f,a,1,trapM,90),fill:"rgba(224,100,79,.30)"}));
+  trapPlot.appendChild(el("path",{d:curveStr(f,-1.05,-0.06,trapM,140),fill:"none",stroke:"#5f7ff2","stroke-width":2.4,"stroke-linecap":"round"}));
+  trapPlot.appendChild(el("path",{d:curveStr(f,0.06,1.05,trapM,140),fill:"none",stroke:"#5f7ff2","stroke-width":2.4,"stroke-linecap":"round"}));
+  trapPlot.appendChild(el("line",{x1:trapM.sx(0),y1:trapM.sy(8),x2:trapM.sx(0),y2:trapM.sy(0),stroke:"#e0644f","stroke-width":1.4,"stroke-dasharray":"5 4",opacity:.9}));
+  trapPlot.appendChild(el("text",{x:trapM.sx(0)+8,y:trapM.sy(7.4),fill:"#e0644f","font-size":10,"font-family":"var(--mono)"},"asymptote"));
+  const half=1/a-1;
+  document.getElementById("trapRead").textContent="a = "+a.toFixed(3);
+  document.getElementById("trapL").textContent=fmt(half,2);
+  document.getElementById("trapR").textContent=fmt(half,2);
+  document.getElementById("trapCall").textContent = a>0.4
+    ? "Each half stops a distance a short of the blow-up. Press play and close the gap."
+    : a>0.05
+      ? "a = "+a.toFixed(3)+": each half already holds "+fmt(half,1)+" \u2014 and the closer you creep, the faster it grows."
+      : "a = "+a.toFixed(3)+": each half holds "+fmt(half,0)+" and counting. No limit, no destination \u2014 the honest verdict is divergence, and the naive \u22122 was pure fiction.";
+}
+function trapStop(){ if(trapRAF){ cancelAnimationFrame(trapRAF); trapRAF=null; } document.getElementById("trapRun").disabled=false; }
+document.getElementById("trapRun").onclick=()=>{
+  if(trapRAF) return;
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ trapA=0.01; renderTrapPlot(); return; }
+  document.getElementById("trapRun").disabled=true;
+  const t0=performance.now(), DUR=3000;
+  const step=(now)=>{ const pr=Math.min(1,(now-t0)/DUR), e=pr*pr*(3-2*pr);
+    trapA=Math.pow(10, -0.3-1.7*e);
+    renderTrapPlot();
+    if(pr<1){ trapRAF=requestAnimationFrame(step); }
+    else { trapRAF=null; document.getElementById("trapRun").disabled=false; } };
+  trapRAF=requestAnimationFrame(step);
+};
+document.getElementById("trapReset").onclick=()=>{ trapStop(); trapA=0.5; renderTrapPlot(); };
+
+/* ======================= 5 · WHICH MACHINERY? ======================= */
+const SG=[
+ { head:"\\int x\\,e^{x^2}\\,dx", ans:"u-substitution",
+   opts:["u-substitution","integration by parts","partial fractions","improper \u2014 limit first"],
+   tell:"It LOOKS like parts (a product!) \u2014 but x is the FINGERPRINT of x\u00b2: d(x\u00b2) = 2x dx is standing right there. The pair check always comes before parts.",
+   move:"u=x^2\\Rightarrow \\tfrac12\\int e^u du=\\tfrac12 e^{x^2}+C" },
+ { head:"\\int x\\,e^{x}\\,dx", ans:"integration by parts",
+   opts:["integration by parts","u-substitution","long division","complete the square"],
+   tell:"No fingerprint: e\u02e3 has no inside function, and nothing in sight is the derivative of anything else. A genuine product of unrelated types \u2014 that's parts territory (u = x dies).",
+   move:"u=x,\\ dv=e^x dx\\Rightarrow (x-1)e^x+C" },
+ { head:"\\int \\frac{x}{x^2+1}\\,dx", ans:"u-substitution \u2192 ln",
+   opts:["u-substitution \u2192 ln","arctan card","partial fractions","integration by parts"],
+   tell:"The numerator is half the denominator's derivative \u2014 the ln pattern. The arctan card needs a CONSTANT on top; an x up there means u-sub was the move all along.",
+   move:"u=x^2+1\\Rightarrow \\tfrac12\\ln(x^2+1)+C" },
+ { head:"\\int \\frac{x^3}{x^2+4}\\,dx", ans:"long division",
+   opts:["long division","partial fractions","u-substitution \u2192 ln","tabular parts"],
+   tell:"Degree 3 over degree 2: TOP-HEAVY. Nothing else is legal until you divide \u2014 the quotient is x, and the remainder term then happens to be a ln pattern.",
+   move:"\\tfrac{x^3}{x^2+4}=x-\\tfrac{4x}{x^2+4}\\Rightarrow \\tfrac{x^2}{2}-2\\ln(x^2+4)+C" },
+ { head:"\\int \\frac{x+3}{(x-1)(x+2)}\\,dx", ans:"partial fractions",
+   opts:["partial fractions","complete the square","long division","u-substitution"],
+   tell:"Top-light, and the denominator is ALREADY FACTORED into distinct linear pieces \u2014 the un-adding setup on a silver platter. Cover-up gives the constants in two lines.",
+   move:"\\tfrac{A}{x-1}+\\tfrac{B}{x+2},\\ A=\\tfrac43,\\ B=-\\tfrac13" },
+ { head:"\\int x^4 e^{x}\\,dx", ans:"tabular parts",
+   opts:["tabular parts","u-substitution","partial fractions","improper \u2014 limit first"],
+   tell:"A polynomial (dies in 4 differentiations) times e\u02e3 (integrates forever) \u2014 the exact tabular setup. Plain parts works too, but you'd run it four times; the table runs them at once.",
+   move:"\\text{signs }+,-,+,-,+\\ \\text{down; }\\times\\ \\searrow" },
+ { head:"\\int_1^{\\infty} \\frac{dx}{x^3}", ans:"improper \u2014 limit first",
+   opts:["improper \u2014 limit first","u-substitution","integration by parts","long division"],
+   tell:"\u221e sits in a bound \u2014 BEFORE any antidifferentiation, swap it for b and write the limit. (Then it's a one-line power rule; p = 3 > 1, converges to \u00bd.)",
+   move:"\\lim_{b\\to\\infty}\\bigl[-\\tfrac{1}{2x^2}\\bigr]_1^b=\\tfrac12" },
+ { head:"\\int \\frac{dx}{x^2+6x+13}", ans:"complete the square",
+   opts:["complete the square","partial fractions","u-substitution \u2192 ln","long division"],
+   tell:"Constant numerator over a quadratic with discriminant 36 \u2212 52 < 0 \u2014 it will NEVER factor, so partial fractions is dead on arrival. Complete the square and aim at arctan.",
+   move:"(x+3)^2+4\\Rightarrow \\tfrac12\\arctan\\tfrac{x+3}{2}+C" }
+];
+let sgI=0, sgScore=0, sgDone=0, sgLock=false;
+function renderSG(){
+  sgLock=false; const item=SG[sgI];
+  document.getElementById("sgHead").innerHTML=tex(item.head,item.head,true);
+  document.getElementById("sgProg").textContent="Integral "+(sgI+1)+" of "+SG.length;
+  document.getElementById("sgScore").textContent="Score: "+sgScore+" / "+sgDone;
+  document.getElementById("sgFb").innerHTML="";
+  document.getElementById("sgNext").style.display="none";
+  document.getElementById("sgWork").innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Pick a weapon to see the diagnosis.</div>';
+  const box=document.getElementById("sgOpts"); box.innerHTML="";
+  shuf(item.opts).forEach(o=>{
+    const b=document.createElement("button"); b.style.textAlign="center"; b.textContent=o;
+    b.onclick=()=>{ if(sgLock)return; sgLock=true; sgDone++;
+      const ok=(o===item.ans);
+      [...box.children].forEach(bb=>{ bb.disabled=true; if(bb.textContent===item.ans) bb.classList.add("correct"); });
+      if(ok){ sgScore++; }
+      else b.classList.add("wrong");
+      document.getElementById("sgScore").textContent="Score: "+sgScore+" / "+sgDone;
+      document.getElementById("sgFb").innerHTML=(ok
+        ?'<span style="color:var(--conv);font-weight:600">\u2713 Right weapon.</span> '
+        :'<span style="color:var(--div);font-weight:600">\u2717 Tempting \u2014 but no.</span> ')+'<span style="color:var(--muted)">'+item.tell+'</span>';
+      document.getElementById("sgWork").innerHTML='<div class="why-step"><div class="why-n">\u2192</div><div><div class="why-t">First move:</div><div class="why-m">'+T(item.move)+'</div></div></div>';
+      document.getElementById("sgNext").style.display="block";
+      document.getElementById("sgNext").textContent = sgI<SG.length-1?"Next integral \u2192":"Run the gauntlet again \u21ba";
+    };
+    box.appendChild(b);
+  });
+}
+document.getElementById("sgNext").onclick=()=>{ if(sgI<SG.length-1){ sgI++; } else { sgI=0; sgScore=0; sgDone=0; } renderSG(); };
+
+/* ======================= anatomy + concepts ======================= */
+function renderAnatomy(){
+  const main="\\int_a^{\\infty}f\\,dx=\\lim_{b\\to\\infty}\\int_a^{b}f\\,dx";
+  document.getElementById("anatMain").innerHTML=tex(main,main,true);
+  document.getElementById("anatB").innerHTML=T("\\int_0^1=\\lim_{a\\to 0^+}\\int_a^1");
+  document.getElementById("anatP").innerHTML=T("\\infty:\\ p>1\\quad\\big|\\quad 0:\\ p<1");
+  document.getElementById("anatS").innerHTML=T("\\int_{-1}^{1}=\\int_{-1}^{0^-}+\\int_{0^+}^{1}");
+}
+function renderConcepts(){
+  const c1=document.getElementById("c1"); if(c1) c1.innerHTML=tex("\\int_1^{\\infty}=\\lim_{b\\to\\infty}\\int_1^{b}","\u222b to \u221e = lim of \u222b to b");
+  const c2=document.getElementById("c2"); if(c2) c2.innerHTML=tex("\\lim=L\\Rightarrow\\text{converges to }L","limit exists \u21d2 converges");
+  const c3=document.getElementById("c3"); if(c3) c3.innerHTML=tex("\\tfrac{1}{x}:\\ \\text{diverges both ways}","1/x diverges both ways");
+  const c4=document.getElementById("c4"); if(c4) c4.innerHTML=tex("f\\ \\text{continuous on}\\ [a,b]\\ \\text{first}","continuity on [a,b] first");
+}
+
+/* ======================= practice ======================= */
+const PRAC=[
+ { tag:"Straight convergence", q:()=>'Evaluate '+T("\\int_1^{\\infty}\\frac{dx}{x^3}")+' or show it diverges.',
+   sol:[{t:"Limit first \u2014 written out:",m:"\\lim_{b\\to\\infty}\\Bigl[-\\tfrac{1}{2x^2}\\Bigr]_1^{b}=\\lim_{b\\to\\infty}\\Bigl(\\tfrac12-\\tfrac{1}{2b^2}\\Bigr)"},
+        {t:"1/(2b\u00b2) dies. (p-test check: p = 3 > 1 \u2014 converges, value 1/(p\u22121)\u00b7\u2026 matches.)",m:"=\\tfrac12"}] },
+ { tag:"The exponential tail", q:()=>'Evaluate '+T("\\int_0^{\\infty}e^{-x}\\,dx")+'.',
+   sol:[{t:"Setup:",m:"\\lim_{b\\to\\infty}\\bigl[-e^{-x}\\bigr]_0^{b}=\\lim_{b\\to\\infty}\\bigl(1-e^{-b}\\bigr)"},
+        {t:"e\u207b\u1d47 \u2192 0. The whole infinite tail under e\u207b\u02e3 holds exactly one unit \u2014 a fact that returns constantly in probability.",m:"=1"}] },
+ { tag:"Blow-up at the TOP bound", q:()=>'Evaluate '+T("\\int_0^{4}\\frac{dx}{\\sqrt{4-x}}")+'.',
+   sol:[{t:"Scan: the integrand blows up at x = 4 \u2014 the RIGHT endpoint this time. Approach from below:",m:"\\lim_{b\\to 4^-}\\int_0^{b}(4-x)^{-1/2}dx=\\lim_{b\\to 4^-}\\Bigl[-2\\sqrt{4-x}\\Bigr]_0^{b}"},
+        {t:"Evaluate: \u22122\u221a(4\u2212b) + 2\u221a4 \u2192 0 + 4.",m:"=4"}] },
+ { tag:"p-test verdict", q:()=>'Does '+T("\\int_1^{\\infty}\\frac{dx}{\\sqrt{x}}")+' converge? Justify with the p-test \u2014 and with the limit.',
+   sol:[{t:"p = \u00bd < 1 at infinity \u2192 diverges. Confirm honestly:",m:"\\lim_{b\\to\\infty}\\bigl[2\\sqrt{x}\\bigr]_1^{b}=\\lim_{b\\to\\infty}(2\\sqrt{b}-2)=\\infty"},
+        {t:"The tail of 1/\u221ax is even fatter than 1/x's. Diverges \u2014 final answer.",m:""}] },
+ { tag:"The hidden trap", q:()=>'A student computes '+T("\\int_0^{3}\\frac{dx}{x-1}=\\bigl[\\ln|x-1|\\bigr]_0^3=\\ln 2-0=\\ln 2")+'. Grade it.',
+   sol:[{t:"Zero points \u2014 fluent and wrong. Scan the interval: x = 1 sits INSIDE [0, 3] and the integrand blows up there. FTC's continuity hypothesis fails.",m:"x=1\\in(0,3)"},
+        {t:"Correct treatment splits at 1; the left piece alone already diverges:",m:"\\lim_{b\\to 1^-}\\bigl[\\ln|x-1|\\bigr]_0^{b}=\\lim_{b\\to 1^-}\\ln|b-1|=-\\infty"},
+        {t:"One divergent half sinks it all \u2014 the integral diverges. (No cancelling \u2212\u221e against the right piece's +\u221e.)",m:"\\text{diverges}"}] }
+];
+function renderPractice(){
+  document.getElementById("practice").innerHTML=PRAC.map((p,i)=>{
+    const steps=p.sol.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+    return '<div class="prob"><div class="prob-tag">'+p.tag+'</div><div class="prob-q">'+p.q()+'</div>'
+      +'<button class="soltoggle" data-i="'+i+'">Show solution</button>'
+      +'<div class="sol" id="sol'+i+'">'+steps+'</div></div>';
+  }).join("");
+  document.querySelectorAll(".soltoggle").forEach(btn=>{ btn.onclick=()=>{ const i=btn.getAttribute("data-i"), s=document.getElementById("sol"+i);
+    btn.textContent=s.classList.toggle("show")?"Hide solution":"Show solution"; }; });
+}
+
+/* ======================= quiz ======================= */
+const QUIZ=[
+ { q:()=>T("\\int_2^{\\infty}f(x)\\,dx")+' is DEFINED as:',
+   opts:[{h:()=>T("\\lim_{b\\to\\infty}\\int_2^{b}f(x)\\,dx"),ok:true},{h:()=>T("\\int_2^{b}f(x)\\,dx\\ \\text{for large }b"),ok:false},{h:()=>T("F(\\infty)-F(2)"),ok:false},{h:()=>T("\\lim_{x\\to\\infty}f(x)"),ok:false}],
+   fb:"An integral plus a limit \u2014 the limit IS the definition. F(\u221e) isn't a thing; \u221e is not a number you evaluate at." },
+ { q:()=>'"The improper integral converges" means:',
+   opts:[{h:()=>"the limit of the partial integrals exists as a finite number",ok:true},{h:()=>"the integrand approaches 0",ok:false},{h:()=>"the antiderivative is bounded",ok:false},{h:()=>"the region has finite width",ok:false}],
+   fb:"Convergence is about the LIMIT existing. Integrand \u2192 0 is necessary-feeling but not sufficient \u2014 1/x \u2192 0 and still diverges." },
+ { q:()=>T("\\int_1^{\\infty}\\frac{dx}{x^p}")+' converges exactly when:',
+   opts:[{h:()=>"p > 1",ok:true},{h:()=>"p < 1",ok:false},{h:()=>"p \u2265 1",ok:false},{h:()=>"all p > 0",ok:false}],
+   fb:"Thin tail needed at infinity: p > 1, value 1/(p\u22121). And p = 1 itself diverges \u2014 ln b has no ceiling \u2014 so \u2265 fails too." },
+ { q:()=>T("\\int_0^{1}\\frac{dx}{x^p}")+' converges exactly when:',
+   opts:[{h:()=>"p < 1",ok:true},{h:()=>"p > 1",ok:false},{h:()=>"never",ok:false},{h:()=>"all p",ok:false}],
+   fb:"Near zero the rule FLIPS: a mild spike (p < 1) integrates fine \u2014 like 1/\u221ax giving 2 \u2014 while p \u2265 1 piles up infinite area at the asymptote." },
+ { q:()=>T("\\int_0^{\\infty}e^{-2x}\\,dx")+' =',
+   opts:[{h:()=>T("\\tfrac12"),ok:true},{h:()=>T("1"),ok:false},{h:()=>T("2"),ok:false},{h:()=>"diverges",ok:false}],
+   fb:"lim [\u2212e\u207b\u00b2\u02e3/2]\u2080\u1d47 = 0 \u2212 (\u22121/2) = 1/2. The chain-rule \u00bd from Lesson 3's bookkeeping shows up even at infinity." },
+ { q:()=>'What makes '+T("\\int_{-2}^{2}\\frac{dx}{x^2}")+' improper?',
+   opts:[{h:()=>"a vertical asymptote at x = 0, inside the interval",ok:true},{h:()=>"the bounds are symmetric",ok:false},{h:()=>"nothing \u2014 FTC applies directly",ok:false},{h:()=>"the integrand is even",ok:false}],
+   fb:"The blow-up hides INSIDE [\u22122, 2]. Naive FTC gives a negative answer for a positive function \u2014 the unit's most famous nonsense. Split at 0; it diverges." },
+ { q:()=>'You compute '+T("\\lim_{b\\to\\infty}\\ln b=\\infty")+' for an improper integral. You should:',
+   opts:[{h:()=>"state that the integral diverges \u2014 done",ok:true},{h:()=>"try a different technique",ok:false},{h:()=>"report the answer as \u221e \u2248 a very large number",ok:false},{h:()=>"re-do it with L'H\u00f4pital",ok:false}],
+   fb:"Divergence is a complete answer, not a failed attempt. State it, justify with the limit, move on." },
+ { q:()=>'Five-second scan: the right FIRST move on '+T("\\int x^3\\cos(x^4)\\,dx")+' is:',
+   opts:[{h:()=>"u-substitution \u2014 x\u00b3 is the fingerprint of x\u2074",ok:true},{h:()=>"tabular parts \u2014 polynomial times trig",ok:false},{h:()=>"parts with u = cos(x\u2074)",ok:false},{h:()=>"it's improper \u2014 limit first",ok:false}],
+   fb:"The pair check beats the product reflex: d(x\u2074) = 4x\u00b3dx is right there. \u201cPolynomial times trig \u2192 tabular\u201d only applies when there's NO fingerprint \u2014 here there is one." }
+];
+let qi=0, qScore=0, qDone=0, qAnswered=false;
+const qOpts=document.getElementById("qOpts"), qFb=document.getElementById("qFb"), qNext=document.getElementById("qNext");
+function renderQuiz(){
+  qAnswered=false; const item=QUIZ[qi];
+  document.getElementById("qText").innerHTML=item.q();
+  document.getElementById("qProgress").textContent="Question "+(qi+1)+" of "+QUIZ.length;
+  document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+  qFb.innerHTML=""; qNext.style.display="none";
+  qNext.textContent = qi<QUIZ.length-1 ? "Next question \u2192" : "Restart quiz \u21ba";
+  qOpts.innerHTML="";
+  const sopts=shuf(item.opts);
+  sopts.forEach((o)=>{ const b=document.createElement("button"); b.innerHTML=o.h();
+    b.onclick=()=>{ if(qAnswered)return; qAnswered=true; qDone++;
+      [...qOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(sopts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ qScore++; b.classList.add("correct"); qFb.innerHTML='<span style="color:var(--conv);font-weight:600">\u2713 Correct.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      else { b.classList.add("wrong"); qFb.innerHTML='<span style="color:var(--div);font-weight:600">\u2717 Not quite.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+      qNext.style.display="block"; };
+    qOpts.appendChild(b); });
+}
+qNext.onclick=()=>{ if(qi<QUIZ.length-1){ qi++; } else { qi=0; qScore=0; qDone=0; } renderQuiz(); };
+
+/* ======================= init + KaTeX refresh ======================= */
+function refreshAll(){ renderRC(); renderDef(); renderIM(); renderP(); renderTrap(); renderTrapPlot(); renderSG(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); }
+renderRC(); renderDef(); renderIM(); renderP(); renderTrap(); renderTrapPlot(); renderSG(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); refreshAll(); }
+  else if(++tries>40) clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.animationDelay=Math.min(i*30,440)+'ms'; });
+
+</script>
+</body>
+</html>

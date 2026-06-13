@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Fundamental Theorem — Accumulation Meets the Derivative · Unit 6 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23101420%27%2F%3E%3Cg%20fill%3D%27%235f7ff2%27%3E%3Crect%20x%3D%276%27%20y%3D%2718%27%20width%3D%274.6%27%20height%3D%278%27%20rx%3D%271%27%20opacity%3D%27.55%27%2F%3E%3Crect%20x%3D%2712%27%20y%3D%2714%27%20width%3D%274.6%27%20height%3D%2712%27%20rx%3D%271%27%20opacity%3D%27.75%27%2F%3E%3Crect%20x%3D%2718%27%20y%3D%2710%27%20width%3D%274.6%27%20height%3D%2716%27%20rx%3D%271%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M5%2017%20C%2012%2010%2C%2020%206%2C%2027%207%27%20stroke%3D%27%238fa6f7%27%20stroke-width%3D%272%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  /* page accent: unit-6 royal blue. base palette/fonts/chrome come from styles.css */
+  :root{ --approx:#5f7ff2; --gold:#5f7ff2; --true:#3fd0b0;
+         --glow:rgba(95,127,242,.08); --wrap-max:1060px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block;border-radius:10px}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:8px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button:disabled:hover{border-color:var(--line);transform:none}
+  .sb-name{font-weight:600;font-size:13.5px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .callout{margin-top:12px;font-size:13.5px;min-height:20px;color:var(--ink);
+    border-left:3px solid var(--gold);padding-left:12px;opacity:0;transition:opacity .3s}
+  .callout.show{opacity:1}
+  .predict{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;padding:12px 14px;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:10px;transition:opacity .25s}
+  .predict.locked{opacity:.55;pointer-events:none}
+  .predict-q{font-size:13.5px;font-weight:600}
+  .predict-btns{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+  .pbtn{font-size:13px;padding:7px 14px;border-radius:8px}
+  .pbtn.picked{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .whypanel .why-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+  .why-step{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .why-step:last-child{border-bottom:none}
+  .why-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .why-t{font-size:13px;line-height:1.5}
+  .why-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;overflow-x:auto}
+  .verdict-badge{display:inline-block;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px}
+  .vb-under{background:rgba(224,100,79,.16);color:var(--div)}
+  .vb-over{background:rgba(63,208,176,.16);color:var(--conv)}
+  .vb-dead{background:var(--panel-2);color:var(--muted)}
+  .legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:12px;flex-wrap:wrap}
+  .legend b{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+  .stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .stat:last-child{border-bottom:none}
+  .stat .k{color:var(--muted)}
+  .stat .v{font-family:var(--mono);color:var(--ink)}
+  .cmp{margin-top:10px}
+  .cmp-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;
+    margin-top:6px;font-size:13px;cursor:pointer;transition:border-color .15s,background .15s}
+  .cmp-row:hover{border-color:var(--gold)}
+  .cmp-row.on{border-color:var(--approx);background:rgba(95,127,242,.08)}
+  .cmp-row .nm{font-weight:600;flex:0 0 86px}
+  .cmp-row .vv{font-family:var(--mono);color:var(--ink);flex:1}
+  .cmp-row .ee{font-family:var(--mono);font-size:12px;flex:0 0 auto}
+  .ee.neg{color:var(--div)} .ee.pos{color:var(--conv)} .ee.zero{color:var(--muted)}
+  /* range sliders */
+  input[type=range]{accent-color:var(--approx);width:160px}
+  .nval{font-family:var(--mono);font-size:13px;color:var(--ink);min-width:54px;display:inline-block}
+  /* data table */
+  table.dt{border-collapse:collapse;margin-top:8px;font-size:13.5px;width:100%}
+  .dt th,.dt td{border:1px solid var(--line);padding:8px 12px;text-align:center;font-family:var(--mono)}
+  .dt th{background:var(--panel-2);color:var(--muted);font-weight:500;font-size:12px;letter-spacing:.04em}
+  .dt td{color:var(--ink)}
+  .sumline{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;overflow-x:auto;min-height:46px;font-size:14px}
+  .units{color:var(--approx);font-weight:600}
+  /* sigma -> integral anatomy */
+  .anatomy{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:780px}
+  .anatomy .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .maprow{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .maprow:last-child{border-bottom:none}
+  .maprow .ph{color:var(--ink);flex:1 1 auto;line-height:1.45}
+  .maprow .sy{font-family:var(--mono);color:var(--muted);flex:none}
+  .concepts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.concepts{grid-template-columns:1fr}}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s,box-shadow .2s}
+  .concept:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(43,41,37,.45)}
+  .concept h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .concept p{font-size:13.5px;margin:6px 0;color:var(--ink)}
+  .concept .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;text-align:center;overflow-x:auto}
+  .key{color:var(--approx);font-weight:600}
+  .ou-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+  .ou-table th,.ou-table td{border:1px solid var(--line);padding:6px 8px;text-align:center}
+  .ou-table th{background:var(--panel-2);color:var(--muted);font-weight:500}
+  .whatsnext{max-width:700px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  button:focus-visible, a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  /* practice */
+  .prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .prob-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--approx);font-weight:600}
+  .prob-q{font-size:14.5px;line-height:1.65;margin:6px 0 12px}
+  .soltoggle{font-size:13px;padding:7px 14px}
+  .sol{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .sol.show{display:block}
+  /* mistakes + tips */
+  .mistakes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){.mistakes{grid-template-columns:1fr}}
+  .mistake{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--div);border-radius:10px;padding:13px 16px}
+  .mistake h4{margin:0 0 4px;font-size:14px;font-family:var(--display)}
+  .mistake p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+  .tipbox{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:780px}
+  .tipbox h4{margin:0 0 8px;font-size:14px;font-family:var(--display);color:var(--approx)}
+  .tipbox ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+  .tipbox li{margin:5px 0}
+  /* quiz */
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .qtag{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button{font-size:14px;padding:11px 14px}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px;line-height:1.5}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit6.html">← Unit 6 Guide</a>
+  <header class="reveal">
+    <h1>The Fundamental <span class="em">Theorem</span></h1>
+    <div class="sub">Lesson 1 ended on a cliffhanger: the net-change curve A(t) carried a tangent tick whose
+      slope was always r(t). That wasn't a coincidence — it was the Fundamental Theorem of Calculus, the
+      hinge that joins differentiation and integration into one machine.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    Turn accumulated area into a function — <b>g(x) = ∫₀ˣ f(t) dt</b> — and ask how fast it grows. Push x
+    right by a sliver of width h and you pick up a sliver of area ≈ <b>f(x) · h</b>. So the rate of growth is
+    <b>g′(x) = f(x)</b>: <i>the derivative of the accumulation is the function you were accumulating.</i>
+    Run it backward and you get the exam's favorite shortcut: ∫ₐᵇ f = F(b) − F(a) for any antiderivative F.
+  </div>
+
+  <h2 class="reveal">Area as a function — and its derivative</h2>
+  <p class="lead reveal">Here is <span id="ft1Eq"></span>. Drag x: the top pane shades ∫₀ˣ f, the bottom pane
+    plots that area as the curve <b>g(x)</b>. Then flip on <b>show the sliver</b> and shrink h — watch the
+    difference quotient close in on f(x). That convergence <i>is</i> Part 1 of the theorem, happening live.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="ftF" viewBox="0 0 560 240" preserveAspectRatio="xMidYMid meet"></svg>
+        <svg id="ftG" viewBox="0 0 560 240" preserveAspectRatio="xMidYMid meet" style="margin-top:6px"></svg>
+        <div class="controls">
+          <span style="font-size:12.5px;color:var(--muted)">x =</span>
+          <input type="range" id="ft1X" min="0.2" max="7.8" step="0.02" value="2" aria-label="x position">
+          <span class="nval" id="ft1Xv">2.00</span>
+          <button id="ft1Sliver">show the sliver</button>
+          <span id="ft1HWrap" style="display:none;align-items:center;gap:8px">
+            <span style="font-size:12.5px;color:var(--muted)">h =</span>
+            <input type="range" id="ft1H" min="0.02" max="1.2" step="0.02" value="1" style="width:110px" aria-label="sliver width h">
+            <span class="nval" id="ft1Hv">1.00</span>
+            <button id="ft1Auto" class="pbtn">take h → 0</button>
+          </span>
+        </div>
+        <div class="callout show" id="ft1Call"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The theorem, measured live</div>
+        <div class="stat"><span class="k">f(x) — the height</span><span class="v" id="ft1Fv">—</span></div>
+        <div class="stat"><span class="k">g(x) = ∫₀ˣ f — the area</span><span class="v" id="ft1Gv">—</span></div>
+        <div class="stat" id="ft1DqRow" style="display:none"><span class="k">[g(x+h) − g(x)] / h</span><span class="v" id="ft1Dq">—</span></div>
+        <div class="stat" id="ft1GapRow" style="display:none"><span class="k">gap from f(x)</span><span class="v" id="ft1Gap">—</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5" id="ft1Note">
+          The sliver of new area is a near-rectangle: height f(x), width h. Divide by h and only the height
+          survives — shrink h to watch the gap die.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Reading g from f's graph</h2>
+  <p class="lead reveal">The single most-tested skill in this unit. You're shown the graph of <b>f</b> —
+    segments and a semicircle, so every area is exact geometry — and asked everything about
+    <b>g(x) = ∫₀ˣ f</b>. The translation rules: f's <i>sign</i> drives g up or down; f's <i>direction</i>
+    bends g. Scrub across and read the story.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="figPlot" viewBox="0 0 560 300" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <span style="font-size:12.5px;color:var(--muted)">x =</span>
+          <input type="range" id="figX" min="0" max="8" step="0.02" value="1.2" aria-label="x position on figure">
+          <span class="nval" id="figXv">1.20</span>
+          <div style="flex:1"></div>
+          <span class="readout">g(x) = <span id="figGv" style="color:var(--ink)">—</span></span>
+        </div>
+        <div class="callout show" id="figCall"></div>
+        <div class="predict" style="margin-top:12px;flex-direction:column;align-items:stretch;gap:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+            <div class="predict-q" id="chalQ">Prove it — click g's features on the graph itself.</div>
+            <button class="pbtn" id="chalBtn">start the challenge</button>
+          </div>
+          <div class="feedback" id="chalFb" style="margin-top:0;min-height:0"></div>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card whypanel">
+        <div class="why-title">Find the absolute max of g on [0, 8]</div>
+        <p style="font-size:12.5px;color:var(--muted);margin:4px 0 10px">The way the rubric wants it —
+          a candidates table. Step through it.</p>
+        <div id="candSteps"></div>
+        <button class="play" id="candBtn" style="margin-top:10px;width:100%">step →</button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Which one is g?</h2>
+  <p class="lead reveal">The multiple-choice version of the same skill. You're shown <b>f</b> — pick the graph
+    of <b>g(x) = ∫₀ˣ f</b>. The distractors are the classic wrong answers; the behavior dictionary is your
+    whole toolkit. Sign drives direction, crossings make extrema, and remember the anchor: <b>g(0) = 0</b>.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="label">This is f</div>
+        <svg id="mgPlot" viewBox="0 0 460 300" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="qtext">Which graph is g(x) = ∫₀ˣ f ?</div>
+        <div class="quiz-opts" id="mgOpts"></div>
+        <div class="feedback" id="mgFb"></div>
+        <button class="next" id="mgNext" style="margin-top:14px;width:100%;display:none">Try another →</button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Evaluate it exactly — FTC Part 2</h2>
+  <p class="lead reveal">Part 1 says accumulation undoes differentiation. Read it backward and definite
+    integrals become two evaluations and a subtraction: find <i>any</i> antiderivative F, then
+    <b>∫ₐᵇ f = F(b) − F(a)</b>. Step through the recipe — and notice where the +C goes.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="ftcPlot" viewBox="0 0 560 240" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <button class="play" id="ftcStep">step →</button>
+          <button id="ftcReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="ftcRead">press step</span>
+        </div>
+        <div class="sumline" id="ftcSum"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick an integral</div>
+        <div class="series-btns" id="ftcBtns"></div>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, shown</div>
+        <div id="ftcSteps"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The theorem in one picture — area = rise</h2>
+  <p class="lead reveal">Why does F(b) − F(a) compute an area? Because they are the <i>same number seen on two
+    graphs</i>. Below: f = cos x and its antiderivative F = sin x. Drag the bounds — the <b>signed area</b>
+    under cos between a and b is always, exactly, the <b>rise</b> of sin from a to b. Red area? Then sin is
+    falling by the same amount. No textbook draws this; it's the whole theorem.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="arF" viewBox="0 0 560 200" preserveAspectRatio="xMidYMid meet"></svg>
+        <svg id="arG" viewBox="0 0 560 200" preserveAspectRatio="xMidYMid meet" style="margin-top:6px"></svg>
+        <div class="controls">
+          <span style="font-size:12.5px;color:var(--muted)">a =</span>
+          <input type="range" id="arA" min="0" max="6.28" step="0.02" value="0.60" style="width:130px" aria-label="lower bound a">
+          <span class="nval" id="arAv">0.60</span>
+          <span style="font-size:12.5px;color:var(--muted)">b =</span>
+          <input type="range" id="arB" min="0" max="6.28" step="0.02" value="2.60" style="width:130px" aria-label="upper bound b">
+          <span class="nval" id="arBv">2.60</span>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">One number, two graphs</div>
+        <div class="stat"><span class="k">area: ∫ₐᵇ cos x dx</span><span class="v" id="arArea">—</span></div>
+        <div class="stat"><span class="k">rise: sin(b) − sin(a)</span><span class="v" id="arRise">—</span></div>
+        <div class="stat"><span class="k">difference</span><span class="v" style="color:var(--true)">0 — always</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          Push b through a red region and watch both numbers fall together: negative area on the top graph
+          IS descent on the bottom one. F(b) − F(a) isn't a trick — it's reading the accumulated area off
+          the antiderivative's own axis.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Properties — algebra you can see</h2>
+  <p class="lead reveal">A few rules let you cut, glue, flip, and scale integrals without computing anything.
+    The figure gives two facts: the area above on [0, 3] is <b>5</b>, the area below on [3, 7] is <b>3</b>.
+    Everything else follows — answer each check.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card"><svg id="propPlot" viewBox="0 0 560 230" preserveAspectRatio="xMidYMid meet"></svg></div>
+    </div>
+    <div class="right">
+      <div id="propChecks"></div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The theorem, both directions — and the variants</h2>
+  <div class="anatomy reveal">
+    <div class="m-big" id="anatMain"></div>
+    <div class="maprow"><span class="ph">Chain rule variant — upper bound is a function: differentiate, then multiply by the bound's derivative</span><span class="sy" id="anatChain"></span></div>
+    <div class="maprow"><span class="ph">Variable LOWER bound — flip it, pick up a minus sign</span><span class="sy" id="anatLower"></span></div>
+    <div class="maprow"><span class="ph">Free point on every exam: an integral from a to a is zero</span><span class="sy" id="anatZero"></span></div>
+  </div>
+
+  <h2 class="reveal">The ideas everything else builds on</h2>
+  <div class="concepts reveal">
+    <div class="concept">
+      <h3>The behavior dictionary</h3>
+      <p>Everything about g is read off f — <span class="key">one derivative down</span> from where your
+        instincts look.</p>
+      <table class="ou-table">
+        <tr><th>f is…</th><th>so g is…</th></tr>
+        <tr><td>positive</td><td>increasing</td></tr>
+        <tr><td>negative</td><td>decreasing</td></tr>
+        <tr><td>crossing + → −</td><td>at a local max</td></tr>
+        <tr><td>crossing − → +</td><td>at a local min</td></tr>
+        <tr><td>increasing</td><td>concave up</td></tr>
+        <tr><td>decreasing</td><td>concave down</td></tr>
+      </table>
+    </div>
+    <div class="concept">
+      <h3>g's slope is f — not g</h3>
+      <p>The most common exam confusion: g(x) is an <span class="key">area</span>, f(x) is g's
+        <span class="key">slope</span> there. A big f means g is climbing fast — it says nothing about
+        whether g is big.</p>
+      <div class="m" id="c2"></div>
+    </div>
+    <div class="concept">
+      <h3>The chain-rule variant</h3>
+      <p>When the upper bound is a function of x, the answer is f at that bound
+        <span class="key">times the bound's derivative</span>. Free multiple-choice points.</p>
+      <div class="m" id="c3"></div>
+    </div>
+    <div class="concept">
+      <h3>Two evaluations and a subtraction</h3>
+      <p>Any antiderivative works — the +C appears in both F(b) and F(a) and
+        <span class="key">cancels in the subtraction</span>.</p>
+      <div class="m" id="c4"></div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Your turn</h2>
+  <p class="lead reveal">Five checks in the exam's own voice. Try each before you reveal the worked answer.</p>
+  <div class="reveal" id="practice"></div>
+
+  <h2 class="reveal">Quick quiz</h2>
+  <p class="lead reveal">Eight fast multiple-choice checks across the whole lesson.</p>
+  <div class="card reveal" id="quizCard">
+    <div class="row" style="margin-bottom:12px">
+      <div class="qtag" id="qProgress">Question 1 of 8</div>
+      <span class="score" id="qScore">Score: 0 / 0</span>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="next" id="qNext" style="margin-top:14px;width:100%;display:none">Next question →</button>
+  </div>
+
+  <h2 class="reveal">Common mistakes &amp; exam tips</h2>
+  <div class="mistakes reveal">
+    <div class="mistake"><h4>Analyzing g with f′ instead of f</h4><p>g′ IS f. To find where g increases or peaks, read the sign of f itself. Reaching for f′ is answering a question one derivative too deep — f′ only enters for g's concavity.</p></div>
+    <div class="mistake"><h4>Forgetting the chain rule</h4><p>d/dx ∫₀^(x²) f(t)dt is f(x²)·2x, not f(x²). The moment the bound isn't a bare x, the bound's derivative comes along.</p></div>
+    <div class="mistake"><h4>Dropping F(a)</h4><p>∫ₐᵇ f = F(b) − F(a) — both evaluations, every time. Computing F(b) alone is only right when F(a) happens to be 0, and the exam makes sure it isn't.</p></div>
+    <div class="mistake"><h4>Forgetting g(a) = 0</h4><p>If g(x) = ∫₂ˣ f, then g(2) = 0 — an integral over an empty interval. It's the freebie candidates-table entry people leave blank.</p></div>
+    <div class="mistake"><h4>Confusing g's value with f's value</h4><p>&ldquo;g is largest where f is largest&rdquo; is false — g is largest where f finishes crossing from + to −. Height of f sets g's slope, not g's size.</p></div>
+    <div class="mistake"><h4>Losing the sign below the axis</h4><p>A semicircle of radius 2 below the axis contributes −2π, not +2π. Geometry gives the magnitude; the position gives the sign.</p></div>
+  </div>
+  <div class="tipbox reveal">
+    <h4>On the AP exam</h4>
+    <ul>
+      <li>Justify extrema in the rubric's language: <i>&ldquo;g has a local max at x = 4 because g′ = f changes sign from positive to negative there.&rdquo;</i> Sign change of g′ — nothing else scores.</li>
+      <li>Absolute extrema want a candidates table: g at every critical point and both endpoints, computed by geometry, compared in writing.</li>
+      <li>Areas of figure regions are exact geometry — triangles and circle pieces. Never estimate what you can compute.</li>
+      <li>See d/dx of an integral? Answer instantly with FTC Part 1 (+ chain factor) — it's designed to take ten seconds, not an antiderivative hunt.</li>
+    </ul>
+  </div>
+
+  <div class="whatsnext reveal">
+    The theorem says any antiderivative unlocks any definite integral — so the hunt for antiderivatives is on.
+    <a href="antiderivatives.html">Antiderivatives &amp; u-Substitution</a> builds the toolkit: the basic rules,
+    and the chain rule run in reverse. Or head back to the <a href="unit6.html">Unit 6 Guide</a>.
+  </div>
+
+  <footer class="reveal">The Fundamental Theorem · part of the Unit 6 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const VC={rate:"#5f7ff2", glow:"#8fa6f7", pos:"rgba(95,127,242,.30)", neg:"rgba(224,100,79,.34)", truec:"#3fd0b0"};
+const T=(s)=>tex(s,s,false);
+const fmt=(v,d=2)=>{const s=v.toFixed(d); return s==="-0.00"?"0.00":s;};
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function mapper(dom,yr,W,H,P){ const x0=dom[0],x1=dom[1],y0=yr[0],y1=yr[1];
+  return { sx:x=>P+((x-x0)/(x1-x0))*(W-2*P), sy:v=>H-P-((v-y0)/(y1-y0))*(H-2*P), x0,x1,y0,y1 }; }
+function drawAxes(svg,M,W,H,P,xt,yt){ const sx=M.sx, sy=M.sy;
+  for(let g=0;g<=yt;g++){ const yy=M.y0+(g/yt)*(M.y1-M.y0), py=sy(yy);
+    svg.appendChild(el("line",{x1:P,y1:py,x2:W-P,y2:py,stroke:"#222838"}));
+    svg.appendChild(el("text",{x:P-7,y:py+3,fill:"#5d6276","font-size":10,"text-anchor":"end","font-family":"var(--mono)"},(+yy.toFixed(2)).toString())); }
+  for(let g=0;g<=xt;g++){ const xx=M.x0+(g/xt)*(M.x1-M.x0), px=sx(xx);
+    svg.appendChild(el("text",{x:px,y:H-P+15,fill:"#5d6276","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},(+xx.toFixed(1)).toString())); }
+  if(M.y0<0&&M.y1>0){ const yz=sy(0); svg.appendChild(el("line",{x1:P,y1:yz,x2:W-P,y2:yz,stroke:"#39415c","stroke-width":1.2})); }
+  else { svg.appendChild(el("line",{x1:P,y1:sy(M.y0),x2:W-P,y2:sy(M.y0),stroke:"#39415c","stroke-width":1.2})); }
+  svg.appendChild(el("line",{x1:P,y1:sy(M.y1),x2:P,y2:sy(M.y0),stroke:"#39415c","stroke-width":1.2}));
+}
+function curveStr(f,a,b,M,N=180){ let d="";
+  for(let k=0;k<=N;k++){ const x=a+(b-a)*k/N; d+=(k?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(f(x)).toFixed(1)+" "; }
+  return d; }
+function signedAreaPolys(svg,f,a,b,M,S=160){
+  if(b<=a) return;
+  let seg=null, sign=null;
+  const flush=()=>{ if(seg&&seg.length>1){
+    let d="M"+M.sx(seg[0][0]).toFixed(1)+" "+M.sy(0).toFixed(1)+" ";
+    seg.forEach(p=>{ d+="L"+M.sx(p[0]).toFixed(1)+" "+M.sy(p[1]).toFixed(1)+" "; });
+    d+="L"+M.sx(seg[seg.length-1][0]).toFixed(1)+" "+M.sy(0).toFixed(1)+" Z";
+    svg.appendChild(el("path",{d,fill:sign>=0?VC.pos:VC.neg,stroke:"none"})); }
+    seg=null; };
+  for(let k=0;k<=S;k++){ const x=a+(b-a)*k/S, v=f(x), s=v>=0?1:-1;
+    if(sign===null||s!==sign){ flush(); sign=s; seg=[]; }
+    seg.push([x,v]); }
+  flush();
+}
+
+/* ======================= 1 · AREA AS A FUNCTION ======================= */
+const FT1={ f:t=>3*Math.sin(t)+1.2, g:x=>3*(1-Math.cos(x))+1.2*x,
+            fTex:"f(t)=3\\sin t+1.2,\\qquad g(x)=\\int_0^x f(t)\\,dt" };
+let ft1x=2, ft1h=1, ft1sliver=false;
+const ftF=document.getElementById("ftF"), ftG=document.getElementById("ftG");
+const ftFM=mapper([0,8],[-2.6,4.9],560,240,40);
+const ftGM=mapper([0,8],[-1.5,14.5],560,240,40);
+function renderFT1(){
+  ftF.innerHTML=""; ftG.innerHTML="";
+  drawAxes(ftF,ftFM,560,240,40,4,3); drawAxes(ftG,ftGM,560,240,40,4,3);
+  ftF.appendChild(el("text",{x:46,y:18,fill:"#8d93a8","font-size":11,"font-family":"var(--mono)"},"f(t) — shading ∫₀ˣ f"));
+  ftG.appendChild(el("text",{x:46,y:18,fill:"#8d93a8","font-size":11,"font-family":"var(--mono)"},"g(x) — the area, as a curve"));
+  signedAreaPolys(ftF,FT1.f,0,ft1x,ftFM);
+  ftF.appendChild(el("path",{d:curveStr(FT1.f,0,8,ftFM),fill:"none",stroke:VC.rate,"stroke-width":2.6,"stroke-linecap":"round"}));
+  /* the sliver strip */
+  if(ft1sliver){
+    const x2=Math.min(8,ft1x+ft1h);
+    let d="M"+ftFM.sx(ft1x).toFixed(1)+" "+ftFM.sy(0).toFixed(1)+" ";
+    for(let k=0;k<=24;k++){ const x=ft1x+(x2-ft1x)*k/24; d+="L"+ftFM.sx(x).toFixed(1)+" "+ftFM.sy(FT1.f(x)).toFixed(1)+" "; }
+    d+="L"+ftFM.sx(x2).toFixed(1)+" "+ftFM.sy(0).toFixed(1)+" Z";
+    ftF.appendChild(el("path",{d,fill:"rgba(63,208,176,.35)",stroke:"#3fd0b0","stroke-width":1.2}));
+    /* the f(x)·h rectangle it approximates */
+    const ry=ftFM.sy(FT1.f(ft1x));
+    ftF.appendChild(el("rect",{x:ftFM.sx(ft1x).toFixed(1),y:Math.min(ry,ftFM.sy(0)).toFixed(1),
+      width:(ftFM.sx(x2)-ftFM.sx(ft1x)).toFixed(1),height:Math.abs(ftFM.sy(0)-ry).toFixed(1),
+      fill:"none",stroke:"#3fd0b0","stroke-width":1.2,"stroke-dasharray":"4 3",opacity:.9}));
+  }
+  const vx=ftFM.sx(ft1x);
+  ftF.appendChild(el("line",{x1:vx,y1:ftFM.sy(ftFM.y1),x2:vx,y2:ftFM.sy(ftFM.y0),stroke:"#7e859c","stroke-width":1.1,"stroke-dasharray":"4 4",opacity:.85}));
+  ftF.appendChild(el("circle",{cx:vx,cy:ftFM.sy(FT1.f(ft1x)),r:4.6,fill:VC.glow}));
+  /* g pane */
+  let d=""; const N=120;
+  for(let k=0;k<=N;k++){ const x=ft1x*k/N; d+=(k?"L":"M")+ftGM.sx(x).toFixed(1)+" "+ftGM.sy(FT1.g(x)).toFixed(1)+" "; }
+  ftG.appendChild(el("path",{d:curveStr(FT1.g,0,8,ftGM),fill:"none",stroke:"#39415c","stroke-width":1.4,"stroke-dasharray":"5 5",opacity:.7}));
+  ftG.appendChild(el("path",{d,fill:"none",stroke:VC.glow,"stroke-width":5.5,"stroke-linecap":"round",opacity:.2}));
+  ftG.appendChild(el("path",{d,fill:"none",stroke:VC.rate,"stroke-width":2.5,"stroke-linecap":"round"}));
+  const gx=ftGM.sx(ft1x), gy=ftGM.sy(FT1.g(ft1x));
+  if(ft1sliver){
+    const x2=Math.min(8,ft1x+ft1h);
+    ftG.appendChild(el("line",{x1:gx,y1:gy,x2:ftGM.sx(x2).toFixed(1),y2:ftGM.sy(FT1.g(x2)).toFixed(1),
+      stroke:"#3fd0b0","stroke-width":2,"stroke-linecap":"round"}));
+    ftG.appendChild(el("circle",{cx:ftGM.sx(x2).toFixed(1),cy:ftGM.sy(FT1.g(x2)).toFixed(1),r:3.4,fill:"#3fd0b0"}));
+  } else {
+    /* tangent tick with slope f(x) — the Lesson-1 callback */
+    const dt=0.45, m=FT1.f(ft1x);
+    ftG.appendChild(el("line",{x1:ftGM.sx(ft1x-dt).toFixed(1),y1:ftGM.sy(FT1.g(ft1x)-dt*m).toFixed(1),
+      x2:ftGM.sx(Math.min(8,ft1x+dt)).toFixed(1),y2:ftGM.sy(FT1.g(ft1x)+Math.min(8-ft1x,dt)*m).toFixed(1),
+      stroke:"#3fd0b0","stroke-width":2,"stroke-linecap":"round",opacity:.95}));
+  }
+  ftG.appendChild(el("circle",{cx:gx,cy:gy,r:4.6,fill:VC.glow}));
+  /* readouts */
+  document.getElementById("ft1Xv").textContent=fmt(ft1x);
+  document.getElementById("ft1Fv").textContent=fmt(FT1.f(ft1x),4);
+  document.getElementById("ft1Gv").textContent=fmt(FT1.g(ft1x),4);
+  const call=document.getElementById("ft1Call");
+  if(ft1sliver){
+    const x2=Math.min(8,ft1x+ft1h), dq=(FT1.g(x2)-FT1.g(ft1x))/(x2-ft1x);
+    document.getElementById("ft1Dq").textContent=fmt(dq,4);
+    document.getElementById("ft1Gap").textContent=fmt(Math.abs(dq-FT1.f(ft1x)),4);
+    document.getElementById("ft1Hv").textContent=fmt(ft1h);
+    call.textContent="The teal strip is the NEW area g picks up over [x, x+h]; the dashed box is the rectangle f(x)·h. Their difference is the tiny sliver above/below the height — shrink h and the quotient is pinned to f(x) = "+fmt(FT1.f(ft1x),3)+".";
+  } else {
+    call.textContent=FT1.f(ft1x)>=0
+      ? "f > 0 here, so g is climbing — the teal tangent tick on g has slope exactly f(x) = "+fmt(FT1.f(ft1x),3)+"."
+      : "f < 0 here — new area counts negative, so g is falling. The tick's slope is still exactly f(x) = "+fmt(FT1.f(ft1x),3)+".";
+  }
+}
+document.getElementById("ft1X").addEventListener("input",e=>{ ft1x=+e.target.value; renderFT1(); });
+document.getElementById("ft1H").addEventListener("input",e=>{ ft1h=+e.target.value; renderFT1(); });
+let ft1AutoRAF=null;
+document.getElementById("ft1Auto").onclick=()=>{
+  if(ft1AutoRAF) return;
+  const btn=document.getElementById("ft1Auto");
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ ft1h=0.02; document.getElementById("ft1H").value=ft1h; renderFT1(); return; }
+  btn.disabled=true;
+  const h0=1.2, t0=performance.now(), DUR=2800;
+  ft1h=h0; document.getElementById("ft1H").value=h0;
+  const step=(now)=>{ const p=Math.min(1,(now-t0)/DUR), e=p*p*(3-2*p);
+    ft1h=h0+(0.02-h0)*e;
+    document.getElementById("ft1H").value=ft1h;
+    renderFT1();
+    if(p<1){ ft1AutoRAF=requestAnimationFrame(step); }
+    else { ft1AutoRAF=null; btn.disabled=false;
+      document.getElementById("ft1Call").textContent="h = 0.02 — the quotient reads "+fmt((FT1.g(Math.min(8,ft1x+0.02))-FT1.g(ft1x))/Math.min(8-ft1x,0.02),3)+" against f(x) = "+fmt(FT1.f(ft1x),3)+". Squeeze h to nothing and the quotient IS f(x): that limit statement is FTC Part 1."; } };
+  ft1AutoRAF=requestAnimationFrame(step);
+};
+document.getElementById("ft1Sliver").onclick=()=>{
+  ft1sliver=!ft1sliver;
+  document.getElementById("ft1Sliver").textContent=ft1sliver?"hide the sliver":"show the sliver";
+  document.getElementById("ft1Sliver").classList.toggle("on",ft1sliver);
+  document.getElementById("ft1HWrap").style.display=ft1sliver?"inline-flex":"none";
+  document.getElementById("ft1DqRow").style.display=ft1sliver?"flex":"none";
+  document.getElementById("ft1GapRow").style.display=ft1sliver?"flex":"none";
+  renderFT1();
+};
+function renderFt1Eq(){ const n=document.getElementById("ft1Eq"); if(n) n.innerHTML=T(FT1.fTex); }
+
+/* ======================= 2 · READING g FROM f'S GRAPH ======================= */
+const FIG={
+  f:x=> x<=2?2*x : x<=4?8-2*x : -Math.sqrt(Math.max(0,4-(x-6)*(x-6))),
+  Fu:u=>u*Math.sqrt(Math.max(0,4-u*u))/2+2*Math.asin(Math.max(-1,Math.min(1,u/2))),
+  g:function(x){ return x<=2? x*x : x<=4? 4+8*x-x*x-12 : 8-(this.Fu(x-6)+Math.PI); }
+};
+let figx=1.2, candStep=0, chalMark=null, chalI=-1;
+const figPlot=document.getElementById("figPlot");
+const figM=mapper([0,8],[-2.6,4.6],560,300,40);
+function renderFig(){
+  figPlot.innerHTML="";
+  drawAxes(figPlot,figM,560,300,40,4,3);
+  signedAreaPolys(figPlot,x=>FIG.f(x),0,figx,figM,200);
+  figPlot.appendChild(el("path",{d:curveStr(x=>FIG.f(x),0,8,figM,240),fill:"none",stroke:VC.rate,"stroke-width":2.6,"stroke-linecap":"round","stroke-linejoin":"round"}));
+  /* exact-area labels */
+  figPlot.appendChild(el("text",{x:figM.sx(1.45),y:figM.sy(1.1),fill:"#8d93a8","font-size":12,"text-anchor":"middle","font-family":"var(--mono)"},"+4"));
+  figPlot.appendChild(el("text",{x:figM.sx(2.95),y:figM.sy(1.1),fill:"#8d93a8","font-size":12,"text-anchor":"middle","font-family":"var(--mono)"},"+4"));
+  figPlot.appendChild(el("text",{x:figM.sx(6),y:figM.sy(-1.1),fill:"#8d93a8","font-size":12,"text-anchor":"middle","font-family":"var(--mono)"},"−2π"));
+  figPlot.appendChild(el("text",{x:figM.sx(7.5),y:figM.sy(4.1),fill:"#5d6276","font-size":11,"text-anchor":"middle","font-family":"var(--mono)"},"y = f(x)"));
+  const vx=figM.sx(figx);
+  figPlot.appendChild(el("line",{x1:vx,y1:figM.sy(figM.y1),x2:vx,y2:figM.sy(figM.y0),stroke:"#7e859c","stroke-width":1.1,"stroke-dasharray":"4 4",opacity:.85}));
+  figPlot.appendChild(el("circle",{cx:vx,cy:figM.sy(FIG.f(figx)),r:4.6,fill:VC.glow}));
+  if(chalMark){ const mx=figM.sx(chalMark.x);
+    figPlot.appendChild(el("line",{x1:mx,y1:figM.sy(figM.y1),x2:mx,y2:figM.sy(figM.y0),
+      stroke:chalMark.ok?"#3fd0b0":"#e0644f","stroke-width":2,opacity:.9}));
+    figPlot.appendChild(el("circle",{cx:mx,cy:figM.sy(0),r:6,fill:"none",stroke:chalMark.ok?"#3fd0b0":"#e0644f","stroke-width":2}));
+  }
+  document.getElementById("figXv").textContent=fmt(figx);
+  document.getElementById("figGv").textContent=fmt(FIG.g(figx),3);
+  let msg;
+  if(figx<1.96) msg="f > 0 and increasing → g is rising AND concave up. Steepest climb still to come.";
+  else if(figx<2.06) msg="f peaks here. g is still rising (f > 0) but its bend flips: x = 2 is an inflection point of g.";
+  else if(figx<3.94) msg="f > 0 but decreasing → g still rises, now concave down — climbing, while leveling off.";
+  else if(figx<4.08) msg="f crosses + to − → g′ changes sign positive to negative: g has its LOCAL MAX here, g(4) = 8.";
+  else if(figx<5.96) msg="f < 0 and decreasing → g falls, concave down. Area now counts against the total.";
+  else if(figx<6.06) msg="Bottom of the semicircle: f turns around. x = 6 is g's second inflection point.";
+  else msg="f < 0 but climbing back toward 0 → g still falls, but concave up — the descent is easing.";
+  document.getElementById("figCall").textContent=msg;
+}
+document.getElementById("figX").addEventListener("input",e=>{ figx=+e.target.value; renderFig(); });
+/* click-the-feature challenge */
+const CHAL=[
+ {q:"1 / 4 — Click where g attains its ABSOLUTE MAX on [0, 8].",
+  ok:x=>Math.abs(x-4)<=0.3,
+  fb:"x = 4. g′ = f crosses + to − there, and g(4) = 8 beats both endpoints.",
+  hint:"Where does f finish crossing from positive to negative?"},
+ {q:"2 / 4 — Click an INFLECTION POINT of g.",
+  ok:x=>Math.abs(x-2)<=0.3||Math.abs(x-6)<=0.3,
+  fb:"x = 2 or x = 6 — wherever f changes DIRECTION, g changes bend.",
+  hint:"Look for where f turns around — a peak or valley of f."},
+ {q:"3 / 4 — Click where g attains its ABSOLUTE MIN on [0, 8].",
+  ok:x=>x<=0.35,
+  fb:"x = 0. g climbs to 8 then only falls back to 8 − 2π ≈ 1.72 — never below its start.",
+  hint:"Check the candidates table: g(0), g(4), g(8). Which is smallest?"},
+ {q:"4 / 4 — Click a point where g is DECREASING and CONCAVE UP.",
+  ok:x=>x>6.1&&x<7.9,
+  fb:"Anywhere in (6, 8): f < 0 there (g falls) while f is rising (g bends upward).",
+  hint:"You need f negative AND f increasing — only one stretch qualifies."}
+];
+const chalQ=document.getElementById("chalQ"), chalFb=document.getElementById("chalFb"), chalBtn=document.getElementById("chalBtn");
+function chalSet(){ if(chalI<0||chalI>=CHAL.length) return;
+  chalQ.textContent=CHAL[chalI].q; chalFb.innerHTML='<span style="color:var(--muted)">click on the plot…</span>'; }
+chalBtn.onclick=()=>{ chalI=0; chalMark=null; chalBtn.style.display="none"; chalSet(); renderFig(); };
+figPlot.addEventListener("click",e=>{
+  if(chalI<0||chalI>=CHAL.length) return;
+  const r=figPlot.getBoundingClientRect();
+  const sx=(e.clientX-r.left)/r.width*560;
+  const x=(sx-40)/(560-80)*8;
+  if(x<-0.2||x>8.2) return;
+  chalMark={x:Math.max(0,Math.min(8,x)), ok:CHAL[chalI].ok(x)};
+  if(chalMark.ok){
+    chalFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ '+(chalI===CHAL.length-1?"All four found.":"Got it.")+'</span> <span style="color:var(--muted)">'+CHAL[chalI].fb+'</span>';
+    chalI++;
+    if(chalI<CHAL.length){ setTimeout(()=>{ chalMark=null; chalSet(); renderFig(); },1900); }
+    else { chalQ.textContent="Challenge complete — that's the FRQ, done by eye."; chalBtn.textContent="↺ run it again"; chalBtn.style.display="inline-block"; }
+  } else {
+    chalFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not there.</span> <span style="color:var(--muted)">'+CHAL[chalI].hint+'</span>';
+  }
+  renderFig();
+});
+/* candidates table stepper */
+const CAND=[
+ {t:"Critical points: g′ = f = 0 with a sign change. f hits zero at x = 4 (crossing + to −) and at x = 8 (an endpoint anyway). So the candidates are the endpoints and the interior critical point:",
+  m:"x=0,\\quad x=4,\\quad x=8"},
+ {t:"Evaluate g at each candidate, using the exact region areas — no estimating:",
+  m:"g(0)=0\\ \\text{(empty interval)},\\quad g(4)=4+4=8,\\quad g(8)=8-2\\pi\\approx 1.72"},
+ {t:"Compare and justify in rubric language: the absolute maximum of g on [0, 8] is g(4) = 8, because g′ = f > 0 on (0, 4) and f < 0 on (4, 8). The absolute minimum is g(0) = 0.",
+  m:"\\max = g(4)=8,\\qquad \\min = g(0)=0"}
+];
+function renderCand(){
+  const panel=document.getElementById("candSteps"), btn=document.getElementById("candBtn");
+  if(candStep===0){ panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Three steps: candidates → values → verdict.</div>'; btn.textContent="step →"; return; }
+  panel.innerHTML=CAND.slice(0,candStep).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+  btn.textContent=candStep>=CAND.length?"↺ reset":"step →";
+}
+document.getElementById("candBtn").onclick=()=>{ candStep=candStep>=CAND.length?0:candStep+1; renderCand(); };
+
+/* ======================= 2b · WHICH ONE IS g? ======================= */
+const MG=[
+ { f:x=>x, dom:[-2,2], fyr:[-2.4,2.4],
+   opts:[
+    {g:x=>x*x/2, yr:[-0.6,2.4], ok:true, why:"f is negative then positive crossing at 0 → g falls then rises with a MIN at 0; f increasing throughout → concave up everywhere; and g(0)=0. The parabola x²/2 checks all three."},
+    {g:x=>x, yr:[-2.4,2.4], ok:false, why:"That's f again — the classic copy distractor. g's SLOPE matches f, not g itself."},
+    {g:x=>-x*x/2, yr:[-2.4,0.6], ok:false, why:"Upside down: this one has a MAX where f crosses − to +. The crossing direction says min, not max."},
+    {g:x=>x*x/2+1.2, yr:[0,3.6], ok:false, why:"Right shape — but g(0) = ∫₀⁰ f = 0, and this curve starts at 1.2. A valid antiderivative, the wrong accumulation."}
+   ] },
+ { f:x=>Math.cos(x), dom:[0,6.28], fyr:[-1.4,1.4],
+   opts:[
+    {g:x=>Math.sin(x), yr:[-1.4,1.4], ok:true, why:"g rises while cos > 0, peaks when cos crosses + to − (at π/2), falls, bottoms at 3π/2 — and g(0)=0. That's sin x."},
+    {g:x=>-Math.sin(x), yr:[-1.4,1.4], ok:false, why:"Sign-flipped: this FALLS while f > 0. g must rise wherever f is positive."},
+    {g:x=>Math.cos(x), yr:[-1.4,1.4], ok:false, why:"The copy distractor again — and it fails instantly: g(0) would be 1, but ∫₀⁰ = 0."},
+    {g:x=>1-Math.cos(x), yr:[-0.3,2.3], ok:false, why:"This is ∫₀ˣ sin t dt — the accumulation of the WRONG function. It starts flat (slope 0) where f starts at its max slope demand of 1."}
+   ] },
+ { f:x=> x<=1?2:-1, dom:[0,3], fyr:[-1.8,2.6], step:true,
+   opts:[
+    {g:x=> x<=1?2*x:2-(x-1), yr:[-0.4,2.6], ok:true, why:"Slope literally equals f: up at slope 2 for one unit (reaching 2), then down at slope −1. Corners, not curves — f jumps, so g kinks."},
+    {g:x=> x<=1?2*x:2, yr:[-0.4,2.6], ok:false, why:"Flat after x = 1 would mean f = 0 there. But f = −1: g must descend."},
+    {g:x=> x<=1?-2*x:-2+(x-1), yr:[-2.6,0.4], ok:false, why:"Inverted: falls while f = +2. Positive f forces g upward."},
+    {g:x=> x<=1?2*x*x:2+(x-1), yr:[-0.4,4.2], ok:false, why:"A curved start means f is changing there — but f is CONSTANT at 2, so g must be a straight line of slope 2."}
+   ] },
+ { f:x=>(x-1)*(x-1)+0.3, dom:[0,2.4], fyr:[0,2.6],
+   opts:[
+    {g:x=>((x-1)*(x-1)*(x-1)+1)/3+0.3*x, yr:[-0.2,2.2], ok:true, why:"f > 0 everywhere, so g NEVER stops climbing. f's minimum at x = 1 is where g climbs gentlest — an inflection, not a dip."},
+    {g:x=>((x-1)*(x-1)*(x-1))/3-0.1+0.55*(x-1)*(x-1), yr:[-0.6,1.6], ok:false, why:"This one dips at x = 1 — the classic trap: f's MIN does not make g dip. g only dips where f goes NEGATIVE, and f never does."},
+    {g:x=>-(((x-1)*(x-1)*(x-1)+1)/3+0.3*x), yr:[-2.2,0.2], ok:false, why:"Decreasing throughout — impossible with f > 0 everywhere."},
+    {g:x=>(x-1)*(x-1)+0.3, yr:[0,2.6], ok:false, why:"The copy of f. And it fails the anchor: this starts at 1.3, but g(0) must be 0."}
+   ] }
+];
+let mgI=0, mgDone=false;
+const mgPlot=document.getElementById("mgPlot"), mgOpts=document.getElementById("mgOpts"), mgFb=document.getElementById("mgFb"), mgNext=document.getElementById("mgNext");
+function miniCurve(fn,dom,yr,W,H,P,col,stepwise){
+  const M=mapper(dom,yr,W,H,P);
+  const g=el("g",{});
+  if(yr[0]<0&&yr[1]>0) g.appendChild(el("line",{x1:P,y1:M.sy(0),x2:W-P,y2:M.sy(0),stroke:"#39415c","stroke-width":1}));
+  else g.appendChild(el("line",{x1:P,y1:M.sy(yr[0]),x2:W-P,y2:M.sy(yr[0]),stroke:"#39415c","stroke-width":1}));
+  let d="";
+  const N=stepwise?2:90;
+  if(stepwise){ /* sample densely anyway to render kinks/jumps cleanly */
+    d=""; for(let k=0;k<=180;k++){ const x=dom[0]+(dom[1]-dom[0])*k/180; d+=(k?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(fn(x)).toFixed(1)+" "; }
+  } else {
+    for(let k=0;k<=N;k++){ const x=dom[0]+(dom[1]-dom[0])*k/N; d+=(k?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(fn(x)).toFixed(1)+" "; }
+  }
+  g.appendChild(el("path",{d,fill:"none",stroke:col,"stroke-width":2.2,"stroke-linecap":"round","stroke-linejoin":"round"}));
+  return g;
+}
+function renderMG(){
+  mgDone=false; const item=MG[mgI];
+  mgPlot.innerHTML="";
+  const M=mapper(item.dom,item.fyr,460,300,36);
+  drawAxes(mgPlot,M,460,300,36,4,3);
+  let d=""; for(let k=0;k<=200;k++){ const x=item.dom[0]+(item.dom[1]-item.dom[0])*k/200; d+=(k?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(item.f(x)).toFixed(1)+" "; }
+  mgPlot.appendChild(el("path",{d,fill:"none",stroke:VC.rate,"stroke-width":2.6,"stroke-linecap":"round","stroke-linejoin":"round"}));
+  mgPlot.appendChild(el("text",{x:42,y:18,fill:"#8d93a8","font-size":11,"font-family":"var(--mono)"},"y = f(x)"));
+  mgFb.innerHTML=""; mgNext.style.display="none"; mgOpts.innerHTML="";
+  /* shuffle option order deterministically per round */
+  const order=shuf([0,1,2,3]);
+  order.forEach(oi=>{
+    const o=item.opts[oi];
+    const b=document.createElement("button"); b.style.padding="8px";
+    const svg=el("svg",{viewBox:"0 0 150 92",width:"100%"});
+    svg.appendChild(miniCurve(o.g,item.dom,o.yr,150,92,10,"currentColor",item.step));
+    b.appendChild(svg);
+    b.onclick=()=>{ if(mgDone)return; mgDone=true;
+      [...mgOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(item.opts[order[k]].ok) bb.classList.add("correct"); });
+      if(o.ok){ b.classList.add("correct"); mgFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ That\u2019s g.</span> <span style="color:var(--muted)">'+o.why+'</span>'; }
+      else { b.classList.add("wrong"); mgFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not that one.</span> <span style="color:var(--muted)">'+o.why+'</span>'; }
+      mgNext.style.display="block"; };
+    mgOpts.appendChild(b);
+  });
+}
+mgNext.onclick=()=>{ mgI=(mgI+1)%MG.length; renderMG(); };
+
+/* ======================= 3b · AREA = RISE ======================= */
+let arA=0.6, arB=2.6;
+const arF=document.getElementById("arF"), arG=document.getElementById("arG");
+const arFM=mapper([0,6.28],[-1.45,1.45],560,200,38);
+const arGM=mapper([0,6.28],[-1.45,1.45],560,200,38);
+function renderAR(){
+  const a=Math.min(arA,arB-0.06), b=Math.max(arB,arA+0.06);
+  arF.innerHTML=""; arG.innerHTML="";
+  drawAxes(arF,arFM,560,200,38,4,2); drawAxes(arG,arGM,560,200,38,4,2);
+  arF.appendChild(el("text",{x:44,y:16,fill:"#8d93a8","font-size":11,"font-family":"var(--mono)"},"f = cos x — signed area on [a, b]"));
+  arG.appendChild(el("text",{x:44,y:16,fill:"#8d93a8","font-size":11,"font-family":"var(--mono)"},"F = sin x — the rise from a to b"));
+  signedAreaPolys(arF,Math.cos,a,b,arFM,140);
+  arF.appendChild(el("path",{d:curveStr(Math.cos,0,6.28,arFM),fill:"none",stroke:VC.rate,"stroke-width":2.4,"stroke-linecap":"round"}));
+  [a,b].forEach(xx=>arF.appendChild(el("line",{x1:arFM.sx(xx),y1:arFM.sy(1.45),x2:arFM.sx(xx),y2:arFM.sy(-1.45),stroke:"#7e859c","stroke-width":1.1,"stroke-dasharray":"4 4",opacity:.8})));
+  arG.appendChild(el("path",{d:curveStr(Math.sin,0,6.28,arGM),fill:"none",stroke:VC.rate,"stroke-width":2.4,"stroke-linecap":"round"}));
+  const ya=arGM.sy(Math.sin(a)), yb=arGM.sy(Math.sin(b)), xb=arGM.sx(b), xa=arGM.sx(a);
+  /* highlight the traversed piece of F */
+  let d=""; for(let k=0;k<=80;k++){ const x=a+(b-a)*k/80; d+=(k?"L":"M")+arGM.sx(x).toFixed(1)+" "+arGM.sy(Math.sin(x)).toFixed(1)+" "; }
+  arG.appendChild(el("path",{d,fill:"none",stroke:"#3fd0b0","stroke-width":3.2,"stroke-linecap":"round",opacity:.95}));
+  arG.appendChild(el("circle",{cx:xa,cy:ya,r:4.2,fill:"#3fd0b0"}));
+  arG.appendChild(el("circle",{cx:xb,cy:yb,r:4.2,fill:"#3fd0b0"}));
+  /* the rise bracket at the right edge */
+  const bx=560-26;
+  arG.appendChild(el("line",{x1:xa,y1:ya,x2:bx,y2:ya,stroke:"#7e859c","stroke-width":1,"stroke-dasharray":"3 4",opacity:.7}));
+  arG.appendChild(el("line",{x1:xb,y1:yb,x2:bx,y2:yb,stroke:"#7e859c","stroke-width":1,"stroke-dasharray":"3 4",opacity:.7}));
+  arG.appendChild(el("line",{x1:bx,y1:ya,x2:bx,y2:yb,stroke:"#3fd0b0","stroke-width":2.4,"stroke-linecap":"round"}));
+  arG.appendChild(el("line",{x1:bx-4,y1:ya,x2:bx+4,y2:ya,stroke:"#3fd0b0","stroke-width":2}));
+  arG.appendChild(el("line",{x1:bx-4,y1:yb,x2:bx+4,y2:yb,stroke:"#3fd0b0","stroke-width":2}));
+  const val=Math.sin(b)-Math.sin(a);
+  document.getElementById("arAv").textContent=fmt(a);
+  document.getElementById("arBv").textContent=fmt(b);
+  document.getElementById("arArea").textContent=fmt(val,4);
+  document.getElementById("arRise").textContent=fmt(val,4);
+}
+document.getElementById("arA").addEventListener("input",e=>{ arA=+e.target.value; renderAR(); });
+document.getElementById("arB").addEventListener("input",e=>{ arB=+e.target.value; renderAR(); });
+
+/* ======================= 3 · FTC PART 2 STEPPER ======================= */
+const FTC=[
+ { name:"Polynomial", sub:"∫₁³ (3x² − 2x) dx", f:x=>3*x*x-2*x, a:1, b:3, yr:[0,24],
+   head:"\\int_1^3(3x^2-2x)\\,dx", FT:"F(x)=x^3-x^2", Fb:"F(3)=27-9=18", Fa:"F(1)=1-1=0", final:"=18-0=18",
+   s1:"Antidifferentiate term by term — power rule up: x³ − x². (Any +C would cancel in step 4, so drop it.)" },
+ { name:"Trig", sub:"∫₀^{π/2} cos x dx", f:x=>Math.cos(x), a:0, b:Math.PI/2, yr:[0,1.3],
+   head:"\\int_0^{\\pi/2}\\cos x\\,dx", FT:"F(x)=\\sin x", Fb:"F(\\tfrac{\\pi}{2})=\\sin\\tfrac{\\pi}{2}=1", Fa:"F(0)=\\sin 0=0", final:"=1-0=1",
+   s1:"What differentiates to cos x? sin x does — that's the antiderivative." },
+ { name:"Exponential", sub:"∫₀^{ln 3} eˣ dx", f:x=>Math.exp(x), a:0, b:Math.log(3), yr:[0,3.6],
+   head:"\\int_0^{\\ln 3}e^x\\,dx", FT:"F(x)=e^x", Fb:"F(\\ln 3)=e^{\\ln 3}=3", Fa:"F(0)=e^0=1", final:"=3-1=2",
+   s1:"eˣ is its own antiderivative — the easiest hunt in calculus." }
+];
+let ftcKey=0, ftcStepN=0;
+const ftcPlot=document.getElementById("ftcPlot");
+function renderFTC(){
+  const e=FTC[ftcKey];
+  const M=mapper([Math.min(0,e.a)-0.2, e.b+0.4],[e.yr[0],e.yr[1]],560,240,40);
+  ftcPlot.innerHTML="";
+  drawAxes(ftcPlot,M,560,240,40,4,3);
+  signedAreaPolys(ftcPlot,e.f,e.a,e.b,M);
+  ftcPlot.appendChild(el("path",{d:curveStr(e.f,M.x0,M.x1,M),fill:"none",stroke:VC.rate,"stroke-width":2.6,"stroke-linecap":"round"}));
+  [e.a,e.b].forEach(xx=>{ ftcPlot.appendChild(el("line",{x1:M.sx(xx),y1:M.sy(M.y1),x2:M.sx(xx),y2:M.sy(M.y0),stroke:"#7e859c","stroke-width":1.1,"stroke-dasharray":"4 4",opacity:.8})); });
+  const rows=[
+    {t:"Step 1 — find an antiderivative. "+e.s1, m:e.FT},
+    {t:"Step 2 — evaluate at the top bound.", m:e.Fb},
+    {t:"Step 3 — evaluate at the bottom bound.", m:e.Fa},
+    {t:"Step 4 — subtract: top minus bottom. The shaded area is exactly this number.", m:e.head+e.final}
+  ];
+  const panel=document.getElementById("ftcSteps"), read=document.getElementById("ftcRead"), sum=document.getElementById("ftcSum");
+  if(ftcStepN===0){ panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Four moves: antiderivative → F(b) → F(a) → subtract.</div>'; }
+  else panel.innerHTML=rows.slice(0,ftcStepN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+  const heads=["press step","antiderivative found","F at the top bound","F at the bottom bound","done — area = "+["18","1","2"][ftcKey]];
+  read.textContent=heads[ftcStepN];
+  const tx= ftcStepN<4 ? e.head+"\\;=\\;?" : e.head+e.final;
+  sum.innerHTML=tex(tx,tx,true);
+  document.querySelectorAll("#ftcBtns button").forEach((b,i)=>b.classList.toggle("on",i===ftcKey));
+}
+document.getElementById("ftcStep").onclick=()=>{ if(ftcStepN<4){ ftcStepN++; renderFTC(); } };
+document.getElementById("ftcReset").onclick=()=>{ ftcStepN=0; renderFTC(); };
+const ftcBtns=document.getElementById("ftcBtns");
+FTC.forEach((e,i)=>{
+  const b=document.createElement("button");
+  b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+  b.onclick=()=>{ ftcKey=i; ftcStepN=0; renderFTC(); };
+  ftcBtns.appendChild(b);
+});
+
+/* ======================= 4 · PROPERTIES ======================= */
+const propPlot=document.getElementById("propPlot");
+function renderProp(){
+  const f=x=> x<=3 ? (5*Math.PI/6)*Math.sin(Math.PI*x/3) : -(3*Math.PI/8)*Math.sin(Math.PI*(x-3)/4);
+  const M=mapper([0,7],[-1.9,3.1],560,230,40);
+  propPlot.innerHTML="";
+  drawAxes(propPlot,M,560,230,40,7,2);
+  signedAreaPolys(propPlot,f,0,7,M,220);
+  propPlot.appendChild(el("path",{d:curveStr(f,0,7,M,220),fill:"none",stroke:VC.rate,"stroke-width":2.6,"stroke-linecap":"round"}));
+  propPlot.appendChild(el("text",{x:M.sx(1.5),y:M.sy(0.95),fill:"#e2e6f2","font-size":13,"text-anchor":"middle","font-family":"var(--mono)"},"area = 5"));
+  propPlot.appendChild(el("text",{x:M.sx(5),y:M.sy(-0.75),fill:"#e2e6f2","font-size":13,"text-anchor":"middle","font-family":"var(--mono)"},"area = 3"));
+  propPlot.appendChild(el("line",{x1:M.sx(3),y1:M.sy(3),x2:M.sx(3),y2:M.sy(-2.2),stroke:"#7e859c","stroke-width":1.1,"stroke-dasharray":"4 4",opacity:.7}));
+}
+const PROPS=[
+ { q:()=>'Glue the pieces: '+T("\\int_0^7 f(x)\\,dx")+' =',
+   opts:[{h:"2",ok:true},{h:"8",ok:false},{h:"−3",ok:false}],
+   fb:"∫₀⁷ = ∫₀³ + ∫₃⁷ = 5 + (−3) = 2. Adjacent intervals glue; signs ride along." },
+ { q:()=>'Flip the bounds: '+T("\\int_7^3 f(x)\\,dx")+' =',
+   opts:[{h:"3",ok:true},{h:"−3",ok:false},{h:"undefined",ok:false}],
+   fb:"Swapping the bounds flips the sign: ∫₇³ = −∫₃⁷ = −(−3) = 3." },
+ { q:()=>'Scale it: '+T("\\int_0^3 4f(x)\\,dx")+' =',
+   opts:[{h:"20",ok:true},{h:"9",ok:false},{h:"5",ok:false}],
+   fb:"Constants slide straight through: 4·∫₀³f = 4·5 = 20." },
+ { q:()=>'True or false: '+T("\\int_0^3 f(x)g(x)\\,dx=\\Bigl(\\int_0^3 f\\Bigr)\\Bigl(\\int_0^3 g\\Bigr)"),
+   opts:[{h:"False",ok:true},{h:"True",ok:false}],
+   fb:"FALSE — integrals split over sums, never over products. (Products are why Lesson 4's integration by parts exists.)" }
+];
+function renderProps(){
+  const wrap=document.getElementById("propChecks"); wrap.innerHTML="";
+  PROPS.forEach((p,i)=>{
+    const card=document.createElement("div"); card.className="card"; if(i) card.style.marginTop="12px";
+    card.innerHTML='<div class="qtext" style="font-size:14px">'+p.q()+'</div><div class="quiz-opts" id="pOpt'+i+'" style="grid-template-columns:repeat('+p.opts.length+',1fr)"></div><div class="feedback" id="pFb'+i+'" style="min-height:0"></div>';
+    wrap.appendChild(card);
+    const box=card.querySelector("#pOpt"+i);
+    let done=false;
+    const po=shuf(p.opts);
+    po.forEach(o=>{ const b=document.createElement("button"); b.innerHTML=o.h; b.style.textAlign="center";
+      b.onclick=()=>{ if(done)return; done=true;
+        [...box.children].forEach((bb,k)=>{ bb.disabled=true; if(po[k].ok) bb.classList.add("correct"); });
+        if(!o.ok) b.classList.add("wrong");
+        card.querySelector("#pFb"+i).innerHTML='<span style="color:'+(o.ok?'var(--conv)':'var(--div)')+';font-weight:600">'+(o.ok?'✓':'✗')+'</span> <span style="color:var(--muted)">'+p.fb+'</span>'; };
+      box.appendChild(b); });
+  });
+}
+
+/* ======================= anatomy + concepts ======================= */
+function renderAnatomy(){
+  const main="\\textbf{Part 1:}\\ \\frac{d}{dx}\\int_a^x f(t)\\,dt=f(x)\\qquad\\qquad \\textbf{Part 2:}\\ \\int_a^b f(x)\\,dx=F(b)-F(a)";
+  document.getElementById("anatMain").innerHTML=tex(main,main,true);
+  document.getElementById("anatChain").innerHTML=T("\\tfrac{d}{dx}\\int_0^{x^2}f(t)\\,dt=f(x^2)\\cdot 2x");
+  document.getElementById("anatLower").innerHTML=T("\\tfrac{d}{dx}\\int_x^5 f(t)\\,dt=-f(x)");
+  document.getElementById("anatZero").innerHTML=T("\\int_a^a f(t)\\,dt=0");
+}
+function renderConcepts(){
+  const c2=document.getElementById("c2"); if(c2) c2.innerHTML=tex("g'(x)=f(x)\\ \\ne\\ g(x)","g′(x)=f(x), not g(x)");
+  const c3=document.getElementById("c3"); if(c3) c3.innerHTML=tex("\\tfrac{d}{dx}\\int_a^{u(x)}f(t)\\,dt=f(u(x))\\,u'(x)","d/dx ∫ to u(x) = f(u)·u′");
+  const c4=document.getElementById("c4"); if(c4) c4.innerHTML=tex("\\int_a^b f=\\bigl[F(x)+C\\bigr]_a^b=F(b)-F(a)","[F+C] from a to b = F(b)−F(a)");
+}
+
+/* ======================= practice ======================= */
+const PRAC=[
+ { tag:"Graph reading — the full FRQ", q:()=>'Using the figure above (areas +4, +4, −2π): find the absolute MINIMUM of g(x) = ∫₀ˣ f on [0, 8], with justification.',
+   sol:[{t:"Candidates: endpoints x = 0, 8 and the critical point x = 4 (f changes + to −, so that's a max candidate, but it still goes in the table).",m:"x=0,\\ 4,\\ 8"},
+        {t:"Values by geometry:",m:"g(0)=0,\\quad g(4)=8,\\quad g(8)=8-2\\pi\\approx 1.72"},
+        {t:"Both 0 and 1.72 beat… compare: 0 < 1.72 < 8. The absolute minimum is g(0) = 0. Justification: g increases on (0, 4) and decreases on (4, 8), but never falls below its start since 8 − 2π > 0.",m:"\\min=g(0)=0"}] },
+ { tag:"Chain-rule variant", q:()=>'Let '+T("h(x)=\\int_0^{x^3}\\cos t\\,dt")+'. Find '+T("h'(x)")+' and evaluate '+T("h'(2)")+'.',
+   sol:[{t:"FTC Part 1 with a function as the upper bound: f at the bound, times the bound's derivative.",m:"h'(x)=\\cos(x^3)\\cdot 3x^2"},
+        {t:"At x = 2:",m:"h'(2)=3(4)\\cos 8=12\\cos 8\\approx -1.746"}] },
+ { tag:"Evaluate with Part 2", q:()=>'Compute '+T("\\int_1^4\\Bigl(\\tfrac{2}{\\sqrt{x}}+1\\Bigr)dx")+' exactly.',
+   sol:[{t:"Antidifferentiate: 2x^{-1/2} integrates to 4x^{1/2}; 1 integrates to x.",m:"F(x)=4\\sqrt{x}+x"},
+        {t:"Evaluate and subtract:",m:"F(4)-F(1)=(8+4)-(4+1)=7"}] },
+ { tag:"Properties workout", q:()=>'Given '+T("\\int_0^5 f=12")+' and '+T("\\int_2^5 f=7")+': find '+T("\\int_0^2 f")+' and '+T("\\int_5^0 3f")+'.',
+   sol:[{t:"Glue: ∫₀⁵ = ∫₀² + ∫₂⁵, so ∫₀² = 12 − 7 = 5.",m:"\\int_0^2 f=5"},
+        {t:"Flip and scale: ∫₅⁰ 3f = −3·∫₀⁵ f = −3(12).",m:"\\int_5^0 3f=-36"}] },
+ { tag:"Concavity justification", q:()=>'g(x) = ∫₀ˣ f. On an interval where f is increasing, what is g doing — and how would you justify it on the exam?',
+   sol:[{t:"Differentiate twice: g′ = f, so g″ = f′. f increasing means f′ > 0, so g″ > 0.",m:"g''=f'>0"},
+        {t:"Rubric sentence: \u201cg is concave up because g′ = f is increasing there.\u201d Concavity of g is read from the DIRECTION of f, not its sign.",m:""}] }
+];
+function renderPractice(){
+  document.getElementById("practice").innerHTML=PRAC.map((p,i)=>{
+    const steps=p.sol.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+    return '<div class="prob"><div class="prob-tag">'+p.tag+'</div><div class="prob-q">'+p.q()+'</div>'
+      +'<button class="soltoggle" data-i="'+i+'">Show solution</button>'
+      +'<div class="sol" id="sol'+i+'">'+steps+'</div></div>';
+  }).join("");
+  document.querySelectorAll(".soltoggle").forEach(btn=>{ btn.onclick=()=>{ const i=btn.getAttribute("data-i"), s=document.getElementById("sol"+i);
+    btn.textContent=s.classList.toggle("show")?"Hide solution":"Show solution"; }; });
+}
+
+/* ======================= quiz ======================= */
+const QUIZ=[
+ { q:()=>'If '+T("g(x)=\\int_0^x f(t)\\,dt")+', then '+T("g'(x)")+' =',
+   opts:[{h:()=>T("f(x)"),ok:true},{h:()=>T("f'(x)"),ok:false},{h:()=>T("F(x)"),ok:false},{h:()=>T("f(x)-f(0)"),ok:false}],
+   fb:"FTC Part 1: the derivative of the accumulation is the integrand itself, evaluated at the moving bound." },
+ { q:()=>'f changes sign from positive to negative at x = c. Then g(x) = ∫₀ˣ f has:',
+   opts:[{h:()=>"a local maximum at c",ok:true},{h:()=>"a local minimum at c",ok:false},{h:()=>"an inflection point at c",ok:false},{h:()=>"a zero at c",ok:false}],
+   fb:"g′ = f goes + to −, so g stops rising and starts falling — local max. (Inflections of g come from f changing DIRECTION, not sign.)" },
+ { q:()=>T("\\dfrac{d}{dx}\\int_2^{x^2}\\sin(t^2)\\,dt")+' =',
+   opts:[{h:()=>T("\\sin(x^4)\\cdot 2x"),ok:true},{h:()=>T("\\sin(x^4)"),ok:false},{h:()=>T("\\sin(x^2)\\cdot 2x"),ok:false},{h:()=>T("\\cos(x^4)\\cdot 2x"),ok:false}],
+   fb:"Substitute the bound into the integrand — (x²)² = x⁴ — then multiply by the bound's derivative 2x. No antidifferentiating happens at all." },
+ { q:()=>'With F any antiderivative of f, '+T("\\int_a^b f(x)\\,dx")+' =',
+   opts:[{h:()=>T("F(b)-F(a)"),ok:true},{h:()=>T("F(a)-F(b)"),ok:false},{h:()=>T("F(b)"),ok:false},{h:()=>T("f(b)-f(a)"),ok:false}],
+   fb:"Top minus bottom, of the ANTIderivative. f(b) − f(a) is the change in f itself — a different quantity entirely (it equals ∫f′)." },
+ { q:()=>'g(x) = ∫₃ˣ f(t)dt. What is g(3)?',
+   opts:[{h:()=>"0",ok:true},{h:()=>T("f(3)"),ok:false},{h:()=>T("F(3)"),ok:false},{h:()=>"cannot be determined",ok:false}],
+   fb:"An integral from 3 to 3 spans no width — zero area, always. It's the free entry in every candidates table." },
+ { q:()=>T("\\dfrac{d}{dx}\\int_x^7 f(t)\\,dt")+' =',
+   opts:[{h:()=>T("-f(x)"),ok:true},{h:()=>T("f(x)"),ok:false},{h:()=>T("f(7)-f(x)"),ok:false},{h:()=>T("f(7)"),ok:false}],
+   fb:"Flip the bounds first: ∫ₓ⁷ = −∫₇ˣ, then FTC gives −f(x). The variable bound on the BOTTOM costs a minus sign." },
+ { q:()=>'f is positive everywhere and f(5) is the largest value of f on [0, 10]. Where is g(x) = ∫₀ˣ f largest on [0, 10]?',
+   opts:[{h:()=>"at x = 10",ok:true},{h:()=>"at x = 5",ok:false},{h:()=>"where f is smallest",ok:false},{h:()=>"cannot be determined",ok:false}],
+   fb:"f > 0 means g NEVER stops climbing — so g is largest at the right endpoint. f's peak at 5 is where g climbs FASTEST, not where g is biggest. Slope vs value." },
+ { q:()=>'g(x) = ∫₀ˣ f. g is concave up exactly where:',
+   opts:[{h:()=>"f is increasing",ok:true},{h:()=>"f is positive",ok:false},{h:()=>"f is concave up",ok:false},{h:()=>"f is negative",ok:false}],
+   fb:"g″ = f′ > 0 ⇔ f increasing. Sign of f controls g's direction; direction of f controls g's bend." }
+];
+let qi=0, qScore=0, qDone=0, qAnswered=false;
+const qOpts=document.getElementById("qOpts"), qFb=document.getElementById("qFb"), qNext=document.getElementById("qNext");
+function renderQuiz(){
+  qAnswered=false; const item=QUIZ[qi];
+  document.getElementById("qText").innerHTML=item.q();
+  document.getElementById("qProgress").textContent="Question "+(qi+1)+" of "+QUIZ.length;
+  document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+  qFb.innerHTML=""; qNext.style.display="none";
+  qNext.textContent = qi<QUIZ.length-1 ? "Next question →" : "Restart quiz ↺";
+  qOpts.innerHTML="";
+  const sopts=shuf(item.opts);
+  sopts.forEach((o)=>{ const b=document.createElement("button"); b.innerHTML=o.h();
+    b.onclick=()=>{ if(qAnswered)return; qAnswered=true; qDone++;
+      [...qOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(sopts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ qScore++; b.classList.add("correct"); qFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ Correct.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      else { b.classList.add("wrong"); qFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not quite.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+      qNext.style.display="block";
+    };
+    qOpts.appendChild(b); });
+}
+qNext.onclick=()=>{ if(qi<QUIZ.length-1){ qi++; } else { qi=0; qScore=0; qDone=0; } renderQuiz(); };
+
+/* ======================= init + KaTeX refresh ======================= */
+function refreshAll(){ renderFt1Eq(); renderFT1(); renderFig(); renderCand(); renderMG(); renderAR(); renderFTC(); renderProp(); renderProps(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); }
+renderFt1Eq(); renderFT1(); renderFig(); renderCand(); renderMG(); renderAR(); renderFTC(); renderProp(); renderProps(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); refreshAll(); }
+  else if(++tries>40) clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.animationDelay=Math.min(i*30,440)+'ms'; });
+
+</script>
+</body>
+</html>

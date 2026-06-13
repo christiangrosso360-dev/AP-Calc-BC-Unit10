@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Accumulation &amp; Riemann Sums — Area as a Running Total · Unit 6 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23101420%27%2F%3E%3Cg%20fill%3D%27%235f7ff2%27%3E%3Crect%20x%3D%276%27%20y%3D%2718%27%20width%3D%274.6%27%20height%3D%278%27%20rx%3D%271%27%20opacity%3D%27.55%27%2F%3E%3Crect%20x%3D%2712%27%20y%3D%2714%27%20width%3D%274.6%27%20height%3D%2712%27%20rx%3D%271%27%20opacity%3D%27.75%27%2F%3E%3Crect%20x%3D%2718%27%20y%3D%2710%27%20width%3D%274.6%27%20height%3D%2716%27%20rx%3D%271%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M5%2017%20C%2012%2010%2C%2020%206%2C%2027%207%27%20stroke%3D%27%238fa6f7%27%20stroke-width%3D%272%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  /* page accent: unit-6 royal blue. base palette/fonts/chrome come from styles.css */
+  :root{ --approx:#5f7ff2; --gold:#5f7ff2; --true:#3fd0b0;
+         --glow:rgba(95,127,242,.08); --wrap-max:1060px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block;border-radius:10px}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:8px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button:disabled:hover{border-color:var(--line);transform:none}
+  .sb-name{font-weight:600;font-size:13.5px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .callout{margin-top:12px;font-size:13.5px;min-height:20px;color:var(--ink);
+    border-left:3px solid var(--gold);padding-left:12px;opacity:0;transition:opacity .3s}
+  .callout.show{opacity:1}
+  .predict{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;padding:12px 14px;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:10px;transition:opacity .25s}
+  .predict.locked{opacity:.55;pointer-events:none}
+  .predict-q{font-size:13.5px;font-weight:600}
+  .predict-btns{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+  .pbtn{font-size:13px;padding:7px 14px;border-radius:8px}
+  .pbtn.picked{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .whypanel .why-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+  .why-step{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .why-step:last-child{border-bottom:none}
+  .why-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .why-t{font-size:13px;line-height:1.5}
+  .why-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;overflow-x:auto}
+  .verdict-badge{display:inline-block;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px}
+  .vb-under{background:rgba(224,100,79,.16);color:var(--div)}
+  .vb-over{background:rgba(63,208,176,.16);color:var(--conv)}
+  .vb-dead{background:var(--panel-2);color:var(--muted)}
+  .legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:12px;flex-wrap:wrap}
+  .legend b{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+  .stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .stat:last-child{border-bottom:none}
+  .stat .k{color:var(--muted)}
+  .stat .v{font-family:var(--mono);color:var(--ink)}
+  .cmp{margin-top:10px}
+  .cmp-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;
+    margin-top:6px;font-size:13px;cursor:pointer;transition:border-color .15s,background .15s}
+  .cmp-row:hover{border-color:var(--gold)}
+  .cmp-row.on{border-color:var(--approx);background:rgba(95,127,242,.08)}
+  .cmp-row .nm{font-weight:600;flex:0 0 86px}
+  .cmp-row .vv{font-family:var(--mono);color:var(--ink);flex:1}
+  .cmp-row .ee{font-family:var(--mono);font-size:12px;flex:0 0 auto}
+  .ee.neg{color:var(--div)} .ee.pos{color:var(--conv)} .ee.zero{color:var(--muted)}
+  /* range sliders */
+  input[type=range]{accent-color:var(--approx);width:160px}
+  .nval{font-family:var(--mono);font-size:13px;color:var(--ink);min-width:54px;display:inline-block}
+  /* data table */
+  table.dt{border-collapse:collapse;margin-top:8px;font-size:13.5px;width:100%}
+  .dt th,.dt td{border:1px solid var(--line);padding:8px 12px;text-align:center;font-family:var(--mono)}
+  .dt th{background:var(--panel-2);color:var(--muted);font-weight:500;font-size:12px;letter-spacing:.04em}
+  .dt td{color:var(--ink)}
+  .sumline{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;overflow-x:auto;min-height:46px;font-size:14px}
+  .units{color:var(--approx);font-weight:600}
+  /* sigma -> integral anatomy */
+  .anatomy{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:780px}
+  .anatomy .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .maprow{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .maprow:last-child{border-bottom:none}
+  .maprow .ph{color:var(--ink);flex:1 1 auto;line-height:1.45}
+  .maprow .sy{font-family:var(--mono);color:var(--muted);flex:none}
+  .concepts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.concepts{grid-template-columns:1fr}}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s,box-shadow .2s}
+  .concept:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(43,41,37,.45)}
+  .concept h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .concept p{font-size:13.5px;margin:6px 0;color:var(--ink)}
+  .concept .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;text-align:center;overflow-x:auto}
+  .key{color:var(--approx);font-weight:600}
+  .ou-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+  .ou-table th,.ou-table td{border:1px solid var(--line);padding:6px 8px;text-align:center}
+  .ou-table th{background:var(--panel-2);color:var(--muted);font-weight:500}
+  .whatsnext{max-width:700px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  button:focus-visible, a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  /* practice */
+  .prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .prob-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--approx);font-weight:600}
+  .prob-q{font-size:14.5px;line-height:1.65;margin:6px 0 12px}
+  .soltoggle{font-size:13px;padding:7px 14px}
+  .sol{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .sol.show{display:block}
+  /* mistakes + tips */
+  .mistakes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){.mistakes{grid-template-columns:1fr}}
+  .mistake{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--div);border-radius:10px;padding:13px 16px}
+  .mistake h4{margin:0 0 4px;font-size:14px;font-family:var(--display)}
+  .mistake p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+  .tipbox{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:780px}
+  .tipbox h4{margin:0 0 8px;font-size:14px;font-family:var(--display);color:var(--approx)}
+  .tipbox ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+  .tipbox li{margin:5px 0}
+  /* quiz */
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .qtag{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button{font-size:14px;padding:11px 14px}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px;line-height:1.5}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit6.html">← Unit 6 Guide</a>
+  <header class="reveal">
+    <h1>Accumulation &amp; <span class="em">Riemann Sums</span></h1>
+    <div class="sub">Where integration begins. A rate of change, added up over time, becomes a total —
+      and the area under the rate's curve <i>is</i> that total. This page builds the definite integral
+      from its raw ingredients: rectangles.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    If <b>r(t)</b> is a rate — gallons per minute, meters per second — then the <b>area under its graph</b>
+    from a to b is the total change between those times. We estimate that area with <b>rectangles</b>; as the
+    rectangles get thinner the estimate sharpens, and its limit is the <b>definite integral</b>. Everything in
+    this unit grows out of that one move.
+  </div>
+
+  <h2 class="reveal">A rate, accumulating</h2>
+  <p class="lead reveal">Water flows through a valve at the rate <span id="rEq"></span> gallons per minute —
+    positive means filling, negative means draining. The tank starts with <b>20 gallons</b>. Drag time forward
+    and watch the shaded area turn into gallons: <span style="color:#5f7ff2">blue area above the axis</span>
+    adds water, <span style="color:#e0644f">red area below it</span> takes water away.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="accPlot" viewBox="0 0 560 320" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="legend">
+          <span><b style="background:#5f7ff2"></b>r(t), the rate</span>
+          <span><b style="background:rgba(95,127,242,.6)"></b>area counted +</span>
+          <span><b style="background:rgba(224,100,79,.7)"></b>area counted −</span>
+        </div>
+        <div class="controls">
+          <button class="play" id="accPlay">▶ play</button>
+          <span style="font-size:12.5px;color:var(--muted)">t =</span>
+          <input type="range" id="accT" min="0" max="10" step="0.05" value="0" aria-label="time t">
+          <span class="nval" id="accTv">0.00 min</span>
+        </div>
+        <div class="callout" id="accCall"></div>
+        <div class="label" style="margin-top:18px">The area, replotted as its own function</div>
+        <svg id="accAPlot" viewBox="0 0 560 170" preserveAspectRatio="xMidYMid meet"></svg>
+        <p style="font-size:12.5px;color:var(--muted);margin:10px 0 0;line-height:1.55">
+          <b style="color:var(--ink)">A(t) = ∫₀ᵗ r</b> — the running net change, traced as a curve of its own.
+          It climbs while r &gt; 0, crests exactly where r = 0, and falls while r &lt; 0. Look at the little
+          tangent tick riding its tip: its slope at every moment <i>is</i> r(t). Hold that thought — it's
+          the whole next lesson.</p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The running totals</div>
+        <div class="stat"><span class="k">rate right now r(t)</span><span class="v" id="accR">—</span></div>
+        <div class="stat"><span class="k">net change so far ∫₀ᵗ r</span><span class="v" id="accNet">—</span></div>
+        <div class="stat"><span class="k">water in the tank</span><span class="v" id="accV">—</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5" id="accNote">
+          The tank's amount is the starting 20 gal <i>plus</i> the signed area so far.</p>
+      </div>
+      <div class="predict" id="accPredict" style="margin-top:14px">
+        <div class="predict-q">When does the tank hold the most water?</div>
+        <div class="predict-btns">
+          <button class="pbtn" data-p="0">t = 3, when r peaks</button>
+          <button class="pbtn" data-p="1">t = 6, when r hits 0</button>
+          <button class="pbtn" data-p="2">t = 10, the end</button>
+        </div>
+      </div>
+      <div class="callout" id="accPredFb"></div>
+    </div>
+  </div>
+
+  <h2 class="reveal">How to build one — step by step</h2>
+  <p class="lead reveal">Before the shortcuts, the recipe. Every Riemann approximation is the same four moves:
+    <b>slice</b> the interval, <b>pick</b> a point in each slice, <b>evaluate</b> f there for the height, and
+    <b>add up</b> height × width. Here it is for <span id="wkEq"></span> on [0, 4] with <b>n = 4</b> —
+    click <i>step</i> to lay each rectangle yourself and watch the sum grow a term at a time.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="wkPlot" viewBox="0 0 560 380" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <button class="play" id="wkStep">step →</button>
+          <button id="wkAuto">▶ auto</button>
+          <button id="wkReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="wkRead">Δx first — press step</span>
+        </div>
+        <div class="sumline" id="wkSum"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick the method to walk through</div>
+        <div class="series-btns" id="wkBtns"></div>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, shown</div>
+        <div id="wkSteps"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Rectangles closing in</h2>
+  <p class="lead reveal">Now that you can build one by hand, scale it. Pick a function and a method, then drag
+    <b>n</b> — the number of rectangles — and watch the estimate close in on the true area. The pattern of
+    <i>over</i> and <i>under</i> isn't random: it's decided by whether the curve is rising, falling, or bending.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="rsPlot" viewBox="0 0 560 380" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="legend">
+          <span><b style="background:#5f7ff2"></b>the approximation</span>
+          <span><b style="background:rgba(224,100,79,.8)"></b>area it misses → pulls under</span>
+          <span><b style="background:rgba(63,208,176,.75)"></b>area it overcounts → pushes over</span>
+        </div>
+        <div class="controls">
+          <span style="font-size:12.5px;color:var(--muted)">n =</span>
+          <input type="range" id="rsN" min="2" max="100" step="1" value="6" aria-label="number of rectangles">
+          <span class="nval" id="rsNv">6</span>
+          <div style="flex:1"></div>
+          <span class="verdict-badge vb-dead" id="rsBadge">—</span>
+        </div>
+        <div class="callout show" id="rsCall"></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="label">The error race — all four methods vs n</div>
+        <svg id="erPlot" viewBox="0 0 560 210" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="legend">
+          <span><b style="background:#e8a13c"></b>Left</span>
+          <span><b style="background:#e0644f"></b>Right</span>
+          <span><b style="background:#3fd0b0"></b>Midpoint</span>
+          <span><b style="background:#a98cf0"></b>Trapezoid</span>
+        </div>
+        <div class="callout show" id="erCall"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick a function</div>
+        <div class="series-btns" id="rsFns"></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="label">Method — click a row</div>
+        <div class="cmp" id="rsCmp"></div>
+        <div class="stat" style="margin-top:10px;border-top:1px solid var(--line);padding-top:10px">
+          <span class="k">true value</span><span class="v" id="rsTrue" style="color:var(--true)">—</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">From a table, like the exam</h2>
+  <p class="lead reveal">On the AP exam you'll rarely be handed a formula — you'll be handed a <b>table</b>,
+    with <b>unequal spacing</b>, and asked to estimate the integral. The widths come from the t-row, the
+    heights from the r-row. Pick a method and watch the sum assemble itself, term by term.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="tabPlot" viewBox="0 0 560 300" preserveAspectRatio="xMidYMid meet"></svg>
+        <table class="dt" aria-label="rate data table">
+          <tr><th>t (min)</th><td>0</td><td>2</td><td>5</td><td>7</td><td>10</td></tr>
+          <tr><th>R(t) (gal/min)</th><td>4.2</td><td>6.0</td><td>7.4</td><td>5.6</td><td>3.0</td></tr>
+        </table>
+        <div class="sumline" id="tabSum"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Estimate ∫₀¹⁰ R(t) dt using…</div>
+        <div class="series-btns" id="tabBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:14px;line-height:1.5" id="tabNote"></p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">From Σ to ∫ — the notation</h2>
+  <p class="lead reveal">A Riemann sum and a definite integral are the same idea at two zoom levels. The
+    integral sign is a stretched S — a <i>sum</i> — and every piece of the sum survives in the notation.</p>
+
+  <div class="anatomy reveal">
+    <div class="m-big" id="anatMain"></div>
+    <div class="controls" style="justify-content:center;margin:2px 0 10px">
+      <button class="play" id="limGo">▶ take n → ∞</button>
+      <span class="readout" id="limRead">n = 4</span>
+    </div>
+    <svg id="limPlot" viewBox="0 0 700 250" preserveAspectRatio="xMidYMid meet" style="margin-bottom:14px"></svg>
+    <div class="maprow"><span class="ph">Slice the interval [a, b] into n equal pieces — each piece has width</span><span class="sy" id="anatDx"></span></div>
+    <div class="maprow"><span class="ph">The right edge of the i-th slice sits at</span><span class="sy" id="anatXi"></span></div>
+    <div class="maprow"><span class="ph">Each term f(xᵢ)·Δx is one rectangle's area; Σ adds them all up</span><span class="sy" id="anatTerm"></span></div>
+    <div class="maprow"><span class="ph">As n → ∞, Δx becomes dx, Σ becomes ∫, and the estimate becomes exact</span><span class="sy" id="anatLim"></span></div>
+  </div>
+
+  <h2 class="reveal">The ideas everything else builds on</h2>
+  <div class="concepts reveal">
+    <div class="concept">
+      <h3>Area under a rate is total change</h3>
+      <p>Integrating a <span class="key">rate</span> gives the <span class="key">net change</span> of the
+        quantity. Add the starting amount to get the new amount.</p>
+      <div class="m" id="c1"></div>
+    </div>
+    <div class="concept">
+      <h3>Over or under is predictable</h3>
+      <p>Rising or falling decides Left vs Right; bending decides Midpoint vs Trapezoid — and those two always
+        land on <span class="key">opposite sides</span>.</p>
+      <table class="ou-table">
+        <tr><th></th><th>f increasing</th><th>f decreasing</th></tr>
+        <tr><td>Left</td><td style="color:var(--div)">under</td><td style="color:var(--conv)">over</td></tr>
+        <tr><td>Right</td><td style="color:var(--conv)">over</td><td style="color:var(--div)">under</td></tr>
+        <tr><th></th><th>concave up</th><th>concave down</th></tr>
+        <tr><td>Midpoint</td><td style="color:var(--div)">under</td><td style="color:var(--conv)">over</td></tr>
+        <tr><td>Trapezoid</td><td style="color:var(--conv)">over</td><td style="color:var(--div)">under</td></tr>
+      </table>
+    </div>
+    <div class="concept">
+      <h3>The dictionary</h3>
+      <p>Every Riemann sum hides the same three ingredients — find them and you can convert in
+        <span class="key">either direction</span>.</p>
+      <div class="m" id="c3"></div>
+    </div>
+    <div class="concept">
+      <h3>Units multiply</h3>
+      <p>A rectangle's area is height × width, so the integral's units are
+        <span class="key">(units of f) × (units of x)</span> — gallons/min × min = gallons.</p>
+      <div class="m" id="c4"></div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Your turn</h2>
+  <p class="lead reveal">Five checks, straight from the exam's playbook. Try each before you reveal the
+    worked answer.</p>
+  <div class="reveal" id="practice"></div>
+
+  <h2 class="reveal">Quick quiz</h2>
+  <p class="lead reveal">Eight fast multiple-choice checks across the whole lesson. Pick an answer to see
+    whether it's right and why.</p>
+  <div class="card reveal" id="quizCard">
+    <div class="row" style="margin-bottom:12px">
+      <div class="qtag" id="qProgress">Question 1 of 8</div>
+      <span class="score" id="qScore">Score: 0 / 0</span>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="next" id="qNext" style="margin-top:14px;width:100%;display:none">Next question →</button>
+  </div>
+
+  <h2 class="reveal">Common mistakes &amp; exam tips</h2>
+  <div class="mistakes reveal">
+    <div class="mistake"><h4>Assuming equal widths</h4><p>Tables are usually spaced unevenly on purpose. Every width is the <i>difference of consecutive t-values</i> — compute each one; never divide the interval length by the number of columns.</p></div>
+    <div class="mistake"><h4>Off-by-one on Left vs Right</h4><p>A left sum uses every value <i>except the last</i>; a right sum uses every value <i>except the first</i>. Using all five values of a five-column table means you've double-dipped.</p></div>
+    <div class="mistake"><h4>Flipping the over/under rules</h4><p>Don't memorize blindly — picture it. Left rectangles tuck <i>under</i> a rising curve because each one's height is set at its lowest point. Re-derive the rule from the picture every time.</p></div>
+    <div class="mistake"><h4>Net vs total</h4><p>∫r dt is <i>net</i> change — negative rate subtracts. If a question asks for the <i>total</i> amount pumped in and out, that's ∫|r| dt, a different number.</p></div>
+    <div class="mistake"><h4>Forgetting the starting amount</h4><p>The integral gives the <i>change</i>. &ldquo;How much is in the tank at t = 10?&rdquo; needs initial amount + net change — leaving off the +20 is a classic dropped point.</p></div>
+    <div class="mistake"><h4>Answering without units</h4><p>On an FRQ, an estimate of &ldquo;56.2&rdquo; loses a point that &ldquo;56.2 gallons&rdquo; earns. The units are part of the answer, not decoration.</p></div>
+  </div>
+  <div class="tipbox reveal">
+    <h4>On the AP exam</h4>
+    <ul>
+      <li>Show the sum term by term — (2)(4.2) + (3)(6.0) + … — before the total. The setup earns points even if the arithmetic slips.</li>
+      <li>&ldquo;Is your estimate greater or less than the true value? Explain.&rdquo; wants the behavior reason: <i>&ldquo;R is increasing on [0,5], so a left sum underestimates.&rdquo;</i> One sentence, full credit.</li>
+      <li>If a midpoint sum is requested, check the table actually contains values at the midpoints — subintervals are often chosen so that every <i>other</i> column is a midpoint.</li>
+      <li>Always interpret in context: &ldquo;∫₀¹⁰ R(t)dt ≈ 56.2 means about 56.2 gallons flowed in during the first 10 minutes.&rdquo;</li>
+    </ul>
+  </div>
+
+  <div class="whatsnext reveal">
+    Rectangles estimate the area — the next lesson computes it exactly. <a href="fundamental-theorem.html">The
+    Fundamental Theorem</a> turns accumulation into a function, takes its derivative, and recovers f itself —
+    the hinge of all of calculus. Or head back to the <a href="unit6.html">Unit 6 Guide</a>.
+  </div>
+
+  <footer class="reveal">Accumulation &amp; Riemann Sums · part of the Unit 6 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const VC={rate:"#5f7ff2", glow:"#8fa6f7", pos:"rgba(95,127,242,.30)", neg:"rgba(224,100,79,.34)",
+          rect:"rgba(95,127,242,.22)", rectS:"#5f7ff2", truec:"#3fd0b0"};
+const T=(s)=>tex(s,s,false);
+const fmt=(v,d=2)=>{const s=v.toFixed(d); return s==="-0.00"?"0.00":s;};
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+
+/* ---------- shared plotting helpers ---------- */
+function mapper(dom,yr,W,H,P){ const x0=dom[0],x1=dom[1],y0=yr[0],y1=yr[1];
+  return { sx:x=>P+((x-x0)/(x1-x0))*(W-2*P), sy:v=>H-P-((v-y0)/(y1-y0))*(H-2*P),
+           x0,x1,y0,y1 }; }
+function drawAxes(svg,M,W,H,P,xt,yt){ const sx=M.sx, sy=M.sy;
+  for(let g=0;g<=yt;g++){ const yy=M.y0+(g/yt)*(M.y1-M.y0), py=sy(yy);
+    svg.appendChild(el("line",{x1:P,y1:py,x2:W-P,y2:py,stroke:"#222838"}));
+    svg.appendChild(el("text",{x:P-7,y:py+3,fill:"#5d6276","font-size":10,"text-anchor":"end","font-family":"var(--mono)"},(+yy.toFixed(2)).toString())); }
+  for(let g=0;g<=xt;g++){ const xx=M.x0+(g/xt)*(M.x1-M.x0), px=sx(xx);
+    svg.appendChild(el("text",{x:px,y:H-P+15,fill:"#5d6276","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},(+xx.toFixed(1)).toString())); }
+  if(M.y0<0&&M.y1>0){ const yz=sy(0); svg.appendChild(el("line",{x1:P,y1:yz,x2:W-P,y2:yz,stroke:"#39415c","stroke-width":1.2})); }
+  else { svg.appendChild(el("line",{x1:P,y1:sy(M.y0),x2:W-P,y2:sy(M.y0),stroke:"#39415c","stroke-width":1.2})); }
+  svg.appendChild(el("line",{x1:P,y1:sy(M.y1),x2:P,y2:sy(M.y0),stroke:"#39415c","stroke-width":1.2}));
+}
+function curveStr(f,a,b,M,N=180){ let d="";
+  for(let k=0;k<=N;k++){ const x=a+(b-a)*k/N; d+=(k?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(f(x)).toFixed(1)+" "; }
+  return d; }
+/* gap between the curve and an approximation's top edge, split by sign.
+   miss = curve above top (area the method fails to count) — pulls the estimate under
+   extra = top above curve (area it counts that isn't there) — pushes it over */
+function gapPaths(svg,f,top,xl,xr,M,S=10){
+  const pts=[]; for(let k=0;k<=S;k++){ const x=xl+(xr-xl)*k/S; pts.push([x,f(x),top(x)]); }
+  let seg=null, sign=null;
+  const flush=()=>{ if(seg&&seg.length>1){
+    let d=""; seg.forEach((p,i)=>{ d+=(i?"L":"M")+M.sx(p[0]).toFixed(1)+" "+M.sy(p[1]).toFixed(1)+" "; });
+    for(let i=seg.length-1;i>=0;i--){ d+="L"+M.sx(seg[i][0]).toFixed(1)+" "+M.sy(seg[i][2]).toFixed(1)+" "; }
+    svg.appendChild(el("path",{d:d+"Z",fill:sign>0?"rgba(224,100,79,.5)":"rgba(63,208,176,.45)",stroke:"none"})); }
+    seg=null; };
+  for(const p of pts){ const d=p[1]-p[2], sgn=d>=0?1:-1;
+    if(sign===null||sgn!==sign){ flush(); sign=sgn; seg=[]; }
+    seg.push(p); }
+  flush();
+}
+
+/* ======================= 1 · A RATE, ACCUMULATING ======================= */
+const ACC={ r:t=>7*Math.sin(Math.PI*t/6), A:t=>(42/Math.PI)*(1-Math.cos(Math.PI*t/6)), V0:20, T0:0, T1:10 };
+const ACCW=560, ACCH=320, ACCP=42;
+const accPlot=document.getElementById("accPlot");
+let accT=0, accRAF=null;
+const accM=mapper([0,10],[-8,8.5],ACCW,ACCH,ACCP);
+function accAreaPaths(tEnd){
+  // walk samples; build separate polygons for r>=0 and r<0 stretches
+  const out={pos:[],neg:[]}; if(tEnd<=0) return out;
+  const N=Math.max(2,Math.round(tEnd/10*240));
+  let seg=null, sign=null;
+  const close=()=>{ if(seg&&seg.length>1){ (sign>=0?out.pos:out.neg).push(seg); } seg=null; };
+  for(let k=0;k<=N;k++){
+    const t=tEnd*k/N, v=ACC.r(t), s=v>=0?1:-1;
+    if(sign===null||s!==sign){ close(); sign=s; seg=[[t,0]]; }
+    seg.push([t,v]);
+    if(k===N){ seg.push([t,0]); close(); }
+  }
+  return out;
+}
+function polyStr(pts){ let d="";
+  pts.forEach((p,i)=>{ d+=(i?"L":"M")+accM.sx(p[0]).toFixed(1)+" "+accM.sy(p[1]).toFixed(1)+" "; });
+  return d+"Z"; }
+function renderAcc(){
+  accPlot.innerHTML="";
+  drawAxes(accPlot,accM,ACCW,ACCH,ACCP,5,4);
+  accPlot.appendChild(el("text",{x:ACCW-ACCP,y:ACCH-ACCP+30,fill:"#5d6276","font-size":11,"text-anchor":"end","font-family":"var(--mono)"},"t, minutes"));
+  const areas=accAreaPaths(accT);
+  areas.pos.forEach(p=>accPlot.appendChild(el("path",{d:polyStr(p),fill:VC.pos,stroke:"none"})));
+  areas.neg.forEach(p=>accPlot.appendChild(el("path",{d:polyStr(p),fill:VC.neg,stroke:"none"})));
+  accPlot.appendChild(el("path",{d:curveStr(ACC.r,0,10,accM),fill:"none",stroke:VC.rate,"stroke-width":2.6,"stroke-linecap":"round"}));
+  if(accT>0 && accT<10){
+    const px=accM.sx(accT);
+    accPlot.appendChild(el("line",{x1:px,y1:accM.sy(accM.y1),x2:px,y2:accM.sy(accM.y0),stroke:"#7e859c","stroke-width":1.2,"stroke-dasharray":"4 4"}));
+    accPlot.appendChild(el("circle",{cx:px,cy:accM.sy(ACC.r(accT)),r:5,fill:VC.glow}));
+  }
+  const net=ACC.A(accT);
+  document.getElementById("accTv").textContent=fmt(accT)+" min";
+  document.getElementById("accR").textContent=fmt(ACC.r(accT))+" gal/min";
+  document.getElementById("accNet").textContent=(net>=0?"+":"")+fmt(net)+" gal";
+  document.getElementById("accV").textContent=fmt(ACC.V0+net)+" gal";
+  const call=document.getElementById("accCall");
+  if(accT===0){ call.classList.remove("show"); }
+  else{
+    let msg;
+    if(accT<5.7) msg="r(t) > 0 — the area is counting up, the tank is filling.";
+    else if(accT<=6.3) msg="r(t) = 0 right here — the tank is at its fullest: "+fmt(ACC.V0+ACC.A(6))+" gal. From now on the rate is negative.";
+    else if(accT<10) msg="r(t) < 0 — red area subtracts. The tank is draining even though time still moves forward.";
+    else msg="Net change over the whole 10 minutes: +"+fmt(ACC.A(10))+" gal. The tank gained less than it had at t = 6, because the red area cancelled part of the blue.";
+    call.textContent=msg; call.classList.add("show");
+  }
+  renderAccA();
+}
+document.getElementById("accT").addEventListener("input",e=>{ accT=+e.target.value; stopAcc(); renderAcc(); });
+function stopAcc(){ if(accRAF){ cancelAnimationFrame(accRAF); accRAF=null; document.getElementById("accPlay").textContent="▶ play"; } }
+document.getElementById("accPlay").onclick=()=>{
+  if(accRAF){ stopAcc(); return; }
+  if(accT>=10) accT=0;
+  document.getElementById("accPlay").textContent="❚❚ pause";
+  const step=()=>{ accT=Math.min(10,accT+0.045);
+    document.getElementById("accT").value=accT; renderAcc();
+    if(accT<10){ accRAF=requestAnimationFrame(step); } else stopAcc(); };
+  accRAF=requestAnimationFrame(step);
+};
+/* predict */
+const accPredict=document.getElementById("accPredict"), accPredFb=document.getElementById("accPredFb");
+accPredict.querySelectorAll(".pbtn").forEach(b=>{
+  b.onclick=()=>{ accPredict.classList.add("locked"); b.classList.add("picked");
+    const ok=b.getAttribute("data-p")==="1";
+    accPredFb.innerHTML=(ok?'<span style="color:var(--conv);font-weight:600">✓ Exactly.</span> ':'<span style="color:var(--div);font-weight:600">✗ Watch the play-through.</span> ')+
+      '<span style="color:var(--muted)">The tank keeps gaining as long as r(t) > 0 — even after the rate peaks at t = 3, water is still coming in. The maximum is at t = 6, the instant the rate crosses from + to −. Accumulation peaks where the rate changes sign, not where the rate peaks.</span>';
+    accPredFb.classList.add("show"); };
+});
+
+/* ======================= 1b · HOW TO BUILD ONE, STEP BY STEP ======================= */
+const WK={ f:x=>x*x/2+1, a:0, b:4, n:4, fname:"f(x)=\\tfrac{x^2}{2}+1" };
+const WKMETH={
+  L:{name:"Left", sub:"height from each LEFT edge", pt:i=>WK.a+i*wkDx(), lab:i=>"x = "+(WK.a+i*wkDx()),
+     how:i=>"Use the slice's left edge: evaluate f("+(WK.a+i*wkDx())+")."},
+  R:{name:"Right", sub:"height from each RIGHT edge", pt:i=>WK.a+(i+1)*wkDx(), lab:i=>"x = "+(WK.a+(i+1)*wkDx()),
+     how:i=>"Use the slice's right edge: evaluate f("+(WK.a+(i+1)*wkDx())+")."},
+  M:{name:"Midpoint", sub:"height from each MIDDLE", pt:i=>WK.a+(i+0.5)*wkDx(), lab:i=>"x = "+(WK.a+(i+0.5)*wkDx()),
+     how:i=>"Use the slice's middle: evaluate f("+(WK.a+(i+0.5)*wkDx())+")."},
+  T:{name:"Trapezoid", sub:"AVERAGE the two edge heights", pt:null, lab:i=>"avg of edges",
+     how:i=>{const xl=WK.a+i*wkDx(), xr=xl+wkDx();
+       return "Average the two edge heights: ½[f("+xl+") + f("+xr+")] = ½["+(+WK.f(xl).toFixed(3))+" + "+(+WK.f(xr).toFixed(3))+"]."; }}
+};
+let wkMethod="L", wkStepN=0, wkTimer=null;
+function wkDx(){ return (WK.b-WK.a)/WK.n; }
+function wkHeight(i){ const m=WKMETH[wkMethod];
+  if(wkMethod==="T"){ const xl=WK.a+i*wkDx(); return (WK.f(xl)+WK.f(xl+wkDx()))/2; }
+  return WK.f(m.pt(i)); }
+const wkPlot=document.getElementById("wkPlot");
+const wkM=mapper([0,4],[0,9.5],560,380,42);
+function renderWK(){
+  wkPlot.innerHTML="";
+  drawAxes(wkPlot,wkM,560,380,42,4,4);
+  const dx=wkDx();
+  /* cut points always marked once Δx is established (step >= 1) */
+  if(wkStepN>=1){
+    for(let i=0;i<=WK.n;i++){ const px=wkM.sx(WK.a+i*dx);
+      wkPlot.appendChild(el("line",{x1:px,y1:wkM.sy(0),x2:px,y2:wkM.sy(0)+6,stroke:"#7e859c","stroke-width":1.4}));
+      wkPlot.appendChild(el("text",{x:px,y:wkM.sy(0)+18,fill:"#8d93a8","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},(WK.a+i*dx).toString()));
+    }
+  }
+  /* laid rectangles: steps 2..(n+1) lay rect 1..n */
+  const laid=Math.max(0,Math.min(WK.n,wkStepN-1));
+  for(let i=0;i<laid;i++){
+    const xl=WK.a+i*dx, xr=xl+dx, isCur=(i===laid-1 && wkStepN<=WK.n+1);
+    if(wkMethod==="T"){
+      const d="M"+wkM.sx(xl).toFixed(1)+" "+wkM.sy(0).toFixed(1)
+            +"L"+wkM.sx(xl).toFixed(1)+" "+wkM.sy(WK.f(xl)).toFixed(1)
+            +"L"+wkM.sx(xr).toFixed(1)+" "+wkM.sy(WK.f(xr)).toFixed(1)
+            +"L"+wkM.sx(xr).toFixed(1)+" "+wkM.sy(0).toFixed(1)+"Z";
+      wkPlot.appendChild(el("path",{d,fill:isCur?"rgba(95,127,242,.34)":VC.rect,stroke:VC.rectS,"stroke-width":isCur?1.8:1,"stroke-opacity":.9}));
+    } else {
+      const h=wkHeight(i), x=wkM.sx(xl), w=wkM.sx(xr)-x, y=wkM.sy(h);
+      wkPlot.appendChild(el("rect",{x:x.toFixed(1),y:y.toFixed(1),width:w.toFixed(2),height:(wkM.sy(0)-y).toFixed(1),
+        fill:isCur?"rgba(95,127,242,.34)":VC.rect,stroke:VC.rectS,"stroke-width":isCur?1.8:1,"stroke-opacity":.9}));
+    }
+    /* evaluation dot(s) for the rectangle being laid */
+    if(isCur){
+      if(wkMethod==="T"){
+        wkPlot.appendChild(el("circle",{cx:wkM.sx(xl).toFixed(1),cy:wkM.sy(WK.f(xl)).toFixed(1),r:4.6,fill:VC.glow}));
+        wkPlot.appendChild(el("circle",{cx:wkM.sx(xr).toFixed(1),cy:wkM.sy(WK.f(xr)).toFixed(1),r:4.6,fill:VC.glow}));
+      } else {
+        const xp=WKMETH[wkMethod].pt(i);
+        wkPlot.appendChild(el("circle",{cx:wkM.sx(xp).toFixed(1),cy:wkM.sy(WK.f(xp)).toFixed(1),r:5,fill:VC.glow}));
+        wkPlot.appendChild(el("line",{x1:wkM.sx(xp),y1:wkM.sy(WK.f(xp)),x2:wkM.sx(xp),y2:wkM.sy(0),stroke:VC.glow,"stroke-width":1.1,"stroke-dasharray":"3 3",opacity:.8}));
+      }
+    }
+  }
+  for(let i=0;i<laid;i++){
+    const xl=WK.a+i*wkDx(), xr=xl+wkDx();
+    let top;
+    if(wkMethod==="T"){ const fl=WK.f(xl), fr=WK.f(xr); top=x=>fl+(fr-fl)*(x-xl)/wkDx(); }
+    else { const h=wkHeight(i); top=()=>h; }
+    gapPaths(wkPlot,WK.f,top,xl,xr,wkM,12);
+  }
+  wkPlot.appendChild(el("path",{d:curveStr(WK.f,0,4,wkM),fill:"none",stroke:VC.glow,"stroke-width":2.8,"stroke-linecap":"round"}));
+  /* readout + sum line + steps panel */
+  const read=document.getElementById("wkRead"), sumEl=document.getElementById("wkSum"), panel=document.getElementById("wkSteps");
+  const mm=WKMETH[wkMethod], sym=wkMethod==="T"?"T_4":(wkMethod+"_4");
+  const rows=[];
+  rows.push({t:"Slice [0, 4] into n = 4 equal pieces.",m:"\\Delta x=\\tfrac{4-0}{4}=1,\\quad \\text{cuts at }x=0,1,2,3,4"});
+  let run=0; const terms=[];
+  for(let i=0;i<Math.min(WK.n,laid);i++){
+    const h=wkHeight(i); run+=h*wkDx();
+    terms.push(wkMethod==="T" ? "\\tfrac{"+(+WK.f(WK.a+i*wkDx()).toFixed(3))+"+"+(+WK.f(WK.a+(i+1)*wkDx()).toFixed(3))+"}{2}(1)"
+                              : "("+(+h.toFixed(3))+")(1)");
+    rows.push({t:"Rectangle "+(i+1)+" of 4. "+mm.how(i)+" Height = "+(+h.toFixed(3))+"; area = height × Δx = "+(+h.toFixed(3))+" × 1.",
+               m:"\\text{running total}="+(+run.toFixed(3))});
+  }
+  if(wkStepN===0){ panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Press <b>step</b> — the first move is always Δx.</div>'; }
+  else{
+    const shown=rows.slice(0,Math.min(rows.length,wkStepN===0?0:laid+1));
+    panel.innerHTML=shown.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j===0?"Δx":j)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+  }
+  if(wkStepN===0){ sumEl.innerHTML='<span style="color:var(--muted)">'+sym.replace("_4","₄")+' = ?</span>'; read.textContent="Δx first — press step"; }
+  else if(laid<WK.n){ const texS=sym+"="+(terms.length?terms.join("+")+"+\\cdots":"\\cdots");
+    sumEl.innerHTML=tex(texS,texS,true); read.textContent=laid===0?"Δx = 1 ✓ — now lay rectangle 1":"rectangle "+laid+" of 4 laid"; }
+  else{ const texS=sym+"="+terms.join("+")+"="+(+run.toFixed(3));
+    sumEl.innerHTML=tex(texS,texS,true);
+    read.textContent="done: "+(+run.toFixed(3))+" vs true 14.667 — "+(run<14.6667?"under":"over")+"estimate"; }
+  /* method buttons state */
+  document.querySelectorAll("#wkBtns button").forEach(b=>b.classList.toggle("on",b.getAttribute("data-m")===wkMethod));
+}
+function wkAdvance(){ if(wkStepN<WK.n+1){ wkStepN++; renderWK(); return true; } return false; }
+function wkStop(){ if(wkTimer){ clearInterval(wkTimer); wkTimer=null; document.getElementById("wkAuto").textContent="▶ auto"; } }
+document.getElementById("wkStep").onclick=()=>{ wkStop(); wkAdvance(); };
+document.getElementById("wkAuto").onclick=()=>{
+  if(wkTimer){ wkStop(); return; }
+  if(wkStepN>=WK.n+1){ wkStepN=0; }
+  document.getElementById("wkAuto").textContent="❚❚ pause";
+  wkTimer=setInterval(()=>{ if(!wkAdvance()) wkStop(); },1100);
+};
+document.getElementById("wkReset").onclick=()=>{ wkStop(); wkStepN=0; renderWK(); };
+const wkBtns=document.getElementById("wkBtns");
+Object.keys(WKMETH).forEach(k=>{
+  const b=document.createElement("button"); b.setAttribute("data-m",k);
+  b.innerHTML='<div class="sb-name">'+WKMETH[k].name+'</div><div class="sb-sub">'+WKMETH[k].sub+'</div>';
+  b.onclick=()=>{ wkStop(); wkMethod=k; wkStepN=0; renderWK(); };
+  wkBtns.appendChild(b);
+});
+function renderWkEq(){ const n=document.getElementById("wkEq"); if(n) n.innerHTML=T(WK.fname); }
+
+/* ----- the area as its own function: A(t) traced live ----- */
+const accAPlot=document.getElementById("accAPlot");
+const accM2=mapper([0,10],[-4,30],560,170,36);
+function renderAccA(){
+  accAPlot.innerHTML="";
+  [0,14,28].forEach(yy=>{ const py=accM2.sy(yy);
+    accAPlot.appendChild(el("line",{x1:36,y1:py,x2:560-36,y2:py,stroke:"#222838"}));
+    accAPlot.appendChild(el("text",{x:29,y:py+3,fill:"#5d6276","font-size":10,"text-anchor":"end","font-family":"var(--mono)"},""+yy)); });
+  accAPlot.appendChild(el("line",{x1:36,y1:accM2.sy(0),x2:560-36,y2:accM2.sy(0),stroke:"#39415c","stroke-width":1.2}));
+  [0,2,4,6,8,10].forEach(tt2=>{ accAPlot.appendChild(el("text",{x:accM2.sx(tt2),y:170-36+15,fill:"#5d6276","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},""+tt2)); });
+  accAPlot.appendChild(el("text",{x:42,y:18,fill:"#8d93a8","font-size":10,"font-family":"var(--mono)"},"A(t) = net gallons so far"));
+  if(accT>0.01){
+    let d=""; const N=Math.max(2,Math.round(accT*22));
+    for(let k=0;k<=N;k++){ const t=accT*k/N; d+=(k?"L":"M")+accM2.sx(t).toFixed(1)+" "+accM2.sy(ACC.A(t)).toFixed(1)+" "; }
+    accAPlot.appendChild(el("path",{d,fill:"none",stroke:VC.glow,"stroke-width":5.5,"stroke-linecap":"round",opacity:.22}));
+    accAPlot.appendChild(el("path",{d,fill:"none",stroke:VC.rate,"stroke-width":2.4,"stroke-linecap":"round"}));
+    const hy=ACC.A(accT), hx2=accM2.sx(accT), hy2=accM2.sy(hy);
+    /* tangent tick: its slope IS r(t) */
+    const dt=0.55, m=ACC.r(accT);
+    const x1=Math.max(0,accT-dt), x2=Math.min(10,accT+dt);
+    accAPlot.appendChild(el("line",{x1:accM2.sx(x1).toFixed(1),y1:accM2.sy(hy-(accT-x1)*m).toFixed(1),
+      x2:accM2.sx(x2).toFixed(1),y2:accM2.sy(hy+(x2-accT)*m).toFixed(1),
+      stroke:"#3fd0b0","stroke-width":2,"stroke-linecap":"round",opacity:.95}));
+    accAPlot.appendChild(el("circle",{cx:hx2.toFixed(1),cy:hy2.toFixed(1),r:4.4,fill:VC.glow}));
+    if(accT>0.6&&accT<9.4) accAPlot.appendChild(el("text",{x:(hx2+10).toFixed(1),y:(hy2-8).toFixed(1),fill:"#3fd0b0","font-size":10,"font-family":"var(--mono)"},"slope = r(t)"));
+  }
+}
+
+/* ======================= 2 · RECTANGLES CLOSING IN ======================= */
+const RSF={
+  inc:{ name:"Increasing", sub:"f(x) = x²/2 + 1", texs:"f(x)=\\tfrac{x^2}{2}+1", f:x=>x*x/2+1, F:14.666667,
+        shape:"increasing and concave up" },
+  dec:{ name:"Decreasing", sub:"f(x) = 6/(x+1)", texs:"f(x)=\\tfrac{6}{x+1}", f:x=>6/(x+1), F:9.656627,
+        shape:"decreasing and concave up" },
+  mix:{ name:"Mixed", sub:"f(x) = 3 + 2 sin(1.5x)", texs:"f(x)=3+2\\sin(1.5x)", f:x=>3+2*Math.sin(1.5*x), F:12.053110,
+        shape:"rising then falling — no single over/under rule applies" }
+};
+const METHODS=[ {k:"L",name:"Left"}, {k:"R",name:"Right"}, {k:"M",name:"Midpoint"}, {k:"T",name:"Trapezoid"} ];
+let rsKey="inc", rsMethod="L", rsn=6;
+const RSW=560, RSH=380, RSP=42;
+const rsPlot=document.getElementById("rsPlot");
+const rsM=mapper([0,4],[0,9.5],RSW,RSH,RSP);
+function estimate(f,n,m){ let s=0; const dx=4/n;
+  for(let i=0;i<n;i++){ const xl=i*dx, xr=xl+dx;
+    if(m==="L") s+=f(xl)*dx; else if(m==="R") s+=f(xr)*dx;
+    else if(m==="M") s+=f((xl+xr)/2)*dx; else s+=(f(xl)+f(xr))/2*dx; }
+  return s; }
+function renderRS(){
+  const e=RSF[rsKey], f=e.f, dx=4/rsn;
+  rsPlot.innerHTML="";
+  drawAxes(rsPlot,rsM,RSW,RSH,RSP,4,4);
+  const sw=rsn<=24?1:(rsn<=60?0.7:0.45);
+  for(let i=0;i<rsn;i++){
+    const xl=i*dx, xr=xl+dx;
+    if(rsMethod==="T"){
+      const d="M"+rsM.sx(xl).toFixed(1)+" "+rsM.sy(0).toFixed(1)
+            +"L"+rsM.sx(xl).toFixed(1)+" "+rsM.sy(f(xl)).toFixed(1)
+            +"L"+rsM.sx(xr).toFixed(1)+" "+rsM.sy(f(xr)).toFixed(1)
+            +"L"+rsM.sx(xr).toFixed(1)+" "+rsM.sy(0).toFixed(1)+"Z";
+      rsPlot.appendChild(el("path",{d,fill:VC.rect,stroke:VC.rectS,"stroke-width":sw,"stroke-opacity":.85}));
+    } else {
+      const h=rsMethod==="L"?f(xl):(rsMethod==="R"?f(xr):f((xl+xr)/2));
+      const x=rsM.sx(xl), w=rsM.sx(xr)-x, y=rsM.sy(h);
+      rsPlot.appendChild(el("rect",{x:x.toFixed(1),y:y.toFixed(1),width:w.toFixed(2),height:(rsM.sy(0)-y).toFixed(1),
+        fill:VC.rect,stroke:VC.rectS,"stroke-width":sw,"stroke-opacity":.85}));
+      if(rsMethod==="M" && rsn<=30){
+        rsPlot.appendChild(el("circle",{cx:rsM.sx((xl+xr)/2).toFixed(1),cy:rsM.sy(h).toFixed(1),r:2.4,fill:VC.glow}));
+      }
+    }
+  }
+  /* the error itself, shaded: red = missed, green = overcounted */
+  const gapS=Math.max(4,Math.round(60/Math.sqrt(rsn)));
+  for(let i=0;i<rsn;i++){
+    const xl=i*dx, xr=xl+dx;
+    let top;
+    if(rsMethod==="T"){ const fl=f(xl), fr=f(xr); top=x=>fl+(fr-fl)*(x-xl)/dx; }
+    else { const h=rsMethod==="L"?f(xl):(rsMethod==="R"?f(xr):f((xl+xr)/2)); top=()=>h; }
+    gapPaths(rsPlot,f,top,xl,xr,rsM,gapS);
+  }
+  rsPlot.appendChild(el("path",{d:curveStr(f,0,4,rsM),fill:"none",stroke:VC.glow,"stroke-width":2.8,"stroke-linecap":"round"}));
+  document.getElementById("rsNv").textContent=rsn;
+  document.getElementById("rsTrue").textContent=fmt(e.F,4);
+  /* compare rows */
+  const cmp=document.getElementById("rsCmp"); cmp.innerHTML="";
+  METHODS.forEach(mm=>{
+    const v=estimate(f,rsn,mm.k), err=v-e.F;
+    const row=document.createElement("div"); row.className="cmp-row"+(mm.k===rsMethod?" on":"");
+    const ec=Math.abs(err)<5e-5?"zero":(err<0?"neg":"pos");
+    row.innerHTML='<span class="nm">'+mm.name+'</span><span class="vv">'+fmt(v,4)+'</span>'
+      +'<span class="ee '+ec+'">'+(Math.abs(err)<5e-5?"≈ exact":(err>0?"+":"")+fmt(err,4))+'</span>';
+    row.onclick=()=>{ rsMethod=mm.k; renderRS(); };
+    cmp.appendChild(row);
+  });
+  /* badge + callout */
+  const v=estimate(f,rsn,rsMethod), err=v-e.F, badge=document.getElementById("rsBadge");
+  if(Math.abs(err)<5e-4){ badge.className="verdict-badge vb-dead"; badge.textContent="≈ dead on"; }
+  else if(err<0){ badge.className="verdict-badge vb-under"; badge.textContent="underestimate"; }
+  else { badge.className="verdict-badge vb-over"; badge.textContent="overestimate"; }
+  const mName=METHODS.find(m=>m.k===rsMethod).name;
+  let why="";
+  if(rsKey!=="mix"){
+    if(rsMethod==="L") why=rsKey==="inc"?"each rectangle's height is set at its left edge — the lowest point of a rising curve, so every rectangle tucks under it.":"on a falling curve the left edge is the highest point, so every rectangle pokes above it.";
+    else if(rsMethod==="R") why=rsKey==="inc"?"the right edge is the highest point of each slice on a rising curve — rectangles overshoot.":"the right edge is the lowest point on a falling curve — rectangles undershoot.";
+    else if(rsMethod==="M") why="this curve is concave up, so each midpoint rectangle trades a sliver of missing area for a smaller sliver of extra — midpoint lands just under.";
+    else why="this curve is concave up, so the chord of each trapezoid sits above the curve — trapezoid lands just over.";
+    why=mName+" with n = "+rsn+" "+(err<0?"under":"over")+"shoots because "+why;
+  } else {
+    why="On a curve that rises then falls, slices fight each other — "+mName.toLowerCase()+" overshoots some slices and undershoots others, so the global over/under can flip. The exam only asks for a guaranteed direction when the behavior is consistent.";
+  }
+  document.getElementById("rsCall").textContent=why+"  Error: "+(err>0?"+":"")+fmt(err,4)+".";
+  renderER();
+}
+const rsFns=document.getElementById("rsFns");
+Object.keys(RSF).forEach(k=>{
+  const b=document.createElement("button");
+  b.innerHTML='<div class="sb-name">'+RSF[k].name+'</div><div class="sb-sub">'+RSF[k].sub+'</div>';
+  if(k===rsKey) b.className="on";
+  b.onclick=()=>{ rsKey=k; [...rsFns.children].forEach(c=>c.classList.remove("on")); b.classList.add("on"); renderRS(); };
+  rsFns.appendChild(b);
+});
+document.getElementById("rsN").addEventListener("input",e=>{ rsn=+e.target.value; renderRS(); });
+
+/* ======================= 2b · THE ERROR RACE ======================= */
+const ERCOL={L:"#e8a13c",R:"#e0644f",M:"#3fd0b0",T:"#a98cf0"};
+const ERCACHE={};
+function erData(key){
+  if(ERCACHE[key]) return ERCACHE[key];
+  const e=RSF[key], out={L:[],R:[],M:[],T:[]};
+  for(let n=2;n<=100;n++) for(const m of ["L","R","M","T"]) out[m].push(Math.abs(estimate(e.f,n,m)-e.F));
+  ERCACHE[key]=out; return out;
+}
+const erPlot=document.getElementById("erPlot");
+function renderER(){
+  const data=erData(rsKey);
+  const ymax=Math.max(data.L[0],data.R[0])*1.06;
+  const M=mapper([2,100],[0,ymax],560,210,36);
+  erPlot.innerHTML="";
+  for(let g=0;g<=2;g++){ const yy=ymax*g/2, py=M.sy(yy);
+    erPlot.appendChild(el("line",{x1:36,y1:py,x2:560-36,y2:py,stroke:"#222838"}));
+    erPlot.appendChild(el("text",{x:29,y:py+3,fill:"#5d6276","font-size":10,"text-anchor":"end","font-family":"var(--mono)"},yy.toFixed(1))); }
+  [2,20,40,60,80,100].forEach(nn=>{ erPlot.appendChild(el("text",{x:M.sx(nn),y:210-36+15,fill:"#5d6276","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},""+nn)); });
+  erPlot.appendChild(el("text",{x:36,y:18,fill:"#5d6276","font-size":10,"font-family":"var(--mono)"},"|error|"));
+  erPlot.appendChild(el("text",{x:560-36,y:210-36+30,fill:"#5d6276","font-size":10,"text-anchor":"end","font-family":"var(--mono)"},"n"));
+  erPlot.appendChild(el("line",{x1:36,y1:M.sy(0),x2:560-36,y2:M.sy(0),stroke:"#39415c","stroke-width":1.2}));
+  const mx=M.sx(rsn);
+  erPlot.appendChild(el("line",{x1:mx,y1:M.sy(ymax),x2:mx,y2:M.sy(0),stroke:"#7e859c","stroke-width":1.1,"stroke-dasharray":"4 4",opacity:.8}));
+  for(const m of ["L","R","M","T"]){
+    let d=""; data[m].forEach((v,i)=>{ d+=(i?"L":"M")+M.sx(i+2).toFixed(1)+" "+M.sy(Math.min(v,ymax)).toFixed(1)+" "; });
+    erPlot.appendChild(el("path",{d,fill:"none",stroke:ERCOL[m],"stroke-width":m===rsMethod?2.6:1.7,opacity:m===rsMethod?1:.75}));
+    erPlot.appendChild(el("circle",{cx:mx.toFixed(1),cy:M.sy(Math.min(data[m][rsn-2],ymax)).toFixed(1),r:m===rsMethod?4.4:3,fill:ERCOL[m]}));
+  }
+  const rL=data.L[18]/data.L[8], rM=data.M[18]/data.M[8];
+  document.getElementById("erCall").textContent=
+    "Double n from 10 to 20: Left's error shrinks ×"+rL.toFixed(2)+" — but Midpoint's shrinks ×"+rM.toFixed(2)+
+    ". Left and Right errors fall like 1/n; Midpoint and Trapezoid fall like 1/n². The curve-following methods don't just win — they win faster with every doubling.";
+}
+
+/* ======================= 3 · FROM A TABLE ======================= */
+const TAB={ t:[0,2,5,7,10], r:[4.2,6.0,7.4,5.6,3.0] };
+const TABW=560, TABH=300, TABP=42;
+const tabPlot=document.getElementById("tabPlot");
+const tabM=mapper([0,10],[0,8.5],TABW,TABH,TABP);
+let tabMethod="L";
+/* smooth monotone-ish curve through the table points (catmull-rom) for context */
+function tabCurvePath(){
+  const P=TAB.t.map((t,i)=>[t,TAB.r[i]]);
+  const pts=[P[0]].concat(P).concat([P[P.length-1]]);
+  let d="M"+tabM.sx(P[0][0]).toFixed(1)+" "+tabM.sy(P[0][1]).toFixed(1)+" ";
+  for(let i=1;i<pts.length-2;i++){
+    const p0=pts[i-1],p1=pts[i],p2=pts[i+1],p3=pts[i+2];
+    for(let k=1;k<=14;k++){ const u=k/14,u2=u*u,u3=u2*u;
+      const x=0.5*((2*p1[0])+(-p0[0]+p2[0])*u+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*u2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*u3);
+      const y=0.5*((2*p1[1])+(-p0[1]+p2[1])*u+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*u2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*u3);
+      d+="L"+tabM.sx(x).toFixed(1)+" "+tabM.sy(y).toFixed(1)+" ";
+    }
+  }
+  return d;
+}
+function renderTab(){
+  tabPlot.innerHTML="";
+  drawAxes(tabPlot,tabM,TABW,TABH,TABP,5,4);
+  const note=document.getElementById("tabNote"), sumEl=document.getElementById("tabSum");
+  if(tabMethod!=="X"){
+    for(let i=0;i<4;i++){
+      const t0=TAB.t[i], t1=TAB.t[i+1];
+      if(tabMethod==="T"){
+        const d="M"+tabM.sx(t0).toFixed(1)+" "+tabM.sy(0).toFixed(1)
+              +"L"+tabM.sx(t0).toFixed(1)+" "+tabM.sy(TAB.r[i]).toFixed(1)
+              +"L"+tabM.sx(t1).toFixed(1)+" "+tabM.sy(TAB.r[i+1]).toFixed(1)
+              +"L"+tabM.sx(t1).toFixed(1)+" "+tabM.sy(0).toFixed(1)+"Z";
+        tabPlot.appendChild(el("path",{d,fill:VC.rect,stroke:VC.rectS,"stroke-width":1,"stroke-opacity":.85}));
+      } else {
+        const h=tabMethod==="L"?TAB.r[i]:TAB.r[i+1];
+        const x=tabM.sx(t0), w=tabM.sx(t1)-x, y=tabM.sy(h);
+        tabPlot.appendChild(el("rect",{x:x.toFixed(1),y:y.toFixed(1),width:w.toFixed(1),height:(tabM.sy(0)-y).toFixed(1),
+          fill:VC.rect,stroke:VC.rectS,"stroke-width":1,"stroke-opacity":.85}));
+      }
+    }
+  }
+  tabPlot.appendChild(el("path",{d:tabCurvePath(),fill:"none",stroke:"#7e859c","stroke-width":1.6,"stroke-dasharray":"5 5",opacity:.7}));
+  TAB.t.forEach((t,i)=>{ tabPlot.appendChild(el("circle",{cx:tabM.sx(t).toFixed(1),cy:tabM.sy(TAB.r[i]).toFixed(1),r:4.4,fill:VC.glow}));
+    tabPlot.appendChild(el("text",{x:tabM.sx(t).toFixed(1),y:(tabM.sy(TAB.r[i])-10).toFixed(1),fill:"#8d93a8","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},TAB.r[i].toFixed(1))); });
+  tabPlot.appendChild(el("text",{x:TABW-TABP,y:TABH-TABP+30,fill:"#5d6276","font-size":11,"text-anchor":"end","font-family":"var(--mono)"},"t, minutes"));
+  /* the sum, term by term */
+  let texS="", total=0, msg="";
+  if(tabMethod==="L"){
+    const terms=[]; for(let i=0;i<4;i++){ const w=TAB.t[i+1]-TAB.t[i]; terms.push("("+w+")("+TAB.r[i].toFixed(1)+")"); total+=w*TAB.r[i]; }
+    texS=terms.join("+")+"="+(+total.toFixed(2))+"\\ \\text{gal}";
+    msg="Left sum: each width × the value at the subinterval's LEFT end — the last column (3.0) never gets used.";
+  } else if(tabMethod==="R"){
+    const terms=[]; for(let i=0;i<4;i++){ const w=TAB.t[i+1]-TAB.t[i]; terms.push("("+w+")("+TAB.r[i+1].toFixed(1)+")"); total+=w*TAB.r[i+1]; }
+    texS=terms.join("+")+"="+(+total.toFixed(2))+"\\ \\text{gal}";
+    msg="Right sum: each width × the RIGHT-end value — now the first column (4.2) is the one left out.";
+  } else if(tabMethod==="T"){
+    const terms=[]; for(let i=0;i<4;i++){ const w=TAB.t[i+1]-TAB.t[i]; terms.push("("+w+")\\tfrac{"+TAB.r[i].toFixed(1)+"+"+TAB.r[i+1].toFixed(1)+"}{2}"); total+=w*(TAB.r[i]+TAB.r[i+1])/2; }
+    texS=terms.join("+")+"="+(+total.toFixed(2))+"\\ \\text{gal}";
+    msg="Trapezoid: width × the average of the two end values. Always exactly halfway between the left and right sums.";
+  } else {
+    texS="";
+    msg="Trick question — and a real exam trap. A midpoint sum over these four subintervals needs R at t = 1, 3.5, 6, and 8.5, and the table doesn't have those values. Midpoint only works when the table contains the midpoints — the exam picks subintervals so every other column is one.";
+  }
+  if(texS){ sumEl.innerHTML=tex(texS,texS,true); }
+  else { sumEl.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not possible from this table.</span>'; }
+  note.textContent=msg;
+  document.querySelectorAll("#tabBtns button").forEach(b=>b.classList.toggle("on",b.getAttribute("data-m")===tabMethod));
+}
+const tabBtns=document.getElementById("tabBtns");
+[ {k:"L",n:"Left Riemann sum",s:"4 subintervals from the table"},
+  {k:"R",n:"Right Riemann sum",s:"4 subintervals from the table"},
+  {k:"T",n:"Trapezoidal sum",s:"4 subintervals from the table"},
+  {k:"X",n:"Midpoint sum",s:"can you? think first…"} ].forEach(m=>{
+  const b=document.createElement("button"); b.setAttribute("data-m",m.k);
+  b.innerHTML='<div class="sb-name">'+m.n+'</div><div class="sb-sub">'+m.s+'</div>';
+  b.onclick=()=>{ tabMethod=m.k; renderTab(); };
+  tabBtns.appendChild(b);
+});
+
+/* ======================= 4 · Σ → ∫ anatomy ======================= */
+function renderAnatomy(){
+  const main="\\lim_{n\\to\\infty}\\ \\sum_{i=1}^{n} f(x_i)\\,\\Delta x \\;=\\; \\int_a^b f(x)\\,dx";
+  document.getElementById("anatMain").innerHTML=tex(main,main,true);
+  document.getElementById("anatDx").innerHTML=T("\\Delta x=\\tfrac{b-a}{n}");
+  document.getElementById("anatXi").innerHTML=T("x_i=a+i\\,\\Delta x");
+  document.getElementById("anatTerm").innerHTML=T("\\text{height}\\times\\text{width}");
+  document.getElementById("anatLim").innerHTML=T("\\Delta x\\to dx,\\ \\Sigma\\to\\int");
+}
+
+/* ======================= 4b · TAKE n TO INFINITY ======================= */
+const limPlot=document.getElementById("limPlot");
+const limM=mapper([0,4],[0,9.5],700,250,38);
+let limAnim=null, limDone=false;
+function renderLim(n,done){
+  limPlot.innerHTML="";
+  drawAxes(limPlot,limM,700,250,38,4,3);
+  if(done){
+    let d="M"+limM.sx(0).toFixed(1)+" "+limM.sy(0).toFixed(1)+" ";
+    for(let k=0;k<=180;k++){ const x=4*k/180; d+="L"+limM.sx(x).toFixed(1)+" "+limM.sy(WK.f(x)).toFixed(1)+" "; }
+    d+="L"+limM.sx(4).toFixed(1)+" "+limM.sy(0).toFixed(1)+" Z";
+    limPlot.appendChild(el("path",{d,fill:"rgba(95,127,242,.32)",stroke:"none"}));
+  } else {
+    const dx=4/n, sw=Math.max(0.18,1.1-n/130), so=Math.max(0.16,0.85-n/180);
+    for(let i=0;i<n;i++){
+      const xl=i*dx, h=WK.f(xl), x=limM.sx(xl), w=limM.sx(xl+dx)-x, y=limM.sy(h);
+      limPlot.appendChild(el("rect",{x:x.toFixed(1),y:y.toFixed(1),width:w.toFixed(2),height:(limM.sy(0)-y).toFixed(1),
+        fill:"rgba(95,127,242,.26)",stroke:VC.rectS,"stroke-width":sw,"stroke-opacity":so}));
+    }
+  }
+  limPlot.appendChild(el("path",{d:curveStr(WK.f,0,4,limM),fill:"none",stroke:VC.glow,"stroke-width":2.8,"stroke-linecap":"round"}));
+  const read=document.getElementById("limRead");
+  if(done){ read.innerHTML='Σ became ∫ — exactly <b style="color:var(--true)">44/3 ≈ 14.667</b>. The limit isn\'t a bigger estimate; it\'s the area itself.'; }
+  else { read.textContent="n = "+n+"  ·  Σ = "+estimate(WK.f,n,"L").toFixed(3); }
+}
+document.getElementById("limGo").onclick=()=>{
+  const btn=document.getElementById("limGo");
+  if(limAnim) return;
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ limDone=true; renderLim(200,true); btn.textContent="↺ replay"; return; }
+  limDone=false; btn.disabled=true;
+  const t0=performance.now(), DUR=4200;
+  function stepA(now){
+    const p=Math.min(1,(now-t0)/DUR), e=p*p*(3-2*p);
+    const n=Math.round(4+(200-4)*e);
+    renderLim(n,false);
+    if(p<1){ limAnim=requestAnimationFrame(stepA); }
+    else { limAnim=null; limDone=true; renderLim(200,true); btn.disabled=false; btn.textContent="↺ replay"; }
+  }
+  limAnim=requestAnimationFrame(stepA);
+};
+
+/* ======================= concepts ======================= */
+function renderConcepts(){
+  const c1=document.getElementById("c1"); if(c1) c1.innerHTML=tex("\\int_a^b r(t)\\,dt=\\text{net change},\\qquad y(b)=y(a)+\\int_a^b r(t)\\,dt","∫r = net change; y(b)=y(a)+∫r");
+  const c3=document.getElementById("c3"); if(c3) c3.innerHTML=tex("\\Delta x=\\tfrac{b-a}{n},\\quad x_i=a+i\\Delta x,\\quad \\sum f(x_i)\\Delta x\\to\\int_a^b f\\,dx","Δx=(b−a)/n, xᵢ=a+iΔx");
+  const c4=document.getElementById("c4"); if(c4) c4.innerHTML=tex("\\tfrac{\\text{gal}}{\\text{min}}\\times\\text{min}=\\text{gal}","gal/min × min = gal");
+}
+
+/* ======================= practice ======================= */
+const PRAC=[
+ { tag:"Left sum from a table", q:()=>'A pump runs with rates given by the table: t = 0, 1, 4, 6 (hours) and '+T("v(t)")+' = 2, 5, 8, 3 (liters/hour). Use a left Riemann sum with the three subintervals from the table to estimate the total liters pumped.',
+   sol:[{t:"The widths are differences of consecutive t-values: 1, 3, and 2 — not equal!",m:"\\Delta t = 1,\\ 3,\\ 2"},
+        {t:"Left sum uses the value at each subinterval's left end (the 3 never gets used):",m:"(1)(2)+(3)(5)+(2)(8)=2+15+16"},
+        {t:"Total, with units.",m:"=33\\ \\text{liters}"}] },
+ { tag:"Trapezoid, same table", q:()=>'Same table. Estimate with a trapezoidal sum, and say whether you expect it to be closer to the truth than the left sum.',
+   sol:[{t:"Each term is width × the average of the two endpoint values:",m:"(1)\\tfrac{2+5}{2}+(3)\\tfrac{5+8}{2}+(2)\\tfrac{8+3}{2}=3.5+19.5+11"},
+        {t:"Total:",m:"=34\\ \\text{liters}"},
+        {t:"Generally yes — the trapezoid follows the curve's tilt inside each slice instead of holding one height, so its error shrinks faster as the data gets finer. (It's also always the average of the left and right sums.)",m:""}] },
+ { tag:"Interpret with units", q:()=>'Water drains from a tub at rate '+T("r(t)")+' liters per minute. In one sentence with units, what does '+T("\\int_0^{60} r(t)\\,dt = -210")+' mean?',
+   sol:[{t:"Integrating a rate over time gives net change of the quantity, in (liters/min)(min) = liters.",m:""},
+        {t:"So: over the first 60 minutes, the amount of water in the tub decreased by 210 liters.",m:"\\Delta W=-210\\ \\text{L on } [0,60]"}] },
+ { tag:"Recognize the limit", q:()=>'Express as a definite integral: '+T("\\displaystyle\\lim_{n\\to\\infty}\\sum_{i=1}^{n}\\sqrt{1+\\tfrac{2i}{n}}\\cdot\\tfrac{2}{n}")+'.',
+   sol:[{t:"Match the pieces to the template Σ f(xᵢ)Δx. The factor 2/n is Δx, so b − a = 2.",m:"\\Delta x=\\tfrac{2}{n}\\Rightarrow b-a=2"},
+        {t:"Inside the function: 1 + 2i/n = 1 + i·Δx looks like a + xᵢ with a = 0 and f built around (1 + x)… or read it as xᵢ = 1 + iΔx running from 1 to 3.",m:"x_i=\\tfrac{2i}{n}\\ \\text{(right endpoints, } a=0)"},
+        {t:"Either reading gives the same integral:",m:"\\int_0^2\\sqrt{1+x}\\,dx\\;=\\;\\int_1^3\\sqrt{u}\\,du"}] },
+ { tag:"Guarantee the direction", q:()=>'f is positive, decreasing, and concave down on [2, 8]. Which of Left, Right, Midpoint, Trapezoid are guaranteed to OVERestimate '+T("\\int_2^8 f(x)\\,dx")+'?',
+   sol:[{t:"Decreasing ⇒ each left endpoint is the slice's highest value ⇒ Left overestimates; Right underestimates.",m:"\\text{Left: over}"},
+        {t:"Concave down ⇒ chords sit below the curve ⇒ Trapezoid underestimates; tangents sit above ⇒ Midpoint overestimates.",m:"\\text{Midpoint: over}"},
+        {t:"So Left and Midpoint overestimate; Right and Trapezoid underestimate.",m:""}] }
+];
+function renderPractice(){
+  document.getElementById("practice").innerHTML=PRAC.map((p,i)=>{
+    const steps=p.sol.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+    return '<div class="prob"><div class="prob-tag">'+p.tag+'</div><div class="prob-q">'+p.q()+'</div>'
+      +'<button class="soltoggle" data-i="'+i+'">Show solution</button>'
+      +'<div class="sol" id="sol'+i+'">'+steps+'</div></div>';
+  }).join("");
+  document.querySelectorAll(".soltoggle").forEach(btn=>{ btn.onclick=()=>{ const i=btn.getAttribute("data-i"), s=document.getElementById("sol"+i);
+    btn.textContent=s.classList.toggle("show")?"Hide solution":"Show solution"; }; });
+}
+
+/* ======================= quiz ======================= */
+const QUIZ=[
+ { q:()=>'f is increasing on [a, b]. A left Riemann sum for '+T("\\int_a^b f\\,dx")+' is guaranteed to be:',
+   opts:[{h:()=>"an underestimate",ok:true},{h:()=>"an overestimate",ok:false},{h:()=>"exact",ok:false},{h:()=>"it depends on concavity",ok:false}],
+   fb:"On a rising curve each rectangle's height is set at its lowest point — the left edge — so the sum tucks under the true area. Concavity doesn't enter for Left/Right; only increasing vs decreasing does." },
+ { q:()=>T("R(t)")+' is measured in gallons per minute and t in minutes. The units of '+T("\\int_0^{10}R(t)\\,dt")+' are:',
+   opts:[{h:()=>"gallons",ok:true},{h:()=>"gallons per minute",ok:false},{h:()=>"gal/min²",ok:false},{h:()=>"minutes",ok:false}],
+   fb:"Height × width: (gal/min)(min) = gallons. The integral of a rate carries the quantity's own units." },
+ { q:()=>'Using the lesson\'s table (t: 0, 2, 5, 7, 10; R: 4.2, 6.0, 7.4, 5.6, 3.0), the left Riemann sum is:',
+   opts:[{h:()=>"58.0 gal",ok:true},{h:()=>"54.4 gal",ok:false},{h:()=>"56.2 gal",ok:false},{h:()=>"65.2 gal",ok:false}],
+   fb:"(2)(4.2)+(3)(6.0)+(2)(7.4)+(3)(5.6) = 8.4+18+14.8+16.8 = 58.0. Widths 2, 3, 2, 3 — and the 3.0 never gets used. (54.4 is the right sum; 56.2 the trapezoid.)" },
+ { q:()=>'A table gives v(t) at t = 0, 2, 5, 7, 10 only. A midpoint Riemann sum over those four subintervals:',
+   opts:[{h:()=>"can't be computed — the midpoint values aren't in the table",ok:true},{h:()=>"equals the average of left and right sums",ok:false},{h:()=>"uses the values at t = 2, 5, 7",ok:false},{h:()=>"equals the trapezoidal sum",ok:false}],
+   fb:"Midpoint needs v at t = 1, 3.5, 6, 8.5 — none are given. (Averaging left and right gives the trapezoid, not midpoint.)" },
+ { q:()=>'The trapezoidal sum always equals:',
+   opts:[{h:()=>"the average of the left and right sums",ok:true},{h:()=>"the midpoint sum",ok:false},{h:()=>"the exact integral",ok:false},{h:()=>"half the right sum",ok:false}],
+   fb:"Each trapezoid's area is width × the average of the two endpoint heights — averaging the left and right rectangles slice by slice." },
+ { q:()=>'f is concave UP on [a, b]. Then:',
+   opts:[{h:()=>"trapezoid overestimates, midpoint underestimates",ok:true},{h:()=>"trapezoid underestimates, midpoint overestimates",ok:false},{h:()=>"both overestimate",ok:false},{h:()=>"both underestimate",ok:false}],
+   fb:"Concave up means chords lie above the curve (trapezoid over) and tangent lines lie below it (midpoint under — the midpoint rectangle has the same area as a tangent trapezoid). They always land on opposite sides." },
+ { q:()=>'A tank holds 50 L at t = 0 and water flows in at rate r(t). The amount at t = 8 is:',
+   opts:[{h:()=>T("50+\\int_0^8 r(t)\\,dt"),ok:true},{h:()=>T("\\int_0^8 r(t)\\,dt"),ok:false},{h:()=>T("r(8)-r(0)"),ok:false},{h:()=>T("50\\cdot r(8)"),ok:false}],
+   fb:"The integral is the CHANGE; the amount is starting value plus change. Forgetting the +50 is the most-dropped point on accumulation FRQs." },
+ { q:()=>T("\\displaystyle\\lim_{n\\to\\infty}\\sum_{i=1}^{n}\\Bigl(3+\\tfrac{5i}{n}\\Bigr)^{2}\\cdot\\tfrac{5}{n}")+' equals:',
+   opts:[{h:()=>T("\\int_3^8 x^2\\,dx"),ok:true},{h:()=>T("\\int_0^5 x^2\\,dx"),ok:false},{h:()=>T("\\int_3^8 x^5\\,dx"),ok:false},{h:()=>T("\\int_0^3 (3+x)^2dx"),ok:false}],
+   fb:"Δx = 5/n so the interval has length 5; xᵢ = 3 + iΔx starts at 3 — right endpoints running 3 → 8, and the function being sampled is x². (Equivalently ∫₀⁵(3+x)²dx — same value — but with bounds 0 to 5, not 0 to 3.)" }
+];
+let qi=0, qScore=0, qDone=0, qAnswered=false;
+const qOpts=document.getElementById("qOpts"), qFb=document.getElementById("qFb"), qNext=document.getElementById("qNext");
+function renderQuiz(){
+  qAnswered=false; const item=QUIZ[qi];
+  document.getElementById("qText").innerHTML=item.q();
+  document.getElementById("qProgress").textContent="Question "+(qi+1)+" of "+QUIZ.length;
+  document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+  qFb.innerHTML=""; qNext.style.display="none";
+  qNext.textContent = qi<QUIZ.length-1 ? "Next question →" : "Restart quiz ↺";
+  qOpts.innerHTML="";
+  const sopts=shuf(item.opts);
+  sopts.forEach((o)=>{ const b=document.createElement("button"); b.innerHTML=o.h();
+    b.onclick=()=>{ if(qAnswered)return; qAnswered=true; qDone++;
+      [...qOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(sopts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ qScore++; b.classList.add("correct"); qFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ Correct.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      else { b.classList.add("wrong"); qFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not quite.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+      qNext.style.display="block";
+    };
+    qOpts.appendChild(b); });
+}
+qNext.onclick=()=>{ if(qi<QUIZ.length-1){ qi++; } else { qi=0; qScore=0; qDone=0; } renderQuiz(); };
+
+/* ======================= init + KaTeX refresh ======================= */
+function renderHeaderEq(){ const n=document.getElementById("rEq"); if(n) n.innerHTML=T("r(t)=7\\sin\\!\\bigl(\\tfrac{\\pi t}{6}\\bigr)"); }
+function refreshAll(){ renderHeaderEq(); renderWkEq(); renderWK(); renderAnatomy(); if(!limAnim) renderLim(limDone?200:4,limDone); renderConcepts(); renderPractice(); renderQuiz(); renderAcc(); renderRS(); renderTab(); }
+renderHeaderEq(); renderWkEq(); renderWK(); renderAcc(); renderRS(); renderTab(); renderAnatomy(); renderLim(4,false); renderConcepts(); renderPractice(); renderQuiz();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); refreshAll(); }
+  else if(++tries>40) clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.animationDelay=Math.min(i*30,440)+'ms'; });
+
+</script>
+</body>
+</html>

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Exam Practice — Mixed Review &amp; FRQ · Unit 6</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23101420%27%2F%3E%3Cg%20fill%3D%27%235f7ff2%27%3E%3Crect%20x%3D%276%27%20y%3D%2718%27%20width%3D%274.6%27%20height%3D%278%27%20rx%3D%271%27%20opacity%3D%27.55%27%2F%3E%3Crect%20x%3D%2712%27%20y%3D%2714%27%20width%3D%274.6%27%20height%3D%2712%27%20rx%3D%271%27%20opacity%3D%27.75%27%2F%3E%3Crect%20x%3D%2718%27%20y%3D%2710%27%20width%3D%274.6%27%20height%3D%2716%27%20rx%3D%271%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M5%2017%20C%2012%2010%2C%2020%206%2C%2027%207%27%20stroke%3D%27%238fa6f7%27%20stroke-width%3D%272%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{ --approx:#5f7ff2; --emerald:#5f7ff2; --cyan:#5f7ff2; --true:#3fd0b0; --glow:rgba(95,127,242,.08); --wrap-max:820px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:680px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:720px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-top:18px} .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7);margin-top:14px}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:14px;text-align:left;transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--emerald);transform:translateY(-1px)} button:active{transform:translateY(0) scale(.99)} button:disabled{cursor:default}
+  .qtag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:3px 10px;margin-bottom:10px;background:var(--panel-2)}
+  .qprompt{font-size:15.5px;font-weight:500;margin:6px 0 4px;line-height:1.5}
+  .qmath{font-family:var(--mono);font-size:16px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center;margin:12px 0;overflow-x:auto} .qmath .katex{font-size:1.06em}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px}
+  @media(max-width:560px){.opts{grid-template-columns:1fr}}
+  .opts button{text-align:center;font-size:14.5px;padding:11px}
+  .opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv);font-weight:600}
+  .opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .fb{font-size:13.5px;line-height:1.55;margin-top:12px;background:var(--bg);border-radius:9px;padding:11px 13px;display:none} .fb.show{display:block} .fb .ftag{font-weight:600}
+  .fb .ftag.ok{color:var(--conv)} .fb .ftag.bad{color:var(--div)}
+  .next{background:var(--approx);color:#1a1408;border-color:var(--approx);font-weight:600;text-align:center;width:100%;box-shadow:0 8px 18px -10px var(--approx);margin-top:16px;display:none} .next.show{display:block}
+  .review-link{display:inline-block;margin-top:8px;font-size:12.5px;font-family:var(--mono);color:var(--emerald);text-decoration:none} .review-link:hover{text-decoration:underline}
+  /* FRQ */
+  .frq-given{background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+  .frq-given .katex{font-size:1.05em} .frq-given .gl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .frq-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .frq-tabs button{font-size:13px;padding:9px 13px;text-align:center;border-radius:9px}
+  .frq-tabs button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .frq-desc{font-size:13px;color:var(--muted);background:var(--bg);border-radius:9px;padding:9px 13px;margin-bottom:6px} .frq-desc b{color:var(--approx)}
+  .part{border-top:1px solid var(--line);padding:16px 0 4px} .part:first-child{border-top:none}
+  .part-h{display:flex;justify-content:space-between;align-items:center;gap:10px} .part-l{font-weight:600;font-size:14.5px;color:var(--ink)} .part-pts{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .part-q{font-size:14.5px;line-height:1.55;margin:8px 0 4px}
+  .frq-fields{display:flex;flex-direction:column;gap:10px;margin:4px 0 12px}
+  .frq-field{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .frq-flabel{font-size:14px;min-width:54px;color:var(--ink)} .frq-flabel .katex{font-size:1em}
+  .frq-input{font-family:var(--mono);font-size:14px;padding:8px 11px;border:1px solid var(--line);border-radius:8px;background:var(--panel-2);color:var(--ink);min-width:140px}
+  .frq-input:focus{outline:none;border-color:var(--emerald)} .frq-input.ok{border-color:var(--conv);background:rgba(63,208,176,.16)} .frq-input.no{border-color:var(--div);background:rgba(224,100,79,.16)}
+  .frq-check{background:var(--ink);color:var(--panel);border-color:var(--ink);font-size:13px;padding:8px 14px} .frq-check:hover{background:#d8d2c6} .frq-check:disabled{opacity:.5}
+  .frq-sol{display:none;margin-top:10px;font-size:13.5px;line-height:1.6;background:var(--bg);border-left:2px solid var(--emerald);border-radius:0 9px 9px 0;padding:11px 14px} .frq-sol.show{display:block}
+  .frq-sol .stepm{font-family:var(--mono);background:var(--panel-2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;margin:7px 0;overflow-x:auto;font-size:13px}
+  .rubric{margin-top:10px} .rubric-h{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .rubric label{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink);padding:5px 0;cursor:pointer} .rubric input{margin-top:3px;accent-color:var(--emerald)}
+  .reveal-sol{font-family:var(--mono);font-size:12.5px;color:var(--emerald);background:none;border:1px dashed var(--line-2);width:100%;text-align:center;margin-top:8px}
+  .scoreline{font-family:var(--mono);font-size:14px;color:var(--ink);background:var(--panel-2);border-radius:9px;padding:12px 14px;margin-top:14px;text-align:center} .scoreline b{color:var(--emerald)}
+  .weakrow{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:13.5px}
+  .weakbar{flex:1;height:8px;background:var(--panel-2);border-radius:5px;overflow:hidden} .weakbar i{display:block;height:100%;background:var(--emerald);border-radius:5px}
+  .weaklabel{min-width:160px;color:var(--ink)} .weakpct{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:48px;text-align:right}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  footer{color:var(--muted);font-size:12px;margin-top:50px;border-top:1px solid var(--line);padding-top:14px}
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit6.html">← Unit 6</a>
+  <header class="reveal">
+    <h1>Exam <span class="em">Practice</span></h1>
+    <div class="sub">Forty-eight multiple-choice questions across all five lessons of Unit 6 — accumulation, the Fundamental Theorem, the antiderivative toolkit, the BC machinery, and improper integrals — plus three full Section-II free-response problems with typed answers graded against the rubric. Filter by topic, and the mastery panel tracks where you stand.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    <b>How to use this.</b> The multiple choice pulls a fresh batch of 12 from a bank of 48, mixing every topic the way
+    the real exam does. Answer, read the worked explanation, and your weak spots surface at the bottom. Then train the
+    free-response format — one scenario, several chained parts — exactly how Section II works.
+  </div>
+
+  <h2 class="reveal">Mixed multiple choice</h2>
+  <div class="card reveal" id="mcCard">
+    <div class="row">
+      <span class="score" id="mcProgress">Question 1 of 12</span>
+      <span class="score" id="mcScore">Score: 0</span>
+    </div>
+    <div class="qtag" id="mcTag"></div>
+    <div class="qprompt" id="mcPrompt"></div>
+    <div class="qmath" id="mcMath"></div>
+    <div class="opts" id="mcOpts"></div>
+    <div class="fb" id="mcFb"></div>
+    <button class="next" id="mcNext">Next question →</button>
+    <div id="mcDone" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Free-response trainer <span style="font-family:var(--mono);font-size:13px;color:var(--approx);font-weight:400">· Section II style</span></h2>
+  <p class="lead reveal">One scenario, several chained parts — exactly how the real FRQ works. Pick a problem below; type
+    what you can, then check the worked solution and score your reasoning against the rubric.</p>
+  <div class="frq-tabs reveal" id="frqTabs"></div>
+  <div class="card reveal" id="frqCard">
+    <div class="frq-desc" id="frqDesc"></div>
+    <div class="frq-given">
+      <div class="gl">Given</div>
+      <div id="frqGiven"></div>
+      <div id="frqGivenNote" style="font-size:12.5px;color:var(--muted);margin-top:8px"></div>
+    </div>
+    <div id="frqParts"></div>
+    <div class="scoreline" id="frqScore" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Where you stand</h2>
+  <div class="card reveal" id="weakCard">
+    <div id="weakBody" style="font-size:14px;color:var(--muted)">Finish some multiple-choice questions and your topic breakdown shows up here.</div>
+  </div>
+
+  <footer class="reveal">Exam Practice · Unit 6 · part of the Visual AP Calculus guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+const TOPICS={
+  riemann:["Riemann sums & accumulation","riemann-sums.html"],
+  ftc:["Fundamental Theorem","fundamental-theorem.html"],
+  antider:["Antiderivatives & u-sub","antiderivatives.html"],
+  parts:["Parts & partial fractions","parts-partial-fractions.html"],
+  improper:["Improper & technique choice","improper-integrals.html"]
+};
+
+// ===================== MC BANK (48, all verified in Node) =====================
+const MC=[
+ // ============ RIEMANN SUMS & ACCUMULATION (10) ============
+ {topic:"riemann",calc:false,prompt:"A pump's rate is recorded: at \\(t=0,2,5,7,10\\) minutes the rate \\(R(t)\\) is \\(4.2,\\ 6,\\ 7.4,\\ 5.6,\\ 3\\) gal/min. Using a <b>left</b> Riemann sum with the four subintervals of the table, the total gallons pumped over \\([0,10]\\) is approximately:",
+  opts:[{t:"58.0",correct:true},{t:"54.4"},{t:"56.2"},{t:"52.6"}],
+  explain:`<b>Left sum uses each subinterval's LEFT value, with the table's unequal widths:</b> \\(4.2(2)+6(3)+7.4(2)+5.6(3)=8.4+18+14.8+16.8=58.0\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>54.4</b> is the <i>right</i> sum — heights read from the wrong end of each piece.<br>• <b>56.2</b> is the trapezoid sum (the average of left and right) — a different method.<br>• <b>52.6</b> uses equal widths of 2.5 — the table's spacing is not uniform.<br><br><b>The principle:</b> with a table, the widths come from the \\(t\\)-values, never from dividing the range evenly.` },
+ {topic:"riemann",calc:false,prompt:"\\(f\\) is continuous, positive, and <b>increasing</b> on \\([a,b]\\). Which statement about Riemann approximations of \\(\\int_a^b f\\,dx\\) must be true?",
+  opts:[{t:"The right sum overestimates the integral",correct:true},{t:"The right sum underestimates the integral"},{t:"The midpoint sum equals the integral"},{t:"The trapezoid sum overestimates the integral"}],
+  explain:`<b>Increasing means each rectangle's right edge is its tallest point</b> — right rectangles poke above the curve, so the right sum overestimates (and the left sum underestimates).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>"Right underestimates"</b> is the rule for a <i>decreasing</i> function — direction flipped.<br>• <b>"Midpoint is exact"</b> is a myth; midpoint is merely usually <i>better</i>, not perfect.<br>• <b>"Trapezoid overestimates"</b> depends on <i>concavity</i>, not direction — increasing alone doesn't decide it.<br><br><b>The principle:</b> direction of \\(f\\) controls Left/Right over-or-under; concavity controls Midpoint/Trapezoid.` },
+ {topic:"riemann",calc:false,prompt:"\\(f\\) is continuous and <b>concave down</b> on \\([a,b]\\). The trapezoidal approximation of \\(\\int_a^b f\\,dx\\):",
+  opts:[{t:"underestimates, because each chord lies below the curve",correct:true},{t:"overestimates, because each chord lies above the curve"},{t:"is exact, because errors cancel"},{t:"could be either — concavity is not enough information"}],
+  explain:`<b>Trapezoids connect endpoints with chords.</b> On a concave-down arc, every chord sags <i>below</i> the curve, so the trapezoid is missing the sliver between chord and curve: underestimate.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>"Overestimates"</b> is the concave-<i>up</i> rule, reversed.<br>• <b>"Exact"</b> would require straight-line pieces of \\(f\\).<br>• <b>"Not enough information"</b> — concavity alone IS the deciding fact for trapezoids (and midpoint, oppositely).<br><br><b>The principle:</b> concave down \\(\\Rightarrow\\) trapezoid under, midpoint over; concave up flips both.` },
+ {topic:"riemann",calc:false,prompt:"Which definite integral equals \\(\\displaystyle\\lim_{n\\to\\infty}\\sum_{k=1}^{n}\\frac{3}{n}\\sqrt{1+\\frac{3k}{n}}\\,\\)?",
+  opts:[{t:"\\(\\int_1^4\\sqrt{x}\\,dx\\)",correct:true},{t:"\\(\\int_0^3\\sqrt{x}\\,dx\\)"},{t:"\\(\\tfrac{1}{3}\\int_1^4\\sqrt{x}\\,dx\\)"},{t:"\\(\\int_1^4\\sqrt{3x}\\,dx\\)"}],
+  explain:`<b>Read the anatomy:</b> \\(\\Delta x=\\tfrac{3}{n}\\) means the interval has length 3; the sample points \\(1+\\tfrac{3k}{n}\\) start at 1 — so \\([1,4]\\), integrand \\(\\sqrt{x}\\): the limit is \\(\\int_1^4\\sqrt{x}\\,dx=\\tfrac{14}{3}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\int_0^3\\sqrt x\\)</b> reads the start as 0, ignoring the "+1" inside the sample point — and computes a genuinely different number (\\(2\\sqrt3\\approx3.46\\), not \\(\\tfrac{14}{3}\\approx4.67\\)).<br>• <b>\\(\\tfrac13\\int_1^4\\)</b> double-counts the width: the \\(3/n\\) IS the \\(dx\\); it doesn't also scale the integral.<br>• <b>\\(\\sqrt{3x}\\)</b> misreads the \\(3k/n\\) as multiplying \\(x\\) rather than building the partition.<br><br><b>The principle:</b> \\(a\\) is the constant inside the sample point; \\(b=a+\\)(the coefficient of \\(k/n\\)); that same coefficient over \\(n\\) is \\(\\Delta x\\).` },
+ {topic:"riemann",calc:true,prompt:"Speeds are recorded at unequal times: \\(t=0,1,3,6\\) seconds give \\(v=10,12,15,9\\) m/s. The <b>trapezoidal</b> estimate of distance traveled on \\([0,6]\\) is:",
+  opts:[{t:"74 m",correct:true},{t:"79 m"},{t:"69 m"},{t:"57 m"}],
+  explain:`<b>Trapezoid on each table piece, honest widths:</b> \\(\\tfrac{10+12}{2}(1)+\\tfrac{12+15}{2}(2)+\\tfrac{15+9}{2}(3)=11+27+36=74\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>79</b> is the left sum \\(10(1)+12(2)+15(3)\\).<br>• <b>69</b> is the right sum \\(12(1)+15(2)+9(3)\\).<br>• <b>57</b> averages only the first and last readings over the whole interval, \\(\\tfrac{10+9}{2}(6)\\) — throwing away the middle data.<br><br><b>The principle:</b> trapezoid = average the two edge heights <i>on each subinterval</i>, then multiply by that subinterval's own width.` },
+ {topic:"riemann",calc:false,prompt:"Water flows into a tank at rate \\(r(t)\\) gallons per minute for \\(0\\le t\\le 60\\). The quantity \\(\\displaystyle\\int_0^{60} r(t)\\,dt\\) represents:",
+  opts:[{t:"the total gallons added to the tank during the hour",correct:true},{t:"the flow rate at \\(t=60\\)"},{t:"the average flow rate over the hour"},{t:"the rate of change of the flow rate"}],
+  explain:`<b>Integrating a rate accumulates its net change:</b> (gal/min)\\(\\times\\)(min) = gallons — total volume added.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Flow rate at 60</b> is \\(r(60)\\) — a value of the integrand, not its accumulation.<br>• <b>Average flow rate</b> would be \\(\\tfrac{1}{60}\\int_0^{60}r\\,dt\\) — the integral <i>divided by the width</i>.<br>• <b>Rate of change of the rate</b> is \\(r'(t)\\) — one derivative in the wrong direction.<br><br><b>The principle:</b> units multiply through the integral — the fastest distractor-killer on the exam.` },
+ {topic:"riemann",calc:false,prompt:"For a smooth function, the error of a <b>left</b> Riemann sum behaves like \\(C/n\\). If doubling \\(n\\) is observed to cut a method's error roughly to one <b>quarter</b>, that method is most likely:",
+  opts:[{t:"midpoint or trapezoid",correct:true},{t:"left endpoint"},{t:"right endpoint"},{t:"no method behaves this way"}],
+  explain:`<b>Error scaling is a fingerprint:</b> Left/Right errors fall like \\(1/n\\) (double \\(n\\) → halve); Midpoint/Trapezoid fall like \\(1/n^2\\) (double \\(n\\) → quarter).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Left</b> and <b>right</b> are the \\(1/n\\) methods — they only halve.<br>• <b>"No method"</b> — the curve-following methods do exactly this, which is why they dominate for the same work.<br><br><b>The principle:</b> the order of convergence (\\(1/n\\) vs \\(1/n^2\\)) is the real difference between endpoint and curve-following methods.` },
+ {topic:"riemann",calc:false,prompt:"Which sum is the <b>right</b> Riemann approximation of \\(\\int_2^7 f(x)\\,dx\\) with \\(n\\) equal subintervals?",
+  opts:[{t:"\\(\\displaystyle\\sum_{k=1}^{n} f\\!\\Bigl(2+\\frac{5k}{n}\\Bigr)\\frac{5}{n}\\)",correct:true},{t:"\\(\\displaystyle\\sum_{k=0}^{n-1} f\\!\\Bigl(2+\\frac{5k}{n}\\Bigr)\\frac{5}{n}\\)"},{t:"\\(\\displaystyle\\sum_{k=1}^{n} f\\!\\Bigl(2+\\frac{7k}{n}\\Bigr)\\frac{7}{n}\\)"},{t:"\\(\\displaystyle\\sum_{k=1}^{n} f\\!\\Bigl(\\frac{5k}{n}\\Bigr)\\frac{5}{n}\\)"}],
+  explain:`<b>Width \\(\\Delta x=\\tfrac{7-2}{n}=\\tfrac5n\\); right endpoints are \\(x_k=2+\\tfrac{5k}{n}\\), \\(k=1,\\dots,n\\).</b><br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(k=0\\) to \\(n-1\\)</b> samples the LEFT endpoints — same points, shifted one slot.<br>• <b>\\(7k/n\\) with \\(7/n\\)</b> uses the right endpoint 7 as if it were the interval <i>length</i>; the length is \\(b-a=5\\).<br>• <b>missing the "+2"</b> starts the partition at 0 instead of at \\(a\\).<br><br><b>The principle:</b> \\(\\Delta x=(b-a)/n\\), and the sample points always carry the "+a".` },
+ {topic:"riemann",calc:true,prompt:"A tank holds 20 gallons at \\(t=0\\). Water enters at \\(r(t)=7\\sin\\!\\bigl(\\tfrac{\\pi t}{6}\\bigr)\\) gal/min. The amount in the tank at \\(t=6\\) minutes is closest to:",
+  opts:[{t:"46.7 gal",correct:true},{t:"26.7 gal"},{t:"62.0 gal"},{t:"33.4 gal"}],
+  explain:`<b>Amount = initial + accumulated inflow:</b> \\(20+\\int_0^6 7\\sin(\\pi t/6)\\,dt=20+\\tfrac{42}{\\pi}\\bigl[-\\cos\\tfrac{\\pi t}{6}\\bigr]_0^6=20+\\tfrac{84}{\\pi}\\approx46.74\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>26.7</b> is the integral alone — the initial 20 gallons forgotten: the #1 rubric deduction on accumulation problems.<br>• <b>62.0</b> is \\(20+7(6)\\): rate × time, treating a varying rate as constant at its peak.<br>• <b>33.4</b> is \\(20+\\tfrac{42}{\\pi}\\) — the antiderivative's constant \\(\\tfrac{42}{\\pi}\\) applied to only one bound.<br><br><b>The principle:</b> \\(A(t)=A(0)+\\int_0^t r\\) — the "+ initial amount" is a stated rubric point.` },
+ {topic:"riemann",calc:false,prompt:"\\(f\\) is continuous and <b>decreasing</b> on \\([a,b]\\). Which approximation of \\(\\int_a^b f\\,dx\\) must be an <b>overestimate</b>?",
+  opts:[{t:"the left Riemann sum",correct:true},{t:"the right Riemann sum"},{t:"both left and right"},{t:"neither — it depends on concavity"}],
+  explain:`<b>Decreasing means each slice's LEFT edge is its tallest point</b> — left rectangles stick above the curve: overestimate. (Right rectangles tuck under.)<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Right</b> is the underestimate here — the increasing-function rule applied without flipping.<br>• <b>Both</b> is impossible: for monotone \\(f\\), left and right always bracket the integral.<br>• <b>"Depends on concavity"</b> confuses the Left/Right rule (direction-driven) with the Midpoint/Trapezoid rule (concavity-driven).<br><br><b>The principle:</b> monotone direction settles Left/Right immediately; concavity is for the other two.` },
+ // ============ FUNDAMENTAL THEOREM (10) ============
+ {topic:"ftc",calc:false,prompt:"Let \\(g(x)=\\displaystyle\\int_0^x f(t)\\,dt\\) where \\(f\\) is continuous, \\(f(3)=0\\), and \\(f\\) changes sign from positive to negative at \\(x=3\\). Then \\(g\\) has:",
+  opts:[{t:"a local maximum at \\(x=3\\)",correct:true},{t:"a local minimum at \\(x=3\\)"},{t:"an inflection point at \\(x=3\\)"},{t:"a discontinuity at \\(x=3\\)"}],
+  explain:`<b>\\(g'=f\\) by FTC Part 1.</b> \\(g'\\) going \\(+\\) to \\(-\\) is the textbook first-derivative-test signature of a local max.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>Local min</b> is the \\(-\\) to \\(+\\) crossing — direction reversed.<br>• <b>Inflection</b> of \\(g\\) comes from \\(f\\) changing <i>direction</i> (since \\(g''=f'\\)), not changing sign.<br>• <b>Discontinuity</b> — accumulation of a continuous function is not just continuous but differentiable.<br><br><b>The principle:</b> sign of \\(f\\) → direction of \\(g\\); sign <i>change</i> of \\(f\\) → extremum of \\(g\\); direction change of \\(f\\) → inflection of \\(g\\).` },
+ {topic:"ftc",calc:false,prompt:"\\(\\dfrac{d}{dx}\\displaystyle\\int_2^{x^3}\\cos(t^2)\\,dt\\;=\\)",
+  opts:[{t:"\\(3x^2\\cos(x^6)\\)",correct:true},{t:"\\(\\cos(x^6)\\)"},{t:"\\(3x^2\\cos(x^3)\\)"},{t:"\\(-\\sin(x^6)\\cdot 3x^2\\)"}],
+  explain:`<b>FTC Part 1 with a chain:</b> substitute the upper bound into the integrand — \\((x^3)^2=x^6\\) — then multiply by the bound's derivative \\(3x^2\\). No antidifferentiation happens at all.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\cos(x^6)\\)</b> forgets the chain factor \\(3x^2\\) — the most common point lost on this question type.<br>• <b>\\(\\cos(x^3)\\)</b> substitutes the bound but forgets to square it inside \\(t^2\\).<br>• <b>\\(-\\sin(x^6)\\cdot3x^2\\)</b> differentiates the integrand — but FTC says evaluate, not differentiate.<br><br><b>The principle:</b> \\(\\tfrac{d}{dx}\\int_a^{u(x)}f(t)\\,dt=f(u(x))\\,u'(x)\\). Designed to take ten seconds.` },
+ {topic:"ftc",calc:false,prompt:"\\(\\dfrac{d}{dx}\\displaystyle\\int_x^{5}\\ln(1+t^2)\\,dt\\;=\\)",
+  opts:[{t:"\\(-\\ln(1+x^2)\\)",correct:true},{t:"\\(\\ln(1+x^2)\\)"},{t:"\\(\\ln(26)-\\ln(1+x^2)\\)"},{t:"\\(\\dfrac{2x}{1+x^2}\\)"}],
+  explain:`<b>The variable bound is on the BOTTOM — flip it first:</b> \\(\\int_x^5=-\\int_5^x\\), then FTC gives \\(-\\ln(1+x^2)\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(+\\ln(1+x^2)\\)</b> applies FTC without paying the flip's minus sign.<br>• <b>\\(\\ln26-\\ln(1+x^2)\\)</b> "evaluates at both bounds" — FTC <i>Part 2</i> thinking; a constant bound contributes nothing to a derivative.<br>• <b>\\(\\tfrac{2x}{1+x^2}\\)</b> differentiates the integrand — wrong operation entirely.<br><br><b>The principle:</b> a variable lower bound costs exactly one minus sign.` },
+ {topic:"ftc",calc:false,prompt:"\\(\\displaystyle\\int_0^{\\pi/3}\\sec^2 x\\,dx\\;=\\)",
+  opts:[{t:"\\(\\sqrt{3}\\)",correct:true},{t:"\\(1\\)"},{t:"\\(\\tfrac{1}{\\sqrt 3}\\)"},{t:"\\(\\tfrac{4\\pi}{3}\\)"}],
+  explain:`<b>The antiderivative is a deck card:</b> \\([\\tan x]_0^{\\pi/3}=\\tan\\tfrac{\\pi}{3}-0=\\sqrt3\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>1</b> evaluates \\(\\sec x\\) at the bounds, \\(2-1\\) — that antiderivative belongs to \\(\\sec x\\tan x\\), not \\(\\sec^2x\\).<br>• <b>\\(1/\\sqrt3\\)</b> is \\(\\tan(\\pi/6)\\) — the wrong special angle.<br>• <b>\\(4\\pi/3\\)</b> is \\(\\sec^2(\\pi/3)\\cdot\\tfrac{\\pi}{3}\\) — endpoint value times width, a rectangle masquerading as an integral.<br><br><b>The principle:</b> \\(\\int\\sec^2=\\tan\\) is one of the twelve cards; a definite integral is two evaluations and a subtraction.` },
+ {topic:"ftc",calc:false,prompt:"<div style='text-align:center;margin:4px auto 12px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;max-width:330px'><svg viewBox='0 0 300 220' width='300' xmlns='http://www.w3.org/2000/svg' style='max-width:100%;height:auto'><line x1='20' y1='132.5' x2='280' y2='132.5' stroke='#39424b' stroke-width='1'/><line x1='38.6' y1='18' x2='38.6' y2='202' stroke='#39424b' stroke-width='1'/><line x1='112.9' y1='128.5' x2='112.9' y2='136.5' stroke='#39424b' stroke-width='1'/><text x='112.9' y='150.5' fill='#8a93a0' font-size='11' text-anchor='middle' font-family='monospace'>2</text><line x1='187.1' y1='128.5' x2='187.1' y2='136.5' stroke='#39424b' stroke-width='1'/><text x='187.1' y='150.5' fill='#8a93a0' font-size='11' text-anchor='middle' font-family='monospace'>4</text><line x1='261.4' y1='128.5' x2='261.4' y2='136.5' stroke='#39424b' stroke-width='1'/><text x='261.4' y='150.5' fill='#8a93a0' font-size='11' text-anchor='middle' font-family='monospace'>6</text><polyline points='38.6,132.5 112.9,42.5 187.1,132.5 261.4,177.5' fill='none' stroke='#5f7ff2' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/><text x='112.9' y='101.0' fill='#aab3bd' font-size='12' text-anchor='middle' font-family='monospace'>area 8</text><text x='236.3' y='152.8' fill='#aab3bd' font-size='12' text-anchor='middle' font-family='monospace'>area 2</text><text x='268' y='30' fill='#8a93a0' font-size='12' text-anchor='end' font-family='monospace'>y = f(x)</text></svg></div>The graph of \\(f\\) consists of three line segments, with the labeled region areas. If \\(g(x)=\\displaystyle\\int_0^x f(t)\\,dt\\), then \\(g(6)=\\)",
+  opts:[{t:"\\(6\\)",correct:true},{t:"\\(10\\)"},{t:"\\(8\\)"},{t:"\\(-2\\)"}],
+  explain:`<b>Signed areas, glued:</b> \\(g(6)=\\underbrace{8}_{[0,4],\\ \\text{above}}+\\underbrace{(-2)}_{[4,6],\\ \\text{below}}=6\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>10</b> adds \\(8+2\\) — treating the below-axis region as positive. Position gives the sign.<br>• <b>8</b> stops at \\(x=4\\), ignoring the final region entirely.<br>• <b>−2</b> is only the last region — the accumulated history forgotten.<br><br><b>The principle:</b> \\(g\\) accumulates <i>signed</i> area from 0 — below the axis counts against the total.` },
+ {topic:"ftc",calc:false,prompt:"<div style='text-align:center;margin:4px auto 12px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;max-width:330px'><svg viewBox='0 0 300 220' width='300' xmlns='http://www.w3.org/2000/svg' style='max-width:100%;height:auto'><line x1='20' y1='132.5' x2='280' y2='132.5' stroke='#39424b' stroke-width='1'/><line x1='38.6' y1='18' x2='38.6' y2='202' stroke='#39424b' stroke-width='1'/><line x1='112.9' y1='128.5' x2='112.9' y2='136.5' stroke='#39424b' stroke-width='1'/><text x='112.9' y='150.5' fill='#8a93a0' font-size='11' text-anchor='middle' font-family='monospace'>2</text><line x1='187.1' y1='128.5' x2='187.1' y2='136.5' stroke='#39424b' stroke-width='1'/><text x='187.1' y='150.5' fill='#8a93a0' font-size='11' text-anchor='middle' font-family='monospace'>4</text><line x1='261.4' y1='128.5' x2='261.4' y2='136.5' stroke='#39424b' stroke-width='1'/><text x='261.4' y='150.5' fill='#8a93a0' font-size='11' text-anchor='middle' font-family='monospace'>6</text><polyline points='38.6,132.5 112.9,42.5 187.1,132.5 261.4,177.5' fill='none' stroke='#5f7ff2' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/><text x='112.9' y='101.0' fill='#aab3bd' font-size='12' text-anchor='middle' font-family='monospace'>area 8</text><text x='236.3' y='152.8' fill='#aab3bd' font-size='12' text-anchor='middle' font-family='monospace'>area 2</text><text x='268' y='30' fill='#8a93a0' font-size='12' text-anchor='end' font-family='monospace'>y = f(x)</text></svg></div>With the same figure and \\(g(x)=\\displaystyle\\int_0^x f(t)\\,dt\\), the absolute maximum of \\(g\\) on \\([0,6]\\) occurs at \\(x=\\)",
+  opts:[{t:"\\(4\\)",correct:true},{t:"\\(2\\)"},{t:"\\(6\\)"},{t:"\\(0\\)"}],
+  explain:`<b>\\(g'=f\\):</b> \\(f>0\\) on \\((0,4)\\) so \\(g\\) climbs to \\(g(4)=8\\); \\(f<0\\) on \\((4,6)\\) so \\(g\\) falls. The \\(+\\to-\\) sign change at \\(x=4\\) is the max, and it beats both endpoints (\\(g(0)=0,\\ g(6)=6\\)).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>2</b> is where \\(f\\) itself peaks — where \\(g\\) climbs <i>fastest</i>, not where it's biggest. Slope vs value, the classic confusion.<br>• <b>6</b> would need \\(f\\ge0\\) throughout; the below-axis region drags \\(g\\) back down.<br>• <b>0</b> is where \\(g\\) is smallest.<br><br><b>The principle:</b> \\(g\\) is largest where \\(f\\) finishes crossing \\(+\\) to \\(-\\) — confirm with a candidates table.` },
+ {topic:"ftc",calc:false,prompt:"Given \\(\\displaystyle\\int_0^5 f(x)\\,dx=10\\) and \\(\\displaystyle\\int_0^5 g(x)\\,dx=-2\\), find \\(\\displaystyle\\int_0^5\\bigl(3f(x)-2g(x)\\bigr)dx\\).",
+  opts:[{t:"\\(34\\)",correct:true},{t:"\\(26\\)"},{t:"\\(8\\)"},{t:"\\(24\\)"}],
+  explain:`<b>Linearity:</b> \\(3(10)-2(-2)=30+4=34\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>26</b> computes \\(30-4\\): the minus sign of \\(\\int g\\) lost in the double negative.<br>• <b>8</b> is \\(10-2\\) — the constants never applied.<br>• <b>24</b> is arithmetic slippage on the same double negative, \\(30-6\\)-style.<br><br><b>The principle:</b> integrals split over sums and constants slide through — handle the signs like a ledger.` },
+ {topic:"ftc",calc:false,prompt:"If \\(\\displaystyle\\int_3^8 f(x)\\,dx=12\\), then \\(\\displaystyle\\int_8^3 2f(x)\\,dx=\\)",
+  opts:[{t:"\\(-24\\)",correct:true},{t:"\\(24\\)"},{t:"\\(-12\\)"},{t:"\\(12\\)"}],
+  explain:`<b>Two properties at once:</b> swapping bounds flips the sign, and the constant slides out: \\(\\int_8^3 2f=-2\\int_3^8 f=-24\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>24</b> scales but never pays the flip.<br>• <b>−12</b> flips but never scales.<br>• <b>12</b> does neither.<br><br><b>The principle:</b> \\(\\int_b^a=-\\int_a^b\\) — bounds are oriented, and each property applies independently.` },
+ {topic:"ftc",calc:false,prompt:"\\(g(x)=\\displaystyle\\int_0^x f(t)\\,dt\\) with \\(f\\) continuous. \\(g\\) is <b>concave down</b> exactly on intervals where:",
+  opts:[{t:"\\(f\\) is decreasing",correct:true},{t:"\\(f\\) is negative"},{t:"\\(f\\) is concave down"},{t:"\\(f\\) is positive"}],
+  explain:`<b>Differentiate twice:</b> \\(g''=f'\\), so \\(g\\) concave down \\(\\iff f'<0\\iff f\\) decreasing.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(f\\) negative</b> controls where \\(g\\) <i>decreases</i> — direction, not bend. One derivative off.<br>• <b>\\(f\\) concave down</b> is two derivatives too deep — that is \\(g\\)-third-derivative territory.<br>• <b>\\(f\\) positive</b> is where \\(g\\) increases.<br><br><b>The principle:</b> everything about \\(g\\) reads one derivative DOWN on \\(f\\): sign→direction, direction→bend.` },
+ {topic:"ftc",calc:false,prompt:"Let \\(h(x)=\\displaystyle\\int_2^x f(t)\\,dt\\) with \\(f\\) continuous and \\(f(2)=7\\). Which pair of statements is true?",
+  opts:[{t:"\\(h(2)=0\\) and \\(h'(2)=7\\)",correct:true},{t:"\\(h(2)=7\\) and \\(h'(2)=0\\)"},{t:"\\(h(2)=0\\) and \\(h'(2)=0\\)"},{t:"\\(h(2)\\) cannot be determined"}],
+  explain:`<b>Two freebies:</b> \\(h(2)=\\int_2^2f=0\\) (no width, no area), and \\(h'(x)=f(x)\\) so \\(h'(2)=f(2)=7\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(h(2)=7\\)</b> confuses the function's value with the accumulation's value — \\(f(2)\\) is \\(h\\)'s <i>slope</i> there, not its height.<br>• <b>both zero</b> erases FTC Part 1.<br>• <b>"cannot be determined"</b> — \\(\\int_a^a=0\\) needs no information at all.<br><br><b>The principle:</b> \\(h(a)=0\\) is the free entry in every candidates table, and \\(h'=f\\) is the theorem.` },
+ // ============ ANTIDERIVATIVES & u-SUB (10) ============
+ {topic:"antider",calc:false,prompt:"\\(\\displaystyle\\int\\Bigl(4x^3-\\frac{2}{x^2}+5\\Bigr)dx\\;=\\)",
+  opts:[{t:"\\(x^4+\\dfrac{2}{x}+5x+C\\)",correct:true},{t:"\\(x^4-\\dfrac{2}{x}+5x+C\\)"},{t:"\\(x^4+\\dfrac{2}{x^3}+5x+C\\)"},{t:"\\(12x^2+\\dfrac{4}{x^3}+C\\)"}],
+  explain:`<b>Power rule up, term by term:</b> \\(-2x^{-2}\\) lifts to \\(-2\\cdot\\tfrac{x^{-1}}{-1}=+\\tfrac{2}{x}\\) — the double negative is the whole question. Check: \\(\\tfrac{d}{dx}\\tfrac2x=-\\tfrac{2}{x^2}\\). \\(\\checkmark\\)<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(-2/x\\)</b> drops the sign flip from dividing by \\(-1\\).<br>• <b>\\(+2/x^3\\)</b> moves the exponent the WRONG direction — differentiation's \\(-3\\), not integration's \\(-1\\).<br>• <b>\\(12x^2+\\cdots\\)</b> differentiates instead of integrating.<br><br><b>The principle:</b> verify by differentiating — ten seconds converts "probably right" into "certain."` },
+ {topic:"antider",calc:false,prompt:"\\(\\displaystyle\\int x^2\\sqrt{x^3+8}\\;dx\\;=\\)",
+  opts:[{t:"\\(\\tfrac{2}{9}(x^3+8)^{3/2}+C\\)",correct:true},{t:"\\(\\tfrac{2}{3}(x^3+8)^{3/2}+C\\)"},{t:"\\(\\tfrac{1}{9}(x^3+8)^{3/2}+C\\)"},{t:"\\(\\tfrac{2}{9}x^3(x^3+8)^{3/2}+C\\)"}],
+  explain:`<b>u-sub with constant adjust:</b> \\(u=x^3+8\\), \\(du=3x^2dx\\) so \\(x^2dx=\\tfrac{du}{3}\\): \\(\\tfrac13\\int\\sqrt u\\,du=\\tfrac13\\cdot\\tfrac23u^{3/2}=\\tfrac29(x^3+8)^{3/2}+C\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac23\\)</b> forgets the \\(\\tfrac13\\) from \\(du\\) — the missing-3 bookkeeping.<br>• <b>\\(\\tfrac19\\)</b> applies a \\(\\tfrac13\\) twice.<br>• <b>the \\(x^3\\)-carrying option</b> "back-substitutes" a factor that was already consumed by \\(du\\).<br><br><b>The principle:</b> MC options differing only by constants are a du-bookkeeping check — differentiate the candidates and one survives.` },
+ {topic:"antider",calc:false,prompt:"\\(\\displaystyle\\int_0^{\\pi/4}\\tan x\\,\\sec^2x\\;dx\\;=\\)",
+  opts:[{t:"\\(\\tfrac12\\)",correct:true},{t:"\\(1\\)"},{t:"\\(0\\)"},{t:"\\(\\tfrac{\\pi}{4}\\)"}],
+  explain:`<b>The fingerprint pair:</b> \\(u=\\tan x\\), \\(du=\\sec^2x\\,dx\\); the bounds convert \\(0\\to0\\), \\(\\tfrac\\pi4\\to1\\): \\(\\int_0^1u\\,du=\\tfrac12\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>1</b> is \\(\\tan^2(\\pi/4)\\) — the \\(\\tfrac{u^2}{2}\\)'s half dropped.<br>• <b>0</b> mixes worlds — old \\(x\\)-bounds used on the \\(u\\)-antiderivative.<br>• <b>\\(\\pi/4\\)</b> treats the integral as width times something — no integration performed.<br><br><b>The principle:</b> definite u-sub converts the bounds through \\(u(x)\\) and finishes entirely in u-world.` },
+ {topic:"antider",calc:false,prompt:"\\(\\displaystyle\\int_2^4\\frac{dx}{1-x}\\;=\\)",
+  opts:[{t:"\\(-\\ln 3\\)",correct:true},{t:"\\(\\ln 3\\)"},{t:"undefined — the integrand is discontinuous on \\([2,4]\\)"},{t:"\\(\\ln 3-\\ln(-1)\\), which does not exist"}],
+  explain:`<b>\\(u=1-x\\), \\(du=-dx\\):</b> \\(\\int\\tfrac{dx}{1-x}=-\\ln|1-x|+C\\), so the value is \\(-\\ln|-3|+\\ln|-1|=-\\ln3\\). The asymptote sits at \\(x=1\\), safely OUTSIDE \\([2,4]\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(+\\ln3\\)</b> misses the minus emitted by \\(du=-dx\\).<br>• <b>"discontinuous"</b> fails the scan: \\(1-x=0\\) at \\(x=1\\notin[2,4]\\) — the interval is clean.<br>• <b>\\(\\ln(-1)\\)</b> forgets the absolute value that makes \\(\\ln|1-x|\\) perfectly defined for \\(x>1\\).<br><br><b>The principle:</b> the \\(|\\cdot|\\) in \\(\\ln|u|\\) lets antiderivatives live on the negative side — and the asymptote scan must check the actual interval, not just exist.` },
+ {topic:"antider",calc:false,prompt:"\\(\\displaystyle\\int 2^x\\,dx\\;=\\)",
+  opts:[{t:"\\(\\dfrac{2^x}{\\ln 2}+C\\)",correct:true},{t:"\\(2^x\\ln 2+C\\)"},{t:"\\(\\dfrac{2^{x+1}}{x+1}+C\\)"},{t:"\\(x\\cdot 2^{x-1}+C\\)"}],
+  explain:`<b>Deck card:</b> \\(\\tfrac{d}{dx}2^x=2^x\\ln2\\), so integrating must pre-divide: \\(\\tfrac{2^x}{\\ln2}+C\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(2^x\\ln2\\)</b> is the DERIVATIVE — the \\(\\ln2\\) goes downstairs when integrating.<br>• <b>\\(2^{x+1}/(x+1)\\)</b> applies the power rule to an exponential — but the base is constant and the exponent is the variable.<br>• <b>\\(x\\,2^{x-1}\\)</b> is the same confusion in differentiated form.<br><br><b>The principle:</b> \\(x^n\\) (variable base) takes the power rule; \\(a^x\\) (variable exponent) takes \\(\\ln a\\).` },
+ {topic:"antider",calc:false,prompt:"\\(\\displaystyle\\int\\frac{dx}{x^2-4x+8}\\;=\\)",
+  opts:[{t:"\\(\\tfrac12\\arctan\\!\\Bigl(\\dfrac{x-2}{2}\\Bigr)+C\\)",correct:true},{t:"\\(\\arctan(x-2)+C\\)"},{t:"\\(\\tfrac12\\ln\\bigl|x^2-4x+8\\bigr|+C\\)"},{t:"\\(\\tfrac12\\ln\\Bigl|\\dfrac{x-2}{x+2}\\Bigr|+C\\)"}],
+  explain:`<b>Discriminant \\(16-32<0\\): won't factor — complete the square:</b> \\((x-2)^2+4\\), then the arctan card with \\(a=2\\): \\(\\tfrac1a\\arctan\\tfrac ua=\\tfrac12\\arctan\\tfrac{x-2}{2}+C\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>no \\(\\tfrac12\\)</b> drops the \\(1/a\\) — the most-lost constant in the unit.<br>• <b>the \\(\\ln\\) option</b> would need the numerator to be the derivative \\(2x-4\\); a constant numerator means arctan.<br>• <b>the two-log option</b> is partial fractions — illegal here, because this quadratic has no real factors.<br><br><b>The principle:</b> constant top + irreducible quadratic bottom \\(\\Rightarrow\\) complete the square \\(\\Rightarrow\\) \\(\\tfrac1a\\arctan\\tfrac ua\\).` },
+ {topic:"antider",calc:false,prompt:"\\(\\displaystyle\\int\\frac{x^2+1}{x-1}\\,dx\\;=\\)",
+  opts:[{t:"\\(\\dfrac{x^2}{2}+x+2\\ln|x-1|+C\\)",correct:true},{t:"\\(\\dfrac{x^3/3+x}{x^2/2-x}+C\\)"},{t:"\\(\\ln\\bigl|x^2+1\\bigr|\\cdot\\ln|x-1|+C\\)"},{t:"\\(\\dfrac{x^2}{2}+x-2\\ln|x-1|+C\\)"}],
+  explain:`<b>Top-heavy — divide first:</b> \\(\\tfrac{x^2+1}{x-1}=x+1+\\tfrac{2}{x-1}\\) (check: \\((x-1)(x+1)+2=x^2+1\\)). Integrate: \\(\\tfrac{x^2}2+x+2\\ln|x-1|+C\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>the stacked-fraction option</b> integrates top and bottom separately — integrals NEVER distribute over quotients.<br>• <b>the product-of-logs option</b> invents a "log both pieces" rule that doesn't exist.<br>• <b>\\(-2\\ln\\)</b> divides correctly but flips the remainder's sign.<br><br><b>The principle:</b> degree(top) \\(\\ge\\) degree(bottom) \\(\\Rightarrow\\) long division before anything else.` },
+ {topic:"antider",calc:false,prompt:"Which integral <b>cannot</b> be evaluated with a single u-substitution?",
+  opts:[{t:"\\(\\displaystyle\\int x\\,e^{x}\\,dx\\)",correct:true},{t:"\\(\\displaystyle\\int x\\,e^{x^2}dx\\)"},{t:"\\(\\displaystyle\\int \\cos x\\,\\sin^4x\\;dx\\)"},{t:"\\(\\displaystyle\\int\\frac{x^2}{x^3+1}\\,dx\\)"}],
+  explain:`<b>Run the fingerprint check on each:</b> \\(xe^{x^2}\\) pairs \\(x\\) with \\(d(x^2)\\); \\(\\cos x\\sin^4x\\) pairs \\(\\cos x\\) with \\(d(\\sin x)\\); \\(\\tfrac{x^2}{x^3+1}\\) pairs \\(x^2\\) with \\(d(x^3+1)\\). But in \\(xe^x\\) nothing is the derivative of anything else — \\(e^x\\) has no inside. That one needs integration by parts.<br><br><b>Why each distractor is a specific mistake:</b> each of the other three has its inside function's derivative standing right there, up to a constant — they are one-line u-subs, which is precisely why they are wrong answers here.<br><br><b>The principle:</b> u-sub needs a composition WITH its inside's derivative on duty. A genuine product of unrelated types is parts territory — the boundary between Lessons 3 and 4 in one question.` },
+ {topic:"antider",calc:false,prompt:"Let \\(F(x)=x\\arctan x-\\tfrac12\\ln(1+x^2)\\). Then \\(F'(x)=\\)",
+  opts:[{t:"\\(\\arctan x\\)",correct:true},{t:"\\(\\dfrac{1}{1+x^2}\\)"},{t:"\\(\\arctan x+\\dfrac{2x}{1+x^2}\\)"},{t:"\\(x\\arctan x\\)"}],
+  explain:`<b>Differentiate honestly:</b> the product rule gives \\(\\arctan x+\\tfrac{x}{1+x^2}\\); the log term contributes \\(-\\tfrac12\\cdot\\tfrac{2x}{1+x^2}=-\\tfrac{x}{1+x^2}\\). The fractions cancel exactly, leaving \\(\\arctan x\\) — so \\(F\\) is the antiderivative of \\(\\arctan x\\), verified the cheap way.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac1{1+x^2}\\)</b> differentiates only the \\(\\arctan\\) and forgets it sits inside a product.<br>• <b>the uncancelled option</b> drops the \\(-\\tfrac12\\) coefficient on the log's chain rule.<br>• <b>\\(x\\arctan x\\)</b> differentiates nothing.<br><br><b>The principle:</b> verification by differentiation also TEACHES — the cancellation you witness is exactly why parts produced that second term.` },
+ {topic:"antider",calc:false,prompt:"\\(\\displaystyle\\int\\sec^2(2x)\\,dx\\;=\\)",
+  opts:[{t:"\\(\\tfrac12\\tan(2x)+C\\)",correct:true},{t:"\\(\\tan(2x)+C\\)"},{t:"\\(2\\tan(2x)+C\\)"},{t:"\\(\\tfrac13\\sec^3(2x)+C\\)"}],
+  explain:`<b>Deck card + constant adjust:</b> \\(u=2x\\), \\(dx=\\tfrac{du}2\\): \\(\\tfrac12\\tan(2x)+C\\). Check: the chain rule's 2 meets the \\(\\tfrac12\\) and cancels.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tan(2x)\\)</b> differentiates back to \\(2\\sec^2(2x)\\) — twice too big.<br>• <b>\\(2\\tan(2x)\\)</b> adjusts in the WRONG direction — four times too big.<br>• <b>\\(\\tfrac13\\sec^3\\)</b> power-rules the \\(\\sec^2\\) as if \\(\\sec\\) were the variable — but \\(d(\\sec)\\ne dx\\).<br><br><b>The principle:</b> inner constants cost a reciprocal, never a copy — and the options can always be arbitrated by differentiating them.` },
+ // ============ PARTS & PARTIAL FRACTIONS (9) ============
+ {topic:"parts",calc:false,prompt:"\\(\\displaystyle\\int x\\sin x\\,dx\\;=\\)",
+  opts:[{t:"\\(-x\\cos x+\\sin x+C\\)",correct:true},{t:"\\(x\\cos x-\\sin x+C\\)"},{t:"\\(-x\\cos x-\\sin x+C\\)"},{t:"\\(-\\tfrac{x^2}{2}\\cos x+C\\)"}],
+  explain:`<b>Parts with LIATE:</b> \\(u=x,\\ dv=\\sin x\\,dx\\Rightarrow v=-\\cos x\\): \\(-x\\cos x+\\int\\cos x\\,dx=-x\\cos x+\\sin x+C\\). Verify: \\(-\\cos x+x\\sin x+\\cos x=x\\sin x\\). \\(\\checkmark\\)<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(x\\cos x-\\sin x\\)</b> is the global sign flip — \\(v=+\\cos x\\) used.<br>• <b>\\(-x\\cos x-\\sin x\\)</b> botches the double negative in \\(-\\int(-\\cos x)dx\\).<br>• <b>the \\(\\tfrac{x^2}2\\) option</b> antidifferentiates both factors separately — \\(\\int fg\\ne(\\int f)(\\int g)\\), ever.<br><br><b>The principle:</b> \\(v=-\\cos x\\) plants two sign traps in one problem; differentiate your answer and both disarm.` },
+ {topic:"parts",calc:false,prompt:"\\(\\displaystyle\\int_1^{e^2}\\ln x\\,dx\\;=\\)",
+  opts:[{t:"\\(e^2+1\\)",correct:true},{t:"\\(e^2-1\\)"},{t:"\\(2e^2\\)"},{t:"\\(e^2\\)"}],
+  explain:`<b>The invisible product:</b> \\(\\int\\ln x\\,dx=x\\ln x-x\\) (parts with \\(dv=dx\\)). Evaluate: \\((e^2\\cdot2-e^2)-(0-1)=e^2+1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(e^2-1\\)</b> drops the sign on \\(-(0-1)\\) — the lower bound contributes \\(+1\\).<br>• <b>\\(2e^2\\)</b> evaluates \\(x\\ln x\\) alone, forgetting the \\(-x\\).<br>• <b>\\(e^2\\)</b> forgets the lower bound entirely — \\(F(b)\\) without \\(F(a)\\).<br><br><b>The principle:</b> \\(\\ln(e^2)=2\\), both bounds always, and the \\(-x\\) is half the antiderivative.` },
+ {topic:"parts",calc:false,prompt:"Using the tabular method, \\(\\displaystyle\\int x^2e^x\\,dx\\;=\\)",
+  opts:[{t:"\\(e^x\\bigl(x^2-2x+2\\bigr)+C\\)",correct:true},{t:"\\(e^x\\bigl(x^2+2x+2\\bigr)+C\\)"},{t:"\\(e^x\\bigl(x^2-2x-2\\bigr)+C\\)"},{t:"\\(\\tfrac{x^3}{3}e^x+C\\)"}],
+  explain:`<b>The table:</b> derivatives \\(x^2,2x,2,0\\); antiderivatives \\(e^x\\) all the way; signs \\(+,-,+\\). Diagonals: \\(x^2e^x-2xe^x+2e^x=e^x(x^2-2x+2)+C\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>all-plus</b> never alternates the signs — multiplying straight across instead of along signed diagonals.<br>• <b>\\(-2\\) at the end</b> alternates one slot too far: the third diagonal carries \\(+\\).<br>• <b>\\(\\tfrac{x^3}3e^x\\)</b> integrates the factors independently — the product-rule myth again.<br><br><b>The principle:</b> signs start at \\(+\\) and attach to the DIAGONAL products; run the column all the way to 0.` },
+ {topic:"parts",calc:false,prompt:"\\(\\displaystyle\\int e^x\\cos x\\,dx\\;=\\)",
+  opts:[{t:"\\(\\dfrac{e^x(\\sin x+\\cos x)}{2}+C\\)",correct:true},{t:"\\(\\dfrac{e^x(\\sin x-\\cos x)}{2}+C\\)"},{t:"\\(e^x\\sin x+C\\)"},{t:"the integral cannot be expressed in elementary terms"}],
+  explain:`<b>The cyclic case:</b> parts twice returns the original integral; naming it \\(I\\) gives \\(I=e^x\\sin x+e^x\\cos x-I\\), so \\(2I=e^x(\\sin x+\\cos x)\\). Verify: differentiating, the \\(\\sin\\) terms cancel and \\(e^x\\cos x\\) returns. \\(\\checkmark\\)<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\((\\sin-\\cos)\\)</b> is the answer to \\(\\int e^x\\sin x\\,dx\\) — the sibling integral.<br>• <b>\\(e^x\\sin x\\)</b> stops after round one, ignoring the leftover \\(-\\int e^x\\sin x\\,dx\\).<br>• <b>"not elementary"</b> is panic at the cycle — the integral returning IS the solving mechanism.<br><br><b>The principle:</b> when the original reappears, name it \\(I\\) and solve algebraically. Two rounds, one equation.` },
+ {topic:"parts",calc:false,prompt:"If \\(\\dfrac{5x-7}{(x-2)(x-1)}=\\dfrac{A}{x-2}+\\dfrac{B}{x-1}\\), then \\(A=\\)",
+  opts:[{t:"\\(3\\)",correct:true},{t:"\\(2\\)"},{t:"\\(-3\\)"},{t:"\\(5\\)"}],
+  explain:`<b>Cover-up:</b> cover \\((x-2)\\), evaluate the rest at its root \\(x=2\\): \\(A=\\dfrac{5(2)-7}{2-1}=3\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>2</b> is \\(B\\) (evaluated at \\(x=1\\): \\(\\tfrac{-2}{-1}\\)) — right method, wrong factor.<br>• <b>−3</b> evaluates the surviving denominator as \\(1-2\\) instead of \\(2-1\\).<br>• <b>5</b> just reads the numerator's leading coefficient.<br><br><b>The principle:</b> cover the factor, evaluate everything that survives at THAT factor's root — one line per constant.` },
+ {topic:"parts",calc:false,prompt:"\\(\\displaystyle\\int\\frac{x+4}{x^2+3x+2}\\,dx\\;=\\)",
+  opts:[{t:"\\(3\\ln|x+1|-2\\ln|x+2|+C\\)",correct:true},{t:"\\(\\tfrac12\\ln\\bigl|x^2+3x+2\\bigr|+C\\)"},{t:"\\(\\ln|x+1|+\\ln|x+2|+C\\)"},{t:"\\(\\arctan(2x+3)+C\\)"}],
+  explain:`<b>Factor first:</b> \\(x^2+3x+2=(x+1)(x+2)\\). Cover-up: at \\(x=-1\\), \\(A=\\tfrac31=3\\); at \\(x=-2\\), \\(B=\\tfrac{2}{-1}=-2\\). Two log cards.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>the single-log option</b> pretends the numerator is the denominator's derivative — but \\(d(x^2+3x+2)=2x+3\\ne x+4\\). Close is not equal.<br>• <b>\\(\\ln+\\ln\\)</b> uses \\(A=B=1\\) without computing anything.<br>• <b>the arctan option</b> aims at an irreducible quadratic — but the discriminant is \\(9-8>0\\): it FACTORS, so PF was the branch.<br><br><b>The principle:</b> run the rational checklist in order — top-heavy? numerator \\(\\approx\\) derivative? factors? — then pick the machine.` },
+ {topic:"parts",calc:false,prompt:"Before integrating \\(\\displaystyle\\int\\frac{x^2+5}{x+2}\\,dx\\), the required first step is:",
+  opts:[{t:"long division, giving \\(x-2+\\dfrac{9}{x+2}\\)",correct:true},{t:"partial fractions with \\(\\dfrac{A}{x+2}\\)"},{t:"the substitution \\(u=x^2+5\\)"},{t:"completing the square in the numerator"}],
+  explain:`<b>Degree 2 over degree 1: top-heavy.</b> Divide: \\((x+2)(x-2)=x^2-4\\), remainder 9 — so \\(x-2+\\tfrac9{x+2}\\), each piece a one-step integral.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>PF with one constant</b> can only produce a proper fraction — it cannot represent the polynomial hiding inside an improper one.<br>• <b>\\(u=x^2+5\\)</b> needs \\(du=2x\\,dx\\) as a factor; there is no lone \\(x\\) upstairs.<br>• <b>completing the square in the NUMERATOR</b> isn't a technique — that move lives in denominators, aiming at arctan.<br><br><b>The principle:</b> improper fraction \\(\\Rightarrow\\) divide first, reflexively — exactly like rewriting \\(\\tfrac{17}5\\) as \\(3+\\tfrac25\\).` },
+ {topic:"parts",calc:false,prompt:"By the tabular method, \\(\\displaystyle\\int x^3\\cos x\\,dx\\;=\\)",
+  opts:[{t:"\\(x^3\\sin x+3x^2\\cos x-6x\\sin x-6\\cos x+C\\)",correct:true},{t:"\\(x^3\\sin x-3x^2\\cos x+6x\\sin x-6\\cos x+C\\)"},{t:"\\(x^3\\sin x+3x^2\\cos x+6x\\sin x+6\\cos x+C\\)"},{t:"\\(x^3\\sin x+3x^2\\cos x-6x\\sin x+C\\)"}],
+  explain:`<b>The table:</b> derivatives \\(x^3,3x^2,6x,6,0\\); antiderivatives of \\(\\cos\\): \\(\\sin,-\\cos,-\\sin,\\cos\\); signs \\(+,-,+,-\\). Diagonals: \\(+x^3\\sin x-3x^2(-\\cos x)+6x(-\\sin x)-6(\\cos x)\\) — the chain's own minuses interleave with the sign column.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>option 2</b> applies the sign column but ignores the minuses already living in the trig antiderivative chain.<br>• <b>all-plus</b> ignores both sign sources.<br>• <b>the three-term option</b> stops before the derivative column reaches 0 — the silently dropped last term.<br><br><b>The principle:</b> trig chains carry their OWN signs (\\(\\sin\\to-\\cos\\to-\\sin\\to\\cos\\)); the alternating column multiplies on top of them.` },
+ {topic:"parts",calc:false,prompt:"\\(\\displaystyle\\int x^5\\ln x\\,dx\\;=\\)",
+  opts:[{t:"\\(\\dfrac{x^6}{6}\\ln x-\\dfrac{x^6}{36}+C\\)",correct:true},{t:"\\(\\dfrac{x^6}{6}\\ln x-\\dfrac{x^6}{6}+C\\)"},{t:"\\(5x^4\\ln x+x^4+C\\)"},{t:"\\(\\dfrac{x^6}{6}\\bigl(x\\ln x-x\\bigr)+C\\)"}],
+  explain:`<b>LIATE: the log is u.</b> \\(u=\\ln x,\\ dv=x^5dx\\Rightarrow v=\\tfrac{x^6}6\\): \\(\\tfrac{x^6}6\\ln x-\\int\\tfrac{x^6}6\\cdot\\tfrac1x\\,dx=\\tfrac{x^6}6\\ln x-\\tfrac16\\int x^5dx=\\tfrac{x^6}6\\ln x-\\tfrac{x^6}{36}+C\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(-x^6/6\\)</b> forgets the new integral carries its own extra \\(\\tfrac16\\).<br>• <b>the derivative-looking option</b> differentiated the product instead.<br>• <b>multiplying by \\((x\\ln x-x)\\)</b> treats \\(\\int\\ln x\\) as a factor — antiderivatives of factors don't multiply.<br><br><b>The principle:</b> with \\(x^n\\ln x\\), the log dies into \\(1/x\\) and erases itself from the new integral — that's WHY LIATE ranks it first.` },
+
+ // ============ IMPROPER & TECHNIQUE CHOICE (9) ============
+ {topic:"improper",calc:false,prompt:"\\(\\displaystyle\\int_1^{\\infty}x^{-4/3}\\,dx\\;=\\)",
+  opts:[{t:"\\(3\\)",correct:true},{t:"diverges"},{t:"\\(\\tfrac13\\)"},{t:"\\(\\tfrac34\\)"}],
+  explain:`<b>p-test first (\\(p=\\tfrac43>1\\): converges), then the limit:</b> \\(\\lim_{b\\to\\infty}\\bigl[-3x^{-1/3}\\bigr]_1^b=0+3=3\\) — matching \\(\\tfrac1{p-1}=3\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>"diverges"</b> misreads \\(p=\\tfrac43\\) as less than 1.<br>• <b>\\(\\tfrac13\\)</b> is \\(p-1\\) instead of \\(\\tfrac1{p-1}\\) — the formula inverted.<br>• <b>\\(\\tfrac34\\)</b> is \\(1/p\\), a number from nowhere meaningful.<br><br><b>The principle:</b> at infinity the tail must be THIN: \\(p>1\\) converges, to \\(\\tfrac1{p-1}\\).` },
+ {topic:"improper",calc:false,prompt:"\\(\\displaystyle\\int_0^{1}\\frac{dx}{x^3}\\;\\):",
+  opts:[{t:"diverges",correct:true},{t:"\\(=\\tfrac12\\)"},{t:"\\(=-\\tfrac12\\)"},{t:"\\(=2\\)"}],
+  explain:`<b>The blow-up is at 0 — and near zero the p-rule FLIPS:</b> \\(\\int_0^1x^{-p}\\) needs \\(p<1\\). Here \\(p=3\\): \\(\\lim_{a\\to0^+}\\bigl[-\\tfrac1{2x^2}\\bigr]_a^1=-\\tfrac12+\\lim\\tfrac1{2a^2}=\\infty\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac12\\)</b> and <b>\\(-\\tfrac12\\)</b> evaluate the antiderivative at 1 and quietly drop the exploding lower limit — "plugging in 0" where the function has no value.<br>• <b>2</b> is the answer to \\(\\int_0^1x^{-1/2}\\) — the mild spike, not this violent one.<br><br><b>The principle:</b> near zero, convergence needs a MILD spike (\\(p<1\\)); \\(p\\ge1\\) piles up infinite area at the asymptote.` },
+ {topic:"improper",calc:false,prompt:"\\(\\displaystyle\\int_0^{\\infty}x\\,e^{-x^2}dx\\;=\\)",
+  opts:[{t:"\\(\\tfrac12\\)",correct:true},{t:"\\(1\\)"},{t:"diverges"},{t:"\\(0\\)"}],
+  explain:`<b>u-sub inside an improper integral:</b> \\(u=x^2\\) converts it to \\(\\tfrac12\\int_0^\\infty e^{-u}du=\\tfrac12\\lim_{b\\to\\infty}(1-e^{-b})=\\tfrac12\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>1</b> is \\(\\int_0^\\infty e^{-u}du\\) with the \\(\\tfrac12\\) from \\(du=2x\\,dx\\) forgotten.<br>• <b>"diverges"</b> reasons "\\(x\\) grows" — but \\(e^{-x^2}\\) dies far faster; the product's tail is razor thin.<br>• <b>0</b> confuses the integrand's limit with the integral's value.<br><br><b>The principle:</b> techniques compose — substitution first, then the limit. The bounds convert too: \\(0\\to0,\\ \\infty\\to\\infty\\).` },
+ {topic:"improper",calc:false,prompt:"A student writes \\(\\displaystyle\\int_0^4\\frac{dx}{(x-2)^2}=\\Bigl[-\\frac{1}{x-2}\\Bigr]_0^4=-\\frac12-\\frac12=-1\\). The correct conclusion is:",
+  opts:[{t:"the integral diverges — there is an asymptote at \\(x=2\\), inside the interval",correct:true},{t:"\\(-1\\) is correct"},{t:"the answer should be \\(+1\\) — sign error only"},{t:"the answer is \\(0\\) by symmetry"}],
+  explain:`<b>Scan before FTC:</b> the integrand blows up at \\(x=2\\in(0,4)\\). FTC's continuity hypothesis fails, so the fluent computation is meaningless — a positive function can never integrate to \\(-1\\). Splitting at 2 gives two halves that each diverge.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>"−1 is correct"</b> trusts a negative area for a positive integrand — the absurdity is the alarm.<br>• <b>"+1, sign error"</b> repairs the symptom and keeps the disease; no sign fix rescues a broken hypothesis.<br>• <b>"0 by symmetry"</b> — two \\(+\\infty\\) halves don't cancel; they're the same sign anyway.<br><br><b>The principle:</b> scan the WHOLE interval for blow-ups before integrating. Interior asymptote \\(\\Rightarrow\\) split, and BOTH halves must converge.` },
+ {topic:"improper",calc:false,prompt:"The improper integral \\(\\displaystyle\\int_3^{\\infty}f(x)\\,dx\\) <b>converges</b> means precisely that:",
+  opts:[{t:"\\(\\displaystyle\\lim_{b\\to\\infty}\\int_3^{b}f(x)\\,dx\\) exists as a finite number",correct:true},{t:"\\(f(x)\\to 0\\) as \\(x\\to\\infty\\)"},{t:"\\(f\\) is bounded on \\([3,\\infty)\\)"},{t:"\\(\\int_3^b f\\,dx\\) is increasing in \\(b\\)"}],
+  explain:`<b>Convergence is a statement about the LIMIT of the partial integrals</b> — the running total has a destination.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(f\\to0\\)</b> is not sufficient: \\(1/x\\to0\\) and its integral still diverges — the fat-tail counterexample to memorize.<br>• <b>bounded</b> is far too weak — \\(f=1\\) is bounded and diverges instantly.<br>• <b>increasing partial integrals</b> describes any positive integrand, convergent or not.<br><br><b>The principle:</b> the definition IS the limit. Everything else is heuristics the exam loves to weaponize.` },
+ {topic:"improper",calc:false,prompt:"\\(\\displaystyle\\int_0^{\\infty}e^{-3x}\\,dx\\;=\\)",
+  opts:[{t:"\\(\\tfrac13\\)",correct:true},{t:"\\(3\\)"},{t:"\\(1\\)"},{t:"diverges"}],
+  explain:`<b>Limit, written:</b> \\(\\lim_{b\\to\\infty}\\bigl[-\\tfrac13e^{-3x}\\bigr]_0^b=0-(-\\tfrac13)=\\tfrac13\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>3</b> inverts the constant adjust — the chain rule's 3 must be pre-divided, not multiplied.<br>• <b>1</b> is \\(\\int_0^\\infty e^{-x}\\) — the inner 3 ignored.<br>• <b>"diverges"</b> — exponential decay has the thinnest tail there is; these always converge.<br><br><b>The principle:</b> \\(\\int_0^\\infty e^{-kx}dx=\\tfrac1k\\) — worth knowing cold, derived in one limit line.` },
+ {topic:"improper",calc:false,prompt:"Five-second scan: the right approach to \\(\\displaystyle\\int\\frac{dx}{x^2-1}\\) is:",
+  opts:[{t:"partial fractions — the denominator factors as \\((x-1)(x+1)\\)",correct:true},{t:"the arctan card directly"},{t:"complete the square"},{t:"integration by parts"}],
+  explain:`<b>Check factorability FIRST:</b> \\(x^2-1=(x-1)(x+1)\\) — real factors, so it un-adds: cover-up gives \\(\\tfrac{1/2}{x-1}-\\tfrac{1/2}{x+1}\\), two logs.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>arctan</b> requires \\(u^2+a^2\\) — a SUM. \\(x^2-1\\) is a difference; arctan is structurally impossible here.<br>• <b>completing the square</b> changes nothing (no linear term) and solves nothing — it's the tool for irreducible quadratics, and this one reduces.<br>• <b>parts</b> needs a product of unrelated types; there is no product.<br><br><b>The principle:</b> \\(x^2-1\\Rightarrow\\) PF and logs; \\(x^2+1\\Rightarrow\\) arctan. The sign in the middle picks the entire branch.` },
+ {topic:"improper",calc:false,prompt:"\\(\\displaystyle\\int_1^{\\infty}\\frac{\\ln x}{x^2}\\,dx\\;=\\)",
+  opts:[{t:"\\(1\\)",correct:true},{t:"diverges"},{t:"\\(\\tfrac12\\)"},{t:"\\(e\\)"}],
+  explain:`<b>Two machines composed:</b> parts (\\(u=\\ln x,\\ dv=x^{-2}dx\\)) gives \\(\\bigl[-\\tfrac{\\ln x}{x}\\bigr]_1^b+\\int_1^b x^{-2}dx\\). As \\(b\\to\\infty\\): \\(\\tfrac{\\ln b}b\\to0\\) (the log loses to the power) and the second piece \\(\\to1\\). Total: \\(0+1=1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>"diverges"</b> sees \\(\\ln x\\) growing and panics — but it's divided by \\(x^2\\), and \\(\\ln\\) loses every race against powers.<br>• <b>\\(\\tfrac12\\)</b> grabs only part of the boundary bookkeeping.<br>• <b>\\(e\\)</b> is log-flavored decoration.<br><br><b>The principle:</b> improper integrals freely compose with parts — evaluate the boundary term WITH a limit, then finish.` },
+ {topic:"improper",calc:false,prompt:"For which values of \\(p\\) does \\(\\displaystyle\\int_0^{1}\\frac{dx}{x^p}\\) <b>diverge</b>?",
+  opts:[{t:"\\(p\\ge 1\\)",correct:true},{t:"\\(p\\le 1\\)"},{t:"\\(p>1\\) only"},{t:"all \\(p>0\\)"}],
+  explain:`<b>Near zero the knife edge flips:</b> the spike must be MILD — converges iff \\(p<1\\), so divergence is \\(p\\ge1\\) (and \\(p=1\\) itself diverges: \\(\\ln a\\to-\\infty\\)).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(p\\le1\\)</b> applies the at-infinity rule to the at-zero regime — direction confusion, the unit's signature trap.<br>• <b>\\(p>1\\) only</b> forgets that the knife edge \\(p=1\\) loses too.<br>• <b>all \\(p>0\\)</b> — \\(1/\\sqrt x\\) converges to 2, the lesson's own counterexample.<br><br><b>The principle:</b> anchor on \\(1/x\\): it diverges in BOTH regimes, so the convergent side always points away from it — \\(p>1\\) at \\(\\infty\\), \\(p<1\\) at 0.` }
+];
+
+// ===================== MC ENGINE (batches of 12) =====================
+let mcBatch=[], mcIdx=0, mcScore=0, mcAnswered=false;
+const stats={};
+Object.keys(TOPICS).forEach(k=>stats[k]={right:0,total:0});
+
+function mathify(h){return (h||"").replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return m;}});}
+// Decide how to render an MC option: embedded inline-math or prose -> mathify as-is; pure math -> wrap in \( \).
+function renderOpt(t){
+  if(t.indexOf("\\(")>=0) return mathify(t);                 // already has inline math (text+math mix)
+  // Pure math if it has LaTeX structure markers (commands, sup/sub, etc.). Prose otherwise.
+  if(/[\\^_{}]/.test(t)){
+    try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return t;}
+  }
+  // no LaTeX markers: simple numeric/symbolic (e.g. "3", "0,4") -> render as math; wordy -> render as text
+  if(/[A-Za-z]{2,}/.test(t)) return mathify(t);              // prose like "Slowing down", "15 ft/s"
+  try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return t;}
+}
+
+function newBatch(){
+  mcBatch=shuffle(MC).slice(0,12); mcIdx=0; mcScore=0;
+  document.getElementById('mcDone').style.display='none';
+  document.getElementById('mcTag').style.display='';
+  document.getElementById('mcPrompt').style.display='';
+  document.getElementById('mcOpts').style.display='';
+  renderMC();
+}
+function renderMC(){
+  mcAnswered=false;
+  const q=mcBatch[mcIdx];
+  document.getElementById('mcProgress').textContent="Question "+(mcIdx+1)+" of "+mcBatch.length;
+  document.getElementById('mcScore').textContent="Score: "+mcScore;
+  document.getElementById('mcTag').textContent=TOPICS[q.topic][0];
+  document.getElementById('mcPrompt').innerHTML=mathify(q.prompt);
+  const mm=document.getElementById('mcMath');
+  if(q.math){mm.style.display='';mm.innerHTML=tex(q.math,q.math,true);}else{mm.style.display='none';}
+  const opts=document.getElementById('mcOpts'); opts.innerHTML="";
+  const list=shuffle(q.opts.map((o,i)=>({...o})));
+  list.forEach(o=>{const b=document.createElement('button');b.innerHTML=renderOpt(o.t);b.dataset.correct=!!o.correct;b.onclick=()=>pickMC(b,q);opts.appendChild(b);});
+  const fb=document.getElementById('mcFb');fb.className="fb";fb.innerHTML="";
+  document.getElementById('mcNext').className="next";
+}
+function pickMC(btn,q){
+  if(mcAnswered)return; mcAnswered=true;
+  const correct=btn.dataset.correct==="true";
+  stats[q.topic].total++; if(correct){stats[q.topic].right++;mcScore++;}
+  [...document.getElementById('mcOpts').children].forEach(b=>{b.disabled=true;if(b.dataset.correct==="true")b.classList.add('correct');});
+  if(!correct)btn.classList.add('wrong');
+  const fb=document.getElementById('mcFb');
+  fb.className="fb show";
+  fb.innerHTML='<span class="ftag '+(correct?'ok':'bad')+'">'+(correct?'Correct. ':'Not quite. ')+'</span>'+mathify(q.explain)+
+    '<br><a class="review-link" href="'+TOPICS[q.topic][1]+'">Review: '+TOPICS[q.topic][0]+' →</a>';
+  document.getElementById('mcScore').textContent="Score: "+mcScore;
+  const nx=document.getElementById('mcNext'); nx.className="next show";
+  nx.textContent = mcIdx<mcBatch.length-1 ? "Next question →" : "See batch results →";
+  renderWeak();
+}
+document.getElementById('mcNext').onclick=()=>{
+  if(mcIdx<mcBatch.length-1){mcIdx++;renderMC();}
+  else{
+    document.getElementById('mcTag').style.display='none';
+    document.getElementById('mcPrompt').style.display='none';
+    document.getElementById('mcMath').style.display='none';
+    document.getElementById('mcOpts').style.display='none';
+    document.getElementById('mcFb').className="fb";
+    document.getElementById('mcNext').className="next";
+    const pct=Math.round(100*mcScore/mcBatch.length);
+    const msg=pct>=85?"Exam-ready across the board.":pct>=65?"Solid — clean up the misses below.":"Keep drilling; your weak topics are flagged below.";
+    const d=document.getElementById('mcDone');
+    d.style.display='block';
+    d.innerHTML='<div style="text-align:center;padding:10px"><div style="font-family:var(--display);font-size:34px;font-weight:600;color:var(--emerald)">'+mcScore+' / '+mcBatch.length+'</div><p style="color:var(--muted);margin:8px auto 16px;max-width:420px;font-size:14px">'+msg+'</p></div>';
+    const r=document.createElement('button');r.className="next show";r.style.maxWidth="240px";r.style.margin="4px auto 0";r.textContent="↺ Get a new batch of 12";r.onclick=newBatch;d.appendChild(r);
+    document.getElementById('mcProgress').textContent="Batch complete";
+  }
+};
+
+// ===================== WEAK-SPOTS =====================
+function renderWeak(){
+  const rows=Object.keys(TOPICS).filter(k=>stats[k].total>0);
+  const body=document.getElementById('weakBody');
+  if(!rows.length){return;}
+  rows.sort((a,b)=>(stats[a].right/stats[a].total)-(stats[b].right/stats[b].total));
+  body.innerHTML=rows.map(k=>{
+    const s=stats[k],pct=Math.round(100*s.right/s.total);
+    return '<div class="weakrow"><span class="weaklabel">'+TOPICS[k][0]+'</span><span class="weakbar"><i style="width:'+pct+'%"></i></span><span class="weakpct">'+s.right+'/'+s.total+'</span></div>';
+  }).join('')+'<p style="font-size:12.5px;color:var(--muted);margin-top:12px">Lowest topics first. Tap a topic in the question feedback to jump to its lesson.</p>';
+}
+
+// ===================== FRQ TRAINER =====================
+function frqNorm(s){return (s||"").toLowerCase().replace(/\s+/g,"").replace(/−/g,"-").replace(/·/g,"*").replace(/\{|\}/g,"");}
+const FRQS=[
+ { label:"Accumulation & the Graph",
+   desc:"<b>Geometry of accumulation → extrema with justification → concavity → a chained accumulation function.</b> The classic Section II graph-analysis problem, worth 9 points, no calculator. The figure shows \\(f\\): two line segments from \\((0,0)\\) to \\((2,4)\\) to \\((4,0)\\), then a semicircle of radius 2 below the axis on \\([4,8]\\). <div style='text-align:center;margin:4px auto 12px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;max-width:360px'><svg viewBox='0 0 300 220' width='300' xmlns='http://www.w3.org/2000/svg' style='max-width:100%;height:auto'><line x1='20' y1='132.5' x2='285' y2='132.5' stroke='#39424b' stroke-width='1'/><line x1='34.4' y1='14' x2='34.4' y2='206' stroke='#39424b' stroke-width='1'/><line x1='92.2' y1='128.5' x2='92.2' y2='136.5' stroke='#39424b' stroke-width='1'/><text x='92.2' y='148.5' fill='#8a93a0' font-size='10.5' text-anchor='middle' font-family='monospace'>2</text><line x1='150.0' y1='128.5' x2='150.0' y2='136.5' stroke='#39424b' stroke-width='1'/><text x='150.0' y='148.5' fill='#8a93a0' font-size='10.5' text-anchor='middle' font-family='monospace'>4</text><line x1='207.8' y1='128.5' x2='207.8' y2='136.5' stroke='#39424b' stroke-width='1'/><text x='207.8' y='148.5' fill='#8a93a0' font-size='10.5' text-anchor='middle' font-family='monospace'>6</text><line x1='265.6' y1='128.5' x2='265.6' y2='136.5' stroke='#39424b' stroke-width='1'/><text x='265.6' y='148.5' fill='#8a93a0' font-size='10.5' text-anchor='middle' font-family='monospace'>8</text><path d='M34.4,132.5 L92.2,42.5 L150.0,132.5 L150.2,136.0 L150.7,139.5 L151.6,143.0 L152.8,146.4 L154.4,149.7 L156.3,152.9 L158.5,156.0 L161.0,159.0 L163.8,161.7 L166.9,164.3 L170.3,166.7 L173.8,168.9 L177.6,170.9 L181.5,172.6 L185.7,174.1 L189.9,175.3 L194.3,176.3 L198.7,176.9 L203.2,177.4 L207.8,177.5 L212.3,177.4 L216.8,176.9 L221.3,176.3 L225.6,175.3 L229.9,174.1 L234.0,172.6 L238.0,170.9 L241.7,168.9 L245.3,166.7 L248.6,164.3 L251.7,161.7 L254.5,159.0 L257.0,156.0 L259.3,152.9 L261.2,149.7 L262.7,146.4 L264.0,143.0 L264.8,139.5 L265.4,136.0 L265.6,132.5' fill='none' stroke='#5f7ff2' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/><text x='92.2' y='34.5' fill='#aab3bd' font-size='11' text-anchor='middle' font-family='monospace'>(2, 4)</text><text x='207.8' y='193.5' fill='#aab3bd' font-size='11' text-anchor='middle' font-family='monospace'>semicircle</text><text x='272' y='28' fill='#8a93a0' font-size='12' text-anchor='end' font-family='monospace'>y = f(x)</text></svg></div>",
+   given:"g(x)=\\int_0^{x} f(t)\\,dt,\\qquad 0\\le x\\le 8",
+   givenNote:"The graph of f consists of two line segments and a semicircle of radius 2 lying below the x-axis, as shown. Let g be the accumulation function defined from 0. No calculator.",
+   givenFall:"g(x) = integral from 0 to x of f(t) dt, where f is the pictured piecewise graph.",
+  parts:[
+   {pl:"Part A",pts:2,topic:"ftc",q:"Using geometry, find \\(g(4)\\), \\(g(6)\\), and \\(g(8)\\).",
+    fields:[{label:"g(4)=",hint:"a number",match:s=>["8"].includes(frqNorm(s))},
+            {label:"g(6)=",hint:"exact or 3-decimal",match:s=>["8-pi","8-π","4.86","4.858"].includes(frqNorm(s))},
+            {label:"g(8)=",hint:"exact or 3-decimal",match:s=>["8-2pi","8-2π","1.72","1.717"].includes(frqNorm(s))}],
+    sol:`<b>Read areas, signed.</b> The triangle on \\([0,4]\\) has area \\(\\tfrac12(4)(4)=8\\), so \\(g(4)=8\\).<br>By symmetry of the semicircle about \\(x=6\\), the interval \\([4,6]\\) holds exactly half of the semicircular region: \\(\\tfrac12\\cdot\\tfrac{\\pi(2)^2}{2}=\\pi\\), below the axis. So \\(g(6)=8-\\pi\\approx4.858\\).<br>The full semicircle has area \\(\\tfrac{\\pi(2)^2}{2}=2\\pi\\), so \\(g(8)=8-2\\pi\\approx1.717\\).<br><br><b>Scoring:</b> one point for \\(g(4)=8\\) with the triangle, one for both semicircle values with correct signs. Adding \\(2\\pi\\) instead of subtracting loses the second point — position gives the sign.`,
+    rubric:["\\(g(4)=8\\) from triangle area","\\(g(6)=8-\\pi\\) and \\(g(8)=8-2\\pi\\), signed"]},
+   {pl:"Part B",pts:2,topic:"ftc",q:"On \\(0<x<8\\), at what value of \\(x\\) does \\(g\\) attain a local maximum? Justify your answer.",
+    fields:[{label:"x=",hint:"a number",match:s=>["4","x=4"].includes(frqNorm(s))},
+            {label:"\\text{because } g'=f \\text{ changes sign}",hint:"e.g. + to -",match:s=>["+to-","postoneg","positivetonegative","from+to-"].includes(frqNorm(s))}],
+    sol:`<b>\\(g'(x)=f(x)\\) by FTC.</b> \\(f>0\\) on \\((0,4)\\) and \\(f<0\\) on \\((4,8)\\), so \\(g'\\) changes sign from positive to negative at \\(x=4\\): a local maximum there, by the First Derivative Test.<br><br><b>Scoring:</b> one point for \\(x=4\\), one for the sign-change justification IN TERMS OF \\(f\\). "Because the graph goes down after" earns nothing — readers want \\(g'=f\\) named and its sign change stated.`,
+    rubric:["\\(x=4\\)","justification: \\(g'=f\\) changes \\(+\\) to \\(-\\) at 4"]},
+   {pl:"Part C",pts:2,topic:"ftc",q:"Find all \\(x\\) in \\((0,8)\\) at which the graph of \\(g\\) has a point of inflection. Give a reason.",
+    fields:[{label:"x=",hint:"list, e.g. 2, 6",match:s=>["2,6","6,2","2and6","x=2,x=6","x=2,6","2;6"].includes(frqNorm(s))}],
+    sol:`<b>\\(g''=f'\\):</b> inflection where \\(f\\) changes direction. \\(f\\) switches from increasing to decreasing at \\(x=2\\) (the corner peak) and from decreasing to increasing at \\(x=6\\) (the semicircle's bottom). Both are inflection points of \\(g\\).<br><br><b>Scoring:</b> one point per location with the direction-change reason. Citing "\\(f=0\\) at \\(x=4\\)" is the classic wrong answer — that's where \\(g\\) has its EXTREMUM, not an inflection.`,
+    rubric:["\\(x=2\\) and \\(x=6\\)","reason: \\(f\\) changes direction (so \\(g''=f'\\) changes sign)"]},
+   {pl:"Part D",pts:3,topic:"ftc",q:"Let \\(h(x)=\\displaystyle\\int_0^{x^2} f(t)\\,dt\\). Find \\(h'(x)\\), and evaluate \\(h'(\\sqrt{2})\\).",
+    fields:[{label:"h'(x)=",hint:"e.g. 2x f(x^2)",match:s=>["2xf(x^2)","f(x^2)*2x","2x*f(x^2)","f(x^2)2x","2xf(x2)"].includes(frqNorm(s))},
+            {label:"h'(\\sqrt2)=",hint:"exact or 3-decimal",match:s=>["8√2","8sqrt2","8sqrt(2)","8*sqrt2","8*sqrt(2)","11.31","11.314"].includes(frqNorm(s))}],
+    sol:`<b>FTC Part 1 with the chain rule:</b> \\(h'(x)=f(x^2)\\cdot 2x\\).<br>At \\(x=\\sqrt2\\): \\(h'(\\sqrt2)=f(2)\\cdot2\\sqrt2\\). From the graph, \\(f(2)=4\\) (the peak), so \\(h'(\\sqrt2)=8\\sqrt2\\approx11.314\\).<br><br><b>Scoring:</b> one point for the chain factor \\(2x\\), one for reading \\(f(2)=4\\) from the graph, one for the value. Omitting \\(2x\\) — answering \\(f(x^2)\\) — is the single most common error on this question type and forfeits two of the three points.`,
+    rubric:["\\(h'(x)=f(x^2)\\cdot2x\\) (chain factor present)","reads \\(f(2)=4\\) from the figure","\\(h'(\\sqrt2)=8\\sqrt2\\approx11.314\\)"]}
+  ]},
+
+ { label:"The Techniques Gauntlet",
+   desc:"<b>Integration by parts → partial fractions → an improper integral via substitution → a divergence verdict.</b> Nine points, no calculator. Every part is a different machine from Lessons 4–5 — the diagnosis is half the credit.",
+   given:"\\text{Evaluate each integral exactly, or show that it diverges.}",
+   givenNote:"Four independent integrals. Show the setup for each: the parts casting, the partial-fraction constants, and the limit statements. No calculator.",
+   givenFall:"Four independent integrals; show all setups.",
+  parts:[
+   {pl:"Part A",pts:2,topic:"parts",q:"\\(\\displaystyle\\int_0^{\\pi} x\\cos\\!\\Bigl(\\frac{x}{2}\\Bigr)dx\\)",
+    fields:[{label:"\\text{value}=",hint:"exact or 3-decimal",match:s=>["2pi-4","2π-4","2.28","2.283"].includes(frqNorm(s))}],
+    sol:`<b>Parts, LIATE:</b> \\(u=x,\\ dv=\\cos(x/2)dx\\Rightarrow du=dx,\\ v=2\\sin(x/2)\\).<br>\\(\\bigl[2x\\sin(x/2)\\bigr]_0^{\\pi}-\\int_0^{\\pi}2\\sin(x/2)dx=\\bigl[2x\\sin(x/2)+4\\cos(x/2)\\bigr]_0^{\\pi}\\).<br>At \\(\\pi\\): \\(2\\pi(1)+0=2\\pi\\). At 0: \\(0+4\\). Value: \\(2\\pi-4\\approx2.283\\).<br><br><b>Scoring:</b> one point for the casting with \\(v=2\\sin(x/2)\\) (the inner \\(\\tfrac12\\) integrates to a 2, not a \\(\\tfrac12\\)), one for the value with both bounds.`,
+    rubric:["parts setup with \\(v=2\\sin(x/2)\\)","value \\(2\\pi-4\\)"]},
+   {pl:"Part B",pts:3,topic:"parts",q:"\\(\\displaystyle\\int\\frac{2x+7}{(x+3)(x-1)}\\,dx\\)",
+    fields:[{label:"A\\ (\\text{over } x+3)=",hint:"a fraction",match:s=>["-1/4","-0.25","-.25"].includes(frqNorm(s))},
+            {label:"B\\ (\\text{over } x-1)=",hint:"a fraction",match:s=>["9/4","2.25"].includes(frqNorm(s))},
+            {label:"\\int=",hint:"e.g. -1/4 ln|x+3| + 9/4 ln|x-1| + C",match:s=>["-1/4ln|x+3|+9/4ln|x-1|+c","-0.25ln|x+3|+2.25ln|x-1|+c","(-1/4)ln|x+3|+(9/4)ln|x-1|+c"].includes(frqNorm(s))}],
+    sol:`<b>Distinct linear factors — cover-up:</b><br>at \\(x=-3\\): \\(A=\\dfrac{2(-3)+7}{-3-1}=\\dfrac{1}{-4}=-\\tfrac14\\);&nbsp; at \\(x=1\\): \\(B=\\dfrac{9}{4}\\).<br>\\(\\displaystyle\\int=-\\tfrac14\\ln|x+3|+\\tfrac94\\ln|x-1|+C\\).<br><br><b>Scoring:</b> one point per constant (cover-up shown in one line each is full credit), one for the two-log antiderivative with absolute values and \\(+C\\). Missing \\(|\\cdot|\\) or \\(+C\\) is a real deduction on FRQs.`,
+    rubric:["\\(A=-\\tfrac14\\) by cover-up","\\(B=\\tfrac94\\) by cover-up","\\(-\\tfrac14\\ln|x+3|+\\tfrac94\\ln|x-1|+C\\)"]},
+   {pl:"Part C",pts:2,topic:"improper",q:"\\(\\displaystyle\\int_2^{\\infty}\\frac{dx}{x\\,(\\ln x)^2}\\)",
+    fields:[{label:"\\text{value}=",hint:"exact or 4-decimal",match:s=>["1/ln2","1/ln(2)","1.44","1.443","1.4427"].includes(frqNorm(s))}],
+    sol:`<b>Substitute INSIDE the improper integral:</b> \\(u=\\ln x,\\ du=\\tfrac{dx}{x}\\); bounds: \\(2\\to\\ln2,\\ \\infty\\to\\infty\\).<br>\\(\\displaystyle\\lim_{B\\to\\infty}\\int_{\\ln2}^{B}u^{-2}du=\\lim_{B\\to\\infty}\\Bigl(\\frac{1}{\\ln2}-\\frac1B\\Bigr)=\\frac{1}{\\ln 2}\\approx1.4427\\).<br><br><b>Scoring:</b> one point for the substitution with converted bounds, one for the limit statement and value. Writing the answer without the \\(\\lim\\) notation forfeits the second point — the limit IS the definition.`,
+    rubric:["\\(u=\\ln x\\) with converted bounds","limit shown; value \\(\\tfrac1{\\ln2}\\)"]},
+   {pl:"Part D",pts:2,topic:"improper",q:"Determine whether \\(\\displaystyle\\int_2^{\\infty}\\frac{dx}{x\\ln x}\\) converges or diverges. Justify.",
+    fields:[{label:"\\text{verdict:}",hint:"converges / diverges",match:s=>["diverges","diverge","divergent"].includes(frqNorm(s))},
+            {label:"\\text{because } u=\\ln x \\text{ gives }",hint:"e.g. ∫ du/u",match:s=>["du/u","∫du/u","intdu/u","1/u","lnu","ln(u)"].includes(frqNorm(s))}],
+    sol:`<b>Same substitution, one power weaker:</b> \\(u=\\ln x\\) gives \\(\\displaystyle\\int_{\\ln2}^{\\infty}\\frac{du}{u}=\\lim_{B\\to\\infty}\\bigl(\\ln B-\\ln\\ln2\\bigr)=\\infty\\): <b>diverges</b>.<br><br>The pair C–D is the p-test knife edge in disguise: \\((\\ln x)^2\\) downstairs is \\(p=2\\) in \\(u\\)-world (converges); \\(\\ln x\\) alone is \\(p=1\\) (diverges). One power of a log is the whole difference.<br><br><b>Scoring:</b> one point for the verdict, one for justification via the substitution or an explicit limit. "It goes to zero so it converges" earns nothing — \\(1/(x\\ln x)\\to0\\) and it still diverges.`,
+    rubric:["diverges","justified: \\(\\int du/u\\) with limit \\(\\infty\\)"]}
+  ]},
+
+ { label:"The Draining Tank",
+   desc:"<b>Rate in, rate out — accumulation, net change, instantaneous comparison, and an optimization with a calculator root.</b> Nine points, <b>calculator allowed</b> (and required for part D). The Section II archetype: every AP exam since 1998 has had one of these.",
+   given:"P(t)=12+10\\cos\\!\\Bigl(\\frac{\\pi t}{12}\\Bigr),\\qquad D(t)=\\frac{t^2}{4},\\qquad W(0)=50",
+   givenNote:"For 0 ≤ t ≤ 12 hours, water is pumped into a tank at rate P(t) and drained at rate D(t), both in gallons per hour. The tank holds W(t) gallons, with 50 gallons at t = 0. Calculator allowed.",
+   givenFall:"P(t)=12+10cos(πt/12), D(t)=t²/4, W(0)=50, on [0,12].",
+  parts:[
+   {pl:"Part A",pts:2,topic:"riemann",q:"How many gallons are pumped INTO the tank during the 12 hours?",
+    fields:[{label:"\\int_0^{12}P\\,dt=",hint:"a number",match:s=>["144"].includes(frqNorm(s))}],
+    sol:`<b>Accumulate the in-rate:</b> \\(\\displaystyle\\int_0^{12}\\Bigl(12+10\\cos\\tfrac{\\pi t}{12}\\Bigr)dt=\\Bigl[12t+\\tfrac{120}{\\pi}\\sin\\tfrac{\\pi t}{12}\\Bigr]_0^{12}=144+\\tfrac{120}{\\pi}\\sin\\pi=144+0=144\\) gallons.<br><br><b>Scoring:</b> one point for the integral setup with correct limits, one for 144. The \\(\\sin\\pi=0\\) cancellation is the question's gift — the cosine pumps symmetrically above and below its mean.`,
+    rubric:["\\(\\int_0^{12}P\\,dt\\) setup","144 gallons"]},
+   {pl:"Part B",pts:3,topic:"riemann",q:"Find \\(W(12)\\), the amount of water in the tank at \\(t=12\\).",
+    fields:[{label:"W(12)=",hint:"a number",match:s=>["50"].includes(frqNorm(s))}],
+    sol:`<b>Initial + net change:</b> \\(W(12)=50+\\int_0^{12}\\bigl(P(t)-D(t)\\bigr)dt\\).<br>The drain: \\(\\int_0^{12}\\tfrac{t^2}{4}dt=\\tfrac{t^3}{12}\\Big|_0^{12}=\\tfrac{1728}{12}=144\\).<br>So \\(W(12)=50+144-144=50\\) gallons — the tank ends exactly where it began.<br><br><b>Scoring:</b> one point for the \\(W(0)+\\int(P-D)\\) structure, one for \\(\\int D=144\\), one for 50. Forgetting the initial 50 is the classic single-point loss; answering "0 net change" without stating \\(W(12)=50\\) also drops a point — answer the question asked.`,
+    rubric:["\\(W(12)=50+\\int_0^{12}(P-D)\\,dt\\)","\\(\\int_0^{12}D\\,dt=144\\)","\\(W(12)=50\\)"]},
+   {pl:"Part C",pts:2,topic:"riemann",q:"Is the amount of water in the tank increasing or decreasing at \\(t=9\\)? Give a reason.",
+    fields:[{label:"\\text{verdict:}",hint:"increasing / decreasing",match:s=>["decreasing","decrease"].includes(frqNorm(s))},
+            {label:"P(9)-D(9)\\approx",hint:"3 decimals",match:s=>["-15.32","-15.321","-15.3"].includes(frqNorm(s))}],
+    sol:`<b>Look at the derivative:</b> \\(W'(t)=P(t)-D(t)\\). At \\(t=9\\): \\(P(9)=12+10\\cos\\tfrac{3\\pi}{4}=12-5\\sqrt2\\approx4.929\\) and \\(D(9)=\\tfrac{81}{4}=20.25\\).<br>\\(W'(9)\\approx4.929-20.25=-15.321<0\\): <b>decreasing</b>.<br><br><b>Scoring:</b> one point for the verdict, one for the reason via the SIGN of \\(P(9)-D(9)\\) with values shown. Comparing \\(W(9)\\) to \\(W(8)\\) is not the expected justification — instantaneous questions want the derivative.`,
+    rubric:["decreasing","because \\(W'(9)=P(9)-D(9)\\approx-15.321<0\\)"]},
+   {pl:"Part D",pts:2,topic:"improper",q:"At what time \\(t\\) is the amount of water in the tank a maximum, and what is that maximum? Justify.",
+    fields:[{label:"t\\approx",hint:"3 decimals",match:s=>["6.52","6.522","6.523","6.5226"].includes(frqNorm(s))},
+            {label:"W_{max}\\approx",hint:"3 decimals",match:s=>["142.98","142.99","142.986","142.987","143"].includes(frqNorm(s))}],
+    sol:`<b>Candidates: endpoints and where \\(W'=P-D=0\\).</b> Solve \\(12+10\\cos\\tfrac{\\pi t}{12}=\\tfrac{t^2}{4}\\) with the calculator: \\(t\\approx6.523\\) (the only crossing — \\(P-D\\) starts at \\(+22\\), is still \\(+3\\) at \\(t=6\\), and \\(-2.8\\) by \\(t=7\\)).<br>\\(W'\\) changes \\(+\\) to \\(-\\) there, so it's a maximum: \\(W(6.523)=50+\\int_0^{6.523}\\bigl(P-D\\bigr)dt\\approx50+92.987\\approx142.987\\) gallons. Endpoints check: \\(W(0)=50\\), \\(W(12)=50\\) — both smaller.<br><br><b>Scoring:</b> one point for the critical time from \\(P=D\\) with sign-change (or candidates-table) justification, one for the maximum via the integral. Reporting \\(t\\) without justifying WHY it's a max is the most common dropped point on this archetype.`,
+    rubric:["\\(t\\approx6.523\\) where \\(P=D\\), with \\(+\\to-\\) justification","\\(W_{max}=50+\\int_0^{t}(P-D)\\approx142.987\\)"]}
+  ]}
+];
+
+let frqActive=0;
+function buildFrqTabs(){
+  const t=document.getElementById('frqTabs');t.innerHTML="";
+  FRQS.forEach((f,i)=>{const b=document.createElement('button');b.textContent=f.label;if(i===frqActive)b.classList.add('on');b.onclick=()=>{frqActive=i;buildFrqTabs();renderFRQ();};t.appendChild(b);});
+}
+function renderFRQ(){
+  const f=FRQS[frqActive];
+  document.getElementById('frqDesc').innerHTML=mathify(f.desc);
+  document.getElementById('frqGiven').innerHTML=tex(f.given,f.givenFall,true);
+  document.getElementById('frqGivenNote').textContent=f.givenNote;
+  document.getElementById('frqScore').style.display='none';
+  const wrap=document.getElementById('frqParts');wrap.innerHTML="";
+  f.parts.forEach((p,pi)=>{
+    const div=document.createElement('div');div.className="part";
+    let fieldsHtml='<div class="frq-fields">';
+    p.fields.forEach((fl,fi)=>{
+      fieldsHtml+='<div class="frq-field"><span class="frq-flabel">'+tex(fl.label,fl.label,false)+'</span>'+
+        '<input class="frq-input" id="f'+pi+'_'+fi+'" placeholder="'+(fl.hint||'')+'" autocomplete="off"></div>';
+    });
+    fieldsHtml+='</div>';
+    let rubricHtml='<div class="rubric"><div class="rubric-h">Score your reasoning ('+p.pts+' pt'+(p.pts>1?'s':'')+')</div>';
+    p.rubric.forEach((r,ri)=>{rubricHtml+='<label><input type="checkbox" id="r'+pi+'_'+ri+'" onchange="updFrqScore()"> <span>'+mathify(r)+'</span></label>';});
+    rubricHtml+='</div>';
+    div.innerHTML='<div class="part-h"><span class="part-l">'+p.pl+'</span><span class="part-pts">'+p.pts+' pt'+(p.pts>1?'s':'')+'</span></div>'+
+      '<div class="part-q">'+mathify(p.q)+'</div>'+fieldsHtml+
+      '<button class="frq-check" onclick="checkFrqPart('+pi+')">Check answer</button>'+
+      '<button class="reveal-sol" onclick="document.getElementById(\'sol'+pi+'\').classList.add(\'show\');this.style.display=\'none\'">show worked solution</button>'+
+      '<div class="frq-sol" id="sol'+pi+'">'+mathify(p.sol)+rubricHtml+'</div>';
+    wrap.appendChild(div);
+  });
+}
+function checkFrqPart(pi){
+  const p=FRQS[frqActive].parts[pi];
+  p.fields.forEach((fl,fi)=>{
+    const inp=document.getElementById('f'+pi+'_'+fi);
+    if(!inp.value.trim()){inp.classList.remove('ok','no');return;}
+    const ok=fl.match(inp.value);
+    inp.classList.toggle('ok',ok);inp.classList.toggle('no',!ok);
+  });
+  document.getElementById('sol'+pi).classList.add('show');
+}
+function updFrqScore(){
+  const f=FRQS[frqActive];let got=0,tot=0;
+  f.parts.forEach((p,pi)=>{tot+=p.pts;let checked=0;p.rubric.forEach((r,ri)=>{const c=document.getElementById('r'+pi+'_'+ri);if(c&&c.checked)checked++;});got+=Math.round(p.pts*checked/p.rubric.length);});
+  const sl=document.getElementById('frqScore');sl.style.display='block';
+  sl.innerHTML='Self-scored: <b>'+got+' / '+tot+'</b> points'+(got===tot?' — full marks. ':' ')+'<span style="color:var(--muted);font-size:12.5px">(check rubric boxes for each part you earned)</span>';
+}
+window.checkFrqPart=checkFrqPart;window.updFrqScore=updFrqScore;
+
+// ===================== BOOT =====================
+function boot(){newBatch();buildFrqTabs();renderFRQ();}
+boot();
+if(window.addEventListener)window.addEventListener('load',()=>{if(window.katex){newBatch();renderFRQ();}});
+if(!window.katex){let t=0;const iv=setInterval(()=>{if(window.katex){clearInterval(iv);newBatch();renderFRQ();}else if(++t>60)clearInterval(iv);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*40,360)+'ms';});
+</script>
+</body>
+</html>

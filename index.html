@@ -30,7 +30,7 @@
     /* course house accent: champagne gold */
     --gold:#d8b873; --gold-glow:#efd49b; --gold-deep:#a8893f;
     /* per-unit signature colors */
-    --u7:#de5360; --u7b:#fb8590;
+    --u6:#5f7ff2; --u6b:#8fa6f7; --u7:#de5360; --u7b:#fb8590;
     --u8:#40c98a; --u8b:#5fe0a4;
     --u9:#3fb6d8; --u9b:#6dd4ef;
     --u10:#a98cf0; --u10b:#c4adff;
@@ -194,6 +194,7 @@
   .go .arr{transition:transform .4s cubic-bezier(.16,.8,.3,1)}
   .card:hover .go .arr{transform:translateX(6px)}
   /* per-card color binding */
+  .u6{--cardc:var(--u6);--cardglow:rgba(95,127,242,.20)}
   .u7{--cardc:var(--u7);--cardglow:rgba(222,83,96,.20)}
   .u7:hover{border-color:rgba(222,83,96,.42);box-shadow:0 30px 66px -40px rgba(0,0,0,.92),0 0 50px -26px rgba(222,83,96,.4)}
   .u7:hover .card-art{border-color:rgba(222,83,96,.25)} .u7:hover .card-art svg{filter:drop-shadow(0 0 12px rgba(222,83,96,.5))}
@@ -216,7 +217,7 @@
   .progress-track{flex:1;height:5px;border-radius:30px;background:var(--line);overflow:hidden;max-width:320px}
   .progress-fill{height:100%;width:0;border-radius:30px;transition:width 1.2s cubic-bezier(.2,.7,.2,1);
     background:linear-gradient(90deg,var(--u8),var(--u9) 55%,var(--u10))}
-  .group-fade.shown .progress-fill{width:40%}
+  .group-fade.shown .progress-fill{width:50%}
   .sec-head .t .sn{color:var(--gold-glow);font-weight:600;margin-right:1px}
   .rrow{--d:0s}
   @keyframes rowSweep{0%{background:transparent}38%{background:rgba(255,255,255,.05)}100%{background:transparent}}
@@ -428,8 +429,8 @@
         <a class="hero-cta" href="#readyGroup">Explore the units <span class="arr" aria-hidden="true">&#8595;</span></a>
         <div class="meta">
           <div><div class="n" data-count="10">10</div><div class="l">Units</div></div>
-          <div><div class="n"><em data-count="4">4</em></div><div class="l">Ready now</div></div>
-          <div><div class="n" data-count="19">19</div><div class="l">Lessons</div></div>
+          <div><div class="n"><em data-count="5">5</em></div><div class="l">Ready now</div></div>
+          <div><div class="n" data-count="24">24</div><div class="l">Lessons</div></div>
         </div>
       </div>
       <div class="hero-chips">
@@ -466,7 +467,7 @@
   <div class="group-fade" id="readyGroup">
     <div class="sec-head">
       <div class="t"><span class="sn">01</span>Start here</div>
-      <h2>Four units, ready to use</h2>
+      <h2>Five units, ready to use</h2>
       <p class="sub">Each is a complete guide &mdash; interactive lessons, a full exam-style practice set, and a one-page cheat sheet.</p>
     </div>
     <div class="router" id="router">
@@ -479,6 +480,28 @@
       <div class="ans" id="routerAns"></div>
     </div>
     <div class="grid">
+      <!-- Unit 6 -->
+      <a class="card u6" href="unit6.html">
+        <div class="card-art" aria-hidden="true">
+          <svg viewBox="0 0 150 118" width="150" height="118" fill="none">
+            <path d="M22 96 H130" stroke="currentColor" stroke-width="2" opacity=".22" stroke-linecap="round"/>
+            <path d="M26 96 V24" stroke="currentColor" stroke-width="2" opacity=".22" stroke-linecap="round"/>
+            <rect x="30" y="92.5" width="13" height="3.5" fill="currentColor" opacity=".35" rx="1"/>
+            <rect x="48" y="83.0" width="13" height="13.0" fill="currentColor" opacity=".35" rx="1"/>
+            <rect x="66" y="71.4" width="13" height="24.6" fill="currentColor" opacity=".35" rx="1"/>
+            <rect x="84" y="58.4" width="13" height="37.6" fill="currentColor" opacity=".35" rx="1"/>
+            <rect x="102" y="44.2" width="13" height="51.8" fill="currentColor" opacity=".35" rx="1"/>
+            <path class="cdraw" pathLength="1" d="M26 94 C 60 88, 90 62, 130 26" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="unum">Unit 06</div>
+          <h3 class="uname">Integration &amp; Accumulation</h3>
+          <p class="udesc">Riemann sums, the Fundamental Theorem, the antiderivative toolkit, parts &amp; partial fractions, and improper integrals &mdash; accumulation built from rectangles up.</p>
+          <div class="chips"><span class="chip">Riemann</span><span class="chip">FTC</span><span class="chip">u&#8209;sub</span><span class="chip">Parts &amp; PF</span><span class="chip">Improper</span></div>
+          <span class="go">Open unit <span class="arr">&#8594;</span></span>
+        </div>
+      </a>
       <!-- Unit 7 -->
       <a class="card u7" href="unit7.html">
         <div class="card-art" aria-hidden="true">
@@ -595,7 +618,7 @@
       <div class="rrow soon"><span class="rnum">03</span><span class="rdot"></span><span class="rtitle">Differentiation: Composite, Implicit &amp; Inverse<span class="rwhat">The chain rule, implicit differentiation, and derivatives of inverse functions.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
       <div class="rrow soon"><span class="rnum">04</span><span class="rdot"></span><span class="rtitle">Contextual Applications of Differentiation<span class="rwhat">Related rates, motion along a line, and linear approximation in context.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
       <div class="rrow soon"><span class="rnum">05</span><span class="rdot"></span><span class="rtitle">Analytical Applications of Differentiation<span class="rwhat">The Mean Value Theorem, curve sketching, optimization, and concavity.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
-      <div class="rrow soon"><span class="rnum">06</span><span class="rdot"></span><span class="rtitle">Integration &amp; Accumulation of Change<span class="rwhat">Antiderivatives, the Fundamental Theorem, Riemann sums, and u&#8209;substitution.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
+      <a class="rrow live" href="unit6.html" style="--rc:var(--u6)"><span class="rnum">06</span><span class="rdot"></span><span class="rtitle">Integration &amp; Accumulation of Change<span class="rsub">5 lessons · exam · cheat sheet</span></span><span class="pill ready">Ready</span><span class="rarr">&#8594;</span></a>
       <a class="rrow live" href="unit7.html" style="--rc:var(--u7)"><span class="rnum">07</span><span class="rdot"></span><span class="rtitle">Differential Equations<span class="rsub">5 lessons · exam · cheat sheet</span></span><span class="pill ready">Ready</span><span class="rarr">&#8594;</span></a>
       <a class="rrow live" href="unit8.html" style="--rc:var(--u8)"><span class="rnum">08</span><span class="rdot"></span><span class="rtitle">Applications of Integration<span class="rsub">5 lessons · exam · cheat sheet</span></span><span class="pill ready">Ready</span><span class="rarr">&#8594;</span></a>
       <a class="rrow live" href="unit9.html" style="--rc:var(--u9)"><span class="rnum">09</span><span class="rdot"></span><span class="rtitle">Parametric, Polar &amp; Vector&#8209;Valued Functions<span class="rsub">4 lessons · exam · cheat sheet</span></span><span class="pill ready">Ready</span><span class="rarr">&#8594;</span></a>
@@ -814,6 +837,13 @@
 /* ---------- utility layer: catalog, progress, goal router, topic search ---------- */
 (function(){
   var CAT=[
+   {u:6,k:'lesson',t:'Riemann Sums & the Definite Integral',f:'riemann-sums.html',kw:'riemann sum left right midpoint trapezoid rectangle approximation table overestimate underestimate definite integral accumulation'},
+   {u:6,k:'lesson',t:'The Fundamental Theorem',f:'fundamental-theorem.html',kw:'fundamental theorem ftc accumulation function g(x) chain rule bound graph analysis area'},
+   {u:6,k:'lesson',t:'Antiderivatives & u-Substitution',f:'antiderivatives.html',kw:'antiderivative deck u-substitution u sub reverse chain rule completing square arctan long division'},
+   {u:6,k:'lesson',t:'Parts & Partial Fractions',f:'parts-partial-fractions.html',kw:'integration by parts liate tabular cyclic partial fractions cover-up bc'},
+   {u:6,k:'lesson',t:'Improper Integrals & Technique Choice',f:'improper-integrals.html',kw:'improper integral limit infinity p-test asymptote diverges converges technique selection bc'},
+   {u:6,k:'exam',t:'Unit 6 \u2014 Exam Practice',f:'unit6-exam-practice.html',kw:'exam practice mcq frq test integration accumulation'},
+   {u:6,k:'sheet',t:'Unit 6 \u2014 Cheat Sheet',f:'unit6-cheatsheet.html',kw:'cheat sheet formulas review integration accumulation'},
    {u:7,k:'lesson',t:'Equations of Change',f:'equations-of-change.html',kw:'differential equation modeling rate proportional verify solution slope newton'},
    {u:7,k:'lesson',t:'Slope Fields',f:'slope-fields.html',kw:'slope field segments isocline sketch match direction equilibrium'},
    {u:7,k:'lesson',t:"Euler's Method",f:'eulers-method.html',kw:'euler approximation step tangent error concavity overestimate underestimate numerical'},
@@ -880,8 +910,8 @@
 
   // goal router
   var ans={
-    fresh:'Go in order \u2014 the ready units build on each other. Start with <b>Unit 7</b> (Differential Equations), then 8, 9, and 10.<span class="lk"><a href="unit7.html">Open Unit 7 &#8594;</a></span>',
-    review:'Drill the practice set and keep the cheat sheet open for your unit:<span class="lk"><a href="unit7-exam-practice.html">Unit 7 exam</a><a href="unit8-exam-practice.html">Unit 8 exam</a><a href="unit9-exam-practice.html">Unit 9 exam</a><a href="exam-practice.html">Unit 10 exam</a></span>',
+    fresh:'Go in order \u2014 the ready units build on each other. Start with <b>Unit 6</b> (Integration &amp; Accumulation), then 7, 8, 9, and 10.<span class="lk"><a href="unit6.html">Open Unit 6 &#8594;</a></span>',
+    review:'Drill the practice set and keep the cheat sheet open for your unit:<span class="lk"><a href="unit6-exam-practice.html">Unit 6 exam</a><a href="unit7-exam-practice.html">Unit 7 exam</a><a href="unit8-exam-practice.html">Unit 8 exam</a><a href="unit9-exam-practice.html">Unit 9 exam</a><a href="exam-practice.html">Unit 10 exam</a></span>',
     stuck:'Search the exact topic and jump straight to the lesson.<span class="lk"><a href="#" id="goSearch">Go to search &#8595;</a></span>'
   };
   var router=document.getElementById('router'), rAns=document.getElementById('routerAns');

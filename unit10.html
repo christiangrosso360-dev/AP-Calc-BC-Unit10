@@ -419,6 +419,34 @@
     ctx.fillStyle=og; ctx.beginPath(); ctx.arc(oneX,yB,expFS*0.95,0,TAU); ctx.fill();
     ctx.fillStyle=`rgba(${GO},0.95)`; ctx.fillText('  = 1', bx, yB);
 
+    // ===== convergence strip: partial sums hop toward 1 =====
+    const yC=cy+sig*0.92;
+    const lw2=Math.min(W*0.30,330), sx0=cx-lw2/2, sx1=cx+lw2/2;
+    const stripA=groupA*clamp((tt-1500)/450);
+    ctx.globalAlpha=stripA*0.3; ctx.strokeStyle=`rgba(${VI},1)`; ctx.lineWidth=1.4; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(sx0,yC); ctx.lineTo(sx1,yC); ctx.stroke();
+    ctx.globalAlpha=stripA*0.55; ctx.font=`500 ${limFS*0.95}px ${SERIF}`; ctx.textAlign='center'; ctx.fillStyle=`rgba(${VI},1)`;
+    ctx.fillText('0', sx0, yC+limFS*1.05);
+    for(let n=1;n<=7;n++){
+      const sn=1-Math.pow(0.5,n);
+      const tx=sx0+lw2*sn;
+      const a=clamp((tt-1500-n*430)/300);
+      if(a<=0) continue;
+      ctx.globalAlpha=stripA*a*(n<=3?0.9:0.55);
+      ctx.beginPath(); ctx.moveTo(tx,yC-5.5); ctx.lineTo(tx,yC+5.5); ctx.stroke();
+      if(n<=3){ ctx.fillText(n===1?'½':(n===2?'¾':'⅞'), tx, yC+limFS*1.05); }
+    }
+    const oneA=groupA*clamp((tt-3450)/480);
+    if(oneA>0){
+      const og2=ctx.createRadialGradient(sx1,yC,0,sx1,yC,16);
+      og2.addColorStop(0,`rgba(${GO},0.45)`); og2.addColorStop(1,`rgba(${GO},0)`);
+      ctx.globalAlpha=oneA; ctx.fillStyle=og2; ctx.beginPath(); ctx.arc(sx1,yC,16,0,TAU); ctx.fill();
+      ctx.strokeStyle=`rgba(${GO},0.95)`; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(sx1,yC-7); ctx.lineTo(sx1,yC+7); ctx.stroke();
+      ctx.fillStyle=`rgba(${GO},0.95)`; ctx.font=`600 ${limFS}px ${SERIF}`;
+      ctx.fillText('1', sx1, yC+limFS*1.1);
+    }
+
     ctx.restore();
     t+=16; raf=requestAnimationFrame(frame);
   }

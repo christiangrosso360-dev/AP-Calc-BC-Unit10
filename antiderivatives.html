@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Antiderivatives &amp; u-Substitution — The Hunt, Trained · Unit 6 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23101420%27%2F%3E%3Cg%20fill%3D%27%235f7ff2%27%3E%3Crect%20x%3D%276%27%20y%3D%2718%27%20width%3D%274.6%27%20height%3D%278%27%20rx%3D%271%27%20opacity%3D%27.55%27%2F%3E%3Crect%20x%3D%2712%27%20y%3D%2714%27%20width%3D%274.6%27%20height%3D%2712%27%20rx%3D%271%27%20opacity%3D%27.75%27%2F%3E%3Crect%20x%3D%2718%27%20y%3D%2710%27%20width%3D%274.6%27%20height%3D%2716%27%20rx%3D%271%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M5%2017%20C%2012%2010%2C%2020%206%2C%2027%207%27%20stroke%3D%27%238fa6f7%27%20stroke-width%3D%272%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  /* page accent: unit-6 royal blue. base palette/fonts/chrome come from styles.css */
+  :root{ --approx:#5f7ff2; --gold:#5f7ff2; --true:#3fd0b0;
+         --glow:rgba(95,127,242,.08); --wrap-max:1060px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block;border-radius:10px}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:8px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button:disabled:hover{border-color:var(--line);transform:none}
+  .sb-name{font-weight:600;font-size:13.5px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .callout{margin-top:12px;font-size:13.5px;min-height:20px;color:var(--ink);
+    border-left:3px solid var(--gold);padding-left:12px;opacity:0;transition:opacity .3s}
+  .callout.show{opacity:1}
+  .predict{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;padding:12px 14px;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:10px;transition:opacity .25s}
+  .predict.locked{opacity:.55;pointer-events:none}
+  .predict-q{font-size:13.5px;font-weight:600}
+  .predict-btns{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+  .pbtn{font-size:13px;padding:7px 14px;border-radius:8px}
+  .pbtn.picked{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .whypanel .why-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+  .why-step{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .why-step:last-child{border-bottom:none}
+  .why-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .why-t{font-size:13px;line-height:1.5}
+  .why-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;overflow-x:auto}
+  .verdict-badge{display:inline-block;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px}
+  .vb-under{background:rgba(224,100,79,.16);color:var(--div)}
+  .vb-over{background:rgba(63,208,176,.16);color:var(--conv)}
+  .vb-dead{background:var(--panel-2);color:var(--muted)}
+  .legend{display:flex;gap:16px;font-size:12px;color:var(--muted);margin-top:12px;flex-wrap:wrap}
+  .legend b{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+  .stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .stat:last-child{border-bottom:none}
+  .stat .k{color:var(--muted)}
+  .stat .v{font-family:var(--mono);color:var(--ink)}
+  .cmp{margin-top:10px}
+  .cmp-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;
+    margin-top:6px;font-size:13px;cursor:pointer;transition:border-color .15s,background .15s}
+  .cmp-row:hover{border-color:var(--gold)}
+  .cmp-row.on{border-color:var(--approx);background:rgba(95,127,242,.08)}
+  .cmp-row .nm{font-weight:600;flex:0 0 86px}
+  .cmp-row .vv{font-family:var(--mono);color:var(--ink);flex:1}
+  .cmp-row .ee{font-family:var(--mono);font-size:12px;flex:0 0 auto}
+  .ee.neg{color:var(--div)} .ee.pos{color:var(--conv)} .ee.zero{color:var(--muted)}
+  /* range sliders */
+  input[type=range]{accent-color:var(--approx);width:160px}
+  .nval{font-family:var(--mono);font-size:13px;color:var(--ink);min-width:54px;display:inline-block}
+  /* data table */
+  table.dt{border-collapse:collapse;margin-top:8px;font-size:13.5px;width:100%}
+  .dt th,.dt td{border:1px solid var(--line);padding:8px 12px;text-align:center;font-family:var(--mono)}
+  .dt th{background:var(--panel-2);color:var(--muted);font-weight:500;font-size:12px;letter-spacing:.04em}
+  .dt td{color:var(--ink)}
+  .sumline{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;overflow-x:auto;min-height:46px;font-size:14px}
+  .units{color:var(--approx);font-weight:600}
+  /* sigma -> integral anatomy */
+  .anatomy{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:780px}
+  .anatomy .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .maprow{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .maprow:last-child{border-bottom:none}
+  .maprow .ph{color:var(--ink);flex:1 1 auto;line-height:1.45}
+  .maprow .sy{font-family:var(--mono);color:var(--muted);flex:none}
+  .concepts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.concepts{grid-template-columns:1fr}}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s,box-shadow .2s}
+  .concept:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(43,41,37,.45)}
+  .concept h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .concept p{font-size:13.5px;margin:6px 0;color:var(--ink)}
+  .concept .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;text-align:center;overflow-x:auto}
+  .key{color:var(--approx);font-weight:600}
+  .ou-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+  .ou-table th,.ou-table td{border:1px solid var(--line);padding:6px 8px;text-align:center}
+  .ou-table th{background:var(--panel-2);color:var(--muted);font-weight:500}
+  .whatsnext{max-width:700px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  button:focus-visible, a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  /* practice */
+  .prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .prob-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--approx);font-weight:600}
+  .prob-q{font-size:14.5px;line-height:1.65;margin:6px 0 12px}
+  .soltoggle{font-size:13px;padding:7px 14px}
+  .sol{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .sol.show{display:block}
+  /* mistakes + tips */
+  .mistakes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){.mistakes{grid-template-columns:1fr}}
+  .mistake{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--div);border-radius:10px;padding:13px 16px}
+  .mistake h4{margin:0 0 4px;font-size:14px;font-family:var(--display)}
+  .mistake p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+  .tipbox{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:780px}
+  .tipbox h4{margin:0 0 8px;font-size:14px;font-family:var(--display);color:var(--approx)}
+  .tipbox ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+  .tipbox li{margin:5px 0}
+  /* quiz */
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .qtag{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button{font-size:14px;padding:11px 14px}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px;line-height:1.5}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+
+  /* flip cards */
+  .deck{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px}
+  @media(max-width:760px){.deck{grid-template-columns:repeat(2,1fr)}}
+  .fcard{perspective:800px;cursor:pointer;height:104px}
+  .fcard-inner{position:relative;width:100%;height:100%;transition:transform .45s cubic-bezier(.3,.7,.3,1);transform-style:preserve-3d}
+  .fcard.flipped .fcard-inner{transform:rotateY(180deg)}
+  .fface{position:absolute;inset:0;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--line);border-radius:12px;background:var(--panel);padding:8px;overflow:hidden}
+  .fface.back{transform:rotateY(180deg);border-color:var(--approx);background:rgba(95,127,242,.07)}
+  .fcard:hover .fface{border-color:var(--gold)}
+  .fface .katex{font-size:1.02em}
+  /* token trainer */
+  .tokrow{display:flex;gap:4px;align-items:center;flex-wrap:wrap;font-size:21px;padding:14px 6px;justify-content:center}
+  .tok{padding:5px 8px;border:1.5px dashed transparent;border-radius:9px;transition:border-color .15s,background .15s}
+  .tok.clk{cursor:pointer}
+  .tok.clk:hover{border-color:var(--gold);background:rgba(95,127,242,.08)}
+  .tok.good{border-color:var(--conv);background:rgba(63,208,176,.13);border-style:solid}
+  .tok.bad{border-color:var(--div);background:rgba(224,100,79,.12);border-style:solid}
+  .tok .katex{font-size:1em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit6.html">← Unit 6 Guide</a>
+  <header class="reveal">
+    <h1>Antiderivatives &amp; <span class="em">u-Substitution</span></h1>
+    <div class="sub">The Fundamental Theorem made a promise: find an antiderivative and any definite integral
+      falls. This page is the hunt — and the secret is that you already know every rule on it. They're your
+      derivative rules, read right to left.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    Antidifferentiation is <b>pattern recognition</b>, not new machinery. The basic rules are a deck to
+    memorize cold; u-substitution is the <b>chain rule run backward</b>; and the "hard" integrals of 6.10 are
+    easy ones wearing a disguise that algebra removes. One habit makes you bulletproof:
+    <b>check any answer by differentiating it</b> — verification never requires integrating.
+  </div>
+
+  <h2 class="reveal">The reversible machine — the deck</h2>
+  <p class="lead reveal">Every derivative fact you know is an antiderivative fact read backward. Click any
+    card to flip it; hit <b>drill me</b> to flip everything down and shuffle — then quiz yourself before
+    peeking. These twelve are the entire vocabulary; everything else in the unit reduces to them.</p>
+  <div class="deck reveal" id="deck"></div>
+  <div class="controls reveal" style="margin-top:12px">
+    <button id="shufBtn">flip all &amp; shuffle</button>
+    <button class="play" id="drillBtn">drill me</button>
+    <span class="readout" id="deckRead"></span>
+  </div>
+  <div class="card reveal" id="drillBox" style="display:none;margin-top:14px">
+    <div class="row" style="margin-bottom:10px">
+      <div class="qtag">Name the antiderivative</div>
+      <span class="score" id="drillStreak">streak: 0 · best: 0</span>
+    </div>
+    <div class="m-big" id="drillFront" style="text-align:center;padding:4px 0 12px"></div>
+    <div class="quiz-opts" id="drillOpts"></div>
+    <div class="feedback" id="drillFb" style="min-height:22px"></div>
+    <button class="next" id="drillNext" style="margin-top:12px;width:100%;display:none">Deal the next card →</button>
+  </div>
+
+  <h2 class="reveal">What the +C really is</h2>
+  <p class="lead reveal">Every card ends in +C — here's the picture behind it. The integrand defines a
+    <b>slope field</b> (Unit 7's language: dy/dx = f(x)), and an antiderivative is any curve that threads it.
+    Slide C: the curve glides vertically, and it <b>never stops fitting</b>, because shifting a graph up or
+    down changes nothing about its slopes. The antiderivative isn't one function — it's this whole family,
+    and an initial condition is what pins down one member.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="cPlot" viewBox="0 0 560 320" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <span style="font-size:12.5px;color:var(--muted)">C =</span>
+          <input type="range" id="cSlide" min="-1.8" max="1.8" step="0.02" value="0.4" aria-label="constant of integration C">
+          <span class="nval" id="cVal">0.40</span>
+          <div style="flex:1"></div>
+          <span class="readout">slope at the dot: <span id="cSlope" style="color:var(--ink)">—</span></span>
+        </div>
+        <div class="callout show" id="cCall"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Here: f(x) = cos x</div>
+        <div class="stat"><span class="k">the family</span><span class="v">sin x + C</span></div>
+        <div class="stat"><span class="k">slope of every member</span><span class="v">cos x — identical</span></div>
+        <div class="stat"><span class="k">what picks one curve</span><span class="v">an initial condition</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          The teal tangent tick rides the dot as you slide C — and it never tilts. Same x, same slope, any C.
+          That's why the indefinite integral must carry the +C: the derivative genuinely cannot tell the
+          family members apart.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">u-Substitution — the chain rule, rewound</h2>
+  <p class="lead reveal">Before any recipe, the idea. Every chain-rule derivative leaves a fingerprint: when
+    you differentiate a composition, the inside function's derivative gets <b>emitted as a factor</b>.
+    u-substitution is nothing but noticing that fingerprint in an integrand and running the tape backward.</p>
+
+  <div class="anatomy reveal">
+    <div class="m-big" id="crFwd"></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Forward (the chain rule):</b> differentiating the composition emits a copy of the inside's derivative. Concretely:</span><span class="sy" id="crDemo"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Backward (u-sub):</b> so if an integrand contains a composition <i>and</i> that emitted factor, it MUST have come from differentiating F(inside) — and the integral is forced:</span><span class="sy" id="crBack"></span></div>
+    <div class="maprow"><span class="ph">Naming the inside function "u" and its differential "du = u′ dx" is just bookkeeping for that reversal — everything in x converts, and a deck card finishes the job</span><span class="sy" id="crDict"></span></div>
+  </div>
+  <p class="lead reveal" style="margin-top:14px">That's the whole theory: <b>u is the inside function, du is its
+    fingerprint</b>. If the fingerprint is missing a constant, you may adjust (constants commute with ∫); if
+    it's missing an <i>x</i>, the substitution is dead. Now the recipe.</p>
+
+  <h2 class="reveal" style="font-size:17px;margin-top:26px">The full recipe, stepped</h2>
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="sumline" id="usSum"></div>
+        <div class="controls">
+          <button class="play" id="usStep">step →</button>
+          <button id="usReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="usRead">press step</span>
+        </div>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, shown</div>
+        <div id="usSteps"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick an integral</div>
+        <div class="series-btns" id="usBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">The third one is
+          definite — watch what happens to the bounds. They live in x-world; once you switch to u, they must
+          switch too.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal" style="font-size:17px;margin-top:26px">Now train the eye — pick the u</h2>
+  <p class="lead reveal" style="margin-top:6px">You know the recipe; the exam-day skill is choosing u
+    <i>fast</i>. Four integrals, four candidates each — pick the inside function whose fingerprint is
+    standing in the integrand.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="m-big" id="puIntegral" style="text-align:center;padding:6px 0 12px"></div>
+        <div class="qtext" style="font-size:14px;margin-bottom:10px">Which u collapses it?</div>
+        <div class="quiz-opts" id="puOpts"></div>
+        <div class="feedback" id="puFb"></div>
+        <button class="next" id="puNext" style="margin-top:12px;width:100%;display:none">Next integral →</button>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">What makes a good u</div>
+        <div class="stat"><span class="k">it's INSIDE something</span><span class="v">f( u )</span></div>
+        <div class="stat"><span class="k">its derivative is a FACTOR</span><span class="v">du = u′ dx</span></div>
+        <div class="stat"><span class="k">off by a constant?</span><span class="v">fine — adjust</span></div>
+        <div class="stat"><span class="k">off by a variable?</span><span class="v">dead — new u</span></div>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The collapse</div>
+        <div id="puWork"><div class="why-t" style="padding:8px 0;color:var(--muted)">Pick a u to see where it leads.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Removing the disguise</h2>
+  <p class="lead reveal">Topic 6.10 isn't new integrals — it's old integrals in costume, and the costume is
+    always a <b>fraction</b>. The trouble: integrals split over <i>sums</i>, never over quotients — you cannot
+    integrate a fraction "top over bottom" piece by piece. So the whole game is algebra that converts the
+    fraction into things the deck already handles. There are exactly two costumes, each with a tell.</p>
+
+  <div class="anatomy reveal">
+    <div class="m-big" id="dtMain"></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Tell #1 — top-heavy</b> (degree of numerator ≥ degree of denominator). An improper fraction hides a polynomial inside it, exactly like 17/5 hides "3 and a bit": 17/5 = 3 + 2/5. Long division extracts it — the polynomial part integrates by the power rule, and only a small proper remainder is left.</span><span class="sy" id="dt1"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Check before anything else</b> — is the numerator (a constant multiple of) the denominator's derivative? Then this isn't 6.10 at all: it's the ln pattern from u-substitution, finished in one line.</span><span class="sy" id="dt2"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Tell #2 — a quadratic that won't factor</b> (discriminant b² − 4ac &lt; 0) under a plain numerator. Every quadratic is secretly a shifted square: x² + bx + c = (x + b/2)² + (the leftover). Completing the square exposes the shift, and the integral becomes the arctan card with u = the shifted x.</span><span class="sy" id="dt3"></span></div>
+    <div class="maprow"><span class="ph">Either way, the algebra is the whole battle — the calculus at the end is one card from the deck</span><span class="sy" id="dt4"></span></div>
+  </div>
+
+  <div class="grid reveal" style="margin-top:16px">
+    <div class="left">
+      <div class="card">
+        <svg id="csPlot" viewBox="0 0 560 250" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Completing the square = reading the vertex</div>
+        <div class="stat"><span class="k">the quadratic</span><span class="v">x² + 4x + 13</span></div>
+        <div class="stat"><span class="k">its vertex</span><span class="v">(−2, 9)</span></div>
+        <div class="stat"><span class="k">so it IS</span><span class="v">(x+2)² + 9</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          Every quadratic is the basic parabola, slid sideways and up. "Completing the square" isn't a ritual —
+          it's locating that slide: left 2, up 9. The "+9" is the vertex height, and it becomes the a² = 9 in
+          the arctan card. A quadratic that won't factor is one whose vertex sits above the axis — it never
+          touches zero, which is exactly why arctan (and not ln of factors) is its destiny.</p>
+      </div>
+    </div>
+  </div>
+
+  <p class="lead reveal" style="margin-top:14px">Now watch both costumes come off, step by step.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="sumline" id="dgSum"></div>
+        <div class="controls">
+          <button class="play" id="dgStep">step →</button>
+          <button id="dgReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="dgRead">press step</span>
+        </div>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, shown</div>
+        <div id="dgSteps"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick a disguise</div>
+        <div class="series-btns" id="dgBtns"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The toolkit on one card</h2>
+  <div class="anatomy reveal">
+    <div class="m-big" id="anatMain"></div>
+    <div class="maprow"><span class="ph">The u-sub template — u inside, du standing by, everything converts</span><span class="sy" id="anatU"></span></div>
+    <div class="maprow"><span class="ph">Definite integrals: the bounds convert too — and then you never go back to x</span><span class="sy" id="anatB"></span></div>
+    <div class="maprow"><span class="ph">Only constants slide through the integral sign — never an x</span><span class="sy" id="anatC"></span></div>
+  </div>
+
+  <h2 class="reveal">The ideas everything else builds on</h2>
+  <div class="concepts reveal">
+    <div class="concept">
+      <h3>+C is not decoration</h3>
+      <p>Antiderivatives come in <span class="key">families</span> — vertical shifts of one curve. Indefinite
+        integral, write +C. Definite integral, it cancels and disappears.</p>
+      <div class="m" id="c1"></div>
+    </div>
+    <div class="concept">
+      <h3>Verify by differentiating</h3>
+      <p>Integration is hard; differentiation is mechanical. Every answer you ever write can be checked in
+        ten seconds — <span class="key">run it forward</span>.</p>
+      <div class="m" id="c2"></div>
+    </div>
+    <div class="concept">
+      <h3>Choosing u</h3>
+      <p>u is the <span class="key">inside function</span>: under the power, inside the trig, up in the
+        exponent, inside the log — whose derivative (up to a constant) is a factor in the integrand.</p>
+      <div class="m" id="c3"></div>
+    </div>
+    <div class="concept">
+      <h3>New world, new bounds</h3>
+      <p>In a definite u-sub, convert the bounds with u(x) and <span class="key">finish entirely in
+        u</span> — or back-substitute and keep the x bounds. Never both.</p>
+      <div class="m" id="c4"></div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Your turn</h2>
+  <p class="lead reveal">Five hunts. Try each before you reveal the worked answer.</p>
+  <div class="reveal" id="practice"></div>
+
+  <h2 class="reveal">Quick quiz</h2>
+  <p class="lead reveal">Eight fast checks across the whole lesson.</p>
+  <div class="card reveal" id="quizCard">
+    <div class="row" style="margin-bottom:12px">
+      <div class="qtag" id="qProgress">Question 1 of 8</div>
+      <span class="score" id="qScore">Score: 0 / 0</span>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="next" id="qNext" style="margin-top:14px;width:100%;display:none">Next question →</button>
+  </div>
+
+  <h2 class="reveal">Common mistakes &amp; exam tips</h2>
+  <div class="mistakes reveal">
+    <div class="mistake"><h4>Dropping the +C</h4><p>On an indefinite integral it's a stated point on the rubric. Write it every time — and only collapse it after a definite integral's subtraction.</p></div>
+    <div class="mistake"><h4>ln x instead of ln|x|</h4><p>∫ dx/x = ln|x| + C. The absolute value isn't pedantry — without it the antiderivative doesn't exist for negative x, and the MC options will include both to catch you.</p></div>
+    <div class="mistake"><h4>Sliding an x through the integral</h4><p>∫ e^(x²) dx is NOT (1/2x)∫ 2x·e^(x²) dx. Only constants pass through the integral sign. If the missing factor has an x in it, u-sub is dead — pick a different u (or a different technique).</p></div>
+    <div class="mistake"><h4>Forgetting du exists</h4><p>∫ cos(5x) dx is sin(5x)/5, not sin(5x). Differentiate your answer: the chain rule coughs up a 5 that must be pre-cancelled. The constant adjustment IS the du bookkeeping.</p></div>
+    <div class="mistake"><h4>Mixing worlds on a definite integral</h4><p>Convert the bounds AND back-substitute, and you've transformed twice. Pick a lane: new bounds and finish in u, or old bounds after returning to x.</p></div>
+    <div class="mistake"><h4>Losing the 1/a in arctan</h4><p>∫ du/(u²+a²) = (1/a)·arctan(u/a) + C. After completing the square, that leading 1/a is the most-dropped factor in the unit.</p></div>
+  </div>
+  <div class="tipbox reveal">
+    <h4>On the AP exam</h4>
+    <ul>
+      <li>Show the substitution explicitly on FRQs: write &ldquo;let u = x² + 3, du = 2x dx&rdquo; before rewriting. The setup line earns the point.</li>
+      <li>Multiple choice answers differing only by a constant factor are a u-sub bookkeeping check — differentiate the candidates and see which chain-rule constant matches.</li>
+      <li>Top-heavy rational integrand (degree of top ≥ degree of bottom)? Long-divide first, reflexively.</li>
+      <li>Quadratic in a denominator that won't factor? Complete the square and expect arctan.</li>
+    </ul>
+  </div>
+
+  <div class="whatsnext reveal">
+    u-substitution undoes the chain rule — but products were never the chain rule's department. Next, the
+    BC-only heavy machinery: <a href="parts-partial-fractions.html">Integration by Parts &amp; Partial
+    Fractions</a>, where the product rule and rational functions get their reversals — including the tabular
+    shortcut. Or head back to the <a href="unit6.html">Unit 6 Guide</a>.
+  </div>
+
+  <footer class="reveal">Antiderivatives &amp; u-Substitution · part of the Unit 6 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const VC={rate:"#5f7ff2", glow:"#8fa6f7", pos:"rgba(95,127,242,.30)", neg:"rgba(224,100,79,.34)", truec:"#3fd0b0"};
+const T=(s)=>tex(s,s,false);
+const fmt=(v,d=2)=>{const s=v.toFixed(d); return s==="-0.00"?"0.00":s;};
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+function mapper(dom,yr,W,H,P){ const x0=dom[0],x1=dom[1],y0=yr[0],y1=yr[1];
+  return { sx:x=>P+((x-x0)/(x1-x0))*(W-2*P), sy:v=>H-P-((v-y0)/(y1-y0))*(H-2*P), x0,x1,y0,y1 }; }
+function drawAxes(svg,M,W,H,P,xt,yt){ const sx=M.sx, sy=M.sy;
+  for(let g=0;g<=yt;g++){ const yy=M.y0+(g/yt)*(M.y1-M.y0), py=sy(yy);
+    svg.appendChild(el("line",{x1:P,y1:py,x2:W-P,y2:py,stroke:"#222838"}));
+    svg.appendChild(el("text",{x:P-6,y:py+3,fill:"#5d6276","font-size":9.5,"text-anchor":"end","font-family":"var(--mono)"},(+yy.toFixed(2)).toString())); }
+  for(let g=0;g<=xt;g++){ const xx=M.x0+(g/xt)*(M.x1-M.x0), px=sx(xx);
+    svg.appendChild(el("text",{x:px,y:H-P+14,fill:"#5d6276","font-size":9.5,"text-anchor":"middle","font-family":"var(--mono)"},(+xx.toFixed(1)).toString())); }
+  svg.appendChild(el("line",{x1:P,y1:sy(Math.max(0,M.y0)),x2:W-P,y2:sy(Math.max(0,M.y0)),stroke:"#39415c","stroke-width":1.2}));
+  svg.appendChild(el("line",{x1:P,y1:sy(M.y1),x2:P,y2:sy(M.y0),stroke:"#39415c","stroke-width":1.2}));
+}
+function curveStr(f,a,b,M,N=140){ let d="";
+  for(let k=0;k<=N;k++){ const x=a+(b-a)*k/N; d+=(k?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(f(x)).toFixed(1)+" "; }
+  return d; }
+
+/* ======================= 1 · THE DECK ======================= */
+const DECK=[
+ {f:"\\int x^n\\,dx", b:"\\frac{x^{n+1}}{n+1}+C\\quad (n\\ne -1)"},
+ {f:"\\int \\frac{1}{x}\\,dx", b:"\\ln|x|+C"},
+ {f:"\\int e^x\\,dx", b:"e^x+C"},
+ {f:"\\int \\cos x\\,dx", b:"\\sin x+C"},
+ {f:"\\int \\sin x\\,dx", b:"-\\cos x+C"},
+ {f:"\\int \\sec^2 x\\,dx", b:"\\tan x+C"},
+ {f:"\\int \\frac{1}{1+x^2}\\,dx", b:"\\arctan x+C"},
+ {f:"\\int \\frac{1}{\\sqrt{1-x^2}}\\,dx", b:"\\arcsin x+C"},
+ {f:"\\int a^x\\,dx", b:"\\frac{a^x}{\\ln a}+C"},
+ {f:"\\int \\csc^2 x\\,dx", b:"-\\cot x+C"},
+ {f:"\\int \\sec x\\tan x\\,dx", b:"\\sec x+C"},
+ {f:"\\int \\csc x\\cot x\\,dx", b:"-\\csc x+C"}
+];
+let deckOrder=DECK.map((_,i)=>i);
+function renderDeck(){
+  const deck=document.getElementById("deck"); deck.innerHTML="";
+  deckOrder.forEach(i=>{
+    const c=DECK[i];
+    const card=document.createElement("div"); card.className="fcard";
+    card.innerHTML='<div class="fcard-inner"><div class="fface">'+T(c.f)+'</div><div class="fface back">'+T(c.b)+'</div></div>';
+    card.onclick=()=>{ card.classList.toggle("flipped"); updateDeckRead(); };
+    deck.appendChild(card);
+  });
+  updateDeckRead();
+}
+function updateDeckRead(){
+  const n=document.querySelectorAll(".fcard.flipped").length;
+  document.getElementById("deckRead").textContent=n===0?"all face-down — name each answer before flipping":n+" of 12 revealed";
+}
+document.getElementById("shufBtn").onclick=()=>{
+  for(let i=deckOrder.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [deckOrder[i],deckOrder[j]]=[deckOrder[j],deckOrder[i]]; }
+  renderDeck();
+};
+
+/* ======================= 1b · DECK DRILL ======================= */
+let drillOn=false, drillIdx=-1, drillStreak=0, drillBest=0, drillLock=false;
+function dealDrill(){
+  drillLock=false;
+  let i; do{ i=Math.floor(Math.random()*DECK.length); }while(i===drillIdx);
+  drillIdx=i;
+  document.getElementById("drillFront").innerHTML=tex(DECK[i].f,DECK[i].f,true);
+  document.getElementById("drillFb").innerHTML="";
+  document.getElementById("drillNext").style.display="none";
+  const others=shuf(DECK.map((_,k)=>k).filter(k=>k!==i)).slice(0,3);
+  const opts=shuf([{b:DECK[i].b,ok:true}].concat(others.map(k=>({b:DECK[k].b,ok:false}))));
+  const box=document.getElementById("drillOpts"); box.innerHTML="";
+  opts.forEach(o=>{
+    const btn=document.createElement("button"); btn.style.textAlign="center"; btn.innerHTML=T(o.b);
+    btn.onclick=()=>{ if(drillLock)return; drillLock=true;
+      [...box.children].forEach((bb,k)=>{ bb.disabled=true; if(opts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ drillStreak++; drillBest=Math.max(drillBest,drillStreak);
+        document.getElementById("drillFb").innerHTML='<span style="color:var(--conv);font-weight:600">✓</span> <span style="color:var(--muted)">'+(drillStreak>=DECK.length?"A full deck without a miss — that's exam-ready.":"Keep the streak alive.")+'</span>'; }
+      else { drillStreak=0; btn.classList.add("wrong");
+        document.getElementById("drillFb").innerHTML='<span style="color:var(--div);font-weight:600">✗ Streak reset.</span> <span style="color:var(--muted)">Flip that card a few more times above.</span>'; }
+      document.getElementById("drillStreak").textContent="streak: "+drillStreak+" · best: "+drillBest;
+      document.getElementById("drillNext").style.display="block"; };
+    box.appendChild(btn);
+  });
+}
+document.getElementById("drillBtn").onclick=()=>{
+  drillOn=!drillOn;
+  document.getElementById("drillBox").style.display=drillOn?"block":"none";
+  document.getElementById("drillBtn").textContent=drillOn?"close the drill":"drill me";
+  if(drillOn) dealDrill();
+};
+document.getElementById("drillNext").onclick=dealDrill;
+
+/* ======================= 1c · WHAT +C REALLY IS ======================= */
+let cC=0.4;
+const cPlot=document.getElementById("cPlot");
+const cM=mapper([0,6.6],[-3.1,3.1],560,320,40);
+const cDOTX=2.0;
+function renderC(){
+  cPlot.innerHTML="";
+  drawAxes(cPlot,cM,560,320,40,4,3);
+  /* slope field of dy/dx = cos x — identical down every column */
+  const cols=15, rows=9, L=10;
+  for(let i=1;i<=cols;i++){
+    const mx=cM.x0+(cM.x1-cM.x0)*i/(cols+1), m=Math.cos(mx);
+    for(let j=1;j<=rows;j++){
+      const my=cM.y0+(cM.y1-cM.y0)*j/(rows+1);
+      const px=cM.sx(mx), py=cM.sy(my);
+      const Wper=(560-80)/(cM.x1-cM.x0), Hper=(320-80)/(cM.y1-cM.y0);
+      let vx=Wper, vy=-Hper*m; const len=Math.hypot(vx,vy)||1; vx=vx/len*L; vy=vy/len*L;
+      cPlot.appendChild(el("line",{x1:(px-vx).toFixed(1),y1:(py-vy).toFixed(1),x2:(px+vx).toFixed(1),y2:(py+vy).toFixed(1),
+        stroke:"#5f7ff2","stroke-width":1.3,opacity:.3,"stroke-linecap":"round"}));
+    }
+  }
+  /* ghost siblings of the family */
+  [-1.4,1.4].forEach(cg=>{
+    cPlot.appendChild(el("path",{d:curveStr(x=>Math.sin(x)+cg,0,6.6,cM),fill:"none",stroke:"#5f7ff2","stroke-width":1.3,opacity:.22,"stroke-dasharray":"5 5"}));
+  });
+  /* the chosen member */
+  const g=x=>Math.sin(x)+cC;
+  cPlot.appendChild(el("path",{d:curveStr(g,0,6.6,cM),fill:"none",stroke:"#8fa6f7","stroke-width":5.5,opacity:.2,"stroke-linecap":"round"}));
+  cPlot.appendChild(el("path",{d:curveStr(g,0,6.6,cM),fill:"none",stroke:"#5f7ff2","stroke-width":2.6,"stroke-linecap":"round"}));
+  /* dot + tangent tick at fixed x — slope never changes with C */
+  const m=Math.cos(cDOTX), dx=0.42;
+  cPlot.appendChild(el("line",{x1:cM.sx(cDOTX-dx).toFixed(1),y1:cM.sy(g(cDOTX)-dx*m).toFixed(1),
+    x2:cM.sx(cDOTX+dx).toFixed(1),y2:cM.sy(g(cDOTX)+dx*m).toFixed(1),
+    stroke:"#3fd0b0","stroke-width":2.4,"stroke-linecap":"round"}));
+  cPlot.appendChild(el("circle",{cx:cM.sx(cDOTX).toFixed(1),cy:cM.sy(g(cDOTX)).toFixed(1),r:4.8,fill:"#8fa6f7"}));
+  document.getElementById("cVal").textContent=fmt(cC);
+  document.getElementById("cSlope").textContent="cos(2) = "+fmt(Math.cos(2),3)+" — for every C";
+  document.getElementById("cCall").textContent="y = sin x "+(cC>=0?"+ ":"− ")+fmt(Math.abs(cC))+" — sliding through the field without ever breaking a tangency. The dashed ghosts are two more family members; there are infinitely many, one per real number C.";
+}
+document.getElementById("cSlide").addEventListener("input",e=>{ cC=+e.target.value; renderC(); });
+
+/* ======================= 3c · COMPLETING THE SQUARE, SEEN ======================= */
+const csPlot=document.getElementById("csPlot");
+function renderCS(){
+  const f=x=>x*x+4*x+13;
+  const M=mapper([-7.5,3.5],[0,32],560,250,40);
+  csPlot.innerHTML="";
+  drawAxes(csPlot,M,560,250,40,5,4);
+  csPlot.appendChild(el("path",{d:curveStr(f,-7.5,3.5,M),fill:"none",stroke:"#5f7ff2","stroke-width":2.6,"stroke-linecap":"round"}));
+  /* vertex guides */
+  csPlot.appendChild(el("line",{x1:M.sx(-2),y1:M.sy(0),x2:M.sx(-2),y2:M.sy(9),stroke:"#7e859c","stroke-width":1.2,"stroke-dasharray":"4 4",opacity:.85}));
+  csPlot.appendChild(el("line",{x1:M.sx(-7.5),y1:M.sy(9),x2:M.sx(-2),y2:M.sy(9),stroke:"#7e859c","stroke-width":1.2,"stroke-dasharray":"4 4",opacity:.85}));
+  csPlot.appendChild(el("circle",{cx:M.sx(-2),cy:M.sy(9),r:5,fill:"#3fd0b0"}));
+  csPlot.appendChild(el("text",{x:M.sx(-2)+10,y:M.sy(9)-10,fill:"#3fd0b0","font-size":12,"font-family":"var(--mono)"},"vertex (−2, 9)"));
+  csPlot.appendChild(el("text",{x:M.sx(-2)+10,y:M.sy(9)+16,fill:"#8d93a8","font-size":11,"font-family":"var(--mono)"},"never reaches 0 → no factors → arctan"));
+  csPlot.appendChild(el("text",{x:M.sx(1.4),y:M.sy(28),fill:"#8d93a8","font-size":12,"text-anchor":"middle","font-family":"var(--mono)"},"y = x²+4x+13 = (x+2)²+9"));
+}
+
+/* ======================= 2 · THE CHAIN RULE, REWOUND ======================= */
+function renderCR(){
+  const fwd="\\underbrace{\\frac{d}{dx}\\,F\\bigl(g(x)\\bigr)}_{\\text{composition}}\\;=\\;\\underbrace{F'\\bigl(g(x)\\bigr)}_{\\text{outer, kept}}\\cdot\\underbrace{g'(x)}_{\\text{emitted!}}";
+  const n1=document.getElementById("crFwd"); if(n1) n1.innerHTML=tex(fwd,fwd,true);
+  const n2=document.getElementById("crDemo"); if(n2) n2.innerHTML=T("\\tfrac{d}{dx}\\tfrac{(x^2+3)^5}{5}=(x^2+3)^4\\cdot 2x");
+  const n3=document.getElementById("crBack"); if(n3) n3.innerHTML=T("\\int (x^2+3)^4\\cdot 2x\\,dx=\\tfrac{(x^2+3)^5}{5}+C");
+  const n4=document.getElementById("crDict"); if(n4) n4.innerHTML=T("u=g(x),\\quad du=g'(x)\\,dx,\\quad \\int f(u)\\,du");
+}
+
+/* ======================= 3 · PICK THE u ======================= */
+const PU=[
+ { integral:"\\int 2x\\,e^{x^2}\\,dx",
+   opts:[
+    {u:"u=x^2", ok:true, why:"x² is INSIDE the exponential, and its fingerprint du = 2x dx is standing right there.",
+     work:[{t:"Convert — the 2x dx is exactly du:",m:"\\int e^u\\,du=e^u+C"},{t:"Return to x:",m:"=e^{x^2}+C"}]},
+    {u:"u=2x", ok:false, why:"2x is the FINGERPRINT (the du-partner), not the inside function. u must be what's inside the exponential."},
+    {u:"u=e^{x^2}", ok:false, why:"That's the entire composition — the wrapper AND the inside together. u is only what's inside: du for this choice would be 2x·e^{x²}dx, which isn't a factor here."},
+    {u:"u=e^x", ok:false, why:"eˣ doesn't even appear in this integrand — the exponent is x², not x."}
+ ]},
+ { integral:"\\int x^3\\sqrt{x^4+1}\\,dx",
+   opts:[
+    {u:"u=x^4+1", ok:true, why:"The whole expression under the radical. du = 4x³dx, and x³ is there — off by the constant 4, which is fine.",
+     work:[{t:"Convert with x³dx = du/4:",m:"\\tfrac14\\int\\sqrt{u}\\,du=\\tfrac14\\cdot\\tfrac{2}{3}u^{3/2}+C"},{t:"Return to x:",m:"=\\tfrac{(x^4+1)^{3/2}}{6}+C"}]},
+    {u:"u=x^4", ok:false, why:"It works — but leaves √(u+1) behind, so you've traded one radical-of-a-sum for another. Take the WHOLE inside, x⁴+1, and the radical becomes a clean √u. Always grab everything under the wrapper."},
+    {u:"u=\\sqrt{x^4+1}", ok:false, why:"That's the wrapper with its contents — and its derivative, 2x³/√(x⁴+1), is not a factor of the integrand. u is what's UNDER the radical."},
+    {u:"u=x^3", ok:false, why:"x³ is the fingerprint. Its own derivative 3x² appears nowhere — choosing the du-partner as u always fails this test."}
+ ]},
+ { integral:"\\int \\frac{(\\ln x)^3}{x}\\,dx",
+   opts:[
+    {u:"u=\\ln x", ok:true, why:"ln x is inside the cube, and its fingerprint du = dx/x is the other factor — a perfect pair.",
+     work:[{t:"Convert — the dx/x is exactly du:",m:"\\int u^3\\,du=\\tfrac{u^4}{4}+C"},{t:"Return to x:",m:"=\\tfrac{(\\ln x)^4}{4}+C"}]},
+    {u:"u=(\\ln x)^3", ok:false, why:"du would be 3(ln x)²/x dx. The integrand only supplies (ln x)³/x — a stray ln x survives the conversion. Dead. The inside of the POWER is ln x itself."},
+    {u:"u=\\tfrac{1}{x}", ok:false, why:"1/x is the fingerprint of ln x, not an inside function here — and its own derivative −1/x² appears nowhere."},
+    {u:"u=x", ok:false, why:"u = x changes nothing — that's not a substitution, that's a rename."}
+ ]},
+ { integral:"\\int \\frac{x}{x^2+9}\\,dx",
+   opts:[
+    {u:"u=x^2+9", ok:true, why:"The whole denominator. du = 2x dx and the numerator x is half of it — constant adjust.",
+     work:[{t:"Convert with x dx = du/2:",m:"\\tfrac12\\int\\frac{du}{u}=\\tfrac12\\ln|u|+C"},{t:"Return to x (no |·| needed — x²+9 is always positive):",m:"=\\tfrac12\\ln(x^2+9)+C"}]},
+    {u:"u=x^2", ok:false, why:"It works — but the +9 tags along into u-world as 1/(u+9). Grab the WHOLE denominator and it's a clean ∫du/u."},
+    {u:"u=\\tfrac{1}{x^2+9}", ok:false, why:"The wrapper-plus-contents again. u is the expression downstairs, not the reciprocal of it."},
+    {u:"u=9", ok:false, why:"A constant can't be u — du would be 0, and the substitution collapses to nothing."}
+ ]}
+];
+let puI=0, puDone=false;
+function renderPU(){
+  puDone=false; const item=PU[puI];
+  document.getElementById("puIntegral").innerHTML=tex(item.integral,item.integral,true);
+  const box=document.getElementById("puOpts"); box.innerHTML="";
+  document.getElementById("puFb").innerHTML="";
+  document.getElementById("puNext").style.display="none";
+  document.getElementById("puWork").innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Pick a u to see where it leads.</div>';
+  const popts=shuf(item.opts);
+  popts.forEach(o=>{
+    const b=document.createElement("button"); b.style.textAlign="center"; b.innerHTML=T(o.u);
+    b.onclick=()=>{ if(puDone)return; puDone=true;
+      [...box.children].forEach((bb,k)=>{ bb.disabled=true; if(popts[k].ok) bb.classList.add("correct"); });
+      if(!o.ok) b.classList.add("wrong");
+      document.getElementById("puFb").innerHTML=(o.ok
+        ?'<span style="color:var(--conv);font-weight:600">✓ That\u2019s the one.</span> '
+        :'<span style="color:var(--div);font-weight:600">✗ Not that one.</span> ')+'<span style="color:var(--muted)">'+o.why+'</span>';
+      const win=item.opts.find(x=>x.ok);
+      document.getElementById("puWork").innerHTML=win.work.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+      document.getElementById("puNext").style.display="block"; };
+    box.appendChild(b);
+  });
+  document.getElementById("puFb").insertAdjacentHTML('beforeend','<span class="readout" style="float:right">round '+(puI+1)+' / '+PU.length+'</span>');
+}
+document.getElementById("puNext").onclick=()=>{ puI=(puI+1)%PU.length; renderPU(); };
+
+/* ======================= 3b · 6.10 DECISION TREE ======================= */
+function renderDT(){
+  const main="\\int\\frac{P(x)}{Q(x)}\\,dx:\\quad \\text{top-heavy}\\Rightarrow\\text{divide}\\qquad P\\approx Q'\\Rightarrow\\ln\\qquad Q\\text{ irreducible}\\Rightarrow\\arctan";
+  const n0=document.getElementById("dtMain"); if(n0) n0.innerHTML=tex(main,main,true);
+  const n1=document.getElementById("dt1"); if(n1) n1.innerHTML=T("\\tfrac{x^2+3x}{x+1}=x+2-\\tfrac{2}{x+1}");
+  const n2=document.getElementById("dt2"); if(n2) n2.innerHTML=T("\\int\\tfrac{u'}{u}\\,dx=\\ln|u|+C");
+  const n3=document.getElementById("dt3"); if(n3) n3.innerHTML=T("x^2+4x+13=(x+2)^2+9");
+  const n4=document.getElementById("dt4"); if(n4) n4.innerHTML=T("\\int\\tfrac{du}{u^2+a^2}=\\tfrac1a\\arctan\\tfrac{u}{a}+C");
+}
+
+/* ======================= 4 · THE FULL RECIPE STEPPER ======================= */
+const US=[
+ { name:"Power inside", sub:"∫ 2x(x²+3)⁴ dx", head:"\\int 2x(x^2+3)^4dx",
+   steps:[
+    {t:"Choose u = the inside of the power; compute du.",m:"u=x^2+3,\\qquad du=2x\\,dx"},
+    {t:"Rewrite — the 2x dx is exactly du, so everything converts.",m:"\\int (x^2+3)^4\\,\\underbrace{2x\\,dx}_{du}=\\int u^4\\,du"},
+    {t:"Integrate in u-world with the power rule.",m:"\\int u^4du=\\tfrac{u^5}{5}+C"},
+    {t:"Back-substitute — the answer must be in x.",m:"=\\tfrac{(x^2+3)^5}{5}+C"},
+    {t:"Safety net — verify by differentiating. The chain rule emits exactly the integrand, so the answer is certain:",m:"\\tfrac{d}{dx}\\tfrac{(x^2+3)^5}{5}=(x^2+3)^4\\cdot 2x\\;\\checkmark"}],
+   fin:"\\int 2x(x^2+3)^4dx=\\tfrac{(x^2+3)^5}{5}+C" },
+ { name:"Constant adjust", sub:"∫ cos(5x) dx", head:"\\int \\cos(5x)\\,dx",
+   steps:[
+    {t:"u = 5x, so du = 5 dx — but there's no 5 in the integrand. Solve for what IS there: dx = du/5.",m:"u=5x,\\qquad dx=\\tfrac{du}{5}"},
+    {t:"Rewrite; the constant ⅕ slides out front (only constants may).",m:"\\int\\cos u\\cdot\\tfrac{du}{5}=\\tfrac{1}{5}\\int\\cos u\\,du"},
+    {t:"Integrate.",m:"\\tfrac{1}{5}\\sin u+C"},
+    {t:"Back-substitute.",m:"=\\tfrac{1}{5}\\sin(5x)+C"},
+    {t:"Verify by differentiating — the chain rule's 5 meets the ⅕ and cancels:",m:"\\tfrac{d}{dx}\\tfrac{\\sin(5x)}{5}=\\tfrac{5\\cos(5x)}{5}=\\cos(5x)\\;\\checkmark"}],
+   fin:"\\int\\cos(5x)dx=\\tfrac{\\sin(5x)}{5}+C" },
+ { name:"Definite — bounds move", sub:"∫₀² x eˣ² dx", head:"\\int_0^2 x\\,e^{x^2}dx",
+   steps:[
+    {t:"u = x², du = 2x dx, so x dx = ½du. Now the crucial move: CONVERT THE BOUNDS with u(x).",m:"x{=}0\\Rightarrow u{=}0,\\qquad x{=}2\\Rightarrow u{=}4"},
+    {t:"Rewrite entirely in u-world — new integrand, new bounds, and we never look back at x.",m:"\\tfrac{1}{2}\\int_0^4 e^u\\,du"},
+    {t:"Integrate and evaluate in u directly — no back-substitution needed for a definite integral.",m:"\\tfrac{1}{2}\\bigl[e^u\\bigr]_0^4=\\tfrac{1}{2}(e^4-1)"},
+    {t:"Done — about 26.799. (Back-substituting AND keeping new bounds would transform twice: the classic blunder.)",m:"\\int_0^2 xe^{x^2}dx=\\tfrac{e^4-1}{2}\\approx 26.80"}],
+   fin:"\\int_0^2 xe^{x^2}dx=\\tfrac{e^4-1}{2}" }
+];
+let usKey=0, usN=0;
+function renderUS(){
+  const e=US[usKey];
+  const panel=document.getElementById("usSteps"), read=document.getElementById("usRead"), sum=document.getElementById("usSum");
+  if(usN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Choose u → convert → integrate → return (or stay, if the bounds moved with you).</div>';
+  else panel.innerHTML=e.steps.slice(0,usN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+  read.textContent=usN===0?"press step":(usN<e.steps.length?"step "+usN+" of "+e.steps.length:"done");
+  const tx=usN>=e.steps.length?e.fin:e.head+"\\;=\\;?";
+  sum.innerHTML=tex(tx,tx,true);
+  document.querySelectorAll("#usBtns button").forEach((b,i)=>b.classList.toggle("on",i===usKey));
+}
+document.getElementById("usStep").onclick=()=>{ if(usN<US[usKey].steps.length){ usN++; renderUS(); } };
+document.getElementById("usReset").onclick=()=>{ usN=0; renderUS(); };
+const usBtns=document.getElementById("usBtns");
+US.forEach((e,i)=>{ const b=document.createElement("button");
+  b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+  b.onclick=()=>{ usKey=i; usN=0; renderUS(); };
+  usBtns.appendChild(b); });
+
+/* ======================= 6 · REMOVING THE DISGUISE ======================= */
+const DG=[
+ { name:"Long division", sub:"∫ (x²+3x)/(x+1) dx", head:"\\int\\frac{x^2+3x}{x+1}\\,dx",
+   steps:[
+    {t:"Degree on top (2) ≥ degree below (1) — that's the long-division trigger. Divide:",m:"\\frac{x^2+3x}{x+1}=x+2-\\frac{2}{x+1}"},
+    {t:"(Check: (x+1)(x+2) = x²+3x+2; subtract the 2 and it's our numerator. Costume off.)",m:"(x+1)(x+2)-2=x^2+3x\\ \\checkmark"},
+    {t:"Integrate the easy pieces — two power-rule terms and one log (with u = x+1).",m:"\\int\\!\\Bigl(x+2-\\tfrac{2}{x+1}\\Bigr)dx=\\tfrac{x^2}{2}+2x-2\\ln|x+1|+C"}],
+   fin:"\\int\\frac{x^2+3x}{x+1}dx=\\tfrac{x^2}{2}+2x-2\\ln|x+1|+C" },
+ { name:"Complete the square", sub:"∫ dx/(x²+4x+13)", head:"\\int\\frac{dx}{x^2+4x+13}",
+   steps:[
+    {t:"The quadratic won't factor (discriminant 16 − 52 < 0) — so complete the square:",m:"x^2+4x+13=(x+2)^2+9"},
+    {t:"Now it's the arctan card in disguise: u = x+2, du = dx, with a² = 9.",m:"\\int\\frac{du}{u^2+3^2}"},
+    {t:"The rule — and don't drop the 1/a:",m:"\\frac{1}{3}\\arctan\\!\\Bigl(\\frac{u}{3}\\Bigr)+C"},
+    {t:"Back-substitute.",m:"=\\frac{1}{3}\\arctan\\!\\Bigl(\\frac{x+2}{3}\\Bigr)+C"}],
+   fin:"\\int\\frac{dx}{x^2+4x+13}=\\tfrac{1}{3}\\arctan\\tfrac{x+2}{3}+C" }
+];
+let dgKey=0, dgN=0;
+function renderDG(){
+  const e=DG[dgKey];
+  const panel=document.getElementById("dgSteps"), read=document.getElementById("dgRead"), sum=document.getElementById("dgSum");
+  if(dgN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Spot the disguise, remove it with algebra, finish with a card from the deck.</div>';
+  else panel.innerHTML=e.steps.slice(0,dgN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+  read.textContent=dgN===0?"press step":(dgN<e.steps.length?"step "+dgN+" of "+e.steps.length:"done");
+  const tx=dgN>=e.steps.length?e.fin:e.head+"\\;=\\;?";
+  sum.innerHTML=tex(tx,tx,true);
+  document.querySelectorAll("#dgBtns button").forEach((b,i)=>b.classList.toggle("on",i===dgKey));
+}
+document.getElementById("dgStep").onclick=()=>{ if(dgN<DG[dgKey].steps.length){ dgN++; renderDG(); } };
+document.getElementById("dgReset").onclick=()=>{ dgN=0; renderDG(); };
+const dgBtns=document.getElementById("dgBtns");
+DG.forEach((e,i)=>{ const b=document.createElement("button");
+  b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+  b.onclick=()=>{ dgKey=i; dgN=0; renderDG(); };
+  dgBtns.appendChild(b); });
+
+/* ======================= anatomy + concepts ======================= */
+function renderAnatomy(){
+  const main="\\int x^n dx=\\tfrac{x^{n+1}}{n+1}{+}C\\quad \\int\\tfrac{dx}{x}=\\ln|x|{+}C\\quad \\int e^x dx=e^x{+}C\\quad \\int\\tfrac{dx}{x^2+a^2}=\\tfrac{1}{a}\\arctan\\tfrac{x}{a}{+}C";
+  document.getElementById("anatMain").innerHTML=tex(main,main,true);
+  document.getElementById("anatU").innerHTML=T("\\int f(u(x))\\,u'(x)\\,dx=\\int f(u)\\,du");
+  document.getElementById("anatB").innerHTML=T("\\int_a^b \\to \\int_{u(a)}^{u(b)}");
+  document.getElementById("anatC").innerHTML=T("\\int c\\,f\\,dx=c\\!\\int\\! f\\,dx\\quad\\text{(}c\\text{ constant only)}");
+}
+function renderConcepts(){
+  const c1=document.getElementById("c1"); if(c1) c1.innerHTML=tex("\\int f(x)\\,dx=F(x)+C","∫f = F(x)+C");
+  const c2=document.getElementById("c2"); if(c2) c2.innerHTML=tex("\\tfrac{d}{dx}\\bigl[\\text{your answer}\\bigr]\\overset{?}{=}\\text{integrand}","d/dx[answer] ?= integrand");
+  const c3=document.getElementById("c3"); if(c3) c3.innerHTML=tex("u=\\text{inside},\\quad du=u'\\,dx\\ \\text{must appear}","u inside, du a factor");
+  const c4=document.getElementById("c4"); if(c4) c4.innerHTML=tex("\\int_0^2 xe^{x^2}dx=\\tfrac12\\int_0^4 e^u du","bounds: 0→0, 2→4");
+}
+
+/* ======================= practice ======================= */
+const PRAC=[
+ { tag:"Straight from the deck", q:()=>'Find '+T("\\int\\Bigl(3\\sqrt{x}-\\tfrac{2}{x}+e^x\\Bigr)dx")+'.',
+   sol:[{t:"Term by term: 3x^{1/2} powers up to 3·(2/3)x^{3/2}; 2/x is the log card; eˣ is itself.",m:"2x^{3/2}-2\\ln|x|+e^x+C"},
+        {t:"Check by differentiating: 3x^{1/2} − 2/x + eˣ. ✓ (And note the |x|.)",m:""}] },
+ { tag:"u-sub, constant adjust", q:()=>'Find '+T("\\int x^2(x^3-5)^6\\,dx")+'.',
+   sol:[{t:"u = x³ − 5 (inside the power); du = 3x² dx, and x² is standing by — off by the constant 3.",m:"u=x^3-5,\\quad x^2dx=\\tfrac{du}{3}"},
+        {t:"Convert, integrate, return:",m:"\\tfrac13\\int u^6du=\\tfrac{u^7}{21}+C=\\tfrac{(x^3-5)^7}{21}+C"}] },
+ { tag:"Definite — finish in u", q:()=>'Evaluate '+T("\\int_1^{e}\\frac{(\\ln x)^2}{x}\\,dx")+'.',
+   sol:[{t:"u = ln x; du = dx/x — both pieces present. Bounds: x = 1 → u = 0; x = e → u = 1.",m:"\\int_0^1 u^2\\,du"},
+        {t:"Evaluate in u-world and stop — no back-substitution for definite integrals.",m:"\\Bigl[\\tfrac{u^3}{3}\\Bigr]_0^1=\\tfrac13"}] },
+ { tag:"Complete the square", q:()=>'Find '+T("\\int\\frac{dx}{x^2-6x+10}")+'.',
+   sol:[{t:"Discriminant 36 − 40 < 0: won't factor. Complete the square:",m:"x^2-6x+10=(x-3)^2+1"},
+        {t:"u = x − 3 with a = 1 — the arctan card, and 1/a = 1 here:",m:"\\arctan(x-3)+C"}] },
+ { tag:"A classic in disguise", q:()=>'Find '+T("\\int \\tan x\\,dx")+' (hint: write it as a fraction).',
+   sol:[{t:"tan x = sin x / cos x. Now the denominator's derivative is (minus) the numerator — the ln pattern.",m:"u=\\cos x,\\quad du=-\\sin x\\,dx"},
+        {t:"So the integral is −∫du/u:",m:"-\\ln|\\cos x|+C\\;\\;(=\\ln|\\sec x|+C)"}] }
+];
+function renderPractice(){
+  document.getElementById("practice").innerHTML=PRAC.map((p,i)=>{
+    const steps=p.sol.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+    return '<div class="prob"><div class="prob-tag">'+p.tag+'</div><div class="prob-q">'+p.q()+'</div>'
+      +'<button class="soltoggle" data-i="'+i+'">Show solution</button>'
+      +'<div class="sol" id="sol'+i+'">'+steps+'</div></div>';
+  }).join("");
+  document.querySelectorAll(".soltoggle").forEach(btn=>{ btn.onclick=()=>{ const i=btn.getAttribute("data-i"), s=document.getElementById("sol"+i);
+    btn.textContent=s.classList.toggle("show")?"Hide solution":"Show solution"; }; });
+}
+
+/* ======================= quiz ======================= */
+const QUIZ=[
+ { q:()=>T("\\int \\frac{1}{x}\\,dx")+' =',
+   opts:[{h:()=>T("\\ln|x|+C"),ok:true},{h:()=>T("\\ln x+C"),ok:false},{h:()=>T("-\\tfrac{1}{x^2}+C"),ok:false},{h:()=>T("\\tfrac{1}{\\ln x}+C"),ok:false}],
+   fb:"The absolute value is required — without it the antiderivative doesn't exist for x < 0. (−1/x² is the DERIVATIVE of 1/x, run the wrong direction.)" },
+ { q:()=>'The fastest reliable way to verify a proposed antiderivative is:',
+   opts:[{h:()=>"differentiate it and compare to the integrand",ok:true},{h:()=>"re-integrate more carefully",ok:false},{h:()=>"plug in x = 0 to both sides",ok:false},{h:()=>"graph both functions",ok:false}],
+   fb:"Differentiation is mechanical and certain. One forward pass either reproduces the integrand or visibly fails." },
+ { q:()=>T("\\int\\cos(7x)\\,dx")+' =',
+   opts:[{h:()=>T("\\tfrac{1}{7}\\sin(7x)+C"),ok:true},{h:()=>T("\\sin(7x)+C"),ok:false},{h:()=>T("7\\sin(7x)+C"),ok:false},{h:()=>T("-\\tfrac{1}{7}\\sin(7x)+C"),ok:false}],
+   fb:"Differentiate the candidates: the chain rule emits a 7 that the ⅐ must pre-cancel. Options differing by a constant = du bookkeeping check." },
+ { q:()=>'For '+T("\\int x^3\\cos(x^4)\\,dx")+', the right substitution is:',
+   opts:[{h:()=>T("u=x^4"),ok:true},{h:()=>T("u=\\cos x"),ok:false},{h:()=>T("u=x^3"),ok:false},{h:()=>T("u=\\cos(x^4)"),ok:false}],
+   fb:"x⁴ is inside the cosine, and its derivative 4x³ is a factor (up to the constant 4). u = x³ fails the test: du = 3x²dx isn't present." },
+ { q:()=>'With u = x²+1, '+T("\\int_0^1 2x(x^2+1)^3dx")+' becomes:',
+   opts:[{h:()=>T("\\int_1^2 u^3\\,du"),ok:true},{h:()=>T("\\int_0^1 u^3\\,du"),ok:false},{h:()=>T("2\\int_0^1 u^3\\,du"),ok:false},{h:()=>T("\\int_1^2 x\\,u^3\\,du"),ok:false}],
+   fb:"Bounds convert through u(x): u(0) = 1, u(1) = 2. Keeping 0 and 1 is the mixing-worlds error — and no x may survive into u-world. (Value: 15/4.)" },
+ { q:()=>'Why can’t '+T("\\int e^{x^2}dx")+' be solved by writing it as '+T("\\tfrac{1}{2x}\\int 2x\\,e^{x^2}dx")+'?',
+   opts:[{h:()=>"only constants can move through an integral sign",ok:true},{h:()=>"the u-sub gives the wrong sign",ok:false},{h:()=>"it can — that works fine",ok:false},{h:()=>T("e^{x^2}")+" has no antiderivative of any kind",ok:false}],
+   fb:"1/(2x) depends on x — pulling it out is illegal. (e^{x²} does have antiderivatives; they just aren't elementary functions. The 'fix the missing x' move is the unit's most tempting illegal step.)" },
+ { q:()=>'You should long-divide before integrating a rational function when:',
+   opts:[{h:()=>"the numerator's degree ≥ the denominator's",ok:true},{h:()=>"the denominator is quadratic",ok:false},{h:()=>"always",ok:false},{h:()=>"the numerator has more terms",ok:false}],
+   fb:"Top-heavy = divide first. The quotient integrates by the power rule; the remainder term becomes a log or arctan." },
+ { q:()=>T("\\int\\frac{dx}{x^2+2x+5}")+' =',
+   opts:[{h:()=>T("\\tfrac12\\arctan\\tfrac{x+1}{2}+C"),ok:true},{h:()=>T("\\arctan(x+1)+C"),ok:false},{h:()=>T("\\ln|x^2+2x+5|+C"),ok:false},{h:()=>T("\\tfrac12\\ln\\tfrac{x+1}{2}+C"),ok:false}],
+   fb:"Complete the square: (x+1)²+4, so a = 2 — and the 1/a rides out front. The ln option would need the numerator to be the derivative 2x+2, and it isn't." }
+];
+let qi=0, qScore=0, qDone=0, qAnswered=false;
+const qOpts=document.getElementById("qOpts"), qFb=document.getElementById("qFb"), qNext=document.getElementById("qNext");
+function renderQuiz(){
+  qAnswered=false; const item=QUIZ[qi];
+  document.getElementById("qText").innerHTML=item.q();
+  document.getElementById("qProgress").textContent="Question "+(qi+1)+" of "+QUIZ.length;
+  document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+  qFb.innerHTML=""; qNext.style.display="none";
+  qNext.textContent = qi<QUIZ.length-1 ? "Next question →" : "Restart quiz ↺";
+  qOpts.innerHTML="";
+  const sopts=shuf(item.opts);
+  sopts.forEach((o)=>{ const b=document.createElement("button"); b.innerHTML=o.h();
+    b.onclick=()=>{ if(qAnswered)return; qAnswered=true; qDone++;
+      [...qOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(sopts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ qScore++; b.classList.add("correct"); qFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ Correct.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      else { b.classList.add("wrong"); qFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not quite.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+      qNext.style.display="block"; };
+    qOpts.appendChild(b); });
+}
+qNext.onclick=()=>{ if(qi<QUIZ.length-1){ qi++; } else { qi=0; qScore=0; qDone=0; } renderQuiz(); };
+
+/* ======================= init + KaTeX refresh ======================= */
+function refreshAll(){ renderDeck(); renderC(); renderCR(); renderPU(); renderUS(); renderDT(); renderCS(); renderDG(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); if(drillOn) dealDrill(); }
+renderDeck(); renderC(); renderCR(); renderPU(); renderUS(); renderDT(); renderCS(); renderDG(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); refreshAll(); }
+  else if(++tries>40) clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.animationDelay=Math.min(i*30,440)+'ms'; });
+
+</script>
+</body>
+</html>
