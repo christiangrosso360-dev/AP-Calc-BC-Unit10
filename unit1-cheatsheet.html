@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unit 1 Cheat Sheet — every formula + when to use it · Limits &amp; Continuity</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23101420%27%2F%3E%3Cg%20fill%3D%27%23e86ab4%27%3E%3Crect%20x%3D%276%27%20y%3D%2718%27%20width%3D%274.6%27%20height%3D%278%27%20rx%3D%271%27%20opacity%3D%27.55%27%2F%3E%3Crect%20x%3D%2712%27%20y%3D%2714%27%20width%3D%274.6%27%20height%3D%2712%27%20rx%3D%271%27%20opacity%3D%27.75%27%2F%3E%3Crect%20x%3D%2718%27%20y%3D%2710%27%20width%3D%274.6%27%20height%3D%2716%27%20rx%3D%271%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M5%2017%20C%2012%2010%2C%2020%206%2C%2027%207%27%20stroke%3D%27%238fa6f7%27%20stroke-width%3D%272%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  /* alias accent vars to Unit 1 magenta so the shared cheat-sheet styling carries over */
+  :root{ --emerald:#e86ab4; --emerald-glow:#fb8590; --approx:#e86ab4; --amber:#e8a13c; --rose:#e0644f; --violet:#a892f0; --wrap-max:1100px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:10px;max-width:700px;line-height:1.6}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}
+  .tool-btn{font-family:var(--mono);font-size:12.5px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-2);border-radius:9px;padding:9px 15px;cursor:pointer;text-decoration:none;transition:border-color .2s,color .2s}
+  .tool-btn:hover{border-color:var(--emerald);color:var(--emerald-glow)}
+
+  .sheet{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px}
+  .col{display:flex;flex-direction:column;gap:16px;min-width:0}
+  @media(max-width:760px){.sheet{grid-template-columns:1fr}}
+  .block{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .block.span2{grid-column:1 / -1}
+  .block h3{font-family:var(--display);font-weight:600;font-size:17px;color:var(--ink);margin:0 0 3px;display:flex;align-items:baseline;gap:10px}
+  .block h3 a{color:inherit;text-decoration:none;border-bottom:1px dashed var(--line-2);transition:border-color .2s,color .2s}
+  .block h3 a:hover{color:var(--emerald-glow);border-color:var(--emerald)}
+  .block .tno{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--emerald);font-weight:400}
+  .block .blurb{font-size:12.5px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+
+  .f{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin:8px 0;overflow-x:auto;overflow-y:hidden}
+  .f .katex{color:var(--ink);font-size:1.02em}
+  .f .flab{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+
+  .mini{font-size:12.5px;color:var(--muted);line-height:1.55;margin:8px 0 0}
+  .mini b{color:var(--ink)} .mini .am{color:var(--amber)} .mini .ro{color:var(--rose)} .mini .cy{color:var(--emerald-glow)}
+
+  .decide{background:rgba(222,83,96,.06);border:1px solid rgba(222,83,96,.25);border-radius:10px;padding:12px 14px;margin-top:12px}
+  .decide .dh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--emerald);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+  .decide .dh::before{content:"\25C6";font-size:9px}
+  .branch{display:flex;gap:10px;font-size:12.5px;color:var(--ink);padding:5px 0;align-items:flex-start;line-height:1.45}
+  .branch .cond{font-family:var(--mono);color:var(--emerald-glow);flex-shrink:0;min-width:104px}
+  .branch .res{color:var(--muted)}
+
+  .traps{background:rgba(224,100,79,.06);border-left:2px solid var(--rose);border-radius:0 9px 9px 0;padding:10px 14px;margin-top:12px}
+  .traps .th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+  .traps ul{margin:0;padding-left:16px} .traps li{font-size:12.5px;color:var(--muted);line-height:1.55;margin:3px 0} .traps li b{color:var(--ink)}
+
+  /* model / phrase gallery */
+  .gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  @media(max-width:420px){.gallery{grid-template-columns:1fr}}
+  .gcard{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+  .gcard .gname{font-family:var(--mono);font-size:10.5px;color:var(--emerald-glow);margin-bottom:3px}
+  .gcard .geq{font-size:12px;color:var(--ink)} .gcard .gnote{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .55s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}}
+  footer{color:var(--muted);font-size:12px;margin-top:46px;border-top:1px solid var(--line);padding-top:14px} footer a{color:var(--emerald);text-decoration:none}
+
+  .closer{margin-top:18px;background:linear-gradient(110deg, rgba(222,83,96,.12), var(--panel-2) 60%, var(--panel));border:1px solid rgba(222,83,96,.3);border-radius:16px;padding:26px 28px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .closer-line{display:flex;gap:18px;align-items:flex-start}
+  .big-idea-mark{font-family:var(--display);font-size:42px;line-height:.95;color:var(--emerald);flex-shrink:0;opacity:.85}
+  .closer-line p{font-size:15px;color:var(--ink);line-height:1.65;margin:2px 0 0} .closer-line p b{color:var(--emerald-glow)}
+  .closer-jump{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+  .jump-primary{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:13.5px;font-weight:600;color:#2a0a0c;background:var(--emerald);border-radius:10px;padding:11px 18px;text-decoration:none;box-shadow:0 8px 20px -10px var(--emerald);transition:transform .2s,box-shadow .2s}
+  .jump-primary:hover{transform:translateY(-2px);box-shadow:0 12px 26px -10px var(--emerald)} .jump-primary span{transition:transform .2s} .jump-primary:hover span{transform:translateX(4px)}
+  .jump-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .jump-row a{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line-2);border-radius:30px;padding:6px 13px;text-decoration:none;transition:border-color .2s,color .2s}
+  .jump-row a:hover{border-color:var(--emerald);color:var(--emerald-glow)}
+  @media(max-width:560px){.closer-line{flex-direction:column;gap:8px}.big-idea-mark{font-size:34px}}
+
+  @media print{
+    @page{margin:1.2cm}
+    body{background:#fff!important;color:#111!important}
+    .backlink,.toolbar,.sub,.scroll-cue,footer a,.closer-jump{display:none!important}
+    .block{background:#fff!important;border:1px solid #bbb!important;box-shadow:none!important;break-inside:avoid}
+    .f,.gcard{background:#f7f7f5!important;border-color:#ccc!important}
+    .f .katex{color:#111!important}
+    .decide{background:#fdeeef!important;border-color:#e3a6ab}
+    .traps{background:#fdf2f0!important}
+    .closer{background:#fdeeef!important;border-color:#e3a6ab!important}
+    .closer-line p,.big-idea-mark{color:#111!important}.big-idea-mark{color:#b23440!important}
+    h1,.block h3,.block .blurb,.mini,.branch,.traps li,.gcard .geq,.gcard .gnote{color:#111!important}
+    .tno,.decide .dh,.branch .cond,.gcard .gname{color:#b23440!important}
+    .sheet{gap:10px}.col{gap:10px}
+    .reveal{animation:none;opacity:1}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit1.html">← Unit 1</a>
+  <header class="reveal">
+    <h1>Unit 1 <span class="em">Cheat Sheet</span></h1>
+    <div class="sub">Limits &amp; Continuity — every formula, every decision rule, and every trap from the five lessons, on one printable page. Each block title links back to its lesson.</div>
+    <div class="toolbar">
+      <button class="tool-btn" onclick="window.print()">⎙ Print / save as PDF</button>
+      <a class="tool-btn" href="unit1-exam-practice.html">→ Test yourself</a>
+    </div>
+  </header>
+
+  <div class="sheet">
+    <div class="col">
+
+      <div class="block reveal">
+        <h3><a href="what-is-a-limit.html">What a Limit Is</a> <span class="tno">1.1 – 1.4</span></h3>
+        <p class="blurb">A limit is the height the outputs <i>approach</i> from both sides &mdash; not the value the function takes there. Heading, not being.</p>
+        <div class="f"><div class="flab">two-sided exists when</div><div id="f_lim"></div></div>
+        <div class="f"><div class="flab">average &rarr; instantaneous rate</div><div id="f_roc"></div></div>
+        <div class="decide"><div class="dh">Does the limit exist?</div>
+          <div class="branch"><span class="cond">left limit = right limit</span><span class="res">limit exists, equals that common value</span></div>
+          <div class="branch"><span class="cond">one-sided limits differ</span><span class="res">DNE (jump)</span></div>
+          <div class="branch"><span class="cond">grows without bound</span><span class="res">DNE (infinite) &mdash; write \(\infty\) as shorthand</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li><b>The value at the point is irrelevant.</b> \(\lim_{x\to a}f\) can exist even if \(f(a)\) is undefined or different.</li>
+          <li><b>Read the \(y\)-value, not the \(x\).</b> A table marching toward \(x=1\) tells you nothing; watch what the outputs approach.</li>
+        </ul></div>
+      </div>
+
+      <div class="block reveal">
+        <h3><a href="computing-limits.html">Computing Limits</a> <span class="tno">1.5 – 1.7</span></h3>
+        <p class="blurb">Substitute first. If you get a number, you&rsquo;re done. If you get \(\tfrac00\), do algebra to cancel the troublemaker.</p>
+        <div class="f"><div class="flab">factor &amp; cancel</div><div id="f_factor"></div></div>
+        <div class="f"><div class="flab">conjugate (radicals)</div><div id="f_conj"></div></div>
+        <div class="f"><div class="flab">complex fraction</div><div id="f_cfrac"></div></div>
+        <div class="decide"><div class="dh">What did substitution give?</div>
+          <div class="branch"><span class="cond">a number</span><span class="res">that&rsquo;s the limit (function is continuous there)</span></div>
+          <div class="branch"><span class="cond">\(\tfrac00\)</span><span class="res">factor, conjugate, or combine &mdash; then cancel and retry</span></div>
+          <div class="branch"><span class="cond">\(\tfrac{k}{0}\), \(k\ne0\)</span><span class="res">infinite &mdash; limit DNE (vertical asymptote)</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li><b>\(\tfrac00\) is not an answer.</b> It means "do more work," not "limit = 0" or "DNE."</li>
+          <li><b>\(\tfrac{k}{0}\) with \(k\ne0\) is different.</b> That one really is DNE (infinite) &mdash; don&rsquo;t try to cancel.</li>
+        </ul></div>
+      </div>
+
+      <div class="block reveal">
+        <h3><a href="squeeze-theorem.html">Squeeze Theorem</a> <span class="tno">1.8 – 1.9</span></h3>
+        <p class="blurb">Trap a messy function between two friendly ones that meet. If both bounds \(\to L\), the middle is forced to \(L\) too.</p>
+        <div class="f"><div class="flab">the squeeze</div><div id="f_sq"></div></div>
+        <div class="f"><div class="flab">the trig limits to memorize</div><div id="f_trig"></div></div>
+        <div class="decide"><div class="dh">Matching the sin / angle pattern</div>
+          <div class="branch"><span class="cond">\(\tfrac{\sin kx}{x}\)</span><span class="res">\(=k\) &mdash; force the angle to match, compensate</span></div>
+          <div class="branch"><span class="cond">\(\tfrac{\sin ax}{\sin bx}\)</span><span class="res">\(=\tfrac{a}{b}\)</span></div>
+          <div class="branch"><span class="cond">bounded \(\times\) (something \(\to0\))</span><span class="res">\(\to 0\) by squeeze (e.g. \(x^2\cos\tfrac1x\))</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li><b>\(\tfrac{1-\cos x}{x}\to0\) but \(\tfrac{1-\cos x}{x^2}\to\tfrac12\).</b> The power of \(x\) in the denominator decides.</li>
+          <li><b>Squeeze needs both bounds to meet.</b> If they head to different values, it says nothing.</li>
+        </ul></div>
+      </div>
+
+    </div>
+    <div class="col">
+
+      <div class="block reveal">
+        <h3><a href="continuity.html">Continuity &amp; Its Failures</a> <span class="tno">1.10 – 1.13</span></h3>
+        <p class="blurb">Continuous means you can draw it without lifting your pen: where it&rsquo;s heading equals where it is, with all three boxes checked.</p>
+        <div class="f"><div class="flab">the definition (all three at once)</div><div id="f_cont"></div></div>
+        <div class="f"><div class="flab">solve-for-k at a seam</div><div id="f_solvek"></div></div>
+        <div class="decide"><div class="dh">Classify the discontinuity</div>
+          <div class="branch"><span class="cond">limit exists, value missing/wrong</span><span class="res">removable (hole) &mdash; patchable</span></div>
+          <div class="branch"><span class="cond">one-sided limits differ</span><span class="res">jump &mdash; not patchable</span></div>
+          <div class="branch"><span class="cond">blows up to \(\pm\infty\)</span><span class="res">infinite (asymptote) &mdash; not patchable</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li><b>Limit existing isn&rsquo;t enough.</b> You also need \(f(a)\) to exist AND equal the limit &mdash; all three.</li>
+          <li><b>Only removable breaks can be patched.</b> Redefining one point can&rsquo;t fix a jump or asymptote.</li>
+          <li><b>Solve-for-k:</b> set the one-sided limits equal at the seam, then solve.</li>
+          <li><b>On an interval:</b> continuous at every interior point; at a closed endpoint only the one existing side must match (e.g. \(\sqrt{x}\) is continuous on \([0,\infty)\)).</li>
+        </ul></div>
+      </div>
+
+      <div class="block reveal">
+        <h3><a href="asymptotes-ivt.html">Asymptotes &amp; the IVT</a> <span class="tno">1.14 – 1.16</span></h3>
+        <p class="blurb">Limits at the extremes &mdash; vertical (blow-ups) and horizontal (end behavior) &mdash; then continuity&rsquo;s payoff: the IVT.</p>
+        <div class="f"><div class="flab">horizontal asymptote (the degree race)</div><div id="f_ha"></div></div>
+        <div class="f"><div class="flab">Intermediate Value Theorem</div><div id="f_ivt"></div></div>
+        <div class="decide"><div class="dh">Horizontal asymptote: top vs bottom degree</div>
+          <div class="branch"><span class="cond">bottom degree bigger</span><span class="res">\(y=0\)</span></div>
+          <div class="branch"><span class="cond">equal degrees</span><span class="res">\(y=\) ratio of leading coefficients</span></div>
+          <div class="branch"><span class="cond">top degree bigger</span><span class="res">no HA (grows without bound)</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li><b>Vertical asymptote needs num \(\ne0\) too.</b> Denominator zero where numerator also zero is a hole, not an asymptote.</li>
+          <li><b>A graph can cross its horizontal asymptote.</b> The HA only governs the far ends, not the middle.</li>
+          <li><b>IVT needs continuity on \([a,b]\).</b> It proves a root <i>exists</i> &mdash; never where, never how many.</li>
+        </ul></div>
+      </div>
+      <div class="block reveal">
+        <h3><a href="continuity.html">The Four Discontinuities</a> <span class="tno">quick ID</span></h3>
+        <p class="blurb">Every break is one of four creatures. Spot it by what the limit and value are doing.</p>
+        <div class="decide"><div class="dh">Name that break</div>
+          <div class="branch"><span class="cond">removable</span><span class="res">a single <b>hole</b> &mdash; limit exists, but \(f(a)\) is missing or wrong. <i>Patchable.</i></span></div>
+          <div class="branch"><span class="cond">jump</span><span class="res">one-sided limits exist but <b>disagree</b> &mdash; the graph leaps. Fails the limit. <i>Not patchable.</i></span></div>
+          <div class="branch"><span class="cond">infinite</span><span class="res">runs to \(\pm\infty\) at a <b>vertical asymptote</b> &mdash; denominator zero, numerator not. <i>Not patchable.</i></span></div>
+          <div class="branch"><span class="cond">oscillating</span><span class="res">endless wiggles with no settling value, e.g. \(\sin\tfrac1x\) near \(0\). Fails the limit. <i>Not patchable.</i></span></div>
+        </div>
+        <div class="traps"><div class="th">which box fails?</div><ul>
+          <li><b>Removable</b> fails box 1 or 3 (value missing or \(\ne\) limit) &mdash; the only fixable kind.</li>
+          <li><b>Jump, infinite, oscillating</b> all fail box 2 (the limit itself doesn&rsquo;t exist).</li>
+        </ul></div>
+      </div>
+
+
+    </div>
+  </div>
+
+  <div class="closer reveal">
+      <div class="closer-line">
+        <span class="big-idea-mark">&#8734;</span>
+        <p>Unit 1 is one question asked five ways: <b>what is a function doing near a point?</b> A limit names where it&rsquo;s heading, algebra computes that value, the squeeze handles the wild cases, continuity asks whether heading equals being, and the IVT cashes that in &mdash; a continuous function skips no values. Everything in calculus stands on this.</p>
+      </div>
+      <div class="closer-jump"><a href="unit1-exam-practice.html">Test yourself on Unit 1 &rarr;</a> &middot; <a href="unit1.html">Back to the Unit 1 Guide</a></div>
+    </div>
+    </div>
+  </div>
+
+  <footer class="reveal">Unit 1 Cheat Sheet · Limits &amp; Continuity — what a limit is, computing limits, the Squeeze Theorem, continuity, asymptotes &amp; the IVT · <a href="unit1.html">back to the unit</a> · print to PDF for a one-page reference.</footer>
+</div>
+
+<script>
+function renderSheet(){
+  const R=String.raw;
+  const put=(id,tex_,fb)=>{const e=document.getElementById(id);if(e)e.innerHTML=tex(tex_,fb||tex_,true);};
+  put('f_lim', R`\lim_{x\to a^-}f=\lim_{x\to a^+}f=L`, "left limit = right limit = L");
+  put('f_roc', R`\lim_{h\to0}\frac{f(a+h)-f(a)}{h}`, "lim (f(a+h)−f(a))/h");
+  put('f_factor', R`\frac{x^2-9}{x-3}=\frac{(x-3)(x+3)}{x-3}=x+3`, "(x²−9)/(x−3) = x+3");
+  put('f_conj', R`\frac{\sqrt{x+4}-2}{x}\cdot\frac{\sqrt{x+4}+2}{\sqrt{x+4}+2}=\frac{1}{\sqrt{x+4}+2}`, "multiply by conjugate");
+  put('f_cfrac', R`\frac{\frac1x-\frac13}{x-3}=\frac{3-x}{3x(x-3)}=\frac{-1}{3x}`, "combine, then cancel");
+  put('f_sq', R`g\le f\le h,\ \lim g=\lim h=L\;\Rightarrow\;\lim f=L`, "g ≤ f ≤ h, both → L ⇒ f → L");
+  put('f_trig', R`\lim_{x\to0}\frac{\sin x}{x}=1,\qquad \lim_{x\to0}\frac{1-\cos x}{x}=0`, "sin x/x → 1,  (1−cos x)/x → 0");
+  put('f_cont', R`f\text{ continuous at }a\iff \lim_{x\to a}f(x)=f(a)`, "continuous ⟺ lim = f(a)");
+  put('f_solvek', R`\lim_{x\to a^-}f=\lim_{x\to a^+}f \;\Rightarrow\; \text{solve for }k`, "set one-sided limits equal, solve k");
+  put('f_ha', R`\deg\downarrow:\,y=0,\quad \deg=:\,\tfrac{a_n}{b_n},\quad \deg\uparrow:\,\text{none}`, "bottom: 0 · tie: lead ratio · top: none");
+  put('f_ivt', R`f\text{ cont. on }[a,b],\ N\text{ between }f(a),f(b)\;\Rightarrow\;\exists c:\,f(c)=N`, "cont + N between ⇒ ∃c, f(c)=N");
+  if(window.katex) document.querySelectorAll('.cond,.res,.blurb,.traps li,.sub,.closer p').forEach(n=>{
+    if(n.dataset.mz||n.innerHTML.indexOf('\\(')<0)return;
+    n.innerHTML=n.innerHTML.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return katex.renderToString(t,{throwOnError:false});}catch(e){return m;}});
+    n.dataset.mz="1";});
+}
+renderSheet();
+if(!window.katex){let n=0;const t=setInterval(()=>{if(window.katex){clearInterval(t);renderSheet();}else if(++n>40)clearInterval(t);},150);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*40,400)+'ms';});
+</script>
+</body>
+</html>

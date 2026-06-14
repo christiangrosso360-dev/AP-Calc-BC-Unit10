@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Computing Limits — Substitute First, Then Dig · Unit 1 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%231c0f18%27%2F%3E%3Cpath%20d%3D%27M5%2024%20C%2011%2022%2C%2017%2016%2C%2026%208%27%20stroke%3D%27%23e86ab4%27%20stroke-width%3D%272.4%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3Ccircle%20cx%3D%2719%27%20cy%3D%2713.8%27%20r%3D%272.6%27%20fill%3D%27%231c0f18%27%20stroke%3D%27%23f3a1cf%27%20stroke-width%3D%272%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<script>
+/* fallback for previewing without helpers.js — the repo's helpers.js takes precedence when present */
+if(typeof tex==="undefined"){
+  window.tex=function(latex,fallback,display){
+    if(window.katex){ try{ return katex.renderToString(latex,{displayMode:!!display,throwOnError:false}); }catch(e){} }
+    return '<span class="tex-fallback">'+(fallback||latex)+'</span>';
+  };
+}
+</script>
+<style>
+  :root{ --approx:#e86ab4; --gold:#e86ab4; --true:#3fd0b0;
+         --glow:rgba(232,106,180,.10); --wrap-max:1060px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block;border-radius:10px}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:8px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button:disabled:hover{border-color:var(--line);transform:none}
+  .sb-name{font-weight:600;font-size:13.5px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .callout{margin-top:12px;font-size:13.5px;min-height:20px;color:var(--ink);
+    border-left:3px solid var(--gold);padding-left:12px;opacity:0;transition:opacity .3s}
+  .callout.show{opacity:1}
+  .whypanel .why-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+  .why-step{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .why-step:last-child{border-bottom:none}
+  .why-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .why-t{font-size:13px;line-height:1.5}
+  .why-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;overflow-x:auto}
+  .stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .stat:last-child{border-bottom:none}
+  .stat .k{color:var(--muted)}
+  .stat .v{font-family:var(--mono);color:var(--ink)}
+  .sumline{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;overflow-x:auto;min-height:46px;font-size:14px}
+  .anatomy{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:820px}
+  .anatomy .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .maprow{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .maprow:last-child{border-bottom:none}
+  .maprow .ph{color:var(--ink);flex:1 1 auto;line-height:1.45}
+  .maprow .sy{font-family:var(--mono);color:var(--muted);flex:none}
+  .concepts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.concepts{grid-template-columns:1fr}}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s,box-shadow .2s}
+  .concept:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(43,41,37,.45)}
+  .concept h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .concept p{font-size:13.5px;margin:6px 0;color:var(--ink)}
+  .concept .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;text-align:center;overflow-x:auto}
+  .key{color:var(--approx);font-weight:600}
+  .whatsnext{max-width:700px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  button:focus-visible, a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  .prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .prob-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--approx);font-weight:600}
+  .prob-q{font-size:14.5px;line-height:1.65;margin:6px 0 12px}
+  .soltoggle{font-size:13px;padding:7px 14px}
+  .sol{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .sol.show{display:block}
+  .mistakes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){.mistakes{grid-template-columns:1fr}}
+  .mistake{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--div);border-radius:10px;padding:13px 16px}
+  .mistake h4{margin:0 0 4px;font-size:14px;font-family:var(--display)}
+  .mistake p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+  .tipbox{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:780px}
+  .tipbox h4{margin:0 0 8px;font-size:14px;font-family:var(--display);color:var(--approx)}
+  .tipbox ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+  .tipbox li{margin:5px 0}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .qtag{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button{font-size:14px;padding:11px 14px}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px;line-height:1.5}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+  .bc-badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#0d1330;
+    background:var(--approx);border-radius:14px;padding:3px 11px;font-weight:600;vertical-align:middle;margin-left:10px}
+  /* tabular method table */
+  .ttab{border-collapse:collapse;margin:6px auto;font-size:15px}
+  .ttab th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);font-weight:500;
+    padding:6px 18px;border-bottom:1px solid var(--line)}
+  .ttab td{padding:9px 18px;text-align:center;font-size:15.5px}
+  .ttab td.sg{color:var(--approx);font-family:var(--mono);font-weight:600;font-size:14px}
+  .ttab td.ar{color:var(--true);font-family:var(--mono);font-size:15px;padding:0 4px}
+  .ttab tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+
+  .looking{font-size:12px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.5}
+  .looking b{color:var(--ink);font-style:normal}
+  .reader{margin-top:10px;background:var(--panel-2);border:1px solid var(--line);border-left:3px solid var(--gold);
+    border-radius:8px;padding:9px 12px;font-size:13px;color:var(--muted)}
+  .reader b{color:var(--ink)}
+  .vtable{border-collapse:collapse;margin:8px auto 0;font-family:var(--mono);font-size:13px}
+  .vtable th{font-size:10.5px;letter-spacing:.06em;color:var(--muted);font-weight:500;padding:4px 16px;border-bottom:1px solid var(--line)}
+  .vtable td{padding:5px 16px;text-align:center;color:var(--ink)}
+  .vtable tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+  .vtable td.hot{color:var(--approx);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit1.html">← Unit 1 Guide</a>
+  <header class="reveal">
+    <h1>Computing <span class="em">Limits</span></h1>
+    <div class="sub">Last lesson you learned to <i>see</i> limits on graphs and tables. Now you compute them
+      with algebra — no graph required. The whole method fits in one sentence: <b>try substituting first;
+      if that breaks, dig for the hidden cancellation.</b></div>
+  </header>
+
+  <div class="big-idea reveal">
+    Here's the surprise that makes calculus livable: for almost every function you'll meet, the limit is just
+    the function's value — <b>you plug in</b> \(a\) and you're done. The interesting limits are the
+    exceptions, where plugging in gives the strange symbol \(\tfrac00\). That isn't a dead end — it's a
+    <b>signal</b> that the function has a removable hole, and a little algebra (factoring, or a conjugate)
+    uncovers the real answer.
+  </div>
+
+  <h2 class="reveal">Substitute first — the green light</h2>
+  <p class="lead reveal">Why does plugging in usually work? Because most functions are <b>continuous</b> — the
+    word from Lesson 1's quiz, meaning the graph flows through the point with no hole or jump, so where the
+    function is <i>heading</i> is exactly where it <i>is</i>. Polynomials, and quotients where the bottom
+    isn't zero, are continuous everywhere they're defined. For those, the limit is pure substitution. Try it:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="m-big" id="subShow"></div>
+        <div class="controls">
+          <button class="play" id="subStep">substitute →</button>
+          <button id="subReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="subRead">press substitute</span>
+        </div>
+        <div class="callout" id="subCall"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick a limit</div>
+        <div class="series-btns" id="subBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">The first three
+          substitute cleanly — green light, you're done. The fourth plugs in to give \(\tfrac00\): a red
+          flag that there's digging to do. That's the whole fork in the road.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The limit laws — limits respect arithmetic</h2>
+  <p class="lead reveal">Substitution works because limits play nicely with every basic operation. If
+    \(f\) and \(g\) each have a limit as \(x\to a\), then the limit of their sum is the sum of their
+    limits, and the same for differences, products, and (if the bottom isn't zero) quotients. In plain terms:
+    <b>you can break a complicated limit into the limits of its pieces.</b></p>
+
+  <div class="anatomy reveal">
+    <div class="m-big" id="lawMain"></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Sum / difference:</b> the limit of a sum is the sum of the limits — pull them apart freely.</span><span class="sy" id="law1"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Product / constant multiple:</b> limits pass through multiplication, and constants slide out front.</span><span class="sy" id="law2"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Quotient:</b> same idea — <i>provided the bottom's limit isn't zero.</i> That one caveat is the source of every interesting problem in this lesson.</span><span class="sy" id="law3"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Powers / roots:</b> the limit passes inside exponents and radicals too.</span><span class="sy" id="law4"></span></div>
+  </div>
+
+  <h2 class="reveal">When substitution breaks: the 0/0 signal</h2>
+  <p class="lead reveal">So you substitute, and you get \(\tfrac00\). It's tempting to write "undefined" and
+    move on — but that's the wrong instinct. \(\tfrac00\) is called an <b>indeterminate form</b>, and the
+    name is the whole point: it means the answer is <b>not yet determined</b>, not that there's no answer.
+    Compare:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="label">Two ways a quotient can "fail"</div>
+        <div class="sumline" id="indMain" style="min-height:60px"></div>
+        <svg id="indPlot" viewBox="0 0 560 200" preserveAspectRatio="xMidYMid meet" style="margin-top:8px"></svg>
+        <div class="controls">
+          <button class="play" id="indToggle">show the other case →</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="indRead"></span>
+        </div>
+        <div class="callout show" id="indCall"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The diagnosis</div>
+        <div class="stat"><span class="k">\(\tfrac{\text{nonzero}}{0}\)</span><span class="v" style="color:var(--div)">blows up → ∞ or DNE</span></div>
+        <div class="stat"><span class="k">\(\tfrac{0}{0}\)</span><span class="v" style="color:var(--approx)">indeterminate → DIG</span></div>
+        <div class="stat"><span class="k">\(\tfrac{\text{nonzero}}{\text{nonzero}}\)</span><span class="v" style="color:var(--true)">just substitute</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          <b>\(\tfrac00\) means a common factor of \((x-a)\) is hiding in both the top and bottom.</b>
+          Cancel it and the hole disappears, revealing the limit. The next two tools are just two ways to do
+          that cancelling.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Tool 1 — factor and cancel</h2>
+  <p class="lead reveal">When the top and bottom are polynomials and you hit \(\tfrac00\), the cure is
+    factoring: the thing making both zero is a shared \((x-a)\) factor. Cancel it — legally, because
+    \(x\to a\) means \(x\ne a\), so you're never dividing by zero — and substitute into what survives.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="sumline" id="fcSum"></div>
+        <svg id="fcPlot" viewBox="0 0 560 220" preserveAspectRatio="xMidYMid meet" style="margin-top:10px"></svg>
+        <div class="controls">
+          <button class="play" id="fcStep">step →</button>
+          <button id="fcReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="fcRead">press step</span>
+        </div>
+        <p class="looking" id="fcLook"><b>What you're looking at:</b> the graph has an open hole where substitution gave 0/0. Step through — when the \((x-a)\) cancels, watch the hole fill in.</p>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, shown</div>
+        <div id="fcSteps"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick a problem</div>
+        <div class="series-btns" id="fcBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">Each one substitutes to
+          \(\tfrac00\) first — that's your cue to factor. Watch the \((x-a)\) appear in both top and
+          bottom, then vanish.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Tool 2 — the conjugate trick</h2>
+  <p class="lead reveal">Factoring needs polynomials. But what about that mystery from Lesson 1's table,
+    \(\dfrac{\sqrt{x+4}-2}{x}\) — the one that seemed to head toward \(\tfrac14\)? A square root blocks
+    ordinary factoring. The trick: multiply top and bottom by the <b>conjugate</b> (the same expression with
+    the sign flipped). The difference-of-squares pattern \((\sqrt{A}-B)(\sqrt{A}+B)=A-B^2\) erases the
+    radical, and the troublesome factor finally cancels.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="sumline" id="cjSum"></div>
+        <svg id="cjPlot" viewBox="0 0 560 220" preserveAspectRatio="xMidYMid meet" style="margin-top:10px"></svg>
+        <div class="controls">
+          <button class="play" id="cjStep">step →</button>
+          <button id="cjReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="cjRead">press step</span>
+        </div>
+        <p class="looking" id="cjLook"><b>What you're looking at:</b> same idea as factoring — the radical hides a removable hole. When the troublesome factor cancels, the hole fills.</p>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, shown</div>
+        <div id="cjSteps"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick a problem</div>
+        <div class="series-btns" id="cjBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">The first one is the
+          table mystery from Lesson 1, now solved exactly: the answer really is \(\tfrac14\), no table
+          needed. The conjugate turns "I think it's heading there" into "it is."</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Putting it together — which tool, when?</h2>
+  <p class="lead reveal">This is the skill the AP exam tests directly: not <i>doing</i> a technique, but
+    <b>choosing</b> it. The routine is always the same three moves — and it starts with substitution every
+    single time. Diagnose each limit below, then pick the right first step:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="row" style="margin-bottom:8px">
+          <div class="qtag" id="dtProg">Limit 1 of 6</div>
+          <span class="score" id="dtScore">Score: 0 / 0</span>
+        </div>
+        <div class="m-big" id="dtHead"></div>
+        <div class="qtext" id="dtQ" style="font-size:14px;margin-bottom:10px">Step 1 — substitute the value. What do you get?</div>
+        <div class="quiz-opts" id="dtOpts"></div>
+        <div class="feedback" id="dtFb"></div>
+        <button class="next" id="dtNext" style="margin-top:12px;width:100%;display:none">Next limit →</button>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card whypanel">
+        <div class="why-title">The diagnosis</div>
+        <div id="dtWork"><div class="why-t" style="padding:8px 0;color:var(--muted)">Pick a first move to see the reasoning.</div></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="label">The three-move routine</div>
+        <div class="stat"><span class="k">1. substitute</span><span class="v">a number? → done</span></div>
+        <div class="stat"><span class="k">2a. got 0/0?</span><span class="v">factor or conjugate</span></div>
+        <div class="stat"><span class="k">2b. got #/0?</span><span class="v">infinite → ∞ or DNE</span></div>
+        <div class="stat"><span class="k">3. re-substitute</span><span class="v">into the cleaned form</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The method on one card</h2>
+  <div class="anatomy reveal">
+    <div class="m-big" id="anatMain"></div>
+    <div class="maprow"><span class="ph">Substitution works whenever the function is continuous at \(a\) — polynomials always, quotients when the bottom isn't 0</span><span class="sy" id="anatA"></span></div>
+    <div class="maprow"><span class="ph">\(\tfrac00\) is indeterminate — a signal to factor (polynomials) or multiply by the conjugate (radicals), then cancel \((x-a)\)</span><span class="sy" id="anatB"></span></div>
+    <div class="maprow"><span class="ph">\(\tfrac{\text{nonzero}}{0}\) is NOT indeterminate — it means the limit is infinite or DNE (Lesson 5's territory)</span><span class="sy" id="anatC"></span></div>
+  </div>
+
+  <h2 class="reveal">The ideas everything else builds on</h2>
+  <div class="concepts reveal">
+    <div class="concept">
+      <h3>Substitute first, always</h3>
+      <p>Every limit computation <span class="key">begins by plugging in</span>. Most of the time you're
+        instantly done; the rest of the time, what you get tells you exactly what to do next.</p>
+      <div class="m" id="c1"></div>
+    </div>
+    <div class="concept">
+      <h3>0/0 means "dig," not "done"</h3>
+      <p>The indeterminate form is a <span class="key">promise that an answer exists</span> once you cancel
+        the shared \((x-a)\). Never stop at \(\tfrac00\).</p>
+      <div class="m" id="c2"></div>
+    </div>
+    <div class="concept">
+      <h3>Two tools, one job</h3>
+      <p>Factoring and the conjugate both do the same thing — <span class="key">expose and cancel</span> the
+        hidden factor. Polynomials factor; radicals need the conjugate.</p>
+      <div class="m" id="c3"></div>
+    </div>
+    <div class="concept">
+      <h3>#/0 is a different beast</h3>
+      <p>A nonzero number over zero <span class="key">isn't indeterminate</span> — it blows up. Don't waste
+        time factoring it; it's heading to infinity or DNE.</p>
+      <div class="m" id="c4"></div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Your turn</h2>
+  <p class="lead reveal">Five problems spanning all three tools — including a complex fraction, a notorious
+    exam favorite. Try each before revealing.</p>
+  <div class="reveal" id="practice"></div>
+
+  <h2 class="reveal">Quick quiz</h2>
+  <p class="lead reveal">Eight fast checks across the whole lesson.</p>
+  <div class="card reveal" id="quizCard">
+    <div class="row" style="margin-bottom:12px">
+      <div class="qtag" id="qProgress">Question 1 of 8</div>
+      <span class="score" id="qScore">Score: 0 / 0</span>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="next" id="qNext" style="margin-top:14px;width:100%;display:none">Next question →</button>
+  </div>
+
+  <h2 class="reveal">Common mistakes &amp; exam tips</h2>
+  <div class="mistakes reveal">
+    <div class="mistake"><h4>Writing "undefined" at 0/0</h4><p>The single biggest error of the lesson. \(\tfrac00\) is indeterminate — it's the START of the work, not the end. There's a hidden factor; go find it.</p></div>
+    <div class="mistake"><h4>Confusing 0/0 with #/0</h4><p>Only \(\tfrac00\) is indeterminate. \(\tfrac50\) genuinely blows up — factoring it is wasted effort. Check WHICH zero-over-zero you actually have.</p></div>
+    <div class="mistake"><h4>Forgetting to re-substitute</h4><p>After cancelling, you're not done — plug \(a\) into the simplified expression. The cancel reveals the function; substitution finishes the limit.</p></div>
+    <div class="mistake"><h4>Multiplying by the wrong conjugate</h4><p>The conjugate flips the sign between the two terms of the radical expression — \(\sqrt{A}-B\) pairs with \(\sqrt{A}+B\). Multiply BOTH top and bottom by it, or you've changed the problem.</p></div>
+    <div class="mistake"><h4>Cancelling before checking 0/0</h4><p>Substitute first. If it gives a clean number, there's nothing to cancel and no reason to factor — you're already done.</p></div>
+    <div class="mistake"><h4>Dropping the (x−a) "illegally"</h4><p>Cancelling \(\tfrac{x-a}{x-a}\) is legal precisely because \(x\to a\) means \(x\ne a\). The limit lives in the approach, where that factor is genuinely nonzero.</p></div>
+  </div>
+  <div class="tipbox reveal">
+    <h4>On the AP exam</h4>
+    <ul>
+      <li>Always show the substitution that gives \(\tfrac00\) — it justifies why you're factoring, and graders look for it.</li>
+      <li>Recognize the conjugate trigger instantly: a square root plus a \(\tfrac00\) form means multiply by the conjugate.</li>
+      <li>For complex fractions (fractions within fractions), combine the little fractions first, then simplify — the \((x-a)\) will surface.</li>
+      <li>If substitution gives \(\tfrac{\text{nonzero}}{0}\), don't factor — state the limit is infinite or DNE and move on.</li>
+    </ul>
+  </div>
+
+  <div class="whatsnext reveal">
+    You can now compute any limit that substitution or a quick cancellation can reach. But some limits resist
+    all of this — like \(\frac{\sin x}{x}\), where every algebraic move still leaves \(\tfrac00\). For
+    those you need a clever trap between two friendlier functions.
+    <a href="squeeze-theorem.html">The Squeeze Theorem</a> is next — or head back to the
+    <a href="unit1.html">Unit 1 Guide</a>.
+  </div>
+
+  <footer class="reveal">Computing Limits · part of the Unit 1 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+
+const T=(s)=>tex(s,s,false);
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mathify(html){ if(!window.katex) return html;
+  return html.replace(/\\\((.+?)\\\)/g,(m,t)=>{ try{ return katex.renderToString(t,{throwOnError:false}); }catch(e){ return m; } }); }
+function mathifyStatic(){ if(!window.katex) return;
+  document.querySelectorAll('.sub,.lead,.big-idea,.looking,.reader,.maprow .ph,.mistake p,.tipbox li,.concept p,.whatsnext,.callout,.stat .k,.card > p').forEach(n=>{
+    if(n.dataset.mz) return;
+    if(n.innerHTML.indexOf('\\(')<0){ n.dataset.mz="1"; return; }
+    n.innerHTML=mathify(n.innerHTML); n.dataset.mz="1"; }); }
+
+/* ======================= shared mini-graph ======================= */
+const GNS="http://www.w3.org/2000/svg";
+const gel=(t,a)=>{const e=document.createElementNS(GNS,t);for(const k in a)e.setAttribute(k,a[k]);return e;};
+function gmap(dom,yr,W,H,P){ return { sx:x=>P+((x-dom[0])/(dom[1]-dom[0]))*(W-2*P),
+  sy:v=>H-P-((v-yr[0])/(yr[1]-yr[0]))*(H-2*P), dom, yr }; }
+function gaxes(v,M,W,H,P){
+  v.appendChild(gel("line",{x1:P,y1:M.sy(Math.max(M.yr[0],Math.min(M.yr[1],0))),x2:W-P,y2:M.sy(Math.max(M.yr[0],Math.min(M.yr[1],0))),stroke:"#4a4334","stroke-width":1}));
+}
+function gcurve(f,a,b,M,N=160){ let d="",pen=false;
+  for(let k=0;k<=N;k++){ const x=a+(b-a)*k/N, y=f(x);
+    if(!isFinite(y)||y<M.yr[0]-50||y>M.yr[1]+50){ pen=false; continue; }
+    d+=(pen?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(y).toFixed(1)+" "; pen=true; }
+  return d; }
+/* draws f with a hole at (a, hy); if filled, draws a solid dot instead of an open circle */
+function holeGraph(svgId, f, a, hy, dom, yr, filled, label){
+  const v=document.getElementById(svgId); if(!v) return; v.innerHTML="";
+  const W=560,H=svgId==="indPlot"?200:220,P=26;
+  const M=gmap(dom,yr,W,H,P);
+  gaxes(v,M,W,H,P);
+  v.appendChild(gel("path",{d:gcurve(f,dom[0],dom[1],M,200),fill:"none",stroke:"#e86ab4","stroke-width":2.4,"stroke-linecap":"round"}));
+  /* guide lines to the hole height */
+  if(filled){
+    v.appendChild(gel("line",{x1:M.sx(a),y1:M.sy(hy),x2:M.sx(a),y2:M.sy(yr[0]),stroke:"#3fd0b0","stroke-width":1,"stroke-dasharray":"3 3",opacity:.6}));
+    v.appendChild(gel("line",{x1:M.sx(dom[0]),y1:M.sy(hy),x2:M.sx(a),y2:M.sy(hy),stroke:"#3fd0b0","stroke-width":1,"stroke-dasharray":"3 3",opacity:.6}));
+    v.appendChild(gel("circle",{cx:M.sx(a),cy:M.sy(hy),r:5.5,fill:"#3fd0b0"}));
+    v.appendChild(gel("text",{x:M.sx(a)+9,y:M.sy(hy)-7,fill:"#3fd0b0","font-size":11,"font-family":"var(--mono)"}))
+      .appendChild(document.createTextNode("limit = "+(Math.round(hy*1000)/1000)));
+  } else {
+    v.appendChild(gel("circle",{cx:M.sx(a),cy:M.sy(hy),r:5.5,fill:"#16140f",stroke:"#e86ab4","stroke-width":2}));
+    if(label){ const tx=gel("text",{x:M.sx(a)+9,y:M.sy(hy)-7,fill:"#9a9183","font-size":10.5,"font-family":"var(--mono)"});
+      tx.appendChild(document.createTextNode(label)); v.appendChild(tx); }
+  }
+}
+
+/* ======================= 1 · SUBSTITUTE FIRST ======================= */
+const SUB=[
+ { name:"A polynomial", sub:"lim x→2 of 3x²−2x+1", head:"\\lim_{x\\to 2}\\,(3x^2-2x+1)",
+   steps:[{t:"Polynomials are continuous everywhere — substitute directly.",m:"3(2)^2-2(2)+1"},
+          {t:"Arithmetic.",m:"12-4+1=9"}], fin:"=9", green:true },
+ { name:"A safe quotient", sub:"lim x→1 of (x+3)/(x²+1)", head:"\\lim_{x\\to 1}\\,\\frac{x+3}{x^2+1}",
+   steps:[{t:"Bottom at x=1 is 1+1=2, not zero — the quotient law applies. Substitute.",m:"\\frac{1+3}{1^2+1}"},
+          {t:"Simplify.",m:"\\frac{4}{2}=2"}], fin:"=2", green:true },
+ { name:"A root", sub:"lim x→3 of √(x²+7)", head:"\\lim_{x\\to 3}\\,\\sqrt{x^2+7}",
+   steps:[{t:"The limit passes inside the radical. Substitute.",m:"\\sqrt{3^2+7}=\\sqrt{16}"},
+          {t:"Evaluate.",m:"=4"}], fin:"=4", green:true },
+ { name:"The wall", sub:"lim x→3 of (x²−9)/(x−3)", head:"\\lim_{x\\to 3}\\,\\frac{x^2-9}{x-3}",
+   steps:[{t:"Substitute and watch what happens:",m:"\\frac{3^2-9}{3-3}=\\frac{0}{0}"},
+          {t:"That's the indeterminate form — NOT an answer. It's the signal to dig (factoring, below).",m:"\\tfrac00\\ \\Rightarrow\\ \\text{factor}"}], fin:"\\tfrac00\\ \\text{— dig!}", green:false }
+];
+let subKey=0, subN=0;
+function renderSUB(){
+  const e=SUB[subKey];
+  document.getElementById("subShow").innerHTML=tex(e.head + (subN>=e.steps.length? "\\;"+e.fin : ""), e.head, true);
+  const read=document.getElementById("subRead"), call=document.getElementById("subCall");
+  read.textContent=subN===0?"press substitute":(subN<e.steps.length?"step "+subN+" of "+e.steps.length:"done");
+  if(subN>=e.steps.length){
+    call.className="callout show";
+    call.innerHTML=e.green
+      ? '<span style="color:var(--conv);font-weight:600">Green light.</span> Substitution gave a clean number — that IS the limit. No tricks needed.'
+      : '<span style="color:var(--div);font-weight:600">Red flag: 0/0.</span> Substitution broke — but this is indeterminate, not undefined. There\u2019s a hidden factor to cancel. The factor-and-cancel tool is next.';
+  } else if(subN>0){
+    call.className="callout show";
+    call.innerHTML='<span style="color:var(--muted)">'+mathify(e.steps[subN-1].t)+'</span><div class="why-m" style="margin-top:6px">'+T(e.steps[subN-1].m)+'</div>';
+  } else { call.className="callout"; call.innerHTML=""; }
+  document.querySelectorAll("#subBtns button").forEach((b,i)=>b.classList.toggle("on",i===subKey));
+}
+document.getElementById("subStep").onclick=()=>{ if(subN<SUB[subKey].steps.length){ subN++; renderSUB(); } };
+document.getElementById("subReset").onclick=()=>{ subN=0; renderSUB(); };
+(function(){ const box=document.getElementById("subBtns");
+  SUB.forEach((e,i)=>{ const b=document.createElement("button");
+    b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+    b.onclick=()=>{ subKey=i; subN=0; renderSUB(); }; box.appendChild(b); }); })();
+
+/* ======================= 2 · LIMIT LAWS ======================= */
+function renderLaws(){
+  const main="\\text{If }\\lim_{x\\to a}f=L\\text{ and }\\lim_{x\\to a}g=M,\\text{ then:}";
+  document.getElementById("lawMain").innerHTML=tex(main,main,true);
+  document.getElementById("law1").innerHTML=T("\\lim (f\\pm g)=L\\pm M");
+  document.getElementById("law2").innerHTML=T("\\lim (fg)=LM,\\ \\lim(cf)=cL");
+  document.getElementById("law3").innerHTML=T("\\lim\\tfrac{f}{g}=\\tfrac{L}{M}\\ (M\\ne 0)");
+  document.getElementById("law4").innerHTML=T("\\lim f^{n}=L^{n},\\ \\lim\\sqrt[n]{f}=\\sqrt[n]{L}");
+}
+
+/* ======================= 3 · THE 0/0 SIGNAL ======================= */
+const IND=[
+ { tex:"\\lim_{x\\to 2}\\frac{x-2}{x^2-4}\\;\\xrightarrow{\\text{sub}}\\;\\frac{0}{0}",
+   read:"indeterminate", call:'<b style="color:var(--approx)">0/0 — indeterminate.</b> Both top and bottom hit zero at x=2 because both contain the factor (x−2). Cancel it: \\(\\frac{x-2}{(x-2)(x+2)}=\\frac{1}{x+2}\\to\\frac14\\). The form was hiding a real, finite answer.' },
+ { tex:"\\lim_{x\\to 2}\\frac{x+2}{x-2}\\;\\xrightarrow{\\text{sub}}\\;\\frac{4}{0}",
+   read:"infinite / DNE", call:'<b style="color:var(--div)">4/0 — not indeterminate.</b> The top is a healthy 4; only the bottom is zero. There\u2019s no shared factor to cancel — the outputs blow up without bound. This limit is infinite (DNE), and no amount of factoring will help.' }
+];
+let indI=0;
+function renderIND(){
+  const e=IND[indI];
+  document.getElementById("indMain").innerHTML=tex(e.tex,e.tex,true);
+  document.getElementById("indRead").textContent=e.read;
+  document.getElementById("indCall").innerHTML=mathify(e.call);
+  document.getElementById("indToggle").textContent = indI===0 ? "show the other case →" : "← back to 0/0";
+  if(indI===0){
+    /* 0/0: (x-2)/(x^2-4) = 1/(x+2), removable hole at (2, 1/4) — shown FILLED to make the point */
+    holeGraph("indPlot", x=>1/(x+2), 2, 0.25, [0,4], [0.1,0.4], true, null);
+  } else {
+    /* #/0: (x+2)/(x-2) — vertical asymptote at 2, no removable hole */
+    const v=document.getElementById("indPlot"); v.innerHTML="";
+    const W=560,H=200,P=26,M=gmap([0,4],[-12,12],W,H,P);
+    gaxes(v,M,W,H,P);
+    v.appendChild(gel("path",{d:gcurve(x=>(x+2)/(x-2),0,1.93,M,160),fill:"none",stroke:"#e86ab4","stroke-width":2.4,"stroke-linecap":"round"}));
+    v.appendChild(gel("path",{d:gcurve(x=>(x+2)/(x-2),2.07,4,M,160),fill:"none",stroke:"#e86ab4","stroke-width":2.4,"stroke-linecap":"round"}));
+    v.appendChild(gel("line",{x1:M.sx(2),y1:M.sy(12),x2:M.sx(2),y2:M.sy(-12),stroke:"#e0644f","stroke-width":1.3,"stroke-dasharray":"5 4",opacity:.9}));
+    const tx=gel("text",{x:M.sx(2)+8,y:M.sy(9),fill:"#e0644f","font-size":10.5,"font-family":"var(--mono)"});
+    tx.appendChild(document.createTextNode("asymptote — no hole to fill")); v.appendChild(tx);
+  }
+}
+document.getElementById("indToggle").onclick=()=>{ indI=1-indI; renderIND(); };
+
+/* ======================= 4 · FACTOR & CANCEL ======================= */
+const FC=[
+ { name:"Difference of squares", sub:"(x²−9)/(x−3) at 3", head:"\\lim_{x\\to 3}\\frac{x^2-9}{x-3}",
+   steps:[{t:"Substitute → 0/0. Dig. Factor the top as a difference of squares:",m:"\\frac{(x-3)(x+3)}{x-3}"},
+          {t:"Cancel the shared (x−3) — legal because x→3 means x≠3:",m:"=x+3\\quad(x\\ne 3)"},
+          {t:"Now substitute into the clean expression:",m:"3+3=6"}], fin:"=6" },
+ { name:"Quadratic top", sub:"(x²−x−6)/(x−3) at 3", head:"\\lim_{x\\to 3}\\frac{x^2-x-6}{x-3}",
+   steps:[{t:"Substitute → 0/0. Factor the quadratic (what multiplies to −6 and adds to −1? −3 and +2):",m:"\\frac{(x-3)(x+2)}{x-3}"},
+          {t:"Cancel:",m:"=x+2"},
+          {t:"Substitute:",m:"3+2=5"}], fin:"=5" },
+ { name:"Cancel at a negative", sub:"(x²+5x+6)/(x+2) at −2", head:"\\lim_{x\\to -2}\\frac{x^2+5x+6}{x+2}",
+   steps:[{t:"Substitute → 0/0. Factor (×6, +5 → 2 and 3):",m:"\\frac{(x+2)(x+3)}{x+2}"},
+          {t:"Cancel the (x+2):",m:"=x+3"},
+          {t:"Substitute x=−2:",m:"-2+3=1"}], fin:"=1" },
+ { name:"Difference of cubes", sub:"(x³−8)/(x−2) at 2", head:"\\lim_{x\\to 2}\\frac{x^3-8}{x-2}",
+   steps:[{t:"Substitute → 0/0. The top is a difference of cubes: a³−b³=(a−b)(a²+ab+b²).",m:"\\frac{(x-2)(x^2+2x+4)}{x-2}"},
+          {t:"Cancel:",m:"=x^2+2x+4"},
+          {t:"Substitute:",m:"4+4+4=12"}], fin:"=12" }
+];
+const FC_G=[ {f:x=>x+3,a:3,hy:6,dom:[1,5],yr:[2,9]},
+             {f:x=>x+2,a:3,hy:5,dom:[1,5],yr:[1,8]},
+             {f:x=>x+3,a:-2,hy:1,dom:[-4,0],yr:[-2,4]},
+             {f:x=>x*x+2*x+4,a:2,hy:12,dom:[0.4,3],yr:[2,20]} ];
+let fcKey=0, fcN=0;
+function renderFC(){
+  const e=FC[fcKey], g=FC_G[fcKey];
+  const filled = fcN>=2;  /* hole fills the moment the (x-a) cancels (step 2) */
+  holeGraph("fcPlot", g.f, g.a, g.hy, g.dom, g.yr, filled, "0/0 here");
+  const lk=document.getElementById("fcLook");
+  if(lk) lk.innerHTML = filled
+    ? '<b>The hole filled in.</b> Cancelling \\((x-'+(g.a<0?"{"+g.a+"}":g.a)+')\\) removed the 0/0 — the function was a clean line/curve all along, just missing one point. The limit is that point\u2019s height.'
+    : '<b>What you\u2019re looking at:</b> the open circle marks where substitution gave 0/0. Step to the cancel and watch it fill.';
+  const panel=document.getElementById("fcSteps"), read=document.getElementById("fcRead"), sum=document.getElementById("fcSum");
+  if(fcN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Substitute → 0/0 → factor → cancel → re-substitute.</div>';
+  else panel.innerHTML=e.steps.slice(0,fcN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+  read.textContent=fcN===0?"press step":(fcN<e.steps.length?"step "+fcN+" of "+e.steps.length:"done");
+  const tx=fcN>=e.steps.length?e.head+"\\;"+e.fin:e.head+"\\;=\\;?";
+  sum.innerHTML=tex(tx,tx,true);
+  document.querySelectorAll("#fcBtns button").forEach((b,i)=>b.classList.toggle("on",i===fcKey));
+}
+document.getElementById("fcStep").onclick=()=>{ if(fcN<FC[fcKey].steps.length){ fcN++; renderFC(); } };
+document.getElementById("fcReset").onclick=()=>{ fcN=0; renderFC(); };
+(function(){ const box=document.getElementById("fcBtns");
+  FC.forEach((e,i)=>{ const b=document.createElement("button");
+    b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+    b.onclick=()=>{ fcKey=i; fcN=0; renderFC(); }; box.appendChild(b); }); })();
+
+/* ======================= 5 · CONJUGATE ======================= */
+const CJ=[
+ { name:"The table mystery", sub:"(√(x+4)−2)/x at 0", head:"\\lim_{x\\to 0}\\frac{\\sqrt{x+4}-2}{x}",
+   steps:[{t:"Substitute → 0/0. A radical blocks factoring, so multiply top and bottom by the conjugate √(x+4)+2:",m:"\\frac{\\sqrt{x+4}-2}{x}\\cdot\\frac{\\sqrt{x+4}+2}{\\sqrt{x+4}+2}"},
+          {t:"The top collapses by difference of squares: (√(x+4))²−2² = (x+4)−4 = x.",m:"\\frac{x}{x\\,(\\sqrt{x+4}+2)}"},
+          {t:"Now the x cancels — the hidden factor, finally exposed:",m:"=\\frac{1}{\\sqrt{x+4}+2}"},
+          {t:"Substitute x=0:",m:"\\frac{1}{\\sqrt{4}+2}=\\frac{1}{4}"}], fin:"=\\tfrac14" },
+ { name:"Radical in the bottom", sub:"(x−9)/(√x−3) at 9", head:"\\lim_{x\\to 9}\\frac{x-9}{\\sqrt{x}-3}",
+   steps:[{t:"Substitute → 0/0. Multiply by the conjugate of the bottom, √x+3:",m:"\\frac{x-9}{\\sqrt{x}-3}\\cdot\\frac{\\sqrt{x}+3}{\\sqrt{x}+3}"},
+          {t:"The bottom becomes (√x)²−9 = x−9:",m:"\\frac{(x-9)(\\sqrt{x}+3)}{x-9}"},
+          {t:"Cancel the (x−9):",m:"=\\sqrt{x}+3"},
+          {t:"Substitute x=9:",m:"\\sqrt{9}+3=6"}], fin:"=6" },
+ { name:"Sign-flipped radical", sub:"(2−√(x+2))/(x−2) at 2", head:"\\lim_{x\\to 2}\\frac{2-\\sqrt{x+2}}{x-2}",
+   steps:[{t:"Substitute → 0/0. Conjugate of the top is 2+√(x+2):",m:"\\frac{2-\\sqrt{x+2}}{x-2}\\cdot\\frac{2+\\sqrt{x+2}}{2+\\sqrt{x+2}}"},
+          {t:"Top: 2²−(x+2) = 4−x−2 = 2−x = −(x−2):",m:"\\frac{-(x-2)}{(x-2)(2+\\sqrt{x+2})}"},
+          {t:"Cancel — note the leftover minus sign:",m:"=\\frac{-1}{2+\\sqrt{x+2}}"},
+          {t:"Substitute x=2:",m:"\\frac{-1}{2+2}=-\\tfrac14"}], fin:"=-\\tfrac14" }
+];
+const CJ_G=[ {f:x=>1/(Math.sqrt(x+4)+2),a:0,hy:0.25,dom:[-2,2],yr:[0.18,0.30]},
+             {f:x=>Math.sqrt(x)+3,a:9,hy:6,dom:[7,11],yr:[4.5,7]},
+             {f:x=>-1/(2+Math.sqrt(x+2)),a:2,hy:-0.25,dom:[0,4],yr:[-0.32,-0.18]} ];
+let cjKey=0, cjN=0;
+function renderCJ(){
+  const e=CJ[cjKey], g=CJ_G[cjKey];
+  const filled = cjN>=3;  /* the cancel happens at step 3 in the conjugate flow */
+  holeGraph("cjPlot", g.f, g.a, g.hy, g.dom, g.yr, filled, "0/0 here");
+  const lk=document.getElementById("cjLook");
+  if(lk) lk.innerHTML = filled
+    ? '<b>The hole filled in.</b> The conjugate exposed the same removable hole factoring would \u2014 once it cancels, a smooth curve remains and the limit is the filled point\u2019s height.'
+    : '<b>What you\u2019re looking at:</b> the radical hid a removable hole. Step to the cancel to fill it.';
+  const panel=document.getElementById("cjSteps"), read=document.getElementById("cjRead"), sum=document.getElementById("cjSum");
+  if(cjN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Substitute → 0/0 → ×conjugate → difference of squares → cancel → substitute.</div>';
+  else panel.innerHTML=e.steps.slice(0,cjN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+  read.textContent=cjN===0?"press step":(cjN<e.steps.length?"step "+cjN+" of "+e.steps.length:"done");
+  const tx=cjN>=e.steps.length?e.head+"\\;"+e.fin:e.head+"\\;=\\;?";
+  sum.innerHTML=tex(tx,tx,true);
+  document.querySelectorAll("#cjBtns button").forEach((b,i)=>b.classList.toggle("on",i===cjKey));
+}
+document.getElementById("cjStep").onclick=()=>{ if(cjN<CJ[cjKey].steps.length){ cjN++; renderCJ(); } };
+document.getElementById("cjReset").onclick=()=>{ cjN=0; renderCJ(); };
+(function(){ const box=document.getElementById("cjBtns");
+  CJ.forEach((e,i)=>{ const b=document.createElement("button");
+    b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+    b.onclick=()=>{ cjKey=i; cjN=0; renderCJ(); }; box.appendChild(b); }); })();
+
+/* ======================= 6 · DECISION TREE GAME ======================= */
+const DT=[
+ { head:"\\lim_{x\\to 4}\\,(x^2-3x+2)", sub:"number", subval:"6 — a clean number", ans:"Substitute — it's a polynomial",
+   opts:["Substitute — it's a polynomial","Factor the top","Multiply by a conjugate","It's infinite / DNE"],
+   tell:"A polynomial is continuous everywhere, so substitution is legal and final: 16−12+2 = 6. No 0/0, nothing to dig for.", move:"=4^2-3(4)+2=6" },
+ { head:"\\lim_{x\\to 1}\\frac{x^2-1}{x-1}", sub:"0/0", subval:"0/0 — indeterminate", ans:"Factor the top",
+   opts:["Factor the top","Substitute — done","Multiply by a conjugate","It's infinite / DNE"],
+   tell:"Substitute → 0/0, and the top is polynomial: factor. (x−1)(x+1)/(x−1) = x+1 → 2. Difference of squares is the giveaway.", move:"\\frac{(x-1)(x+1)}{x-1}=x+1\\to 2" },
+ { head:"\\lim_{x\\to 0}\\frac{\\sqrt{x+9}-3}{x}", sub:"0/0", subval:"0/0 — indeterminate", ans:"Multiply by a conjugate",
+   opts:["Multiply by a conjugate","Factor the top","Substitute — done","It's infinite / DNE"],
+   tell:"Substitute → 0/0, and there's a square root: the conjugate √(x+9)+3 is the move. It reduces to 1/(√(x+9)+3) → 1/6.", move:"\\to\\frac{1}{\\sqrt{x+9}+3}=\\tfrac16" },
+ { head:"\\lim_{x\\to 2}\\frac{x+5}{x-2}", sub:"#/0", subval:"7/0 — nonzero over zero", ans:"It's infinite / DNE",
+   opts:["It's infinite / DNE","Factor the top","Multiply by a conjugate","Substitute — done"],
+   tell:"Substitute → 7/0, NOT 0/0. The top is a healthy 7; nothing cancels. The outputs blow up — the limit is infinite (DNE). Factoring would be wasted effort.", move:"\\frac{7}{0}\\Rightarrow\\text{DNE}" },
+ { head:"\\lim_{x\\to 5}\\frac{x^2-25}{x^2-3x-10}", sub:"0/0", subval:"0/0 — indeterminate", ans:"Factor the top",
+   opts:["Factor the top","Multiply by a conjugate","Substitute — done","It's infinite / DNE"],
+   tell:"Substitute → 0/0; both are polynomials, so factor both: (x−5)(x+5) / [(x−5)(x+2)] = (x+5)/(x+2) → 10/7. Factoring also clears the bottom's zero.", move:"\\frac{(x-5)(x+5)}{(x-5)(x+2)}=\\frac{x+5}{x+2}\\to\\tfrac{10}{7}" },
+ { head:"\\lim_{x\\to 7}\\frac{x-3}{x+1}", sub:"number", subval:"1/2 — a clean number", ans:"Substitute — done",
+   opts:["Substitute — done","Factor the top","Multiply by a conjugate","It's infinite / DNE"],
+   tell:"The bottom at x=7 is 8, not zero — the quotient law applies cleanly. Substitute: 4/8 = 1/2. Always TRY substitution before assuming a problem is hard.", move:"\\frac{7-3}{7+1}=\\frac48=\\tfrac12" }
+];
+const DT_SUBOPTS={ "number":"a clean number", "0/0":"0/0", "#/0":"a nonzero number over 0" };
+let dtI=0, dtScore=0, dtDone=0, dtStage=1, dtLock=false;
+function dtRenderStage1(){
+  const item=DT[dtI];
+  document.getElementById("dtQ").textContent="Step 1 — substitute the value. What do you get?";
+  document.getElementById("dtWork").innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">First decide what substitution yields \u2014 that drives everything.</div>';
+  const box=document.getElementById("dtOpts"); box.innerHTML="";
+  const keys=shuf(Object.keys(DT_SUBOPTS));
+  keys.forEach(k=>{
+    const b=document.createElement("button"); b.style.textAlign="center"; b.textContent=DT_SUBOPTS[k];
+    b.onclick=()=>{ if(dtLock)return; dtLock=true; dtDone++;
+      const ok=(k===item.sub);
+      [...box.children].forEach(bb=>{ bb.disabled=true; if(bb.textContent===DT_SUBOPTS[item.sub]) bb.classList.add("correct"); });
+      if(ok){ dtScore++; } else b.classList.add("wrong");
+      document.getElementById("dtScore").textContent="Score: "+dtScore+" / "+dtDone;
+      document.getElementById("dtFb").innerHTML=(ok?'<span style="color:var(--conv);font-weight:600">\u2713</span> ':'<span style="color:var(--div);font-weight:600">\u2717</span> ')+'<span style="color:var(--muted)">Substituting gives <b>'+item.subval+'</b>. '+(item.sub==="number"?"A clean value means you\u2019re basically done.":item.sub==="0/0"?"Indeterminate \u2014 now pick the tool to dig with.":"Nonzero over zero is NOT indeterminate \u2014 it blows up.")+'</span>';
+      document.getElementById("dtNext").style.display="block";
+      document.getElementById("dtNext").textContent="Step 2 — pick the move →";
+    };
+    box.appendChild(b);
+  });
+}
+function dtRenderStage2(){
+  const item=DT[dtI];
+  dtLock=false;
+  document.getElementById("dtQ").textContent="Step 2 — given that, what's the first move?";
+  document.getElementById("dtFb").innerHTML="";
+  document.getElementById("dtNext").style.display="none";
+  const box=document.getElementById("dtOpts"); box.innerHTML="";
+  shuf(item.opts).forEach(o=>{
+    const b=document.createElement("button"); b.style.textAlign="center"; b.textContent=o;
+    b.onclick=()=>{ if(dtLock)return; dtLock=true; dtDone++;
+      const ok=(o===item.ans);
+      [...box.children].forEach(bb=>{ bb.disabled=true; if(bb.textContent===item.ans) bb.classList.add("correct"); });
+      if(ok){ dtScore++; } else b.classList.add("wrong");
+      document.getElementById("dtScore").textContent="Score: "+dtScore+" / "+dtDone;
+      document.getElementById("dtFb").innerHTML=(ok?'<span style="color:var(--conv);font-weight:600">\u2713 Right call.</span> ':'<span style="color:var(--div);font-weight:600">\u2717 Not the move.</span> ')+'<span style="color:var(--muted)">'+item.tell+'</span>';
+      document.getElementById("dtWork").innerHTML='<div class="why-step"><div class="why-n">\u2192</div><div><div class="why-t">The work:</div><div class="why-m">'+T(item.move)+'</div></div></div>';
+      document.getElementById("dtNext").style.display="block";
+      document.getElementById("dtNext").textContent=dtI<DT.length-1?"Next limit \u2192":"Run them again \u21ba";
+    };
+    box.appendChild(b);
+  });
+}
+function renderDT(){
+  dtLock=false; dtStage=1; const item=DT[dtI];
+  document.getElementById("dtHead").innerHTML=tex(item.head,item.head,true);
+  document.getElementById("dtProg").textContent="Limit "+(dtI+1)+" of "+DT.length;
+  document.getElementById("dtScore").textContent="Score: "+dtScore+" / "+dtDone;
+  document.getElementById("dtFb").innerHTML="";
+  document.getElementById("dtNext").style.display="none";
+  dtRenderStage1();
+}
+document.getElementById("dtNext").onclick=()=>{
+  if(dtStage===1){ dtStage=2; dtRenderStage2(); return; }
+  if(dtI<DT.length-1){ dtI++; } else { dtI=0; dtScore=0; dtDone=0; }
+  renderDT();
+};
+
+/* ======================= anatomy + concepts ======================= */
+function renderAnatomy(){
+  const main="\\text{substitute}\\;\\to\\;\\begin{cases}\\text{a number}&\\Rightarrow\\ \\text{done}\\\\[2pt]\\tfrac00&\\Rightarrow\\ \\text{factor / conjugate}\\\\[2pt]\\tfrac{\\#}{0}&\\Rightarrow\\ \\infty\\ \\text{/ DNE}\\end{cases}";
+  document.getElementById("anatMain").innerHTML=tex(main,main,true);
+  document.getElementById("anatA").innerHTML=T("\\text{cont. at }a:\\ \\lim=f(a)");
+  document.getElementById("anatB").innerHTML=T("\\tfrac00:\\ \\text{cancel }(x-a)");
+  document.getElementById("anatC").innerHTML=T("\\tfrac{\\#}{0}\\ne\\tfrac00");
+}
+function renderConcepts(){
+  const c1=document.getElementById("c1"); if(c1) c1.innerHTML=tex("\\lim_{x\\to a}f(x)\\overset{?}{=}f(a)","try f(a) first");
+  const c2=document.getElementById("c2"); if(c2) c2.innerHTML=tex("\\tfrac00\\Rightarrow\\text{hidden }(x-a)","0/0 ⇒ hidden factor");
+  const c3=document.getElementById("c3"); if(c3) c3.innerHTML=tex("\\text{factor}\\ |\\ \\text{conjugate}","factor | conjugate");
+  const c4=document.getElementById("c4"); if(c4) c4.innerHTML=tex("\\tfrac{\\#}{0}\\to\\pm\\infty\\ \\text{/ DNE}","#/0 → blows up");
+}
+
+/* ======================= practice ======================= */
+const PRAC=[
+ { tag:"Substitute — or not?", q:()=>'Evaluate \\(\\lim_{x\\to 4}\\dfrac{x^2-16}{x-4}\\).',
+   sol:[{t:"Substitute first: 16−16 over 4−4 = 0/0. Indeterminate — dig.",m:"\\frac{0}{0}"},
+        {t:"Factor the difference of squares and cancel:",m:"\\frac{(x-4)(x+4)}{x-4}=x+4"},
+        {t:"Re-substitute:",m:"4+4=8"}] },
+ { tag:"Conjugate", q:()=>'Evaluate \\(\\lim_{x\\to 0}\\dfrac{\\sqrt{x+1}-1}{x}\\).',
+   sol:[{t:"Substitute → 0/0. Radical present — multiply by the conjugate √(x+1)+1:",m:"\\frac{\\sqrt{x+1}-1}{x}\\cdot\\frac{\\sqrt{x+1}+1}{\\sqrt{x+1}+1}"},
+        {t:"Top becomes (x+1)−1 = x; cancel with the bottom's x:",m:"\\frac{x}{x(\\sqrt{x+1}+1)}=\\frac{1}{\\sqrt{x+1}+1}"},
+        {t:"Substitute x=0:",m:"\\frac{1}{1+1}=\\tfrac12"}] },
+ { tag:"The complex fraction", q:()=>'Evaluate \\(\\lim_{x\\to 3}\\dfrac{\\frac{1}{x}-\\frac{1}{3}}{x-3}\\) — an exam favorite.',
+   sol:[{t:"Substitute → 0/0. First combine the little fractions on top over a common denominator 3x:",m:"\\frac{1}{x}-\\frac{1}{3}=\\frac{3-x}{3x}"},
+        {t:"So the whole expression is that, divided by (x−3):",m:"\\frac{3-x}{3x}\\cdot\\frac{1}{x-3}=\\frac{-(x-3)}{3x(x-3)}"},
+        {t:"Cancel the (x−3) — mind the minus from 3−x = −(x−3):",m:"=\\frac{-1}{3x}"},
+        {t:"Substitute x=3:",m:"\\frac{-1}{9}"}] },
+ { tag:"Don't be fooled", q:()=>'Evaluate \\(\\lim_{x\\to 1}\\dfrac{x+2}{(x-1)^2}\\), or explain why it doesn\u2019t exist.',
+   sol:[{t:"Substitute: top is 3, bottom is 0. That's 3/0 — NOT 0/0. Don't factor; diagnose.",m:"\\frac{3}{0}"},
+        {t:"The bottom (x−1)² is positive on both sides of 1, so the fraction → +∞ from both sides. The limit is infinite — it does not exist as a finite number.",m:"\\to +\\infty\\ (\\text{DNE})"}] },
+ { tag:"Two-step factor", q:()=>'Evaluate \\(\\lim_{x\\to -1}\\dfrac{x^2-1}{x^2+3x+2}\\).',
+   sol:[{t:"Substitute → 0/0. Factor BOTH top and bottom:",m:"\\frac{(x-1)(x+1)}{(x+1)(x+2)}"},
+        {t:"Cancel the shared (x+1):",m:"=\\frac{x-1}{x+2}"},
+        {t:"Substitute x=−1:",m:"\\frac{-2}{1}=-2"}] }
+];
+function renderPractice(){
+  document.getElementById("practice").innerHTML=mathify(PRAC.map((p,i)=>{
+    const steps=p.sol.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+    return '<div class="prob"><div class="prob-tag">'+p.tag+'</div><div class="prob-q">'+p.q()+'</div>'
+      +'<button class="soltoggle" data-i="'+i+'">Show solution</button>'
+      +'<div class="sol" id="sol'+i+'">'+steps+'</div></div>';
+  }).join(""));
+  document.querySelectorAll(".soltoggle").forEach(btn=>{ btn.onclick=()=>{ const i=btn.getAttribute("data-i"), s=document.getElementById("sol"+i);
+    btn.textContent=s.classList.toggle("show")?"Hide solution":"Show solution"; }; });
+}
+
+/* ======================= quiz ======================= */
+const QUIZ=[
+ { q:()=>'The FIRST thing to try on any limit is:',
+   opts:[{h:()=>"substitute the value into the function",ok:true},{h:()=>"factor the numerator",ok:false},{h:()=>"multiply by a conjugate",ok:false},{h:()=>"check the one-sided limits",ok:false}],
+   fb:"Always substitute first. Most of the time it works instantly; when it doesn't, what you get tells you the next move." },
+ { q:()=>'Substituting gives \\(\\tfrac00\\). This means:',
+   opts:[{h:()=>"indeterminate — there's a hidden factor to cancel",ok:true},{h:()=>"the limit is 0",ok:false},{h:()=>"the limit does not exist",ok:false},{h:()=>"the limit is 1",ok:false}],
+   fb:"0/0 is indeterminate: the answer isn't determined YET. A shared (x−a) factor is hiding in top and bottom; cancel it to find the real limit." },
+ { q:()=>'\\(\\lim_{x\\to 5}\\dfrac{x^2-25}{x-5}=\\)',
+   opts:[{h:()=>"10",ok:true},{h:()=>"0",ok:false},{h:()=>"5",ok:false},{h:()=>"does not exist",ok:false}],
+   fb:"Sub → 0/0. Factor: (x−5)(x+5)/(x−5) = x+5 → 10. The difference of squares is the tell." },
+ { q:()=>'Substituting gives \\(\\tfrac{7}{0}\\). The limit:',
+   opts:[{h:()=>"is infinite or DNE — not indeterminate",ok:true},{h:()=>"is 7",ok:false},{h:()=>"is 0",ok:false},{h:()=>"needs factoring to find",ok:false}],
+   fb:"Nonzero-over-zero is NOT 0/0. There's no shared factor; the outputs blow up. Don't waste time factoring — it's infinite or DNE." },
+ { q:()=>'To evaluate \\(\\lim_{x\\to 0}\\dfrac{\\sqrt{x+1}-1}{x}\\), the right tool is:',
+   opts:[{h:()=>"multiply by the conjugate √(x+1)+1",ok:true},{h:()=>"factor the numerator",ok:false},{h:()=>"substitute — it's continuous",ok:false},{h:()=>"it's DNE",ok:false}],
+   fb:"A radical plus a 0/0 form screams conjugate. It reduces to 1/(√(x+1)+1) → 1/2. (Substitution alone gives 0/0; factoring can't touch the root.)" },
+ { q:()=>'Cancelling \\(\\tfrac{x-3}{x-3}\\) inside a limit as \\(x\\to 3\\) is legal because:',
+   opts:[{h:()=>"x → 3 means x ≠ 3, so the factor is genuinely nonzero",ok:true},{h:()=>"3 − 3 = 0 cancels to 1",ok:false},{h:()=>"you can always cancel matching terms",ok:false},{h:()=>"the limit ignores algebra rules",ok:false}],
+   fb:"The limit lives in the APPROACH, where x is near 3 but never equal — so (x−3) isn't actually zero there, and the cancellation is fully legal." },
+ { q:()=>'\\(\\lim_{x\\to 2}\\dfrac{x^3-8}{x-2}=\\)',
+   opts:[{h:()=>"12",ok:true},{h:()=>"0",ok:false},{h:()=>"6",ok:false},{h:()=>"does not exist",ok:false}],
+   fb:"Sub → 0/0. Difference of cubes: (x−2)(x²+2x+4)/(x−2) = x²+2x+4 → 4+4+4 = 12." },
+ { q:()=>'For the complex fraction \\(\\lim_{x\\to 2}\\dfrac{\\frac1x-\\frac12}{x-2}\\), the smart first step is:',
+   opts:[{h:()=>"combine the top fractions over a common denominator",ok:true},{h:()=>"multiply by a conjugate",ok:false},{h:()=>"substitute — it's defined",ok:false},{h:()=>"cancel the x's",ok:false}],
+   fb:"Combine 1/x − 1/2 = (2−x)/(2x) first; then the (x−2) surfaces and cancels, giving −1/(2x) → −1/4. Conjugates are for radicals, not stacked fractions." }
+];
+let qi=0, qScore=0, qDone=0, qAnswered=false;
+const qOpts=document.getElementById("qOpts"), qFb=document.getElementById("qFb"), qNext=document.getElementById("qNext");
+function renderQuiz(){
+  qAnswered=false; const item=QUIZ[qi];
+  document.getElementById("qText").innerHTML=mathify(item.q());
+  document.getElementById("qProgress").textContent="Question "+(qi+1)+" of "+QUIZ.length;
+  document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+  qFb.innerHTML=""; qNext.style.display="none";
+  qNext.textContent = qi<QUIZ.length-1 ? "Next question →" : "Restart quiz ↺";
+  qOpts.innerHTML="";
+  const sopts=shuf(item.opts);
+  sopts.forEach((o)=>{ const b=document.createElement("button"); b.innerHTML=o.h();
+    b.onclick=()=>{ if(qAnswered)return; qAnswered=true; qDone++;
+      [...qOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(sopts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ qScore++; b.classList.add("correct"); qFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ Correct.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      else { b.classList.add("wrong"); qFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not quite.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+      qNext.style.display="block"; };
+    qOpts.appendChild(b); });
+}
+qNext.onclick=()=>{ if(qi<QUIZ.length-1){ qi++; } else { qi=0; qScore=0; qDone=0; } renderQuiz(); };
+
+/* ======================= init ======================= */
+function refreshAll(){ renderSUB(); renderLaws(); renderIND(); renderFC(); renderCJ(); renderDT(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic(); }
+renderSUB(); renderLaws(); renderIND(); renderFC(); renderCJ(); renderDT(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); refreshAll(); }
+  else if(++tries>40) clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.animationDelay=Math.min(i*30,440)+'ms'; });
+
+</script>
+</body>
+</html>

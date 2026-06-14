@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>What a Limit Is — Where It's Heading vs. Where It Is · Unit 1 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%231c0f18%27%2F%3E%3Cpath%20d%3D%27M5%2024%20C%2011%2022%2C%2017%2016%2C%2026%208%27%20stroke%3D%27%23e86ab4%27%20stroke-width%3D%272.4%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3Ccircle%20cx%3D%2719%27%20cy%3D%2713.8%27%20r%3D%272.6%27%20fill%3D%27%231c0f18%27%20stroke%3D%27%23f3a1cf%27%20stroke-width%3D%272%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<script>
+/* fallback for previewing without helpers.js — the repo's helpers.js takes precedence when present */
+if(typeof tex==="undefined"){
+  window.tex=function(latex,fallback,display){
+    if(window.katex){ try{ return katex.renderToString(latex,{displayMode:!!display,throwOnError:false}); }catch(e){} }
+    return '<span class="tex-fallback">'+(fallback||latex)+'</span>';
+  };
+}
+</script>
+<style>
+  :root{ --approx:#e86ab4; --gold:#e86ab4; --true:#3fd0b0;
+         --glow:rgba(232,106,180,.10); --wrap-max:1060px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block;border-radius:10px}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:8px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button:disabled:hover{border-color:var(--line);transform:none}
+  .sb-name{font-weight:600;font-size:13.5px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .callout{margin-top:12px;font-size:13.5px;min-height:20px;color:var(--ink);
+    border-left:3px solid var(--gold);padding-left:12px;opacity:0;transition:opacity .3s}
+  .callout.show{opacity:1}
+  .whypanel .why-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+  .why-step{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .why-step:last-child{border-bottom:none}
+  .why-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .why-t{font-size:13px;line-height:1.5}
+  .why-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;overflow-x:auto}
+  .stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .stat:last-child{border-bottom:none}
+  .stat .k{color:var(--muted)}
+  .stat .v{font-family:var(--mono);color:var(--ink)}
+  .sumline{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;overflow-x:auto;min-height:46px;font-size:14px}
+  .anatomy{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:820px}
+  .anatomy .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .maprow{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .maprow:last-child{border-bottom:none}
+  .maprow .ph{color:var(--ink);flex:1 1 auto;line-height:1.45}
+  .maprow .sy{font-family:var(--mono);color:var(--muted);flex:none}
+  .concepts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.concepts{grid-template-columns:1fr}}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s,box-shadow .2s}
+  .concept:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(43,41,37,.45)}
+  .concept h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .concept p{font-size:13.5px;margin:6px 0;color:var(--ink)}
+  .concept .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;text-align:center;overflow-x:auto}
+  .key{color:var(--approx);font-weight:600}
+  .whatsnext{max-width:700px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  button:focus-visible, a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  .prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .prob-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--approx);font-weight:600}
+  .prob-q{font-size:14.5px;line-height:1.65;margin:6px 0 12px}
+  .soltoggle{font-size:13px;padding:7px 14px}
+  .sol{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .sol.show{display:block}
+  .mistakes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){.mistakes{grid-template-columns:1fr}}
+  .mistake{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--div);border-radius:10px;padding:13px 16px}
+  .mistake h4{margin:0 0 4px;font-size:14px;font-family:var(--display)}
+  .mistake p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+  .tipbox{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:780px}
+  .tipbox h4{margin:0 0 8px;font-size:14px;font-family:var(--display);color:var(--approx)}
+  .tipbox ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+  .tipbox li{margin:5px 0}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .qtag{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button{font-size:14px;padding:11px 14px}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px;line-height:1.5}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+  .bc-badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#0d1330;
+    background:var(--approx);border-radius:14px;padding:3px 11px;font-weight:600;vertical-align:middle;margin-left:10px}
+  /* tabular method table */
+  .ttab{border-collapse:collapse;margin:6px auto;font-size:15px}
+  .ttab th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);font-weight:500;
+    padding:6px 18px;border-bottom:1px solid var(--line)}
+  .ttab td{padding:9px 18px;text-align:center;font-size:15.5px}
+  .ttab td.sg{color:var(--approx);font-family:var(--mono);font-weight:600;font-size:14px}
+  .ttab td.ar{color:var(--true);font-family:var(--mono);font-size:15px;padding:0 4px}
+  .ttab tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+
+  .looking{font-size:12px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.5}
+  .looking b{color:var(--ink);font-style:normal}
+  .reader{margin-top:10px;background:var(--panel-2);border:1px solid var(--line);border-left:3px solid var(--gold);
+    border-radius:8px;padding:9px 12px;font-size:13px;color:var(--muted)}
+  .reader b{color:var(--ink)}
+  .vtable{border-collapse:collapse;margin:8px auto 0;font-family:var(--mono);font-size:13px}
+  .vtable th{font-size:10.5px;letter-spacing:.06em;color:var(--muted);font-weight:500;padding:4px 16px;border-bottom:1px solid var(--line)}
+  .vtable td{padding:5px 16px;text-align:center;color:var(--ink)}
+  .vtable tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+  .vtable td.hot{color:var(--approx);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit1.html">← Unit 1 Guide</a>
+  <header class="reveal">
+    <h1>What a <span class="em">Limit</span> Is</h1>
+    <div class="sub">Welcome to calculus. Before any formulas, this lesson shows you the one question
+      ordinary math can't answer — and the beautifully sneaky idea that answers it. No prior calculus
+      assumed: every word gets defined the first time it appears.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    A <b>limit</b> asks one question about a function: as the input <i>x</i> creeps closer and closer to some
+    target value, what single number is the output <b>heading toward</b>? Not what the function <i>equals</i>
+    there — what it's <b>approaching</b>. That distinction — <b>where it's heading vs. where it is</b> — is
+    the whole idea, and the rest of this lesson makes you fluent in it.
+  </div>
+
+  <h2 class="reveal">The problem calculus was invented for</h2>
+  <p class="lead reveal">A ball rolls down a ramp, speeding up the whole way. Its position after \(t\) seconds
+    is \(p(t)=t^2\) meters. Easy question: what's its <b>average</b> speed between \(t=3\) and \(t=4\)?
+    Distance over time: \(\tfrac{16-9}{1}=7\) m/s. Hard question: how fast is it going <b>at the exact
+    instant</b> \(t=3\)? Speed needs two moments to compare — and an instant only has one. Divide by zero
+    time and the formula collapses. Watch what happens if we don't give up, and instead <b>shrink the
+    window</b>:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="spPlot" viewBox="0 0 560 270" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="callout show" id="spPredictBox" style="border-left-color:var(--approx)">
+          <b>Before you press play, commit to a guess.</b> The averages start 7, 6.5, 6.1, … — where are they heading?
+          <div class="quiz-opts" id="spPredict" style="grid-template-columns:1fr 1fr;margin-top:10px"></div>
+        </div>
+        <div class="controls">
+          <button class="play" id="spRun">▶ shrink the window</button>
+          <button id="spReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="spRead">window: 3 to 4 seconds</span>
+        </div>
+        <div class="controls">
+          <span style="font-size:12.5px;color:var(--muted)">or drag the window yourself:</span>
+          <input type="range" id="spSlide" min="0" max="1" step="0.002" value="0" aria-label="window size, wide to narrow">
+          <span class="nval" id="spHv">h = 1.000</span>
+        </div>
+        <p class="looking"><b>What you're looking at:</b> the curve is the ball's position over time. The
+          straight line connects two moments — its slope is the average speed between them. The window
+          between the two moments is about to shrink.</p>
+        <div class="callout show" id="spCall">Average speed over [3, 4]: (16 − 9)/1 = 7 m/s. Now press play.</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The window shrinks</div>
+        <div style="overflow-x:auto"><table class="vtable" id="spTable">
+          <tr><th>window</th><th>avg speed (m/s)</th></tr>
+        </table></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          The window keeps shrinking, the averages keep settling: 7, 6.5, 6.1, 6.01, 6.001…
+          They're <b>heading somewhere</b>. No single window ever gives exactly 6 — but every shrink
+          gets closer. The speed <i>at the instant</i> is the number the averages approach: <b>6 m/s</b>.
+          That move — answering an impossible question by approaching it — is the limit.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The approach machine</h2>
+  <p class="lead reveal">Here's the same idea on a stranger function:
+    \(f(x)=\dfrac{x^2-1}{x-1}\). Try plugging in \(x=1\): the top is \(0\) and the bottom is \(0\) —
+    division by zero, so \(f(1)\) simply <b>does not exist</b>. The graph has a <b>hole</b> there (drawn as
+    an open circle). But the limit question isn't about \(x=1\) itself — it's about the <b>approach</b>.
+    Send walkers in from both sides and watch where they're heading:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="apPlot" viewBox="0 0 560 270" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <button class="play" id="apRun">▶ approach x = 1</button>
+          <button id="apReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="apRead">walkers ready</span>
+        </div>
+        <div class="controls">
+          <span style="font-size:12.5px;color:var(--muted)">or walk it yourself:</span>
+          <input type="range" id="apSlide" min="0.5" max="1.5" step="0.001" value="0.5" aria-label="x position">
+          <span class="nval" id="apXv" style="min-width:190px">x = 0.500 · f(x) = 1.500</span>
+        </div>
+        <p class="looking"><b>What you're looking at:</b> two dots ride the curve — one coming from the left
+          of \(x=1\), one from the right. The open circle at the top of their path is the hole: the one
+          point the function skips.</p>
+        <div class="callout show" id="apCall">Press play — and watch the height readouts as the walkers close in.</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The walkers report</div>
+        <div style="overflow-x:auto"><table class="vtable" id="apTable">
+          <tr><th>x (from left)</th><th>f(x)</th><th>x (from right)</th><th>f(x)</th></tr>
+        </table></div>
+        <div class="stat" style="margin-top:10px"><span class="k">where f is heading</span><span class="v" style="color:var(--true)">2</span></div>
+        <div class="stat"><span class="k">where f is at x = 1</span><span class="v" style="color:var(--div)">undefined — a hole</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          Both walkers close in on height <b>2</b> — even though the function never actually gets there.
+          <b>The limit is where the function is heading, not where it is.</b> Say that sentence out loud;
+          it's the most important one in the unit.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The notation — now that you've earned it</h2>
+  <p class="lead reveal">You just computed your first limit by watching it happen. Here's how mathematicians
+    write what you saw:</p>
+
+  <div class="anatomy reveal">
+    <div class="m-big" id="ntMain"></div>
+    <div class="reader"><b>Read it aloud:</b> &ldquo;the limit, as \(x\) approaches \(1\), of
+      \(\frac{x^2-1}{x-1}\), is \(2\).&rdquo; Four pieces: the word <i>limit</i>, the approach
+      (\(x\to 1\)), the function being watched, and the destination.</div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">\(x\to 1\)</b> means \(x\) gets arbitrarily close to 1 — from BOTH sides — without ever needing to equal 1. The arrow is an approach, not an arrival.</span><span class="sy" id="nt1"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">\(=2\)</b> names the destination: the single height the outputs close in on. The limit is a <b>number</b>, not a process.</span><span class="sy" id="nt2"></span></div>
+    <div class="maprow"><span class="ph">And crucially: \(f(1)\) plays <b>no role</b>. The function can be undefined at 1, or defined with some other value — the limit only cares about the approach.</span><span class="sy" id="nt3"></span></div>
+  </div>
+
+  <h2 class="reveal">One-sided limits — when the two sides disagree</h2>
+  <p class="lead reveal">The walkers came from two directions. Usually they agree on a destination — but not
+    always. Here's a function with a <b>jump</b>: it follows one rule before \(x=2\) and a different rule
+    after. Send in the walkers one side at a time:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="jpPlot" viewBox="0 0 560 270" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <button class="play" id="jpL">▶ approach from the left</button>
+          <button class="play" id="jpR">▶ approach from the right</button>
+          <button id="jpReset">↺ reset</button>
+        </div>
+        <p class="looking"><b>What you're looking at:</b> the left branch ends in an open circle at height 2
+          (the function gets arbitrarily close to that point but it's not included); the right branch starts
+          with a filled dot at height 3 (that point IS the function's value at \(x=2\)).</p>
+        <div class="callout show" id="jpCall">Run both walkers — then compare their destinations.</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The verdict</div>
+        <div class="stat"><span class="k">from the left: \(\lim_{x\to 2^-}\)</span><span class="v" id="jpLv">—</span></div>
+        <div class="stat"><span class="k">from the right: \(\lim_{x\to 2^+}\)</span><span class="v" id="jpRv">—</span></div>
+        <div class="stat"><span class="k">the two-sided limit</span><span class="v" id="jpBoth">—</span></div>
+        <div class="stat"><span class="k">f(2) itself</span><span class="v">3 (the filled dot)</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          The little superscript minus and plus mark the direction: \(x\to 2^-\) approaches from below
+          (the left), \(x\to 2^+\) from above (the right). <b>The two-sided limit exists only when both
+          one-sided limits exist AND agree.</b> Here they don't — so the limit <b>does not exist</b>
+          (written DNE), even though \(f(2)\) is perfectly fine.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The hole, the dot, and the limit — three different questions</h2>
+  <p class="lead reveal">This is the AP exam's favorite opening move: show a graph, then ask about the limit,
+    the function's value, and whether they match — <b>three separate questions with possibly three
+    different answers</b>. Five rounds. Read each graph carefully; open circle = not included, filled dot =
+    the actual value.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="row" style="margin-bottom:8px">
+          <div class="qtag" id="hdProg">Graph 1 of 5</div>
+          <span class="score" id="hdScore">Score: 0 / 0</span>
+        </div>
+        <svg id="hdPlot" viewBox="0 0 420 240" preserveAspectRatio="xMidYMid meet"></svg>
+        <p class="looking" style="margin-top:4px"><b>Legend, every round:</b> an open circle ⭘ marks a point the
+          graph approaches but does NOT include; a filled dot ⬤ marks the function's actual value.</p>
+        <p class="looking" id="hdLook"></p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="qtext" id="hdQ" style="font-size:14px"></div>
+        <div class="quiz-opts" id="hdOpts" style="grid-template-columns:1fr"></div>
+        <div class="feedback" id="hdFb" style="min-height:22px"></div>
+        <button class="next" id="hdNext" style="margin-top:12px;width:100%;display:none">Next graph →</button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Tables — evidence, not proof</h2>
+  <p class="lead reveal">No graph handy? A table of values can show you where a function is heading. Plug in
+    inputs marching toward the target and watch the outputs settle. But there's an honest warning attached —
+    tables can lie. Both stories, side by side:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="m-big" id="tbHead"></div>
+        <div style="overflow-x:auto"><table class="vtable" id="tbTable">
+          <tr><th>x</th><th>f(x)</th></tr>
+        </table></div>
+        <svg id="tbPlot" viewBox="0 0 560 200" preserveAspectRatio="xMidYMid meet" style="display:none;margin-top:10px"></svg>
+        <p class="looking" id="tbLook" style="display:none"><b>What you're looking at:</b> the real graph of
+          sin(π/x) near 0 — thrashing between −1 and 1 faster and faster. The teal dots are the table's three
+          sample points: every one landed, by unlucky choice, exactly on a zero-crossing.</p>
+        <div class="controls">
+          <button class="play" id="tbStep">add a closer x →</button>
+          <button id="tbReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="tbRead"></span>
+        </div>
+        <div class="callout" id="tbCall"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick a story</div>
+        <div class="series-btns" id="tbBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">The first table is
+          honest: the outputs settle on 0.25 and the limit really is \(\tfrac14\). The second is a trap —
+          the outputs LOOK like they're settling on 0, but the chosen x-values just happened to land on the
+          function's zero-crossings. Tables suggest; they never prove.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The whole idea on one card</h2>
+  <div class="anatomy reveal">
+    <div class="m-big" id="anatMain"></div>
+    <div class="maprow"><span class="ph">One-sided limits: approach from below (\(^-\)) or above (\(^+\)); the two-sided limit exists only when they agree</span><span class="sy" id="anatB"></span></div>
+    <div class="maprow"><span class="ph">The limit and the value are independent — any combination of exists/doesn't is possible</span><span class="sy" id="anatC"></span></div>
+    <div class="maprow"><span class="ph">DNE — &ldquo;does not exist&rdquo; — is itself a complete answer (disagreeing sides, unbounded growth, or endless oscillation)</span><span class="sy" id="anatD"></span></div>
+  </div>
+
+  <h2 class="reveal">The ideas everything else builds on</h2>
+  <div class="concepts reveal">
+    <div class="concept">
+      <h3>Heading vs. being</h3>
+      <p>The limit is the <span class="key">destination of the approach</span> — the function's value at the
+        point (or whether it even has one) is a completely separate fact.</p>
+      <div class="m" id="c1"></div>
+    </div>
+    <div class="concept">
+      <h3>Both sides must agree</h3>
+      <p>A two-sided limit is a <span class="key">unanimous verdict</span>: left walker and right walker must
+        arrive at the same height, or the answer is DNE.</p>
+      <div class="m" id="c2"></div>
+    </div>
+    <div class="concept">
+      <h3>Approach, never arrive</h3>
+      <p>\(x\to a\) means arbitrarily close, <span class="key">never equal</span>. That's why a hole at the
+        target changes nothing — the walkers never stand on it anyway.</p>
+      <div class="m" id="c3"></div>
+    </div>
+    <div class="concept">
+      <h3>The instantaneous trick</h3>
+      <p>Questions that collapse at a point (speed at an instant, slope at a point) get answered by
+        <span class="key">approaching the point</span> — the move the entire rest of calculus is built on.</p>
+      <div class="m" id="c4"></div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Your turn</h2>
+  <p class="lead reveal">Five problems, ramping from reading to reasoning. Try each before revealing.</p>
+  <div class="reveal" id="practice"></div>
+
+  <h2 class="reveal">Quick quiz</h2>
+  <p class="lead reveal">Eight fast checks across the whole lesson.</p>
+  <div class="card reveal" id="quizCard">
+    <div class="row" style="margin-bottom:12px">
+      <div class="qtag" id="qProgress">Question 1 of 8</div>
+      <span class="score" id="qScore">Score: 0 / 0</span>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="next" id="qNext" style="margin-top:14px;width:100%;display:none">Next question →</button>
+  </div>
+
+  <h2 class="reveal">Common mistakes &amp; exam tips</h2>
+  <div class="mistakes reveal">
+    <div class="mistake"><h4>Answering f(a) when asked for the limit</h4><p>The single most common Unit 1 error. The filled dot is f(a); the limit is where the curve is heading. On a graph question, locate the approach FIRST, the dot second.</p></div>
+    <div class="mistake"><h4>"The limit doesn't exist because f(a) is undefined"</h4><p>Backwards — a hole at the target is exactly the situation limits were built for. The approach machine's limit was a clean 2 with no f(1) at all.</p></div>
+    <div class="mistake"><h4>Checking only one side</h4><p>A two-sided limit needs BOTH one-sided limits, agreeing. Piecewise functions and absolute values are the classic places the sides quietly differ.</p></div>
+    <div class="mistake"><h4>Treating the arrow as an equals sign</h4><p>\(x\to 2\) is an approach, not a substitution command. (Substituting often works — Lesson 2 explains exactly when — but the MEANING is the approach.)</p></div>
+    <div class="mistake"><h4>Trusting a table too much</h4><p>A table is a handful of samples. The sin(π/x) trap looked like it settled on 0 while actually oscillating forever. Tables estimate; algebra and theorems prove.</p></div>
+    <div class="mistake"><h4>Writing DNE for everything weird</h4><p>DNE is a precise verdict with specific causes: sides disagree, values grow without bound, or endless oscillation. A hole alone is NOT one of them.</p></div>
+  </div>
+  <div class="tipbox reveal">
+    <h4>On the AP exam</h4>
+    <ul>
+      <li>Graph questions: read the open circles and filled dots like punctuation — they carry the entire problem.</li>
+      <li>Write one-sided limits with their superscripts (\(x\to 2^-\), \(x\to 2^+\)) — graders look for them in DNE justifications.</li>
+      <li>&ldquo;Estimate from the table&rdquo; means exactly that — state the trend value, and don't claim more precision than the table shows.</li>
+      <li>If a limit answer feels like it needs the function's value at the point, re-read the question — it almost certainly doesn't.</li>
+    </ul>
+  </div>
+
+  <div class="whatsnext reveal">
+    You can now <b>see</b> limits. Next: <b>computing</b> them — the limit laws, why plugging in usually
+    just works, and the algebra toolkit (factoring, conjugates) for when it doesn't, including that
+    \(\tfrac{\sqrt{x+4}-2}{x}\) mystery from the table.
+    <a href="computing-limits.html">Computing Limits</a> is next — or head back to the
+    <a href="unit1.html">Unit 1 Guide</a>.
+  </div>
+
+  <footer class="reveal">What a Limit Is · part of the Unit 1 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const T=(s)=>tex(s,s,false);
+const fmt=(v,d=2)=>{const s=v.toFixed(d); return s==="-0.00"?"0.00":s;};
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mapper(dom,yr,W,H,P){ const x0=dom[0],x1=dom[1],y0=yr[0],y1=yr[1];
+  return { sx:x=>P+((x-x0)/(x1-x0))*(W-2*P), sy:v=>H-P-((v-y0)/(y1-y0))*(H-2*P), x0,x1,y0,y1 }; }
+function drawAxes(svg,M,W,H,P,xt,yt){ const sx=M.sx, sy=M.sy;
+  for(let g=0;g<=yt;g++){ const yy=M.y0+(g/yt)*(M.y1-M.y0), py=sy(yy);
+    svg.appendChild(el("line",{x1:P,y1:py,x2:W-P,y2:py,stroke:"#2b251a"}));
+    svg.appendChild(el("text",{x:P-6,y:py+3,fill:"#6b6457","font-size":9.5,"text-anchor":"end","font-family":"var(--mono)"},(+yy.toFixed(1)).toString())); }
+  for(let g=0;g<=xt;g++){ const xx=M.x0+(g/xt)*(M.x1-M.x0), px=sx(xx);
+    svg.appendChild(el("text",{x:px,y:H-P+14,fill:"#6b6457","font-size":9.5,"text-anchor":"middle","font-family":"var(--mono)"},(+xx.toFixed(1)).toString())); }
+  svg.appendChild(el("line",{x1:P,y1:sy(Math.max(0,M.y0)),x2:W-P,y2:sy(Math.max(0,M.y0)),stroke:"#4a4334","stroke-width":1.2}));
+  svg.appendChild(el("line",{x1:P,y1:sy(M.y1),x2:P,y2:sy(M.y0),stroke:"#4a4334","stroke-width":1.2}));
+}
+function curve(f,a,b,M,N=140){ let d="";
+  for(let k=0;k<=N;k++){ const x=a+(b-a)*k/N; d+=(k?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(f(x)).toFixed(1)+" "; }
+  return d; }
+const reduceMotion=()=> window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* inline \( .. \) renderer for static copy and generated prompts */
+function mathify(html){
+  if(!window.katex) return html;
+  return html.replace(/\\\((.+?)\\\)/g,(m,t)=>{ try{ return katex.renderToString(t,{throwOnError:false}); }catch(e){ return m; } });
+}
+function mathifyStatic(){
+  if(!window.katex) return;
+  document.querySelectorAll('.sub,.lead,.big-idea,.looking,.reader,.maprow .ph,.mistake p,.tipbox li,.concept p,.whatsnext,.callout,.stat .k,.card > p').forEach(n=>{
+    if(n.dataset.mz) return;
+    if(n.innerHTML.indexOf('\\(')<0){ n.dataset.mz="1"; return; }
+    n.innerHTML=mathify(n.innerHTML); n.dataset.mz="1";
+  });
+}
+
+/* ======================= 1 · SHRINKING WINDOW ======================= */
+const SP={ M:mapper([0,5],[0,26],560,270,38), p:t=>t*t, hs:[1,0.5,0.1,0.01,0.001] };
+let spI=-1, spRAF=null, spH=null;   /* spH non-null = manual slider mode */
+function renderSP(){
+  const v=document.getElementById("spPlot"); v.innerHTML="";
+  drawAxes(v,SP.M,560,270,38,5,2);
+  v.appendChild(el("path",{d:curve(SP.p,0,5,SP.M),fill:"none",stroke:"#e86ab4","stroke-width":2.5,"stroke-linecap":"round"}));
+  const hTrue = spH!=null ? spH : (spI<0 ? 1 : SP.hs[Math.min(spI,SP.hs.length-1)]);
+  const h = Math.max(hTrue, 0.18);  /* visual floor so the line stays visible */
+  const x1=3, x2=3+h;
+  /* secant */
+  const slope=(SP.p(3+hTrue)-9)/hTrue;
+  const yAt=x=>9+slope*(x-3);
+  v.appendChild(el("line",{x1:SP.M.sx(1.6),y1:SP.M.sy(yAt(1.6)),x2:SP.M.sx(4.6),y2:SP.M.sy(yAt(4.6)),stroke:"#ece7dd","stroke-width":1.8,opacity:.9}));
+  v.appendChild(el("circle",{cx:SP.M.sx(3),cy:SP.M.sy(9),r:4.5,fill:"#e86ab4"}));
+  v.appendChild(el("circle",{cx:SP.M.sx(x2),cy:SP.M.sy(SP.p(x2)),r:4.5,fill:"#ece7dd"}));
+  v.appendChild(el("text",{x:SP.M.sx(3),y:SP.M.sy(9)+18,fill:"#9a9183","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},"t = 3"));
+  v.appendChild(el("text",{x:560-44,y:18,fill:"#ece7dd","font-size":11.5,"text-anchor":"end","font-family":"var(--mono)"},
+    "avg = "+(6+hTrue).toFixed(hTrue<0.01?3:hTrue<0.5?2:1)+" m/s"));
+  document.getElementById("spRead").textContent = spH!=null ? "window: 3 to "+(3+spH).toFixed(3)+" s"
+    : (spI<0 ? "window: 3 to 4 seconds" : "window: 3 to "+(3+hTrue)+" s");
+}
+document.getElementById("spSlide").addEventListener("input",e=>{
+  const t=+e.target.value;                /* 0 → h=1, 1 → h=0.001 (log scale) */
+  spH=Math.pow(10, -3*t);
+  document.getElementById("spHv").textContent="h = "+spH.toFixed(3);
+  renderSP();
+  if(spH<0.01) document.getElementById("spCall").innerHTML="h = "+spH.toFixed(3)+": the average is "+(6+spH).toFixed(4)+" m/s — you can squeeze it as close to 6 as you like, but the slider (like the algebra) never reaches h = 0. The limit is the destination you're squeezing toward.";
+});
+const SP_PRED=[{t:"6",ok:true},{t:"6.01 — the last one computed",ok:false},{t:"0",ok:false},{t:"they never settle",ok:false}];
+let spGuessed=false;
+(function(){
+  const box=document.getElementById("spPredict");
+  shuf(SP_PRED).forEach(o=>{
+    const b=document.createElement("button"); b.style.textAlign="center"; b.textContent=o.t;
+    b.onclick=()=>{ if(spGuessed) return; spGuessed=true;
+      [...box.children].forEach(bb=>{ bb.disabled=true; if(bb.textContent==="6") bb.classList.add("correct"); });
+      if(!o.ok) b.classList.add("wrong");
+      document.getElementById("spPredictBox").insertAdjacentHTML("beforeend",
+        '<div style="margin-top:8px;font-size:13px;color:var(--muted)">'+(o.ok
+          ? '<b style="color:var(--conv)">Locked in.</b> Now press play and watch your prediction come true.'
+          : '<b style="color:var(--div)">Locked in</b> — now press play and see where they actually head.')+'</div>');
+    };
+    box.appendChild(b);
+  });
+})();
+function spStep(){
+  spI++;
+  renderSP();
+  const tbl=document.getElementById("spTable");
+  if(spI<SP.hs.length){
+    const h=SP.hs[spI];
+    const tr=document.createElement("tr"); tr.className="fresh";
+    tr.innerHTML="<td>[3, "+(3+h)+"]</td><td class='hot'>"+(6+h)+"</td>";
+    tbl.appendChild(tr);
+  }
+  if(spI>=SP.hs.length-1){
+    document.getElementById("spCall").innerHTML="The averages march: 7, 6.5, 6.1, 6.01, 6.001 — <b>heading to 6</b>. No window ever equals zero width, yet the destination is unmistakable. The instantaneous speed is <b>6 m/s</b>: your first limit."+(spGuessed?" (And it matched a certain prediction made a moment ago.)":"");
+    document.getElementById("spRun").disabled=false; spRAF=null;
+    return false;
+  }
+  return true;
+}
+document.getElementById("spRun").onclick=()=>{
+  if(spRAF) return;
+  spH=null;  /* leave manual mode */
+  document.getElementById("spRun").disabled=true;
+  if(reduceMotion()){ while(spStep()){} return; }
+  const tick=()=>{ if(spStep()) spRAF=setTimeout(tick, 850); };
+  spRAF=setTimeout(tick, 350);
+};
+document.getElementById("spReset").onclick=()=>{
+  if(spRAF){clearTimeout(spRAF);spRAF=null;}
+  spI=-1; spH=null; document.getElementById("spSlide").value=0;
+  document.getElementById("spHv").textContent="h = 1.000";
+  document.getElementById("spRun").disabled=false;
+  document.getElementById("spTable").innerHTML="<tr><th>window</th><th>avg speed (m/s)</th></tr>";
+  document.getElementById("spCall").innerHTML="Average speed over [3, 4]: (16 − 9)/1 = 7 m/s. Now press play.";
+  renderSP();
+};
+
+/* ======================= 2 · APPROACH MACHINE ======================= */
+const AP={ M:mapper([-0.4,2.4],[0,3.4],560,270,38), f:x=>x+1 };  /* (x²−1)/(x−1) simplifies to x+1 off x=1 */
+let apT=0, apRAF=null, apRows=0, apX=null;   /* apX non-null = manual mode */
+const AP_SEQ=[[0.5,1.5],[0.9,1.1],[0.99,1.01],[0.999,1.001]];
+function renderAP(){
+  const v=document.getElementById("apPlot"); v.innerHTML="";
+  drawAxes(v,AP.M,560,270,38,4,2);
+  v.appendChild(el("path",{d:curve(AP.f,-0.4,2.4,AP.M),fill:"none",stroke:"#e86ab4","stroke-width":2.5,"stroke-linecap":"round"}));
+  /* the hole */
+  v.appendChild(el("circle",{cx:AP.M.sx(1),cy:AP.M.sy(2),r:5.5,fill:"#16140f",stroke:"#e86ab4","stroke-width":2}));
+  v.appendChild(el("text",{x:AP.M.sx(1)+10,y:AP.M.sy(2)-10,fill:"#9a9183","font-size":10,"font-family":"var(--mono)"},"the hole: f(1) undefined"));
+  if(apX!=null){
+    /* manual mode: one walker under your control */
+    const onHole=Math.abs(apX-1)<0.0005;
+    if(!onHole){
+      v.appendChild(el("circle",{cx:AP.M.sx(apX),cy:AP.M.sy(AP.f(apX)),r:5.5,fill:"#3fd0b0"}));
+      v.appendChild(el("text",{x:560-44,y:18,fill:"#ece7dd","font-size":11.5,"text-anchor":"end","font-family":"var(--mono)"},
+        "f("+apX.toFixed(3)+") = "+AP.f(apX).toFixed(6)));
+    } else {
+      v.appendChild(el("circle",{cx:AP.M.sx(1),cy:AP.M.sy(2),r:9,fill:"none",stroke:"#e0644f","stroke-width":2,"stroke-dasharray":"3 3"}));
+      v.appendChild(el("text",{x:560-44,y:18,fill:"#e0644f","font-size":11.5,"text-anchor":"end","font-family":"var(--mono)"},
+        "f(1) = undefined \u2014 you’re standing on the hole"));
+    }
+    return;
+  }
+  /* walkers */
+  const ease=apT*apT*(3-2*apT);
+  const xl=0.5+(0.999-0.5)*ease, xr=1.5-(1.5-1.001)*ease;
+  v.appendChild(el("circle",{cx:AP.M.sx(xl),cy:AP.M.sy(AP.f(xl)),r:5,fill:"#3fd0b0"}));
+  v.appendChild(el("circle",{cx:AP.M.sx(xr),cy:AP.M.sy(AP.f(xr)),r:5,fill:"#3fd0b0"}));
+  v.appendChild(el("text",{x:560-44,y:18,fill:"#ece7dd","font-size":11.5,"text-anchor":"end","font-family":"var(--mono)"},
+    "f("+xl.toFixed(3)+") = "+AP.f(xl).toFixed(3)+"   f("+xr.toFixed(3)+") = "+AP.f(xr).toFixed(3)));
+}
+document.getElementById("apSlide").addEventListener("input",e=>{
+  apX=+e.target.value;
+  const onHole=Math.abs(apX-1)<0.0005;
+  document.getElementById("apXv").textContent = onHole
+    ? "x = 1.000 \u00b7 f undefined!"
+    : "x = "+apX.toFixed(3)+" \u00b7 f(x) = "+AP.f(apX).toFixed(3);
+  document.getElementById("apRead").textContent = onHole
+    ? "the one input the function skips"
+    : (Math.abs(apX-1)<0.05 ? "very close \u2014 f is hugging 2" : "walking by hand");
+  renderAP();
+});
+function apAddRow(i){
+  const [l,r]=AP_SEQ[i];
+  const tr=document.createElement("tr"); tr.className="fresh";
+  tr.innerHTML="<td>"+l+"</td><td class='hot'>"+AP.f(l).toFixed(3)+"</td><td>"+r+"</td><td class='hot'>"+AP.f(r).toFixed(3)+"</td>";
+  document.getElementById("apTable").appendChild(tr);
+}
+document.getElementById("apRun").onclick=()=>{
+  if(apRAF) return;
+  apX=null;  /* leave manual mode */
+  document.getElementById("apRun").disabled=true;
+  if(reduceMotion()){ apT=1; renderAP(); while(apRows<AP_SEQ.length) apAddRow(apRows++);
+    document.getElementById("apCall").innerHTML="Both columns settle on <b>2</b>. The function never visits the hole — and the limit doesn't need it to. <b>lim = 2; f(1) = undefined. Different questions, different answers.</b>";
+    return; }
+  const t0=performance.now(), DUR=3400;
+  const step=(now)=>{ const pr=Math.min(1,(now-t0)/DUR); apT=pr;
+    renderAP();
+    const want=Math.min(AP_SEQ.length, Math.floor(pr*4.6));
+    while(apRows<want) apAddRow(apRows++);
+    if(pr<1){ apRAF=requestAnimationFrame(step); }
+    else { apRAF=null;
+      while(apRows<AP_SEQ.length) apAddRow(apRows++);
+      document.getElementById("apCall").innerHTML="Both columns settle on <b>2</b>. The function never visits the hole — and the limit doesn't need it to. <b>lim = 2; f(1) = undefined. Different questions, different answers.</b>";
+      document.getElementById("apRead").textContent="both walkers heading to height 2";
+    } };
+  apRAF=requestAnimationFrame(step);
+};
+document.getElementById("apReset").onclick=()=>{
+  if(apRAF){cancelAnimationFrame(apRAF);apRAF=null;}
+  apT=0; apRows=0; apX=null; document.getElementById("apSlide").value=0.5;
+  document.getElementById("apXv").textContent="x = 0.500 \u00b7 f(x) = 1.500";
+  document.getElementById("apRun").disabled=false;
+  document.getElementById("apTable").innerHTML="<tr><th>x (from left)</th><th>f(x)</th><th>x (from right)</th><th>f(x)</th></tr>";
+  document.getElementById("apCall").innerHTML="Press play — and watch the height readouts as the walkers close in.";
+  document.getElementById("apRead").textContent="walkers ready";
+  renderAP();
+};
+
+/* ======================= 3 · NOTATION ======================= */
+function renderNT(){
+  const main="\\lim_{x\\to 1}\\;\\frac{x^2-1}{x-1}\\;=\\;2";
+  document.getElementById("ntMain").innerHTML=tex(main,main,true);
+  document.getElementById("nt1").innerHTML=T("x\\to 1:\\ \\text{approach}");
+  document.getElementById("nt2").innerHTML=T("L=2:\\ \\text{a number}");
+  document.getElementById("nt3").innerHTML=T("f(1)\\ \\text{irrelevant}");
+}
+
+/* ======================= 4 · ONE-SIDED JUMP ======================= */
+/* g(x)= x for x<2 (open at (2,2)); g(x)=5−x for x≥2 (closed at (2,3)) */
+const JP={ M:mapper([-0.3,4.3],[0,4.2],560,270,38) };
+let jpT={L:0,R:0}, jpRAF=null, jpDone={L:false,R:false};
+function renderJP(){
+  const v=document.getElementById("jpPlot"); v.innerHTML="";
+  drawAxes(v,JP.M,560,270,38,4,2);
+  v.appendChild(el("path",{d:curve(x=>x,-0.3,1.999,JP.M),fill:"none",stroke:"#e86ab4","stroke-width":2.5,"stroke-linecap":"round"}));
+  v.appendChild(el("path",{d:curve(x=>5-x,2,4.3,JP.M),fill:"none",stroke:"#e86ab4","stroke-width":2.5,"stroke-linecap":"round"}));
+  v.appendChild(el("text",{x:JP.M.sx(0.9),y:JP.M.sy(0.9)-12,fill:"#9a9183","font-size":10.5,"font-family":"var(--mono)"},"f(x) = x  (for x < 2)"));
+  v.appendChild(el("text",{x:JP.M.sx(3.1),y:JP.M.sy(5-3.1)-12,fill:"#9a9183","font-size":10.5,"font-family":"var(--mono)"},"f(x) = 5 \u2212 x  (for x \u2265 2)"));
+  v.appendChild(el("circle",{cx:JP.M.sx(2),cy:JP.M.sy(2),r:5.5,fill:"#16140f",stroke:"#e86ab4","stroke-width":2}));
+  v.appendChild(el("circle",{cx:JP.M.sx(2),cy:JP.M.sy(3),r:5,fill:"#e86ab4"}));
+  v.appendChild(el("text",{x:JP.M.sx(2)+10,y:JP.M.sy(3)-8,fill:"#9a9183","font-size":10,"font-family":"var(--mono)"},"f(2) = 3"));
+  const eL=jpT.L*jpT.L*(3-2*jpT.L), eR=jpT.R*jpT.R*(3-2*jpT.R);
+  if(jpT.L>0){ const x=0.6+(1.999-0.6)*eL;
+    v.appendChild(el("circle",{cx:JP.M.sx(x),cy:JP.M.sy(x),r:5,fill:"#3fd0b0"}));
+    v.appendChild(el("text",{x:JP.M.sx(x),y:JP.M.sy(x)-12,fill:"#3fd0b0","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},"f="+x.toFixed(3))); }
+  if(jpT.R>0){ const x=3.6-(3.6-2.001)*eR;
+    v.appendChild(el("circle",{cx:JP.M.sx(x),cy:JP.M.sy(5-x),r:5,fill:"#f3a1cf"}));
+    v.appendChild(el("text",{x:JP.M.sx(x),y:JP.M.sy(5-x)-12,fill:"#f3a1cf","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},"f="+(5-x).toFixed(3))); }
+}
+function jpRun(side){
+  if(jpRAF) return;
+  const t0=performance.now(), DUR=2400;
+  if(reduceMotion()){ jpT[side]=1; jpDone[side]=true; renderJP(); jpVerdict(side); return; }
+  const step=(now)=>{ const pr=Math.min(1,(now-t0)/DUR); jpT[side]=pr; renderJP();
+    if(pr<1){ jpRAF=requestAnimationFrame(step); } else { jpRAF=null; jpDone[side]=true; jpVerdict(side); } };
+  jpRAF=requestAnimationFrame(step);
+}
+function jpVerdict(side){
+  if(side==="L") document.getElementById("jpLv").textContent="2 (arrives at the open circle's height)";
+  else document.getElementById("jpRv").textContent="3";
+  if(jpDone.L&&jpDone.R){
+    document.getElementById("jpBoth").textContent="DNE — the sides disagree";
+    document.getElementById("jpBoth").style.color="var(--div)";
+    document.getElementById("jpCall").innerHTML="Left walker: heading to <b>2</b>. Right walker: heading to <b>3</b>. No single destination — so the two-sided limit <b>does not exist</b>. Notice f(2)=3 exists and is irrelevant to that verdict.";
+  }
+}
+document.getElementById("jpL").onclick=()=>jpRun("L");
+document.getElementById("jpR").onclick=()=>jpRun("R");
+document.getElementById("jpReset").onclick=()=>{
+  if(jpRAF){cancelAnimationFrame(jpRAF);jpRAF=null;}
+  jpT={L:0,R:0}; jpDone={L:false,R:false};
+  document.getElementById("jpLv").textContent="—"; document.getElementById("jpRv").textContent="—";
+  const b=document.getElementById("jpBoth"); b.textContent="—"; b.style.color="";
+  document.getElementById("jpCall").textContent="Run both walkers — then compare their destinations.";
+  renderJP();
+};
+
+/* ======================= 5 · HOLE / DOT / LIMIT GAME ======================= */
+/* each round: draw(svg,M) renders the graph; prompts: sequential MC */
+const HD=[
+ { look:"A straight line with an open circle at (1, 3) and a separate filled dot floating at (1, 5).",
+   draw:(v,M)=>{ v.appendChild(el("path",{d:curve(x=>x+2,-0.3,2.6,M),fill:"none",stroke:"#e86ab4","stroke-width":2.5}));
+     v.appendChild(el("circle",{cx:M.sx(1),cy:M.sy(3),r:5.5,fill:"#16140f",stroke:"#e86ab4","stroke-width":2}));
+     v.appendChild(el("circle",{cx:M.sx(1),cy:M.sy(5),r:5,fill:"#e86ab4"})); },
+   dom:[-0.3,2.6], yr:[0,6],
+   prompts:[
+    {q:"As x approaches 1, where is the curve heading? (That's the limit.)",
+     opts:[{h:"3",ok:true},{h:"5",ok:false},{h:"does not exist",ok:false}],
+     fb:"Follow the LINE from both sides: it closes in on height 3. The floating dot is a distraction — the approach never touches it."},
+    {q:"What is f(1) — the function's actual value at x = 1?",
+     opts:[{h:"5 — the filled dot",ok:true},{h:"3 — the open circle",ok:false},{h:"undefined",ok:false}],
+     fb:"The filled dot IS the value: someone defined f(1) = 5, away from the rest of the line. The open circle means height 3 is NOT the value there."},
+    {q:"So: does the limit equal f(1)?",
+     opts:[{h:"No — limit is 3, value is 5; they're separate facts",ok:true},{h:"Yes, they always match",ok:false},{h:"Can't tell from a graph",ok:false}],
+     fb:"Limit 3, value 5: a function can be heading one place while standing somewhere else entirely. (Lesson 4 names this mismatch: a removable discontinuity.)"}] },
+ { look:"Two branches that don't meet: the left one ends in an open circle at (2, 2); the right one starts with a filled dot at (2, 3).",
+   draw:(v,M)=>{ v.appendChild(el("path",{d:curve(x=>x,-0.2,1.99,M),fill:"none",stroke:"#e86ab4","stroke-width":2.5}));
+     v.appendChild(el("path",{d:curve(x=>5-x,2,4.2,M),fill:"none",stroke:"#e86ab4","stroke-width":2.5}));
+     v.appendChild(el("circle",{cx:M.sx(2),cy:M.sy(2),r:5.5,fill:"#16140f",stroke:"#e86ab4","stroke-width":2}));
+     v.appendChild(el("circle",{cx:M.sx(2),cy:M.sy(3),r:5,fill:"#e86ab4"})); },
+   dom:[-0.2,4.2], yr:[0,4.2],
+   prompts:[
+    {q:"What is the limit of f as x approaches 2?",
+     opts:[{h:"does not exist — the sides disagree",ok:true},{h:"2",ok:false},{h:"3",ok:false}],
+     fb:"Left side heads to 2, right side heads to 3. Two-sided limits need a unanimous verdict — no agreement, no limit. The one-sided limits each exist; the two-sided one doesn't."},
+    {q:"What is f(2)?",
+     opts:[{h:"3 — the filled dot",ok:true},{h:"2",ok:false},{h:"undefined",ok:false}],
+     fb:"The filled dot at (2, 3) is the actual value. A function can have a perfectly good VALUE at a point where its LIMIT fails to exist."}] },
+ { look:"A smooth U-shaped curve passing straight through the point (2, 1) — no holes, no dots, no breaks.",
+   draw:(v,M)=>{ v.appendChild(el("path",{d:curve(x=>(x-2)*(x-2)+1,0,4,M),fill:"none",stroke:"#e86ab4","stroke-width":2.5}));
+     v.appendChild(el("circle",{cx:M.sx(2),cy:M.sy(1),r:4,fill:"#e86ab4"})); },
+   dom:[0,4], yr:[0,5.5],
+   prompts:[
+    {q:"What is the limit of f as x approaches 2?",
+     opts:[{h:"1",ok:true},{h:"2",ok:false},{h:"does not exist",ok:false}],
+     fb:"Both sides slide down into the same point: heading to 1."},
+    {q:"And here, does the limit equal f(2)?",
+     opts:[{h:"Yes — heading and being agree",ok:true},{h:"No",ok:false},{h:"Only from the left",ok:false}],
+     fb:"Limit = value = 1. When where-it's-heading matches where-it-is, the function is called CONTINUOUS at that point — the star of Lesson 4. Most familiar functions behave like this everywhere, which is why plugging in usually works."}] },
+ { look:"An arch-shaped curve with an open circle right at its peak, (1, 4). Nothing else at x = 1 — no dot anywhere.",
+   draw:(v,M)=>{ v.appendChild(el("path",{d:curve(x=>4-(x-1)*(x-1),-0.6,2.6,M),fill:"none",stroke:"#e86ab4","stroke-width":2.5}));
+     v.appendChild(el("circle",{cx:M.sx(1),cy:M.sy(4),r:5.5,fill:"#16140f",stroke:"#e86ab4","stroke-width":2})); },
+   dom:[-0.6,2.6], yr:[0,4.6],
+   prompts:[
+    {q:"What is the limit of f as x approaches 1?",
+     opts:[{h:"4",ok:true},{h:"undefined",ok:false},{h:"does not exist",ok:false}],
+     fb:"Both sides climb to height 4. The hole doesn't matter — approach, never arrive."},
+    {q:"What is f(1)?",
+     opts:[{h:"undefined — there's a hole and no dot",ok:true},{h:"4",ok:false},{h:"0",ok:false}],
+     fb:"Open circle, no filled dot anywhere: the function simply has no value at 1. Limit exists (4), value doesn't — the approach machine's situation exactly."}] },
+ { look:"A curve that shoots upward on BOTH sides of x = 2, hugging a dashed vertical line there and climbing off the top of the picture.",
+   draw:(v,M)=>{ v.appendChild(el("path",{d:curve(x=>Math.min(1/((x-2)*(x-2)),6.4),0.4,1.93,M),fill:"none",stroke:"#e86ab4","stroke-width":2.5}));
+     v.appendChild(el("path",{d:curve(x=>Math.min(1/((x-2)*(x-2)),6.4),2.07,3.6,M),fill:"none",stroke:"#e86ab4","stroke-width":2.5}));
+     v.appendChild(el("line",{x1:M.sx(2),y1:M.sy(6.5),x2:M.sx(2),y2:M.sy(0),stroke:"#e0644f","stroke-width":1.3,"stroke-dasharray":"5 4",opacity:.9})); },
+   dom:[0.4,3.6], yr:[0,6.5],
+   prompts:[
+    {q:"What is the limit of f as x approaches 2?",
+     opts:[{h:"does not exist — the outputs grow without bound",ok:true},{h:"6.5 — the top of the picture",ok:false},{h:"2",ok:false}],
+     fb:"There's no destination — the heights blow past every number. Unbounded growth is the second way a limit can fail (the dashed line is called a vertical asymptote; Lesson 5 is all about these). The picture's edge is just the picture's edge."},
+    {q:"What is f(2)?",
+     opts:[{h:"undefined",ok:true},{h:"infinity",ok:false},{h:"0",ok:false}],
+     fb:"Division by zero at x = 2: no value. And note 'infinity' is not a number a function can equal — it describes unbounded behavior, not a value."}] }
+];
+let hdR=0, hdP=0, hdScore=0, hdDone=0, hdLock=false;
+function renderHD(){
+  const round=HD[hdR];
+  const v=document.getElementById("hdPlot"); v.innerHTML="";
+  const M=mapper(round.dom, round.yr, 420, 240, 32);
+  drawAxes(v,M,420,240,32,3,2);
+  round.draw(v,M);
+  document.getElementById("hdLook").innerHTML="<b>What you're looking at:</b> "+round.look;
+  document.getElementById("hdProg").textContent="Graph "+(hdR+1)+" of "+HD.length;
+  document.getElementById("hdScore").textContent="Score: "+hdScore+" / "+hdDone;
+  const p=round.prompts[hdP];
+  document.getElementById("hdQ").textContent=p.q;
+  const box=document.getElementById("hdOpts"); box.innerHTML="";
+  document.getElementById("hdFb").innerHTML="";
+  document.getElementById("hdNext").style.display="none";
+  hdLock=false;
+  shuf(p.opts).forEach(o=>{
+    const b=document.createElement("button"); b.textContent=o.h;
+    b.onclick=()=>{
+      if(hdLock) return; hdLock=true; hdDone++;
+      [...box.children].forEach(bb=>{ bb.disabled=true; if(bb.textContent===p.opts.find(x=>x.ok).h) bb.classList.add("correct"); });
+      if(o.ok){ hdScore++; } else b.classList.add("wrong");
+      document.getElementById("hdScore").textContent="Score: "+hdScore+" / "+hdDone;
+      document.getElementById("hdFb").innerHTML=(o.ok?'<span style="color:var(--conv);font-weight:600">✓</span> ':'<span style="color:var(--div);font-weight:600">✗</span> ')+'<span style="color:var(--muted)">'+p.fb+'</span>';
+      const last = hdR===HD.length-1 && hdP===HD[hdR].prompts.length-1;
+      document.getElementById("hdNext").textContent = hdP<HD[hdR].prompts.length-1 ? "Next question →" : (last ? "Play again ↺" : "Next graph →");
+      document.getElementById("hdNext").style.display="block";
+    };
+    box.appendChild(b);
+  });
+}
+document.getElementById("hdNext").onclick=()=>{
+  if(hdP<HD[hdR].prompts.length-1){ hdP++; }
+  else if(hdR<HD.length-1){ hdR++; hdP=0; }
+  else { hdR=0; hdP=0; hdScore=0; hdDone=0; }
+  renderHD();
+};
+
+/* ======================= 6 · TABLES: EVIDENCE NOT PROOF ======================= */
+const TB=[
+ { name:"The honest table", sub:"(√(x+4) − 2)/x near 0", head:"f(x)=\\frac{\\sqrt{x+4}-2}{x}\\quad\\text{as }x\\to 0",
+   f:x=>(Math.sqrt(x+4)-2)/x,
+   xs:[0.1,0.01,0.001,0.0001,-0.0001],
+   call:"Settling on 0.250… from BOTH sides — strong evidence the limit is ¼. (It really is; Lesson 2 proves it with an algebra trick called the conjugate.)",
+   read:i=>i<5?"row "+i+" of 5":"evidence: heading to 0.25" },
+ { name:"The liar", sub:"sin(π/x) near 0", head:"f(x)=\\sin\\!\\Bigl(\\frac{\\pi}{x}\\Bigr)\\quad\\text{as }x\\to 0",
+   f:x=>Math.sin(Math.PI/x),
+   xs:[0.1,0.01,0.001,0.0808,2/9],
+   call:"The first three rows scream “limit = 0” — but they were chosen to land exactly on the function's zero-crossings. Other nearby inputs give 1. Between any of these x's the function oscillates infinitely many times; it heads NOWHERE, and the limit does not exist. <b>Tables are evidence, never proof.</b>",
+   read:i=>i<5?"row "+i+" of 5":"the table lied" }
+];
+let tbKey=0, tbN=0;
+function renderTBplot(){
+  const v=document.getElementById("tbPlot"), look=document.getElementById("tbLook");
+  const show = (tbKey===1 && tbN>=TB[1].xs.length);
+  v.style.display=show?"":"none"; look.style.display=show?"":"none";
+  if(!show){ v.innerHTML=""; return; }
+  v.innerHTML="";
+  const M=mapper([0.02,0.36],[-1.3,1.3],560,200,30);
+  drawAxes(v,M,560,200,30,3,2);
+  /* dense sampling: sin(pi/x) oscillates ~8.5 cycles on this window, faster near 0 */
+  v.appendChild(el("path",{d:curve(x=>Math.sin(Math.PI/x),0.022,0.36,M,900),fill:"none",stroke:"#e86ab4","stroke-width":1.8,"stroke-linecap":"round"}));
+  /* the table's innocent samples, all on zero-crossings */
+  [0.1, 0.0808, 2/9].forEach(x=>{ /* show the in-window ones incl. the spike points */
+    v.appendChild(el("circle",{cx:M.sx(x),cy:M.sy(Math.sin(Math.PI/x)),r:5,fill:Math.abs(Math.sin(Math.PI/x))<1e-9?"#3fd0b0":"#ece7dd"}));
+  });
+  v.appendChild(el("circle",{cx:M.sx(0.1),cy:M.sy(0),r:5,fill:"#3fd0b0"}));
+  v.appendChild(el("text",{x:M.sx(0.1),y:M.sy(0)+18,fill:"#3fd0b0","font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},"x = 0.1"));
+  v.appendChild(el("text",{x:560-36,y:16,fill:"#9a9183","font-size":10.5,"text-anchor":"end","font-family":"var(--mono)"},"sin(\u03c0/x): no destination"));
+}
+function renderTB(){
+  const e=TB[tbKey];
+  document.getElementById("tbHead").innerHTML=tex(e.head,e.head,true);
+  const tbl=document.getElementById("tbTable");
+  let h="<tr><th>x</th><th>f(x)</th></tr>";
+  for(let i=0;i<tbN;i++){
+    const x=e.xs[i], val=e.f(x);
+    const xs = Math.abs(x)<0.001?x.toFixed(4):(x===2/9?"0.2222…":x.toString());
+    const fresh=(i===tbN-1)?' class="fresh"':'';
+    h+="<tr"+fresh+"><td>"+xs+"</td><td class='hot'>"+(Math.abs(val)<1e-9?"0.000000":val.toFixed(6))+"</td></tr>";
+  }
+  tbl.innerHTML=h;
+  document.getElementById("tbRead").textContent=e.read(tbN);
+  const c=document.getElementById("tbCall");
+  if(tbN>=e.xs.length){ c.innerHTML=e.call; c.classList.add("show"); }
+  else { c.classList.remove("show"); }
+  document.querySelectorAll("#tbBtns button").forEach((b,i)=>b.classList.toggle("on",i===tbKey));
+  renderTBplot();
+}
+document.getElementById("tbStep").onclick=()=>{ if(tbN<TB[tbKey].xs.length){ tbN++; renderTB(); } };
+document.getElementById("tbReset").onclick=()=>{ tbN=0; renderTB(); };
+const tbBtns=document.getElementById("tbBtns");
+TB.forEach((e,i)=>{ const b=document.createElement("button");
+  b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+  b.onclick=()=>{ tbKey=i; tbN=0; renderTB(); };
+  tbBtns.appendChild(b); });
+
+/* ======================= anatomy + concepts ======================= */
+function renderAnatomy(){
+  const main="\\lim_{x\\to a}f(x)=L\\;\\iff\\;\\text{outputs head to }L\\text{ as }x\\text{ closes in on }a\\text{ (both sides)}";
+  document.getElementById("anatMain").innerHTML=tex(main,main,true);
+  document.getElementById("anatB").innerHTML=T("\\lim_{x\\to a^-}=\\lim_{x\\to a^+}=L");
+  document.getElementById("anatC").innerHTML=T("\\lim_{x\\to a}f\\ \\text{vs}\\ f(a)");
+  document.getElementById("anatD").innerHTML=T("\\text{DNE: disagree / unbounded / oscillate}");
+}
+function renderConcepts(){
+  const c1=document.getElementById("c1"); if(c1) c1.innerHTML=tex("\\lim_{x\\to a}f(x)\\ \\ne\\ f(a)\\ \\text{(in general)}","lim f vs f(a): independent");
+  const c2=document.getElementById("c2"); if(c2) c2.innerHTML=tex("\\lim_{x\\to a^-}f=\\lim_{x\\to a^+}f\\ \\Rightarrow\\ \\lim\\ \\text{exists}","left = right ⇒ exists");
+  const c3=document.getElementById("c3"); if(c3) c3.innerHTML=tex("x\\to a:\\ 0<|x-a|\\ \\text{shrinks}","close, never equal");
+  const c4=document.getElementById("c4"); if(c4) c4.innerHTML=tex("\\text{instant}=\\lim\\ \\text{of windows}","instant = limit of windows");
+}
+
+/* ======================= practice ======================= */
+const PRAC=[
+ { tag:"Read the graph", q:()=>'A graph of \\(g\\) shows an open circle at \\((3,1)\\) with the curve approaching it from both sides, and a filled dot at \\((3,4)\\). Find \\(\\lim_{x\\to 3}g(x)\\) and \\(g(3)\\).',
+   sol:[{t:"Follow the curve, not the dot: both sides head to the open circle's height.",m:"\\lim_{x\\to 3}g(x)=1"},
+        {t:"The filled dot is the actual value.",m:"g(3)=4"},
+        {t:"They disagree — and that's allowed. Heading and being are independent questions.",m:""}] },
+ { tag:"Estimate from a table", q:()=>'Use the values of \\(h(x)=\\dfrac{2^x-1}{x}\\): \\(h(0.1)=0.7177\\), \\(h(0.01)=0.6956\\), \\(h(0.001)=0.6934\\). Estimate \\(\\lim_{x\\to 0}h(x)\\) to two decimal places.',
+   sol:[{t:"The outputs are settling: 0.7177 → 0.6956 → 0.6934. Each step changes less than the last.",m:"\\lim_{x\\to 0}\\frac{2^x-1}{x}\\approx 0.69"},
+        {t:"State the trend value — and no more precision than the table supports. (The exact value turns out to be \\(\\ln 2\\approx 0.6931\\), a fact this estimate quietly predicts.)",m:""}] },
+ { tag:"Piecewise, sides checked", q:()=>'Let \\(k(x)=3-x\\) for \\(x<1\\) and \\(k(x)=x^2+1\\) for \\(x\\ge 1\\). Find \\(\\lim_{x\\to 1}k(x)\\), checking each side.',
+   sol:[{t:"From the left, use the rule for x < 1:",m:"\\lim_{x\\to 1^-}(3-x)=2"},
+        {t:"From the right, the other rule:",m:"\\lim_{x\\to 1^+}(x^2+1)=2"},
+        {t:"Different formulas, same destination — the sides agree, so the limit exists.",m:"\\lim_{x\\to 1}k(x)=2"}] },
+ { tag:"The hole, by hand", q:()=>'Find \\(\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}\\), and explain why the answer isn’t “undefined.”',
+   sol:[{t:"At x = 3 the formula gives 0/0 — so f(3) is undefined. But the LIMIT asks about the approach, where x ≠ 3, and there we may factor and cancel:",m:"\\frac{x^2-9}{x-3}=\\frac{(x-3)(x+3)}{x-3}=x+3\\quad (x\\ne 3)"},
+        {t:"Near 3 (but not at it), the function IS x + 3, which heads to:",m:"\\lim_{x\\to 3}(x+3)=6"},
+        {t:"Undefined describes f(3); the limit is a different question with a clean answer. (Lesson 2 makes this factor-and-cancel move official.)",m:""}] },
+ { tag:"A DNE you can prove", q:()=>'Show that \\(\\lim_{x\\to 0}\\dfrac{|x|}{x}\\) does not exist.',
+   sol:[{t:"For x > 0, |x| = x, so the function equals 1. For x < 0, |x| = −x, so it equals −1.",m:"\\lim_{x\\to 0^+}\\frac{|x|}{x}=1\\qquad \\lim_{x\\to 0^-}\\frac{|x|}{x}=-1"},
+        {t:"Both one-sided limits exist — but they disagree. No unanimous verdict:",m:"\\lim_{x\\to 0}\\frac{|x|}{x}\\ \\text{DNE}"},
+        {t:"Citing the two one-sided values IS the justification graders want for a DNE claim.",m:""}] }
+];
+function renderPractice(){
+  document.getElementById("practice").innerHTML=mathify(PRAC.map((p,i)=>{
+    const steps=p.sol.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+    return '<div class="prob"><div class="prob-tag">'+p.tag+'</div><div class="prob-q">'+p.q()+'</div>'
+      +'<button class="soltoggle" data-i="'+i+'">Show solution</button>'
+      +'<div class="sol" id="sol'+i+'">'+steps+'</div></div>';
+  }).join(""));
+  document.querySelectorAll(".soltoggle").forEach(btn=>{ btn.onclick=()=>{ const i=btn.getAttribute("data-i"), s=document.getElementById("sol"+i);
+    btn.textContent=s.classList.toggle("show")?"Hide solution":"Show solution"; }; });
+}
+
+/* ======================= quiz ======================= */
+const QUIZ=[
+ { q:()=>'\\(\\lim_{x\\to a}f(x)\\) asks:',
+   opts:[{h:()=>"what value f's outputs approach as x closes in on a",ok:true},{h:()=>"the value of f at a",ok:false},{h:()=>"whether f is defined at a",ok:false},{h:()=>"the largest value f reaches near a",ok:false}],
+   fb:"Heading, not being. The function's value at a — or whether it has one — is a separate question entirely." },
+ { q:()=>'A graph shows the curve approaching height 5 from both sides of \\(x=2\\), with an open circle at \\((2,5)\\) and no dot anywhere. Then \\(\\lim_{x\\to 2}f(x)=\\)',
+   opts:[{h:()=>"5",ok:true},{h:()=>"undefined",ok:false},{h:()=>"does not exist",ok:false},{h:()=>"2",ok:false}],
+   fb:"Both sides head to 5 — that IS the limit. The hole makes f(2) undefined, which has no effect on the approach. 'Undefined' answers the wrong question." },
+ { q:()=>'\\(\\lim_{x\\to 3^-}f(x)=7\\) and \\(\\lim_{x\\to 3^+}f(x)=7\\), but \\(f(3)=10\\). Then \\(\\lim_{x\\to 3}f(x)\\):',
+   opts:[{h:()=>"equals 7 — the sides agree, and f(3) is irrelevant",ok:true},{h:()=>"equals 10",ok:false},{h:()=>"does not exist because f(3) ≠ 7",ok:false},{h:()=>"equals 8.5, the average",ok:false}],
+   fb:"Agreement between the one-sided limits is the ENTIRE test. The misplaced dot at height 10 changes nothing about where the function is heading." },
+ { q:()=>'Which situation makes \\(\\lim_{x\\to a}f(x)\\) fail to exist?',
+   opts:[{h:()=>"the left and right approaches head to different values",ok:true},{h:()=>"f(a) is undefined",ok:false},{h:()=>"f(a) exists but differs from the approach",ok:false},{h:()=>"the graph has an open circle at a",ok:false}],
+   fb:"DNE has specific causes: disagreeing sides, unbounded growth, or endless oscillation. Holes, missing values, and misplaced dots are not on the list." },
+ { q:()=>'For \\(g(x)=\\dfrac{|x-4|}{x-4}\\), \\(\\lim_{x\\to 4^+}g(x)=\\)',
+   opts:[{h:()=>"1",ok:true},{h:()=>"−1",ok:false},{h:()=>"0",ok:false},{h:()=>"does not exist",ok:false}],
+   fb:"From the right, x > 4, so |x−4| = x−4 and the fraction is exactly 1 the whole way in. (From the left it's −1 — so the two-sided limit DNE, but the one-sided one is a clean 1.)" },
+ { q:()=>'A table shows \\(f(0.1)=2.9\\), \\(f(0.01)=2.99\\), \\(f(0.001)=2.999\\). The honest conclusion is:',
+   opts:[{h:()=>"the limit appears to be 3 — strong evidence, not proof",ok:true},{h:()=>"the limit is exactly 3, proven",ok:false},{h:()=>"the limit is 2.999",ok:false},{h:()=>"nothing — tables are useless",ok:false}],
+   fb:"Tables estimate. This one is excellent evidence for 3 — but sin(π/x) looked just as convincing and was lying. Evidence, not proof; and 2.999 is just the last sample, not the destination." },
+ { q:()=>'The ball with \\(p(t)=t^2\\): the average speeds over shrinking windows at \\(t=3\\) were 7, 6.5, 6.1, 6.01, … The instantaneous speed at \\(t=3\\) is:',
+   opts:[{h:()=>"6 m/s — the limit of the averages",ok:true},{h:()=>"6.01 m/s — the last average computed",ok:false},{h:()=>"undefined — you can't divide by zero time",ok:false},{h:()=>"7 m/s — the first average",ok:false}],
+   fb:"The averages head to 6, and that destination IS the instantaneous speed. 'Undefined' is what happens if you demand a zero-width window; the limit sidesteps the demand by approaching instead." },
+ { q:()=>'\\(\\lim_{x\\to 2}(x^2+1)=5\\), and also \\(f(2)=5\\). The fancy name (coming in Lesson 4) for a point where heading and being agree is:',
+   opts:[{h:()=>"continuous at x = 2",ok:true},{h:()=>"removable at x = 2",ok:false},{h:()=>"differentiable at x = 2",ok:false},{h:()=>"bounded at x = 2",ok:false}],
+   fb:"Continuity = the limit exists, the value exists, and they match. It's why substituting works for friendly functions — a preview of Lessons 2 and 4." }
+];
+let qi=0, qScore=0, qDone=0, qAnswered=false;
+const qOpts=document.getElementById("qOpts"), qFb=document.getElementById("qFb"), qNext=document.getElementById("qNext");
+function renderQuiz(){
+  qAnswered=false; const item=QUIZ[qi];
+  document.getElementById("qText").innerHTML=mathify(item.q());
+  document.getElementById("qProgress").textContent="Question "+(qi+1)+" of "+QUIZ.length;
+  document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+  qFb.innerHTML=""; qNext.style.display="none";
+  qNext.textContent = qi<QUIZ.length-1 ? "Next question →" : "Restart quiz ↺";
+  qOpts.innerHTML="";
+  const sopts=shuf(item.opts);
+  sopts.forEach((o)=>{ const b=document.createElement("button"); b.innerHTML=o.h();
+    b.onclick=()=>{ if(qAnswered)return; qAnswered=true; qDone++;
+      [...qOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(sopts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ qScore++; b.classList.add("correct"); qFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ Correct.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      else { b.classList.add("wrong"); qFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not quite.</span> <span style="color:var(--muted)">'+item.fb+'</span>'; }
+      document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+      qNext.style.display="block"; };
+    qOpts.appendChild(b); });
+}
+qNext.onclick=()=>{ if(qi<QUIZ.length-1){ qi++; } else { qi=0; qScore=0; qDone=0; } renderQuiz(); };
+
+/* ======================= init + KaTeX refresh ======================= */
+function refreshAll(){ renderSP(); renderAP(); renderNT(); renderJP(); renderHD(); renderTB(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic(); }
+renderSP(); renderAP(); renderNT(); renderJP(); renderHD(); renderTB(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); refreshAll(); }
+  else if(++tries>40) clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.animationDelay=Math.min(i*30,440)+'ms'; });
+
+</script>
+</body>
+</html>

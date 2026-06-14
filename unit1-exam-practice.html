@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Exam Practice — Mixed Review &amp; FRQ · Unit 1</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23101420%27%2F%3E%3Cg%20fill%3D%27%23e86ab4%27%3E%3Crect%20x%3D%276%27%20y%3D%2718%27%20width%3D%274.6%27%20height%3D%278%27%20rx%3D%271%27%20opacity%3D%27.55%27%2F%3E%3Crect%20x%3D%2712%27%20y%3D%2714%27%20width%3D%274.6%27%20height%3D%2712%27%20rx%3D%271%27%20opacity%3D%27.75%27%2F%3E%3Crect%20x%3D%2718%27%20y%3D%2710%27%20width%3D%274.6%27%20height%3D%2716%27%20rx%3D%271%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M5%2017%20C%2012%2010%2C%2020%206%2C%2027%207%27%20stroke%3D%27%238fa6f7%27%20stroke-width%3D%272%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<style>
+  :root{ --approx:#e86ab4; --emerald:#e86ab4; --cyan:#e86ab4; --true:#3fd0b0; --glow:rgba(232,106,180,.08); --wrap-max:820px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:680px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:720px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-top:18px} .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7);margin-top:14px}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:14px;text-align:left;transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--emerald);transform:translateY(-1px)} button:active{transform:translateY(0) scale(.99)} button:disabled{cursor:default}
+  .qtag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:3px 10px;margin-bottom:10px;background:var(--panel-2)}
+  .qprompt{font-size:15.5px;font-weight:500;margin:6px 0 4px;line-height:1.5}
+  .qmath{font-family:var(--mono);font-size:16px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center;margin:12px 0;overflow-x:auto} .qmath .katex{font-size:1.06em}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px}
+  @media(max-width:560px){.opts{grid-template-columns:1fr}}
+  .opts button{text-align:center;font-size:14.5px;padding:11px}
+  .opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv);font-weight:600}
+  .opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .fb{font-size:13.5px;line-height:1.55;margin-top:12px;background:var(--bg);border-radius:9px;padding:11px 13px;display:none} .fb.show{display:block} .fb .ftag{font-weight:600}
+  .fb .ftag.ok{color:var(--conv)} .fb .ftag.bad{color:var(--div)}
+  .next{background:var(--approx);color:#1a1408;border-color:var(--approx);font-weight:600;text-align:center;width:100%;box-shadow:0 8px 18px -10px var(--approx);margin-top:16px;display:none} .next.show{display:block}
+  .review-link{display:inline-block;margin-top:8px;font-size:12.5px;font-family:var(--mono);color:var(--emerald);text-decoration:none} .review-link:hover{text-decoration:underline}
+  /* FRQ */
+  .frq-given{background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+  .frq-given .katex{font-size:1.05em} .frq-given .gl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .frq-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .frq-tabs button{font-size:13px;padding:9px 13px;text-align:center;border-radius:9px}
+  .frq-tabs button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .frq-desc{font-size:13px;color:var(--muted);background:var(--bg);border-radius:9px;padding:9px 13px;margin-bottom:6px} .frq-desc b{color:var(--approx)}
+  .part{border-top:1px solid var(--line);padding:16px 0 4px} .part:first-child{border-top:none}
+  .part-h{display:flex;justify-content:space-between;align-items:center;gap:10px} .part-l{font-weight:600;font-size:14.5px;color:var(--ink)} .part-pts{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .part-q{font-size:14.5px;line-height:1.55;margin:8px 0 4px}
+  .frq-fields{display:flex;flex-direction:column;gap:10px;margin:4px 0 12px}
+  .frq-field{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .frq-flabel{font-size:14px;min-width:54px;color:var(--ink)} .frq-flabel .katex{font-size:1em}
+  .frq-input{font-family:var(--mono);font-size:14px;padding:8px 11px;border:1px solid var(--line);border-radius:8px;background:var(--panel-2);color:var(--ink);min-width:140px}
+  .frq-input:focus{outline:none;border-color:var(--emerald)} .frq-input.ok{border-color:var(--conv);background:rgba(63,208,176,.16)} .frq-input.no{border-color:var(--div);background:rgba(224,100,79,.16)}
+  .frq-check{background:var(--ink);color:var(--panel);border-color:var(--ink);font-size:13px;padding:8px 14px} .frq-check:hover{background:#d8d2c6} .frq-check:disabled{opacity:.5}
+  .frq-sol{display:none;margin-top:10px;font-size:13.5px;line-height:1.6;background:var(--bg);border-left:2px solid var(--emerald);border-radius:0 9px 9px 0;padding:11px 14px} .frq-sol.show{display:block}
+  .frq-sol .stepm{font-family:var(--mono);background:var(--panel-2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;margin:7px 0;overflow-x:auto;font-size:13px}
+  .rubric{margin-top:10px} .rubric-h{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .rubric label{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink);padding:5px 0;cursor:pointer} .rubric input{margin-top:3px;accent-color:var(--emerald)}
+  .reveal-sol{font-family:var(--mono);font-size:12.5px;color:var(--emerald);background:none;border:1px dashed var(--line-2);width:100%;text-align:center;margin-top:8px}
+  .scoreline{font-family:var(--mono);font-size:14px;color:var(--ink);background:var(--panel-2);border-radius:9px;padding:12px 14px;margin-top:14px;text-align:center} .scoreline b{color:var(--emerald)}
+  .weakrow{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:13.5px}
+  .weakbar{flex:1;height:8px;background:var(--panel-2);border-radius:5px;overflow:hidden} .weakbar i{display:block;height:100%;background:var(--emerald);border-radius:5px}
+  .weaklabel{min-width:160px;color:var(--ink)} .weakpct{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:48px;text-align:right}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  footer{color:var(--muted);font-size:12px;margin-top:50px;border-top:1px solid var(--line);padding-top:14px}
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit1.html">← Unit 1 Guide</a>
+  <header class="reveal">
+    <h1>Exam <span class="em">Practice</span></h1>
+    <div class="sub">Thirty multiple-choice questions across all five lessons of Unit 1 &mdash; what a limit is, computing limits algebraically, the Squeeze Theorem, continuity and its failures, and asymptotes with the Intermediate Value Theorem &mdash; plus two full Section-II free-response problems with typed answers graded against the rubric. Filter by topic, and the mastery panel tracks where you stand.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    <b>How to use this.</b> The multiple choice pulls a fresh batch of 12 from a bank of 30, mixing every topic the way the real exam does. Answer, read the worked explanation &mdash; every distractor is a specific, named mistake &mdash; then reshuffle for a new set. The two free-response problems mirror real AP Section II: type your answers and grade them against the official-style rubric. Tap any topic tag in the feedback to jump straight to that lesson.
+  </div>
+
+  <h2 class="reveal">Mixed multiple choice</h2>
+  <div class="card reveal" id="mcCard">
+    <div class="row">
+      <span class="score" id="mcProgress">Question 1 of 12</span>
+      <span class="score" id="mcScore">Score: 0</span>
+    </div>
+    <div class="qtag" id="mcTag"></div>
+    <div class="qprompt" id="mcPrompt"></div>
+    <div class="qmath" id="mcMath"></div>
+    <div class="opts" id="mcOpts"></div>
+    <div class="fb" id="mcFb"></div>
+    <button class="next" id="mcNext">Next question →</button>
+    <div id="mcDone" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Free-response trainer <span style="font-family:var(--mono);font-size:13px;color:var(--approx);font-weight:400">· Section II style</span></h2>
+  <p class="lead reveal">One scenario, several chained parts — exactly how the real FRQ works. Pick a problem below; type
+    what you can, then check the worked solution and score your reasoning against the rubric.</p>
+  <div class="frq-tabs reveal" id="frqTabs"></div>
+  <div class="card reveal" id="frqCard">
+    <div class="frq-desc" id="frqDesc"></div>
+    <div class="frq-given">
+      <div class="gl">Given</div>
+      <div id="frqGiven"></div>
+      <div id="frqGivenNote" style="font-size:12.5px;color:var(--muted);margin-top:8px"></div>
+    </div>
+    <div id="frqParts"></div>
+    <div class="scoreline" id="frqScore" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Where you stand</h2>
+  <div class="card reveal" id="weakCard">
+    <div id="weakBody" style="font-size:14px;color:var(--muted)">Finish some multiple-choice questions and your topic breakdown shows up here.</div>
+  </div>
+
+  <footer class="reveal">Exam Practice · Unit 6 · part of the Visual AP Calculus guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+const TOPICS={
+  whatisalimit:["What a Limit Is","what-is-a-limit.html"],
+  computing:["Computing Limits","computing-limits.html"],
+  squeeze:["Squeeze Theorem","squeeze-theorem.html"],
+  continuity:["Continuity & Its Failures","continuity.html"],
+  asymptotes:["Asymptotes & the IVT","asymptotes-ivt.html"]
+};
+
+// ===================== MC BANK (30, all verified in Node) =====================
+const MC=[
+// ============ WHAT A LIMIT IS (6) ============
+ {topic:"whatisalimit",calc:false,prompt:"A table gives values of \\(f\\) near \\(x=1\\): \\(f(0.9)=1.9\\), \\(f(0.99)=1.99\\), \\(f(1.01)=2.01\\), \\(f(1.1)=2.1\\). The table best supports which estimate of \\(\\lim_{x\\to 1}f(x)\\)?",
+  opts:[{t:"2",correct:true},{t:"1",},{t:"does not exist",},{t:"2.01",}],
+  explain:`<b>Both sides close in on the same height:</b> from the left \\(f\\to 2\\), from the right \\(f\\to 2\\). The limit is the common value, \\(2\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>1</b> reads the \\(x\\)-value being approached instead of the \\(y\\)-value the outputs approach.<br>• <b>does not exist</b> wrongly assumes the sides disagree — here they match.<br>• <b>2.01</b> grabs a single nearby table entry rather than the value being approached.<br><br><b>The principle:</b> a limit is the height the outputs head toward, read from <i>both</i> sides, not a value the function must actually take.`},
+ {topic:"whatisalimit",calc:false,prompt:"For \\(g(x)=\\dfrac{|x-2|}{x-2}\\), what is \\(\\lim_{x\\to 2}g(x)\\)?",
+  opts:[{t:"does not exist",correct:true},{t:"1",},{t:"-1",},{t:"0",}],
+  explain:`<b>The one-sided limits disagree.</b> For \\(x>2\\), \\(|x-2|=x-2\\) so \\(g=1\\); for \\(x<2\\), \\(|x-2|=-(x-2)\\) so \\(g=-1\\). Right limit \\(=1\\), left limit \\(=-1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>1</b> uses only the right-hand limit.<br>• <b>-1</b> uses only the left-hand limit.<br>• <b>0</b> averages the two one-sided limits — limits are not averaged.<br><br><b>The principle:</b> a two-sided limit exists only when both one-sided limits agree.`},
+ {topic:"whatisalimit",calc:false,prompt:"The position of a particle is \\(s(t)=t^2\\) meters. The average velocity on \\([3,\\,3+h]\\) is \\(\\dfrac{(3+h)^2-9}{h}\\). As \\(h\\to 0\\), this approaches:",
+  opts:[{t:"6",correct:true},{t:"9",},{t:"0",},{t:"3",}],
+  explain:`<b>Expand and simplify before taking the limit.</b> \\(\\frac{(3+h)^2-9}{h}=\\frac{6h+h^2}{h}=6+h\\to 6\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>9</b> is \\(s(3)\\), the position, not the rate.<br>• <b>0</b> comes from plugging \\(h=0\\) into the original \\(\\frac00\\) form without simplifying.<br>• <b>3</b> is the time value, not the velocity.<br><br><b>The principle:</b> instantaneous velocity is the limit of average velocity as the interval shrinks — the indeterminate \\(\\frac00\\) resolves after algebra.`},
+ {topic:"whatisalimit",calc:false,prompt:"A function is defined piecewise with \\(\\lim_{x\\to 3^-}f(x)=5\\) and \\(\\lim_{x\\to 3^+}f(x)=5\\), but \\(f(3)=1\\). What is \\(\\lim_{x\\to 3}f(x)\\)?",
+  opts:[{t:"5",correct:true},{t:"1",},{t:"does not exist",},{t:"3",}],
+  explain:`<b>The limit ignores the function's value at the point.</b> Both one-sided limits equal \\(5\\), so \\(\\lim_{x\\to 3}f(x)=5\\) — regardless of the fact that \\(f(3)=1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>1</b> reports \\(f(3)\\), the actual value, which the limit does not use.<br>• <b>does not exist</b> confuses "limit \\(\\ne\\) value" with "limit fails to exist" — the limit is fine; the function is just discontinuous.<br>• <b>3</b> reports the \\(x\\)-value.<br><br><b>The principle:</b> a limit describes where \\(f\\) is <i>heading</i>, which can differ from where it actually <i>is</i>.`},
+ {topic:"whatisalimit",calc:false,prompt:"A table shows \\(\\dfrac{\\sin x}{x}\\) for \\(x=0.1,0.01,0.001\\) giving \\(0.99833,\\ 0.99998,\\ 0.9999998\\). The table suggests \\(\\lim_{x\\to 0}\\dfrac{\\sin x}{x}=\\)",
+  opts:[{t:"1",correct:true},{t:"0",},{t:"does not exist",},{t:"0.998",}],
+  explain:`<b>The values march toward 1.</b> As \\(x\\to 0\\) the ratio climbs \\(0.998\\to 0.99998\\to 0.9999998\\), approaching \\(1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> plugs in \\(x=0\\) to get \\(\\frac00\\) and wrongly calls it zero.<br>• <b>does not exist</b> wrongly treats \\(\\frac00\\) as automatically undefined — the limit is a clean \\(1\\).<br>• <b>0.998</b> stops at the first table row instead of following the trend.<br><br><b>The principle:</b> a numerical table reveals the value being approached; \\(\\frac{\\sin x}{x}\\to 1\\) is the foundational trig limit.`},
+ {topic:"whatisalimit",calc:false,prompt:"The graph of \\(f\\) has a hole at \\((2,4)\\) and a filled point at \\((2,1)\\). Which statement is correct?",
+  opts:[{t:"\\(\\lim_{x\\to 2}f(x)=4\\) and \\(f(2)=1\\)",correct:true},{t:"\\(\\lim_{x\\to 2}f(x)=1\\) and \\(f(2)=4\\)",},{t:"\\(\\lim_{x\\to 2}f(x)=1\\)",},{t:"the limit does not exist",}],
+  explain:`<b>The hole marks the limit; the filled dot marks the value.</b> The curve approaches height \\(4\\) (the hole), so \\(\\lim_{x\\to 2}f(x)=4\\). The solid point at \\((2,1)\\) is the actual value \\(f(2)=1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>limit\\(=1\\), \\(f(2)=4\\)</b> swaps the roles of the hole and the dot.<br>• <b>limit\\(=1\\)</b> reads the limit off the filled point instead of the approaching curve.<br>• <b>does not exist</b> ignores that the curve approaches a single height from both sides.<br><br><b>The principle:</b> an open circle shows where the function heads; a filled circle shows the defined value.`},
+// ============ COMPUTING LIMITS (6) ============
+ {topic:"computing",calc:false,prompt:"\\(\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}=\\)",
+  opts:[{t:"6",correct:true},{t:"0",},{t:"does not exist",},{t:"3",}],
+  explain:`<b>Factor the difference of squares and cancel.</b> \\(\\frac{(x-3)(x+3)}{x-3}=x+3\\to 6\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> stops at the \\(\\frac00\\) form and calls it zero without factoring.<br>• <b>does not exist</b> wrongly treats the removable hole as a fatal discontinuity — the limit exists.<br>• <b>3</b> substitutes into \\(x\\) rather than \\(x+3\\).<br><br><b>The principle:</b> \\(\\frac00\\) signals a common factor; cancel it, then substitute.`},
+ {topic:"computing",calc:false,prompt:"\\(\\lim_{x\\to 2}\\dfrac{x^3-8}{x-2}=\\)",
+  opts:[{t:"12",correct:true},{t:"0",},{t:"4",},{t:"6",}],
+  explain:`<b>Factor the difference of cubes.</b> \\(x^3-8=(x-2)(x^2+2x+4)\\), so the ratio is \\(x^2+2x+4\\to 4+4+4=12\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> reads the \\(\\frac00\\) form as zero.<br>• <b>4</b> keeps only the constant term \\(x^2+2x+4\\) evaluated as just \\(4\\), dropping \\(x^2+2x\\).<br>• <b>6</b> mistakenly factors as if it were \\(x^2-8\\) or miscomputes \\(2^2+2(2)\\).<br><br><b>The principle:</b> \\(a^3-b^3=(a-b)(a^2+ab+b^2)\\) clears the common factor cleanly.`},
+ {topic:"computing",calc:false,prompt:"\\(\\lim_{x\\to 0}\\dfrac{\\sqrt{x+4}-2}{x}=\\)",
+  opts:[{t:"\\(\\tfrac14\\)",correct:true},{t:"0",},{t:"does not exist",},{t:"\\(\\tfrac12\\)",}],
+  explain:`<b>Multiply by the conjugate.</b> \\(\\frac{\\sqrt{x+4}-2}{x}\\cdot\\frac{\\sqrt{x+4}+2}{\\sqrt{x+4}+2}=\\frac{x}{x(\\sqrt{x+4}+2)}=\\frac{1}{\\sqrt{x+4}+2}\\to\\frac{1}{4}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> reads the \\(\\frac00\\) form as zero.<br>• <b>does not exist</b> abandons the problem at \\(\\frac00\\) instead of rationalizing.<br>• <b>\\(\\tfrac12\\)</b> forgets the \\(+2\\), using \\(\\frac{1}{\\sqrt4}=\\frac12\\) instead of \\(\\frac{1}{\\sqrt4+2}\\).<br><br><b>The principle:</b> radicals in a \\(\\frac00\\) limit call for the conjugate, which cancels the troublesome factor.`},
+ {topic:"computing",calc:false,prompt:"\\(\\lim_{x\\to 9}\\dfrac{\\sqrt{x}-3}{x-9}=\\)",
+  opts:[{t:"\\(\\tfrac16\\)",correct:true},{t:"0",},{t:"\\(\\tfrac13\\)",},{t:"does not exist",}],
+  explain:`<b>Recognize the denominator as a difference of squares in \\(\\sqrt{x}\\):</b> \\(x-9=(\\sqrt{x}-3)(\\sqrt{x}+3)\\). Cancel to get \\(\\frac{1}{\\sqrt{x}+3}\\to\\frac{1}{6}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> reads \\(\\frac00\\) as zero.<br>• <b>\\(\\tfrac13\\)</b> uses \\(\\frac{1}{\\sqrt9}\\) and forgets the \\(+3\\) in the denominator.<br>• <b>does not exist</b> stops at \\(\\frac00\\).<br><br><b>The principle:</b> writing \\(x-9=(\\sqrt x-3)(\\sqrt x+3)\\) is the conjugate trick in disguise.`},
+ {topic:"computing",calc:false,prompt:"\\(\\lim_{x\\to 3}\\dfrac{\\frac{1}{x}-\\frac{1}{3}}{x-3}=\\)",
+  opts:[{t:"\\(-\\tfrac19\\)",correct:true},{t:"\\(\\tfrac19\\)",},{t:"0",},{t:"does not exist",}],
+  explain:`<b>Combine the complex fraction first.</b> \\(\\frac1x-\\frac13=\\frac{3-x}{3x}\\), so the expression is \\(\\frac{3-x}{3x(x-3)}=\\frac{-(x-3)}{3x(x-3)}=\\frac{-1}{3x}\\to\\frac{-1}{9}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac19\\)</b> drops the sign from \\(3-x=-(x-3)\\).<br>• <b>0</b> reads the \\(\\frac00\\) form as zero.<br>• <b>does not exist</b> stops at \\(\\frac00\\).<br><br><b>The principle:</b> clear the inner fractions, then cancel the \\((x-3)\\) factor; watch the sign on \\(3-x\\).`},
+ {topic:"computing",calc:false,prompt:"\\(\\lim_{x\\to 2}\\dfrac{3}{x-2}\\) is:",
+  opts:[{t:"does not exist (infinite)",correct:true},{t:"0",},{t:"\\(\\tfrac32\\)",},{t:"3",}],
+  explain:`<b>This is NOT a \\(\\frac00\\) form.</b> The numerator approaches \\(3\\ne 0\\) while the denominator \\(\\to 0\\), so the magnitude blows up: from the right \\(\\to+\\infty\\), from the left \\(\\to-\\infty\\). The two-sided limit does not exist.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> confuses a large denominator (\\(\\to 0\\)) with a large value going to zero.<br>• <b>\\(\\tfrac32\\)</b> wrongly plugs in as if continuous.<br>• <b>3</b> just reads the numerator.<br><br><b>The principle:</b> a nonzero-over-zero form is an infinite discontinuity (DNE), fundamentally different from \\(\\frac00\\), which may have a finite limit.`},
+// ============ SQUEEZE THEOREM & TRIG LIMITS (6) ============
+ {topic:"squeeze",calc:false,prompt:"\\(\\lim_{x\\to 0}\\dfrac{\\sin 5x}{x}=\\)",
+  opts:[{t:"5",correct:true},{t:"1",},{t:"\\(\\tfrac15\\)",},{t:"0",}],
+  explain:`<b>Match the angle.</b> \\(\\frac{\\sin 5x}{x}=5\\cdot\\frac{\\sin 5x}{5x}\\to 5\\cdot 1=5\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>1</b> applies \\(\\frac{\\sin u}{u}\\to 1\\) without accounting for the mismatch between \\(5x\\) and \\(x\\).<br>• <b>\\(\\tfrac15\\)</b> divides by 5 instead of multiplying.<br>• <b>0</b> reads the \\(\\frac00\\) form as zero.<br><br><b>The principle:</b> \\(\\frac{\\sin(kx)}{x}\\to k\\) — force the denominator to match the angle, then compensate.`},
+ {topic:"squeeze",calc:false,prompt:"\\(\\lim_{x\\to 0}\\dfrac{\\sin 3x}{\\sin 2x}=\\)",
+  opts:[{t:"\\(\\tfrac32\\)",correct:true},{t:"\\(\\tfrac23\\)",},{t:"1",},{t:"0",}],
+  explain:`<b>Split into two known limits.</b> \\(\\frac{\\sin 3x}{\\sin 2x}=\\frac{\\sin 3x}{3x}\\cdot\\frac{2x}{\\sin 2x}\\cdot\\frac{3x}{2x}\\to 1\\cdot 1\\cdot\\frac32=\\frac32\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac23\\)</b> inverts the ratio of the angles.<br>• <b>1</b> cancels the sines as if \\(\\frac{\\sin 3x}{\\sin 2x}=1\\).<br>• <b>0</b> reads \\(\\frac00\\) as zero.<br><br><b>The principle:</b> the limit equals the ratio of the angle coefficients, \\(\\frac{3}{2}\\).`},
+ {topic:"squeeze",calc:false,prompt:"\\(\\lim_{x\\to 0}\\dfrac{1-\\cos x}{x}=\\)",
+  opts:[{t:"0",correct:true},{t:"1",},{t:"\\(\\tfrac12\\)",},{t:"does not exist",}],
+  explain:`<b>A standard trig limit.</b> \\(\\frac{1-\\cos x}{x}\\to 0\\) — confirm by the conjugate: \\(\\frac{1-\\cos x}{x}\\cdot\\frac{1+\\cos x}{1+\\cos x}=\\frac{\\sin^2 x}{x(1+\\cos x)}=\\frac{\\sin x}{x}\\cdot\\frac{\\sin x}{1+\\cos x}\\to 1\\cdot\\frac{0}{2}=0\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>1</b> confuses this with \\(\\frac{\\sin x}{x}\\to 1\\).<br>• <b>\\(\\tfrac12\\)</b> is the limit of \\(\\frac{1-\\cos x}{x^2}\\) — wrong denominator power.<br>• <b>does not exist</b> stops at \\(\\frac00\\).<br><br><b>The principle:</b> \\(\\frac{1-\\cos x}{x}\\to 0\\) but \\(\\frac{1-\\cos x}{x^2}\\to\\frac12\\) — the power of \\(x\\) decides.`},
+ {topic:"squeeze",calc:false,prompt:"\\(\\lim_{x\\to 0}\\dfrac{\\tan x}{x}=\\)",
+  opts:[{t:"1",correct:true},{t:"0",},{t:"does not exist",},{t:"\\(\\infty\\)",}],
+  explain:`<b>Rewrite tangent.</b> \\(\\frac{\\tan x}{x}=\\frac{\\sin x}{x}\\cdot\\frac{1}{\\cos x}\\to 1\\cdot\\frac{1}{1}=1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> reads the \\(\\frac00\\) form as zero.<br>• <b>does not exist</b> stops at \\(\\frac00\\).<br>• <b>\\(\\infty\\)</b> wrongly assumes tangent blows up near \\(0\\) — it doesn't; \\(\\tan 0=0\\).<br><br><b>The principle:</b> split \\(\\tan x\\) into \\(\\frac{\\sin x}{x}\\cdot\\frac{1}{\\cos x}\\); both factors have clean limits.`},
+ {topic:"squeeze",calc:false,prompt:"By the Squeeze Theorem, \\(\\lim_{x\\to 0}x^2\\cos\\!\\left(\\tfrac1x\\right)=\\)",
+  opts:[{t:"0",correct:true},{t:"1",},{t:"does not exist",},{t:"\\(\\infty\\)",}],
+  explain:`<b>Trap it between known bounds.</b> Since \\(-1\\le\\cos(\\frac1x)\\le 1\\), we have \\(-x^2\\le x^2\\cos(\\frac1x)\\le x^2\\). Both \\(\\pm x^2\\to 0\\), so the middle is squeezed to \\(0\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>1</b> evaluates \\(\\cos(\\frac1x)\\) as if it settled to a value — it oscillates, but the \\(x^2\\) crushes it.<br>• <b>does not exist</b> notes the oscillation but misses that the amplitude \\(\\to 0\\).<br>• <b>\\(\\infty\\)</b> ignores that \\(x^2\\to 0\\).<br><br><b>The principle:</b> a bounded factor times something \\(\\to 0\\) gives \\(0\\), even when the bounded factor never settles.`},
+ {topic:"squeeze",calc:false,prompt:"\\(\\lim_{x\\to 0}\\dfrac{1-\\cos x}{x^2}=\\)",
+  opts:[{t:"\\(\\tfrac12\\)",correct:true},{t:"0",},{t:"1",},{t:"does not exist",}],
+  explain:`<b>Conjugate, then use \\(\\frac{\\sin x}{x}\\to 1\\).</b> \\(\\frac{1-\\cos x}{x^2}\\cdot\\frac{1+\\cos x}{1+\\cos x}=\\frac{\\sin^2 x}{x^2(1+\\cos x)}=\\left(\\frac{\\sin x}{x}\\right)^2\\cdot\\frac{1}{1+\\cos x}\\to 1\\cdot\\frac{1}{2}=\\frac12\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> is the limit of \\(\\frac{1-\\cos x}{x}\\) — one power of \\(x\\) too few in the denominator.<br>• <b>1</b> forgets the \\(\\frac{1}{1+\\cos x}=\\frac12\\) factor.<br>• <b>does not exist</b> stops at \\(\\frac00\\).<br><br><b>The principle:</b> the conjugate converts \\(1-\\cos x\\) into \\(\\sin^2 x\\), unlocking the \\(\\frac{\\sin x}{x}\\) limit.`},
+// ============ CONTINUITY (6) ============
+ {topic:"continuity",calc:false,prompt:"\\(f\\) is continuous at \\(x=a\\) exactly when:",
+  opts:[{t:"\\(\\lim_{x\\to a}f(x)=f(a)\\)",correct:true},{t:"\\(f(a)\\) is defined",},{t:"\\(\\lim_{x\\to a}f(x)\\) exists",},{t:"\\(f\\) is increasing at \\(a\\)",}],
+  explain:`<b>All three conditions in one equation.</b> Continuity requires \\(f(a)\\) to exist, the limit to exist, AND the two to be equal — captured exactly by \\(\\lim_{x\\to a}f(x)=f(a)\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(f(a)\\) defined</b> is necessary but not sufficient — the limit could still disagree.<br>• <b>limit exists</b> alone allows a hole where \\(f(a)\\) is missing or wrong.<br>• <b>increasing</b> has nothing to do with continuity.<br><br><b>The principle:</b> the single equation \\(\\lim=f(a)\\) bundles all three parts of the continuity test.`},
+ {topic:"continuity",calc:false,prompt:"For \\(f(x)=\\begin{cases}kx+1 & x\\le 2\\\\ x^2-1 & x>2\\end{cases}\\) to be continuous at \\(x=2\\), \\(k=\\)",
+  opts:[{t:"1",correct:true},{t:"\\(\\tfrac32\\)",},{t:"2",},{t:"3",}],
+  explain:`<b>Match the two pieces at the seam.</b> Left value: \\(k(2)+1=2k+1\\). Right limit: \\(2^2-1=3\\). Set equal: \\(2k+1=3\\Rightarrow k=1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\tfrac32\\)</b> solves \\(2k=3\\), forgetting the \\(+1\\).<br>• <b>2</b> sets \\(2k+1=5\\) using \\(2^2+1\\) instead of \\(2^2-1\\).<br>• <b>3</b> reports the right-hand value rather than solving for \\(k\\).<br><br><b>The principle:</b> continuity at a junction means left value \\(=\\) right value; solve the resulting equation for the parameter.`},
+ {topic:"continuity",calc:false,prompt:"The function \\(f(x)=\\dfrac{x^2-4}{x-2}\\) has what kind of discontinuity at \\(x=2\\)?",
+  opts:[{t:"removable",correct:true},{t:"jump",},{t:"infinite",},{t:"none — it is continuous",}],
+  explain:`<b>The factor cancels, leaving a hole.</b> \\(\\frac{(x-2)(x+2)}{x-2}=x+2\\), so the limit at \\(2\\) is \\(4\\), but \\(f(2)\\) is undefined. The limit exists — a removable discontinuity.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>jump</b> would need disagreeing one-sided limits; here both sides \\(\\to 4\\).<br>• <b>infinite</b> would need the denominator to survive (nonzero numerator over zero); it cancels instead.<br>• <b>none</b> ignores that \\(f(2)\\) is undefined.<br><br><b>The principle:</b> when a \\(\\frac00\\) factor cancels, the limit exists and the break is a patchable hole.`},
+ {topic:"continuity",calc:false,prompt:"The function \\(f(x)=\\dfrac{x-3}{x^2-9}\\) at \\(x=-3\\) has what kind of discontinuity?",
+  opts:[{t:"infinite",correct:true},{t:"removable",},{t:"jump",},{t:"none",}],
+  explain:`<b>Factor and see which zero survives.</b> \\(\\frac{x-3}{(x-3)(x+3)}=\\frac{1}{x+3}\\). At \\(x=3\\) the factor cancels (removable), but at \\(x=-3\\) the denominator still vanishes while the numerator doesn't — the function blows up.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>removable</b> describes \\(x=3\\), not \\(x=-3\\) — only one of the two breaks is a hole.<br>• <b>jump</b> would need finite disagreeing sides.<br>• <b>none</b> ignores the surviving zero in the denominator.<br><br><b>The principle:</b> a zero that cancels is removable; a zero that survives is an infinite discontinuity (vertical asymptote).`},
+ {topic:"continuity",calc:false,prompt:"A function has \\(\\lim_{x\\to 4}f(x)=7\\) but \\(f(4)=2\\). The discontinuity at \\(x=4\\) is:",
+  opts:[{t:"removable",correct:true},{t:"jump",},{t:"infinite",},{t:"there is none",}],
+  explain:`<b>The limit exists but disagrees with the value.</b> Both one-sided limits give \\(7\\), so the limit exists; the value \\(f(4)=2\\) is simply wrong. Redefining \\(f(4)=7\\) would fix it — removable.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>jump</b> requires the one-sided limits to disagree; here the limit is a single value \\(7\\).<br>• <b>infinite</b> requires unbounded behavior.<br>• <b>none</b> ignores that \\(\\lim\\ne f(4)\\).<br><br><b>The principle:</b> limit exists but \\(\\ne f(a)\\) is the "wrong value" flavor of removable discontinuity.`},
+ {topic:"continuity",calc:false,prompt:"On which interval is \\(f(x)=\\dfrac{x+1}{x^2-x-6}\\) continuous?",
+  opts:[{t:"all \\(x\\) except \\(x=3\\) and \\(x=-2\\)",correct:true},{t:"all real numbers",},{t:"all \\(x\\) except \\(x=-1\\)",},{t:"all \\(x>3\\)",}],
+  explain:`<b>A rational function breaks where its denominator is zero.</b> \\(x^2-x-6=(x-3)(x+2)\\), zero at \\(x=3,-2\\). The numerator is nonzero there, so both are genuine discontinuities; \\(f\\) is continuous everywhere else.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>all reals</b> ignores the denominator's zeros.<br>• <b>except \\(x=-1\\)</b> sets the numerator to zero — but a zero numerator gives a root, not a discontinuity.<br>• <b>all \\(x>3\\)</b> arbitrarily restricts to one side.<br><br><b>The principle:</b> rational functions are continuous on their domain — everywhere except where the denominator vanishes.`},
+// ============ ASYMPTOTES & IVT (6) ============
+ {topic:"asymptotes",calc:false,prompt:"\\(\\lim_{x\\to\\infty}\\dfrac{2x^2+1}{x^2-3}=\\)",
+  opts:[{t:"2",correct:true},{t:"0",},{t:"\\(\\infty\\)",},{t:"\\(\\tfrac12\\)",}],
+  explain:`<b>Equal degrees — a tie.</b> The horizontal asymptote is the ratio of leading coefficients, \\(\\frac{2}{1}=2\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> applies the "bottom wins" rule, which is only for a larger denominator degree.<br>• <b>\\(\\infty\\)</b> applies the "top wins" rule, only for a larger numerator degree.<br>• <b>\\(\\tfrac12\\)</b> inverts the coefficient ratio.<br><br><b>The principle:</b> equal degrees \\(\\Rightarrow\\) HA at the ratio of leading coefficients.`},
+ {topic:"asymptotes",calc:false,prompt:"\\(\\lim_{x\\to\\infty}\\dfrac{3x+2}{x^2+1}=\\)",
+  opts:[{t:"0",correct:true},{t:"3",},{t:"\\(\\infty\\)",},{t:"1",}],
+  explain:`<b>Bottom wins.</b> Denominator degree (2) exceeds numerator degree (1), so the fraction \\(\\to 0\\) — horizontal asymptote \\(y=0\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>3</b> grabs the leading coefficient as if degrees were equal.<br>• <b>\\(\\infty\\)</b> reverses the race — that's for a bigger numerator.<br>• <b>1</b> wrongly cancels as if both leading terms matched.<br><br><b>The principle:</b> larger denominator degree \\(\\Rightarrow\\) the ratio collapses to \\(0\\).`},
+ {topic:"asymptotes",calc:false,prompt:"\\(\\lim_{x\\to\\infty}\\dfrac{x^3}{x^2+1}=\\)",
+  opts:[{t:"\\(\\infty\\) (no horizontal asymptote)",correct:true},{t:"0",},{t:"1",},{t:"3",}],
+  explain:`<b>Top wins.</b> Numerator degree (3) exceeds denominator degree (2), so the function grows without bound — no horizontal asymptote.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> applies the "bottom wins" rule backward.<br>• <b>1</b> treats it as a tie.<br>• <b>3</b> invents a coefficient ratio that doesn't apply.<br><br><b>The principle:</b> larger numerator degree \\(\\Rightarrow\\) unbounded growth; no HA (though a slant/polynomial asymptote may exist).`},
+ {topic:"asymptotes",calc:false,prompt:"The graph of \\(f(x)=\\dfrac{x+1}{x-2}\\) has a vertical asymptote at:",
+  opts:[{t:"\\(x=2\\)",correct:true},{t:"\\(x=-1\\)",},{t:"\\(y=1\\)",},{t:"\\(x=0\\)",}],
+  explain:`<b>Vertical asymptotes occur where the denominator is zero and the numerator isn't.</b> \\(x-2=0\\) at \\(x=2\\), and the numerator \\(x+1=3\\ne 0\\) there — a vertical asymptote.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(x=-1\\)</b> sets the numerator to zero — that gives an \\(x\\)-intercept, not an asymptote.<br>• <b>\\(y=1\\)</b> is the <i>horizontal</i> asymptote (equal degrees), not vertical.<br>• <b>\\(x=0\\)</b> is the \\(y\\)-axis, unrelated.<br><br><b>The principle:</b> set the denominator to zero for vertical asymptotes; check the numerator isn't also zero (which would signal a hole).`},
+ {topic:"asymptotes",calc:false,prompt:"\\(f\\) is continuous on \\([0,1]\\) with \\(f(0)=-1\\) and \\(f(1)=1\\). The Intermediate Value Theorem guarantees:",
+  opts:[{t:"a value \\(c\\) in \\((0,1)\\) with \\(f(c)=0\\)",correct:true},{t:"exactly one root in \\((0,1)\\)",},{t:"the root is at \\(c=0.5\\)",},{t:"nothing without a formula for \\(f\\)",}],
+  explain:`<b>Sign change across a continuous function forces a crossing.</b> Since \\(0\\) lies between \\(f(0)=-1\\) and \\(f(1)=1\\) and \\(f\\) is continuous, some \\(c\\in(0,1)\\) has \\(f(c)=0\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>exactly one root</b> overclaims — the IVT guarantees <i>at least</i> one, never the count.<br>• <b>\\(c=0.5\\)</b> invents a location; the IVT never tells you <i>where</i>.<br>• <b>nothing without a formula</b> forgets that continuity plus a sign change is already enough.<br><br><b>The principle:</b> the IVT is an existence theorem — it promises a root exists, not where or how many.`},
+ {topic:"asymptotes",calc:false,prompt:"A continuous function \\(g\\) satisfies \\(g(2)=3\\) and \\(g(5)=8\\). The IVT guarantees \\(g(c)=6\\) for some \\(c\\) because:",
+  opts:[{t:"6 lies between 3 and 8",correct:true},{t:"6 is greater than 3",},{t:"\\(g\\) is increasing",},{t:"6 is an even number",}],
+  explain:`<b>The target must lie between the endpoint values.</b> Since \\(3<6<8\\) and \\(g\\) is continuous on \\([2,5]\\), the IVT guarantees some \\(c\\in(2,5)\\) with \\(g(c)=6\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>6 greater than 3</b> is incomplete — it must also be below \\(8\\), i.e. strictly between.<br>• <b>\\(g\\) increasing</b> is never given and isn't required by the IVT.<br>• <b>even number</b> is irrelevant.<br><br><b>The principle:</b> the IVT applies to any value strictly between \\(f(a)\\) and \\(f(b)\\) — not just roots.`},
+];
+
+// ===================== MC ENGINE (batches of 12) =====================
+let mcBatch=[], mcIdx=0, mcScore=0, mcAnswered=false;
+const stats={};
+Object.keys(TOPICS).forEach(k=>stats[k]={right:0,total:0});
+
+function mathify(h){return (h||"").replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return m;}});}
+// Decide how to render an MC option: embedded inline-math or prose -> mathify as-is; pure math -> wrap in \( \).
+function renderOpt(t){
+  if(t.indexOf("\\(")>=0) return mathify(t);                 // already has inline math (text+math mix)
+  // Pure math if it has LaTeX structure markers (commands, sup/sub, etc.). Prose otherwise.
+  if(/[\\^_{}]/.test(t)){
+    try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return t;}
+  }
+  // no LaTeX markers: simple numeric/symbolic (e.g. "3", "0,4") -> render as math; wordy -> render as text
+  if(/[A-Za-z]{2,}/.test(t)) return mathify(t);              // prose like "Slowing down", "15 ft/s"
+  try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return t;}
+}
+
+function newBatch(){
+  mcBatch=shuffle(MC).slice(0,12); mcIdx=0; mcScore=0;
+  document.getElementById('mcDone').style.display='none';
+  document.getElementById('mcTag').style.display='';
+  document.getElementById('mcPrompt').style.display='';
+  document.getElementById('mcOpts').style.display='';
+  renderMC();
+}
+function renderMC(){
+  mcAnswered=false;
+  const q=mcBatch[mcIdx];
+  document.getElementById('mcProgress').textContent="Question "+(mcIdx+1)+" of "+mcBatch.length;
+  document.getElementById('mcScore').textContent="Score: "+mcScore;
+  document.getElementById('mcTag').textContent=TOPICS[q.topic][0];
+  document.getElementById('mcPrompt').innerHTML=mathify(q.prompt);
+  const mm=document.getElementById('mcMath');
+  if(q.math){mm.style.display='';mm.innerHTML=tex(q.math,q.math,true);}else{mm.style.display='none';}
+  const opts=document.getElementById('mcOpts'); opts.innerHTML="";
+  const list=shuffle(q.opts.map((o,i)=>({...o})));
+  list.forEach(o=>{const b=document.createElement('button');b.innerHTML=renderOpt(o.t);b.dataset.correct=!!o.correct;b.onclick=()=>pickMC(b,q);opts.appendChild(b);});
+  const fb=document.getElementById('mcFb');fb.className="fb";fb.innerHTML="";
+  document.getElementById('mcNext').className="next";
+}
+function pickMC(btn,q){
+  if(mcAnswered)return; mcAnswered=true;
+  const correct=btn.dataset.correct==="true";
+  stats[q.topic].total++; if(correct){stats[q.topic].right++;mcScore++;}
+  [...document.getElementById('mcOpts').children].forEach(b=>{b.disabled=true;if(b.dataset.correct==="true")b.classList.add('correct');});
+  if(!correct)btn.classList.add('wrong');
+  const fb=document.getElementById('mcFb');
+  fb.className="fb show";
+  fb.innerHTML='<span class="ftag '+(correct?'ok':'bad')+'">'+(correct?'Correct. ':'Not quite. ')+'</span>'+mathify(q.explain)+
+    '<br><a class="review-link" href="'+TOPICS[q.topic][1]+'">Review: '+TOPICS[q.topic][0]+' →</a>';
+  document.getElementById('mcScore').textContent="Score: "+mcScore;
+  const nx=document.getElementById('mcNext'); nx.className="next show";
+  nx.textContent = mcIdx<mcBatch.length-1 ? "Next question →" : "See batch results →";
+  renderWeak();
+}
+document.getElementById('mcNext').onclick=()=>{
+  if(mcIdx<mcBatch.length-1){mcIdx++;renderMC();}
+  else{
+    document.getElementById('mcTag').style.display='none';
+    document.getElementById('mcPrompt').style.display='none';
+    document.getElementById('mcMath').style.display='none';
+    document.getElementById('mcOpts').style.display='none';
+    document.getElementById('mcFb').className="fb";
+    document.getElementById('mcNext').className="next";
+    const pct=Math.round(100*mcScore/mcBatch.length);
+    const msg=pct>=85?"Exam-ready across the board.":pct>=65?"Solid — clean up the misses below.":"Keep drilling; your weak topics are flagged below.";
+    const d=document.getElementById('mcDone');
+    d.style.display='block';
+    d.innerHTML='<div style="text-align:center;padding:10px"><div style="font-family:var(--display);font-size:34px;font-weight:600;color:var(--emerald)">'+mcScore+' / '+mcBatch.length+'</div><p style="color:var(--muted);margin:8px auto 16px;max-width:420px;font-size:14px">'+msg+'</p></div>';
+    const r=document.createElement('button');r.className="next show";r.style.maxWidth="240px";r.style.margin="4px auto 0";r.textContent="↺ Get a new batch of 12";r.onclick=newBatch;d.appendChild(r);
+    document.getElementById('mcProgress').textContent="Batch complete";
+  }
+};
+
+// ===================== WEAK-SPOTS =====================
+function renderWeak(){
+  const rows=Object.keys(TOPICS).filter(k=>stats[k].total>0);
+  const body=document.getElementById('weakBody');
+  if(!rows.length){return;}
+  rows.sort((a,b)=>(stats[a].right/stats[a].total)-(stats[b].right/stats[b].total));
+  body.innerHTML=rows.map(k=>{
+    const s=stats[k],pct=Math.round(100*s.right/s.total);
+    return '<div class="weakrow"><span class="weaklabel">'+TOPICS[k][0]+'</span><span class="weakbar"><i style="width:'+pct+'%"></i></span><span class="weakpct">'+s.right+'/'+s.total+'</span></div>';
+  }).join('')+'<p style="font-size:12.5px;color:var(--muted);margin-top:12px">Lowest topics first. Tap a topic in the question feedback to jump to its lesson.</p>';
+}
+
+// ===================== FRQ TRAINER =====================
+function frqNorm(s){return (s||"").toLowerCase().replace(/\s+/g,"").replace(/−/g,"-").replace(/·/g,"*").replace(/\{|\}/g,"");}
+const FRQS=[
+ { label:"Continuity of a Piecewise Function",
+   desc:"<b>Solve for a parameter that makes a piecewise function continuous → justify with the three-part test → classify and patch a removable discontinuity.</b> A Section-II style problem, worth 9 points, no calculator. Continuity at a junction is one of the most common free-response setups in this unit.",
+   context:"Let \\(f(x)=\\begin{cases}x+1 & x\\le 2\\\\ x^2+c & x>2\\end{cases}\\) where \\(c\\) is a constant. Separately, let \\(h(x)=\\dfrac{x^2-4}{x-2}\\) for \\(x\\ne 2\\).",
+   parts:[
+    {pl:"Part A",pts:3,topic:"continuity",
+     q:"Find the value of \\(c\\) for which \\(f\\) is continuous at \\(x=2\\). Justify your answer using the definition of continuity.",
+     fields:[{label:"c=",hint:"a number",match:s=>["-1"].includes(frqNorm(s))}],
+     sol:`<b>Apply the three-part test at the junction \\(x=2\\).</b><br>The left piece gives the value and left limit: \\(f(2)=2+1=3\\), and \\(\\lim_{x\\to 2^-}f(x)=3\\).<br>The right limit: \\(\\lim_{x\\to 2^+}f(x)=2^2+c=4+c\\).<br>Continuity requires the limit to exist and equal \\(f(2)\\): set \\(4+c=3\\), so \\(\\boxed{c=-1}\\).<br><br><b>Scoring:</b> 1 point for \\(\\lim_{x\\to 2^-}=3\\), 1 for \\(\\lim_{x\\to 2^+}=4+c\\), 1 for setting them equal and solving \\(c=-1\\). A complete justification states that the two one-sided limits must agree with \\(f(2)\\).`,
+     rubric:["left value/limit \\(f(2)=3\\)","right limit \\(4+c\\)","equate and solve \\(c=-1\\)"]},
+    {pl:"Part B",pts:3,topic:"continuity",
+     q:"For \\(h(x)=\\dfrac{x^2-4}{x-2}\\), classify the discontinuity at \\(x=2\\) and find \\(\\lim_{x\\to 2}h(x)\\).",
+     fields:[{label:"\\lim_{x\\to 2}h(x)=",hint:"a number",match:s=>["4"].includes(frqNorm(s))},
+             {label:"type:",hint:"removable / jump / infinite",match:s=>["removable","removeable","hole"].includes(frqNorm(s))}],
+     sol:`<b>Factor and cancel.</b> \\(h(x)=\\frac{(x-2)(x+2)}{x-2}=x+2\\) for \\(x\\ne 2\\), so \\(\\lim_{x\\to 2}h(x)=4\\).<br>Because the limit exists (\\(=4\\)) but \\(h(2)\\) is undefined, the discontinuity is <b>removable</b> — a hole at \\((2,4)\\).<br><br><b>Scoring:</b> 1 point for the factoring/cancellation, 1 for the limit \\(=4\\), 1 for classifying as removable with reasoning (limit exists, value undefined).`,
+     rubric:["factor and cancel to \\(x+2\\)","limit \\(=4\\)","classify removable (limit exists, value undefined)"]},
+    {pl:"Part C",pts:3,topic:"continuity",
+     q:"How should \\(h(2)\\) be defined to make \\(h\\) continuous at \\(x=2\\)? Explain why this works.",
+     fields:[{label:"h(2)=",hint:"a number",match:s=>["4"].includes(frqNorm(s))}],
+     sol:`<b>Patch the hole by setting the value equal to the limit.</b> Define \\(h(2)=4\\). Then all three conditions hold: \\(h(2)=4\\) is defined, \\(\\lim_{x\\to 2}h(x)=4\\) exists, and they are equal — so \\(h\\) becomes continuous at \\(x=2\\).<br><br><b>Scoring:</b> 1 point for \\(h(2)=4\\), 2 points for the justification that this makes limit \\(=\\) value (all three parts of the continuity definition satisfied). This is only possible <i>because</i> the discontinuity was removable.`,
+     rubric:["\\(h(2)=4\\)","explains limit now equals value","ties to the three-part definition"]}
+   ]},
+
+ { label:"The Intermediate Value Theorem",
+   desc:"<b>Verify the IVT hypotheses → conclude a root exists with full justification → reason about what the theorem does and does not promise.</b> A Section-II style problem, worth 9 points, no calculator. The IVT is the capstone payoff of continuity, and its three-part justification is a frequent free-response requirement.",
+   context:"Let \\(g(x)=x^3-3x+1\\), a polynomial.",
+   parts:[
+    {pl:"Part A",pts:2,topic:"asymptotes",
+     q:"Compute \\(g(0)\\) and \\(g(1)\\).",
+     fields:[{label:"g(0)=",hint:"a number",match:s=>["1"].includes(frqNorm(s))},
+             {label:"g(1)=",hint:"a number",match:s=>["-1"].includes(frqNorm(s))}],
+     sol:`<b>Direct substitution.</b> \\(g(0)=0-0+1=1\\). \\(g(1)=1-3+1=-1\\).<br><br><b>Scoring:</b> 1 point each. These two values straddle zero, which sets up the IVT in Part B.`,
+     rubric:["\\(g(0)=1\\)","\\(g(1)=-1\\)"]},
+    {pl:"Part B",pts:4,topic:"asymptotes",
+     q:"Use the Intermediate Value Theorem to show that \\(g\\) has a root in the interval \\((0,1)\\). State all hypotheses explicitly.",
+     fields:[{label:"target value N=",hint:"the value g must hit",match:s=>["0"].includes(frqNorm(s))}],
+     sol:`<b>State all three IVT hypotheses, then conclude.</b><br>(1) \\(g\\) is a polynomial, so it is <b>continuous</b> on the closed interval \\([0,1]\\).<br>(2) From Part A, \\(g(0)=1>0\\) and \\(g(1)=-1<0\\), so the target value \\(N=0\\) lies between \\(g(0)\\) and \\(g(1)\\).<br>(3) By the IVT, there exists at least one \\(c\\in(0,1)\\) with \\(g(c)=0\\) — a root.<br><br><b>Scoring:</b> 1 point for stating continuity on \\([0,1]\\), 1 for the two endpoint values, 1 for noting \\(0\\) is between them, 1 for the IVT conclusion that a \\(c\\) exists. Omitting the continuity statement is the most common point lost.`,
+     rubric:["continuity on \\([0,1]\\) stated","\\(g(0)=1>0\\), \\(g(1)=-1<0\\)","\\(0\\) is between the values","conclude \\(\\exists c\\) with \\(g(c)=0\\)"]},
+    {pl:"Part C",pts:3,topic:"asymptotes",
+     q:"Does the IVT guarantee that this root is unique? Explain what the theorem does and does not tell you.",
+     fields:[{label:"unique? (yes/no)",hint:"yes or no",match:s=>["no"].includes(frqNorm(s))}],
+     sol:`<b>No — the IVT is an existence theorem only.</b> It guarantees <i>at least one</i> root in \\((0,1)\\), but says nothing about how many or where they are. In fact \\(g(x)=x^3-3x+1\\) has three real roots overall, though only one lies in \\((0,1)\\). The theorem also does not locate the root — it only certifies that a crossing must occur.<br><br><b>Scoring:</b> 1 point for "no," 2 points for explaining that the IVT promises existence (at least one) but not uniqueness or location.`,
+     rubric:["answers no","IVT gives existence, not count","IVT does not locate the root"]}
+   ]}
+];
+
+let frqActive=0;
+function buildFrqTabs(){
+  const t=document.getElementById('frqTabs');t.innerHTML="";
+  FRQS.forEach((f,i)=>{const b=document.createElement('button');b.textContent=f.label;if(i===frqActive)b.classList.add('on');b.onclick=()=>{frqActive=i;buildFrqTabs();renderFRQ();};t.appendChild(b);});
+}
+function renderFRQ(){
+  const f=FRQS[frqActive];
+  document.getElementById('frqDesc').innerHTML=mathify(f.desc);
+  document.getElementById('frqGiven').innerHTML=tex(f.given,f.givenFall,true);
+  document.getElementById('frqGivenNote').textContent=f.givenNote;
+  document.getElementById('frqScore').style.display='none';
+  const wrap=document.getElementById('frqParts');wrap.innerHTML="";
+  f.parts.forEach((p,pi)=>{
+    const div=document.createElement('div');div.className="part";
+    let fieldsHtml='<div class="frq-fields">';
+    p.fields.forEach((fl,fi)=>{
+      fieldsHtml+='<div class="frq-field"><span class="frq-flabel">'+tex(fl.label,fl.label,false)+'</span>'+
+        '<input class="frq-input" id="f'+pi+'_'+fi+'" placeholder="'+(fl.hint||'')+'" autocomplete="off"></div>';
+    });
+    fieldsHtml+='</div>';
+    let rubricHtml='<div class="rubric"><div class="rubric-h">Score your reasoning ('+p.pts+' pt'+(p.pts>1?'s':'')+')</div>';
+    p.rubric.forEach((r,ri)=>{rubricHtml+='<label><input type="checkbox" id="r'+pi+'_'+ri+'" onchange="updFrqScore()"> <span>'+mathify(r)+'</span></label>';});
+    rubricHtml+='</div>';
+    div.innerHTML='<div class="part-h"><span class="part-l">'+p.pl+'</span><span class="part-pts">'+p.pts+' pt'+(p.pts>1?'s':'')+'</span></div>'+
+      '<div class="part-q">'+mathify(p.q)+'</div>'+fieldsHtml+
+      '<button class="frq-check" onclick="checkFrqPart('+pi+')">Check answer</button>'+
+      '<button class="reveal-sol" onclick="document.getElementById(\'sol'+pi+'\').classList.add(\'show\');this.style.display=\'none\'">show worked solution</button>'+
+      '<div class="frq-sol" id="sol'+pi+'">'+mathify(p.sol)+rubricHtml+'</div>';
+    wrap.appendChild(div);
+  });
+}
+function checkFrqPart(pi){
+  const p=FRQS[frqActive].parts[pi];
+  p.fields.forEach((fl,fi)=>{
+    const inp=document.getElementById('f'+pi+'_'+fi);
+    if(!inp.value.trim()){inp.classList.remove('ok','no');return;}
+    const ok=fl.match(inp.value);
+    inp.classList.toggle('ok',ok);inp.classList.toggle('no',!ok);
+  });
+  document.getElementById('sol'+pi).classList.add('show');
+}
+function updFrqScore(){
+  const f=FRQS[frqActive];let got=0,tot=0;
+  f.parts.forEach((p,pi)=>{tot+=p.pts;let checked=0;p.rubric.forEach((r,ri)=>{const c=document.getElementById('r'+pi+'_'+ri);if(c&&c.checked)checked++;});got+=Math.round(p.pts*checked/p.rubric.length);});
+  const sl=document.getElementById('frqScore');sl.style.display='block';
+  sl.innerHTML='Self-scored: <b>'+got+' / '+tot+'</b> points'+(got===tot?' — full marks. ':' ')+'<span style="color:var(--muted);font-size:12.5px">(check rubric boxes for each part you earned)</span>';
+}
+window.checkFrqPart=checkFrqPart;window.updFrqScore=updFrqScore;
+
+// ===================== BOOT =====================
+function boot(){newBatch();buildFrqTabs();renderFRQ();}
+boot();
+if(window.addEventListener)window.addEventListener('load',()=>{if(window.katex){newBatch();renderFRQ();}});
+if(!window.katex){let t=0;const iv=setInterval(()=>{if(window.katex){clearInterval(iv);newBatch();renderFRQ();}else if(++t>60)clearInterval(iv);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*40,360)+'ms';});
+</script>
+</body>
+</html>

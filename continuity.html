@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Continuity &amp; Its Failures — The Three-Part Test · Unit 1 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%231c0f18%27%2F%3E%3Cpath%20d%3D%27M5%2024%20C%2011%2022%2C%2017%2016%2C%2026%208%27%20stroke%3D%27%23e86ab4%27%20stroke-width%3D%272.4%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3Ccircle%20cx%3D%2719%27%20cy%3D%2713.8%27%20r%3D%272.6%27%20fill%3D%27%231c0f18%27%20stroke%3D%27%23f3a1cf%27%20stroke-width%3D%272%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<script>
+/* fallback for previewing without helpers.js — the repo's helpers.js takes precedence when present */
+if(typeof tex==="undefined"){
+  window.tex=function(latex,fallback,display){
+    if(window.katex){ try{ return katex.renderToString(latex,{displayMode:!!display,throwOnError:false}); }catch(e){} }
+    return '<span class="tex-fallback">'+(fallback||latex)+'</span>';
+  };
+}
+</script>
+<style>
+  :root{ --approx:#e86ab4; --gold:#e86ab4; --true:#3fd0b0;
+         --glow:rgba(232,106,180,.10); --wrap-max:1060px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block;border-radius:10px}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:8px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button:disabled:hover{border-color:var(--line);transform:none}
+  .sb-name{font-weight:600;font-size:13.5px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .callout{margin-top:12px;font-size:13.5px;min-height:20px;color:var(--ink);
+    border-left:3px solid var(--gold);padding-left:12px;opacity:0;transition:opacity .3s}
+  .callout.show{opacity:1}
+  .whypanel .why-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+  .why-step{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .why-step:last-child{border-bottom:none}
+  .why-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .why-t{font-size:13px;line-height:1.5}
+  .why-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;overflow-x:auto}
+  .stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .stat:last-child{border-bottom:none}
+  .stat .k{color:var(--muted)}
+  .stat .v{font-family:var(--mono);color:var(--ink)}
+  .sumline{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;overflow-x:auto;min-height:46px;font-size:14px}
+  .anatomy{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:820px}
+  .anatomy .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .maprow{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .maprow:last-child{border-bottom:none}
+  .maprow .ph{color:var(--ink);flex:1 1 auto;line-height:1.45}
+  .maprow .sy{font-family:var(--mono);color:var(--muted);flex:none}
+  .concepts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.concepts{grid-template-columns:1fr}}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s,box-shadow .2s}
+  .concept:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(43,41,37,.45)}
+  .concept h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .concept p{font-size:13.5px;margin:6px 0;color:var(--ink)}
+  .concept .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;text-align:center;overflow-x:auto}
+  .key{color:var(--approx);font-weight:600}
+  .whatsnext{max-width:700px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  button:focus-visible, a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  .prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .prob-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--approx);font-weight:600}
+  .prob-q{font-size:14.5px;line-height:1.65;margin:6px 0 12px}
+  .soltoggle{font-size:13px;padding:7px 14px}
+  .sol{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .sol.show{display:block}
+  .mistakes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){.mistakes{grid-template-columns:1fr}}
+  .mistake{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--div);border-radius:10px;padding:13px 16px}
+  .mistake h4{margin:0 0 4px;font-size:14px;font-family:var(--display)}
+  .mistake p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+  .tipbox{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:780px}
+  .tipbox h4{margin:0 0 8px;font-size:14px;font-family:var(--display);color:var(--approx)}
+  .tipbox ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+  .tipbox li{margin:5px 0}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .qtag{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button{font-size:14px;padding:11px 14px}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px;line-height:1.5}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+  .bc-badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#0d1330;
+    background:var(--approx);border-radius:14px;padding:3px 11px;font-weight:600;vertical-align:middle;margin-left:10px}
+  /* tabular method table */
+  .ttab{border-collapse:collapse;margin:6px auto;font-size:15px}
+  .ttab th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);font-weight:500;
+    padding:6px 18px;border-bottom:1px solid var(--line)}
+  .ttab td{padding:9px 18px;text-align:center;font-size:15.5px}
+  .ttab td.sg{color:var(--approx);font-family:var(--mono);font-weight:600;font-size:14px}
+  .ttab td.ar{color:var(--true);font-family:var(--mono);font-size:15px;padding:0 4px}
+  .ttab tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+
+  .looking{font-size:12px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.5}
+  .looking b{color:var(--ink);font-style:normal}
+  .reader{margin-top:10px;background:var(--panel-2);border:1px solid var(--line);border-left:3px solid var(--gold);
+    border-radius:8px;padding:9px 12px;font-size:13px;color:var(--muted)}
+  .reader b{color:var(--ink)}
+  .vtable{border-collapse:collapse;margin:8px auto 0;font-family:var(--mono);font-size:13px}
+  .vtable th{font-size:10.5px;letter-spacing:.06em;color:var(--muted);font-weight:500;padding:4px 16px;border-bottom:1px solid var(--line)}
+  .vtable td{padding:5px 16px;text-align:center;color:var(--ink)}
+  .vtable tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+  .vtable td.hot{color:var(--approx);font-weight:600}
+  .convbox{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-family:var(--mono);font-size:12.5px;line-height:1.7}
+  .convbox .cv-row{display:flex;justify-content:space-between;gap:10px}
+  .convbox .cv-k{color:var(--muted)} .convbox .cv-v{color:var(--ink);font-weight:600}
+  .zoo{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px}
+  @media(max-width:640px){.zoo{grid-template-columns:1fr}}
+  .zoo-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .zoo-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .zoo-name{font-weight:650;color:var(--ink);font-size:15px}
+  .zoo-tag{font-size:11.5px;color:var(--approx);font-family:var(--mono)}
+  .zoo-card svg{width:100%;height:auto;display:block;margin:4px 0 8px}
+  .zoo-card p{font-size:12.5px;color:var(--muted);line-height:1.55;margin:0 0 9px}
+  .zoo-badge{display:flex;gap:7px;flex-wrap:wrap}
+  .zoo-badge span{font-size:10.5px;font-family:var(--mono);padding:2.5px 8px;border-radius:20px;border:1px solid var(--line)}
+  .zb-fail{color:var(--div);border-color:color-mix(in srgb,var(--div) 35%,transparent)!important}
+  .zb-patch.yes{color:var(--conv);border-color:color-mix(in srgb,var(--conv) 35%,transparent)!important}
+  .zb-patch.no{color:var(--faint)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit1.html">← Unit 1 Guide</a>
+  <header class="reveal">
+    <h1><span class="em">Continuity</span> &amp; Its Failures</h1>
+    <div class="sub">You&rsquo;ve been meeting this word since Lesson 1 &mdash; the functions where substitution
+      &ldquo;just works.&rdquo; Now it gets its full treatment. <b>Continuity</b> is what it means for a graph
+      to flow through a point with no hole, no jump, no break &mdash; and there are exactly three things that
+      have to line up for it.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    A function is <b>continuous</b> at a point when <b>where it&rsquo;s heading equals where it is</b> &mdash;
+    the limit and the value agree, with no surprises. Informally: you can draw the graph through that point
+    without lifting your pen. When that fails, it fails in one of a few specific, namable ways &mdash; a whole
+    zoo of discontinuities, each with its own signature.
+  </div>
+
+  <h2 class="reveal">Drawing without lifting your pen</h2>
+  <p class="lead reveal">Here&rsquo;s the intuition before any rules. A continuous function is one you can trace
+    in a single unbroken stroke. The moment you have to lift your pen &mdash; to skip a hole, leap a gap, or
+    escape to infinity &mdash; you&rsquo;ve hit a <b>discontinuity</b>. Watch the pen try four different
+    functions:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="penPlot" viewBox="0 0 560 280" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <button class="play" id="penRun">▶ trace it</button>
+          <button id="penReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="penRead"></span>
+        </div>
+        <p class="looking" id="penLook"><b>What you&rsquo;re looking at:</b> the pen traces left to right. If it
+          ever has to jump, the function is not continuous there.</p>
+        <div class="callout show" id="penCall"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick a function</div>
+        <div class="series-btns" id="penBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">Only the first traces
+          in one stroke. The others each force a lift &mdash; and each lift has a name you&rsquo;ll learn
+          below.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Continuity, written precisely</h2>
+  <p class="lead reveal">&ldquo;Draw without lifting your pen&rdquo; is the picture. Here it is as a single
+    clean equation &mdash; the whole definition of continuity at a point lives in one line:</p>
+
+  <div class="anatomy reveal">
+    <div class="m-big" id="defMain"></div>
+    <div class="reader"><b>Read it aloud:</b> &ldquo;the limit of \(f\) as \(x\) approaches \(a\)
+      equals \(f\) of \(a\)&rdquo; &mdash; where the function is <i>heading</i> is exactly where it
+      <i>is</i>. That single equals sign is the entire idea.</div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">The left side</b> &mdash; \(\lim_{x\to a}f(x)\) &mdash; is where the function is <i>heading</i> as you approach \(a\) (Lessons 1&ndash;3).</span><span class="sy" id="def1"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">The right side</b> &mdash; \(f(a)\) &mdash; is where the function actually <i>is</i>: its value exactly at \(a\).</span><span class="sy" id="def2"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">The equals sign</b> is the whole claim. For it to even make sense, <i>both</i> sides must exist first &mdash; which is exactly why the test below has three parts, not one.</span><span class="sy" id="def3"></span></div>
+  </div>
+
+  <h2 class="reveal">The three-part test</h2>
+  <p class="lead reveal">&ldquo;Draw without lifting&rdquo; is the feeling; here&rsquo;s the precise check. For
+    \(f\) to be continuous at a point \(a\), <b>three things</b> must all be true &mdash; and if any one
+    fails, continuity fails. Run a function through the gate and watch each box get checked (or not):</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="ckPlot" viewBox="0 0 560 260" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <button class="play" id="ckStep">run the next check →</button>
+          <button id="ckReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="ckRead"></span>
+        </div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The gate</div>
+        <div id="ckList"></div>
+        <div class="callout" id="ckVerdict" style="margin-top:10px"></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="label">Pick a function</div>
+        <div class="series-btns" id="ckBtns"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Feel it click into place</h2>
+  <p class="lead reveal">The three checks are clearest when you <b>operate</b> them. Below, the curve heads
+    toward height 2 at \(x=1\) &mdash; that&rsquo;s the limit. <b>Drag the point&rsquo;s value</b> up and
+    down and watch the three boxes respond live. There&rsquo;s exactly one spot where all three turn green:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="dragPlot" viewBox="0 0 560 280" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <span style="font-size:12.5px;color:var(--muted)">drag the value at x = 1:</span>
+          <input type="range" id="dragSlide" min="0" max="1" step="0.004" value="0.18" aria-label="value of the point at x equals 1">
+          <span class="nval" id="dragYv">f(1) = 0.0</span>
+        </div>
+        <p class="looking"><b>What you&rsquo;re looking at:</b> the magenta curve heads to 2 from both sides.
+          The teal dot is the actual value \(f(1)\) &mdash; you control its height. Continuity needs it to
+          land exactly where the curve is heading.</p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The gate, live</div>
+        <div id="dragList"></div>
+        <div class="callout" id="dragVerdict" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The discontinuity zoo</h2>
+  <p class="lead reveal">When continuity fails, it fails in one of four ways. Each is a different
+    &ldquo;creature&rdquo; with a recognizable shape and a specific broken condition. Meet them all:</p>
+
+  <div class="zoo reveal" id="zoo"></div>
+
+  <h2 class="reveal">Name that break</h2>
+  <p class="lead reveal">The exam loves this: show a graph, ask what kind of discontinuity it has &mdash; and
+    which part of the three-part test it violates. Diagnose each one:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="row" style="margin-bottom:8px">
+          <div class="qtag" id="clProg">Graph 1 of 6</div>
+          <span class="score" id="clScore">Score: 0 / 0</span>
+        </div>
+        <svg id="clPlot" viewBox="0 0 440 250" preserveAspectRatio="xMidYMid meet"></svg>
+        <p class="looking" id="clLook"></p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="qtext" id="clQ" style="font-size:14px"></div>
+        <div class="quiz-opts" id="clOpts" style="grid-template-columns:1fr"></div>
+        <div class="feedback" id="clFb"></div>
+        <button class="next" id="clNext" style="margin-top:12px;width:100%;display:none">Next graph →</button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Close the gap yourself</h2>
+  <p class="lead reveal">Piecewise functions are continuous only if the two branches <b>meet</b> at the seam.
+    Here the right branch is fixed at \(x^2\); the left is \(kx\). <b>Drag \(k\)</b> and slide the left
+    branch until it meets the right one exactly at \(x=2\) &mdash; watch the gap shrink to zero:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="kPlot" viewBox="0 0 560 270" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <span style="font-size:12.5px;color:var(--muted)">drag k:</span>
+          <input type="range" id="kSlide" min="0" max="4" step="0.02" value="0.8" aria-label="value of k">
+          <span class="nval" id="kVal">k = 0.80</span>
+        </div>
+        <p class="looking"><b>What you&rsquo;re looking at:</b> the left branch \(kx\) (its slope changes with
+          \(k\)) and the fixed right branch \(x^2\). The gap at the seam is the vertical distance between
+          where they land at \(x=2\).</p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The seam at x = 2</div>
+        <div class="convbox" id="kBox"></div>
+        <div class="callout" id="kVerdict" style="margin-top:10px"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">Left branch lands at
+          \(2k\); right branch lands at \(4\). They&rsquo;re equal exactly when \(2k=4\) &mdash; the
+          value of \(k\) that makes \(f\) continuous.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Fixing a removable hole</h2>
+  <p class="lead reveal">One type of discontinuity is special: the <b>removable</b> one. The limit exists &mdash;
+    the function just has the wrong value (or none) at a single point. You can <b>patch</b> it: redefine that
+    one point to equal the limit, and the hole seals. These &ldquo;find the value that makes \(f\)
+    continuous&rdquo; problems are an exam staple. Step through:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="sumline" id="fxSum"></div>
+        <svg id="fxPlot" viewBox="0 0 560 200" preserveAspectRatio="xMidYMid meet" style="margin-top:8px"></svg>
+        <div class="controls">
+          <button class="play" id="fxStep">step →</button>
+          <button id="fxReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="fxRead">press step</span>
+        </div>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, shown</div>
+        <div id="fxWork"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick a problem</div>
+        <div class="series-btns" id="fxBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">The recipe is always
+          the same: compute the limit at the trouble point (using Lesson 2&rsquo;s tools), then set the
+          function&rsquo;s value there equal to it. The hole fills.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The lesson on one card</h2>
+  <div class="anatomy reveal">
+    <div class="m-big" id="anatMain"></div>
+    <div class="maprow"><span class="ph">All three must hold: \(f(a)\) exists, \(\lim_{x\to a}f\) exists, and they&rsquo;re equal</span><span class="sy" id="anatA"></span></div>
+    <div class="maprow"><span class="ph">Four failure types: removable (hole), jump (sides disagree), infinite (asymptote), oscillating</span><span class="sy" id="anatB"></span></div>
+    <div class="maprow"><span class="ph">Only removable discontinuities can be patched &mdash; redefine the point to equal the limit</span><span class="sy" id="anatC"></span></div>
+  </div>
+
+  <h2 class="reveal">The ideas everything else builds on</h2>
+  <div class="concepts reveal">
+    <div class="concept">
+      <h3>Heading = being</h3>
+      <p>Continuity is exactly <span class="key">limit equals value</span>. It&rsquo;s why substitution works
+        for friendly functions &mdash; they&rsquo;re continuous, so the limit IS \(f(a)\).</p>
+      <div class="m" id="c1"></div>
+    </div>
+    <div class="concept">
+      <h3>Three independent checks</h3>
+      <p>Value exists, limit exists, they match. <span class="key">Any one</span> can fail on its own &mdash;
+        that&rsquo;s what makes the test diagnostic.</p>
+      <div class="m" id="c2"></div>
+    </div>
+    <div class="concept">
+      <h3>Removable means patchable</h3>
+      <p>If the limit exists, the break is <span class="key">just one bad point</span> &mdash; redefine it and
+        the function becomes continuous. Jumps and asymptotes can&rsquo;t be patched.</p>
+      <div class="m" id="c3"></div>
+    </div>
+    <div class="concept">
+      <h3>Where functions live</h3>
+      <p>Polynomials are continuous <span class="key">everywhere</span>; rational functions everywhere except
+        where the denominator is zero. Knowing the type tells you where to look for trouble.</p>
+      <div class="m" id="c4"></div>
+    </div>
+    <div class="concept">
+      <h3>At a point vs. over an interval</h3>
+      <p>A function is continuous <span class="key">on an interval</span> when it&rsquo;s continuous at every point inside. At a closed endpoint, only the <span class="key">one side that exists</span> needs to match &mdash; e.g. \(\sqrt{x}\) is continuous on \([0,\infty)\) because it&rsquo;s right-continuous at \(0\).</p>
+      <div class="m" id="c5"></div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Your turn</h2>
+  <p class="lead reveal">Five problems &mdash; the three-part test, classification, and a solve-for-k.</p>
+  <div class="reveal" id="practice"></div>
+
+  <h2 class="reveal">Quick quiz</h2>
+  <p class="lead reveal">Eight fast checks across the whole lesson.</p>
+  <div class="card reveal" id="quizCard">
+    <div class="row" style="margin-bottom:12px">
+      <div class="qtag" id="qProgress">Question 1 of 8</div>
+      <span class="score" id="qScore">Score: 0 / 0</span>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="next" id="qNext" style="margin-top:14px;width:100%;display:none">Next question →</button>
+  </div>
+
+  <h2 class="reveal">Common mistakes &amp; exam tips</h2>
+  <div class="mistakes reveal">
+    <div class="mistake"><h4>Thinking &ldquo;limit exists&rdquo; means continuous</h4><p>The limit can exist while the function is still discontinuous &mdash; if \(f(a)\) is missing or has the wrong value. All THREE conditions are required, not just the limit.</p></div>
+    <div class="mistake"><h4>Confusing removable with the others</h4><p>Removable means the LIMIT EXISTS (both sides agree) &mdash; it&rsquo;s just a hole. Jumps have disagreeing sides; infinite discontinuities blow up. Only removable ones can be patched.</p></div>
+    <div class="mistake"><h4>Forgetting to check the value, not just the limit</h4><p>A function can have a perfect limit and still be discontinuous because \(f(a)\) was defined as something else. Always check all three boxes.</p></div>
+    <div class="mistake"><h4>Solving for k using only one side</h4><p>For piecewise functions, continuity needs the left piece, right piece, AND the defined value to all agree at the seam. Set the one-sided limits equal &mdash; both of them.</p></div>
+    <div class="mistake"><h4>Assuming all discontinuities are holes</h4><p>&ldquo;Discontinuous&rdquo; isn&rsquo;t automatically &ldquo;removable.&rdquo; Identify the type first &mdash; a jump or asymptote can never be patched by redefining one point.</p></div>
+    <div class="mistake"><h4>Ignoring domain edges</h4><p>A rational function is discontinuous wherever its denominator is zero &mdash; check those points specifically. Polynomials never have this problem; they&rsquo;re continuous everywhere.</p></div>
+  </div>
+  <div class="tipbox reveal">
+    <h4>On the AP exam</h4>
+    <ul>
+      <li>To justify continuity in writing, state all three conditions explicitly &mdash; graders want the full checklist, not just &ldquo;the limit exists.&rdquo;</li>
+      <li>For &ldquo;find k&rdquo; problems, set the one-sided limits equal at the seam and solve; verify the defined value matches too.</li>
+      <li>Classify before you patch: only removable discontinuities can be fixed by redefining a point.</li>
+      <li>For piecewise functions, the only possible trouble spots are the seams &mdash; check continuity there.</li>
+    </ul>
+  </div>
+
+  <div class="whatsnext reveal">
+    You can now spot exactly where and how a function breaks. The last lesson zooms out to the extremes: limits
+    that run off to <b>infinity</b>, the asymptotes that mark them, and a powerful theorem that continuity
+    unlocks &mdash; the guarantee that a continuous function hits every value in between.
+    <a href="asymptotes-ivt.html">Asymptotes &amp; the IVT</a> is next &mdash; or head back to the
+    <a href="unit1.html">Unit 1 Guide</a>.
+  </div>
+
+  <footer class="reveal">Continuity &amp; Its Failures · part of the Unit 1 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const T=(s)=>tex(s,s,false);
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mathify(html){ if(!window.katex) return html;
+  return html.replace(/\\\((.+?)\\\)/g,(m,t)=>{ try{ return katex.renderToString(t,{throwOnError:false}); }catch(e){ return m; } }); }
+function mathifyStatic(){ if(!window.katex) return;
+  document.querySelectorAll('.sub,.lead,.big-idea,.looking,.reader,.maprow .ph,.mistake p,.tipbox li,.concept p,.whatsnext,.callout,.stat .k,.card > p,.zoo-card p').forEach(n=>{
+    if(n.dataset.mz) return;
+    if(n.innerHTML.indexOf('\\(')<0){ n.dataset.mz="1"; return; }
+    n.innerHTML=mathify(n.innerHTML); n.dataset.mz="1"; }); }
+const reduceMotion=()=> window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function mapper(dom,yr,W,H,P){ return { sx:x=>P+((x-dom[0])/(dom[1]-dom[0]))*(W-2*P),
+  sy:v=>H-P-((v-yr[0])/(yr[1]-yr[0]))*(H-2*P), dom,yr }; }
+function axes(svg,M,W,H,P,xt,yt){
+  for(let g=0;g<=yt;g++){ const yy=M.yr[0]+(g/yt)*(M.yr[1]-M.yr[0]),py=M.sy(yy);
+    svg.appendChild(el("line",{x1:P,y1:py,x2:W-P,y2:py,stroke:"#2b251a"})); }
+  const zx=M.sx(0); if(zx>=P&&zx<=W-P) svg.appendChild(el("line",{x1:zx,y1:H-P,x2:zx,y2:P,stroke:"#4a4334","stroke-width":1.1}));
+  const zy=M.sy(0); if(zy>=P&&zy<=H-P) svg.appendChild(el("line",{x1:P,y1:zy,x2:W-P,y2:zy,stroke:"#4a4334","stroke-width":1.1}));
+}
+/* piecewise-aware curve: f returns null where undefined/skip */
+function pcurve(f,a,b,M,N=200){ const segs=[]; let cur="";
+  for(let k=0;k<=N;k++){ const x=a+(b-a)*k/N,y=f(x);
+    if(y===null||!isFinite(y)||y<M.yr[0]-40||y>M.yr[1]+40){ if(cur){segs.push(cur);cur="";} continue; }
+    cur+=(cur?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(y).toFixed(1)+" "; }
+  if(cur)segs.push(cur); return segs; }
+function openDot(v,M,x,y){ v.appendChild(el("circle",{cx:M.sx(x),cy:M.sy(y),r:5.5,fill:"#1a1312",stroke:"#e86ab4","stroke-width":2.4})); }
+function fillDot(v,M,x,y,c){ v.appendChild(el("circle",{cx:M.sx(x),cy:M.sy(y),r:5,fill:c||"#e86ab4"})); }
+
+/* ======================= 1 · PEN TRACE ======================= */
+/* each: f(x) (null=lift), domain, range, breaks:[{x,y,open}], dots:[{x,y}], continuous, call */
+const PEN=[
+ { name:"Smooth parabola", sub:"continuous everywhere", f:x=>0.45*x*x-1.2, dom:[-3,3], yr:[-2,3],
+   breaks:[], dots:[], cont:true,
+   call:'<span style="color:var(--conv);font-weight:600">One unbroken stroke.</span> The pen never lifts — this function is continuous everywhere. Heading and being agree at every point.' },
+ { name:"A hole", sub:"removable discontinuity", f:x=>Math.abs(x-1)<0.001?null:x+0.5, dom:[-2.5,3.5], yr:[-2,4.5],
+   breaks:[], dots:[{x:1,y:1.5,open:true}], cont:false,
+   call:'The pen must <b>hop over a single missing point</b> at \\(x=1\\). The curve heads straight for height 1.5, but that one point isn’t filled — a <b>removable</b> hole.' },
+ { name:"A jump", sub:"jump discontinuity", f:null, dom:[-2.5,3.5], yr:[-1,4.5], piecewise:"jump",
+   breaks:[], dots:[{x:1,y:1.5,open:true},{x:1,y:3,open:false}], cont:false,
+   call:'The pen reaches height 1.5 from the left, then must <b>leap up to 3</b> to continue on the right. The two sides disagree — a <b>jump</b>.' },
+ { name:"An asymptote", sub:"infinite discontinuity", f:x=>{const d=x-1; return Math.abs(d)<0.04?null:1/(d*d)-0.5;}, dom:[-1.5,3.5], yr:[-1,6], asym:1,
+   breaks:[], dots:[], cont:false,
+   call:'The pen <b>shoots off to infinity</b> at \\(x=1\\), never reaching a value there. The dashed line is a <b>vertical asymptote</b> — an <b>infinite</b> discontinuity.' }
+];
+let penKey=0, penT=0, penRAF=null;
+function penFn(e,x){
+  if(e.piecewise==="jump"){ return x<1 ? x+0.5 : x+2; }  /* left x+0.5→1.5 at 1⁻; right x+2→3 at 1, rises */
+  return e.f(x);
+}
+function renderPEN(){
+  const e=PEN[penKey], v=document.getElementById("penPlot"); v.innerHTML="";
+  const M=mapper(e.dom,e.yr,560,280,38); axes(v,M,560,280,38,4,4);
+  if(e.asym!=null) v.appendChild(el("line",{x1:M.sx(e.asym),y1:38,x2:M.sx(e.asym),y2:242,stroke:"#e0644f","stroke-width":1.3,"stroke-dasharray":"5 4",opacity:.7}));
+  /* full faint curve */
+  pcurve(x=>penFn(e,x),e.dom[0],e.dom[1],M,400).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2,opacity:.22})));
+  /* traced portion up to penT */
+  const xT=e.dom[0]+(e.dom[1]-e.dom[0])*penT;
+  pcurve(x=>x<=xT?penFn(e,x):null,e.dom[0],e.dom[1],M,400).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.8,"stroke-linecap":"round"})));
+  /* pen dot */
+  if(penT>0&&penT<1){ const yp=penFn(e,xT); if(yp!==null&&isFinite(yp)) v.appendChild(el("circle",{cx:M.sx(xT),cy:M.sy(yp),r:5,fill:"#f3a1cf"})); }
+  /* D: lift arc — once traced, show where the pen had to jump */
+  if(penT>=1 && !e.cont){
+    let bx=null, lo=null, hi=null;
+    if(e.piecewise==="jump"){ bx=1; lo=1.5; hi=3; }
+    else if(e.dots.length){ bx=e.dots[0].x; lo=e.dots[0].y; hi=e.dots[0].y; }
+    else if(e.asym!=null){ bx=e.asym; }
+    if(bx!=null && lo!=null){
+      const cx=M.sx(bx);
+      if(Math.abs(hi-lo)>0.01){
+        /* arc hopping from lo to hi */
+        const y1=M.sy(lo), y2=M.sy(hi), mx=cx+26, my=(y1+y2)/2;
+        v.appendChild(el("path",{d:"M"+cx+" "+y1+" Q"+mx+" "+my+" "+cx+" "+y2,fill:"none",stroke:"#f3a1cf","stroke-width":1.6,"stroke-dasharray":"4 3",opacity:.8}));
+        v.appendChild(el("text",{x:mx+6,y:my+3,fill:"#f3a1cf","font-size":10.5,"font-family":"var(--mono)"},"lift!"));
+      }
+    }
+  }
+  /* break dots */
+  e.dots.forEach(d=>{ if(d.open) openDot(v,M,d.x,d.y); else fillDot(v,M,d.x,d.y); });
+  document.getElementById("penRead").textContent = penT>=1?(e.cont?"never lifted ✓":"had to lift ✗"):(penT>0?"tracing…":"ready");
+  document.querySelectorAll("#penBtns button").forEach((b,i)=>b.classList.toggle("on",i===penKey));
+}
+document.getElementById("penRun").onclick=()=>{
+  if(penRAF) return;
+  const e=PEN[penKey];
+  if(reduceMotion()){ penT=1; renderPEN(); document.getElementById("penCall").innerHTML=mathify(e.call); document.getElementById("penCall").className="callout show"; return; }
+  penT=0; const t0=performance.now(), DUR=2600;
+  const step=(now)=>{ penT=Math.min(1,(now-t0)/DUR); renderPEN();
+    if(penT<1) penRAF=requestAnimationFrame(step);
+    else { penRAF=null; document.getElementById("penCall").innerHTML=mathify(e.call); document.getElementById("penCall").className="callout show"; } };
+  penRAF=requestAnimationFrame(step);
+};
+document.getElementById("penReset").onclick=()=>{ if(penRAF){cancelAnimationFrame(penRAF);penRAF=null;} penT=0; renderPEN(); document.getElementById("penCall").className="callout"; document.getElementById("penCall").innerHTML=""; };
+(function(){ const box=document.getElementById("penBtns");
+  PEN.forEach((e,i)=>{ const b=document.createElement("button");
+    b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+    b.onclick=()=>{ if(penRAF){cancelAnimationFrame(penRAF);penRAF=null;} penKey=i; penT=0; renderPEN(); document.getElementById("penCall").className="callout"; document.getElementById("penCall").innerHTML=""; }; box.appendChild(b); }); })();
+
+/* ======================= 2 · THREE-PART TEST GATE ======================= */
+/* each: graph + the 3 checks with pass/fail + values */
+const CK=[
+ { name:"Continuous", sub:"f(x)=x²−1 at x=2", a:2,
+   draw:(v,M)=>{ pcurve(x=>x*x-1,-0.5,3.5,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.6,"stroke-linecap":"round"}))); fillDot(v,M,2,3); },
+   dom:[-0.5,3.5], yr:[-1.5,5],
+   checks:[{t:"Is \\(f(2)\\) defined?",pass:true,note:"Yes: \\(f(2)=3\\)."},
+           {t:"Does \\(\\lim_{x\\to 2}f\\) exist?",pass:true,note:"Yes: both sides \\(\\to 3\\)."},
+           {t:"Are they equal?",pass:true,note:"\\(3=3\\) ✓"}],
+   verdict:'<span style="color:var(--conv);font-weight:600">Continuous at 2.</span> All three boxes checked — heading equals being.' },
+ { name:"Removable hole", sub:"hole at x=1, lim=2", a:1,
+   draw:(v,M)=>{ pcurve(x=>Math.abs(x-1)<0.001?null:x+1,-1.5,3,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.6,"stroke-linecap":"round"}))); openDot(v,M,1,2); },
+   dom:[-1.5,3], yr:[-1,4.5],
+   checks:[{t:"Is \\(f(1)\\) defined?",pass:false,note:"No — there’s a hole; \\(f(1)\\) is undefined."},
+           {t:"Does \\(\\lim_{x\\to 1}f\\) exist?",pass:true,note:"Yes: both sides \\(\\to 2\\)."},
+           {t:"Are they equal?",pass:false,note:"Can’t be — \\(f(1)\\) doesn’t exist."}],
+   verdict:'<span style="color:var(--div);font-weight:600">Discontinuous (removable).</span> The limit exists, but \\(f(1)\\) is missing — fails box 1. Patchable: just define \\(f(1)=2\\).' },
+ { name:"Wrong value", sub:"defined, but ≠ limit", a:1,
+   draw:(v,M)=>{ pcurve(x=>Math.abs(x-1)<0.001?null:x+1,-1.5,3,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.6,"stroke-linecap":"round"}))); openDot(v,M,1,2); fillDot(v,M,1,0.5); },
+   dom:[-1.5,3], yr:[-1,4.5],
+   checks:[{t:"Is \\(f(1)\\) defined?",pass:true,note:"Yes: the filled dot says \\(f(1)=0.5\\)."},
+           {t:"Does \\(\\lim_{x\\to 1}f\\) exist?",pass:true,note:"Yes: both sides \\(\\to 2\\)."},
+           {t:"Are they equal?",pass:false,note:"No — \\(0.5\\ne 2\\). Heading \\(\\ne\\) being."}],
+   verdict:'<span style="color:var(--div);font-weight:600">Discontinuous (removable).</span> Value and limit both exist but disagree — fails box 3. Still patchable: redefine \\(f(1)=2\\).' },
+ { name:"Jump", sub:"sides disagree", a:2,
+   draw:(v,M)=>{ pcurve(x=>x<2?x:null,-0.5,3.5,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.6,"stroke-linecap":"round"}))); pcurve(x=>x>=2?5-x:null,-0.5,3.5,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.6,"stroke-linecap":"round"}))); openDot(v,M,2,2); fillDot(v,M,2,3); },
+   dom:[-0.5,3.5], yr:[-0.5,4],
+   checks:[{t:"Is \\(f(2)\\) defined?",pass:true,note:"Yes: \\(f(2)=3\\) (filled dot)."},
+           {t:"Does \\(\\lim_{x\\to 2}f\\) exist?",pass:false,note:"No — left \\(\\to 2\\), right \\(\\to 3\\). Sides disagree."},
+           {t:"Are they equal?",pass:false,note:"N/A — the limit doesn’t even exist."}],
+   verdict:'<span style="color:var(--div);font-weight:600">Discontinuous (jump).</span> Fails box 2 — no two-sided limit. A jump can never be patched.' }
+];
+let ckKey=0, ckStep=0;
+function renderCK(){
+  const e=CK[ckKey], v=document.getElementById("ckPlot"); v.innerHTML="";
+  const M=mapper(e.dom,e.yr,560,260,36); axes(v,M,560,260,36,4,4);
+  v.appendChild(el("line",{x1:M.sx(e.a),y1:36,x2:M.sx(e.a),y2:224,stroke:"#9a9183","stroke-width":1,"stroke-dasharray":"3 4",opacity:.45}));
+  e.draw(v,M);
+  v.appendChild(el("text",{x:M.sx(e.a),y:238,fill:"#9a9183","font-size":11,"text-anchor":"middle","font-family":"var(--mono)"},"x = "+e.a));
+  const list=document.getElementById("ckList");
+  list.innerHTML=e.checks.map((c,i)=>{
+    const shown=i<ckStep;
+    const mark=!shown?'<span style="color:var(--faint)">○</span>':(c.pass?'<span style="color:var(--conv)">✓</span>':'<span style="color:var(--div)">✗</span>');
+    return '<div class="stat" style="opacity:'+(shown?1:0.4)+'"><span class="k">'+mark+' '+c.t+'</span><span class="v" style="font-size:11.5px;color:'+(shown?(c.pass?'var(--conv)':'var(--div)'):'var(--faint)')+'">'+(shown?c.note:'…')+'</span></div>';
+  }).join("");
+  list.innerHTML=mathify(list.innerHTML);
+  const vd=document.getElementById("ckVerdict");
+  if(ckStep>=3){ vd.className="callout show"; vd.innerHTML=mathify(e.verdict); }
+  else { vd.className="callout"; vd.innerHTML=""; }
+  document.getElementById("ckRead").textContent=ckStep===0?"press to start":(ckStep<3?"check "+ckStep+" of 3":"done");
+  document.querySelectorAll("#ckBtns button").forEach((b,i)=>b.classList.toggle("on",i===ckKey));
+}
+document.getElementById("ckStep").onclick=()=>{ if(ckStep<3){ ckStep++; renderCK(); } };
+document.getElementById("ckReset").onclick=()=>{ ckStep=0; renderCK(); };
+(function(){ const box=document.getElementById("ckBtns");
+  CK.forEach((e,i)=>{ const b=document.createElement("button");
+    b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+    b.onclick=()=>{ ckKey=i; ckStep=0; renderCK(); }; box.appendChild(b); }); })();
+
+/* ======================= 3 · DISCONTINUITY ZOO ======================= */
+const ZOO=[
+ { name:"Removable", tag:"the hole", badge:"box 1 or 3", patchable:true, draw:(v,M)=>{ pcurve(x=>Math.abs(x-1)<0.001?null:x+1,-1,3,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.4,"stroke-linecap":"round"}))); openDot(v,M,1,2); }, dom:[-1,3], yr:[-0.5,4],
+   desc:"The limit exists — both sides agree — but \\(f(a)\\) is missing or wrong. A single bad point. <b>Fails:</b> box 1 or 3. <b>Patchable:</b> yes." },
+ { name:"Jump", tag:"the leap", badge:"box 2", patchable:false, draw:(v,M)=>{ pcurve(x=>x<1?x+0.5:null,-1,3,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.4,"stroke-linecap":"round"}))); pcurve(x=>x>=1?x+1.5:null,-1,3,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.4,"stroke-linecap":"round"}))); openDot(v,M,1,1.5); fillDot(v,M,1,2.5); }, dom:[-1,3], yr:[-0.5,4.5],
+   desc:"The one-sided limits exist but <b>disagree</b> — the graph leaps. <b>Fails:</b> box 2 (no two-sided limit). <b>Patchable:</b> never." },
+ { name:"Infinite", tag:"the blowup", badge:"boxes 1 & 2", patchable:false, draw:(v,M)=>{ v.appendChild(el("line",{x1:M.sx(1),y1:M.sy(M.yr[0]),x2:M.sx(1),y2:M.sy(M.yr[1]),stroke:"#e0644f","stroke-width":1.2,"stroke-dasharray":"5 4",opacity:.6})); pcurve(x=>x<0.93?1/((x-1)*(x-1)):null,-1,0.93,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.4,"stroke-linecap":"round"}))); pcurve(x=>x>1.07?1/((x-1)*(x-1)):null,1.07,3,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.4,"stroke-linecap":"round"}))); }, dom:[-1,3], yr:[0,6],
+   desc:"The function <b>runs to \\(\\pm\\infty\\)</b> at the point — a vertical asymptote. <b>Fails:</b> boxes 1 and 2. <b>Patchable:</b> never." },
+ { name:"Oscillating", tag:"the wild one", badge:"box 2", patchable:false, draw:(v,M)=>{ pcurve(x=>Math.abs(x-1)>0.012?Math.sin(1/(x-1))*1.4+2:null,-1,3,M,600).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":1.6,"stroke-linecap":"round"}))); }, dom:[-1,3], yr:[0,4],
+   desc:"Infinitely many wiggles near the point — \\(\\sin\\frac{1}{x-1}\\) from Lessons 1 and 3. <b>Fails:</b> box 2 (no limit). <b>Patchable:</b> never." }
+];
+function renderZoo(){
+  const wrap=document.getElementById("zoo"); wrap.innerHTML="";
+  ZOO.forEach((z,i)=>{
+    const card=document.createElement("div"); card.className="zoo-card";
+    const svg=el("svg",{viewBox:"0 0 280 150",preserveAspectRatio:"xMidYMid meet"});
+    const M=mapper(z.dom,z.yr,280,150,22); axes(svg,M,280,150,22,3,3); z.draw(svg,M);
+    card.innerHTML='<div class="zoo-head"><span class="zoo-name">'+z.name+'</span><span class="zoo-tag">'+z.tag+'</span></div>';
+    card.appendChild(svg);
+    const badge=document.createElement("div"); badge.className="zoo-badge";
+    badge.innerHTML='<span class="zb-fail">fails '+z.badge+'</span><span class="zb-patch '+(z.patchable?"yes":"no")+'">'+(z.patchable?"patchable":"not patchable")+'</span>';
+    card.appendChild(badge);
+    const p=document.createElement("p"); p.innerHTML=mathify(z.desc); card.appendChild(p);
+    wrap.appendChild(card);
+  });
+}
+
+/* ======================= 4 · CLASSIFIER GAME ======================= */
+const CL=[
+ { look:"A line heading toward (1, 3) with an open hole there, and nothing else at x=1.", a:1,
+   draw:(v,M)=>{ pcurve(x=>Math.abs(x-1)<0.001?null:x+2,-1,2.5,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.5}))); openDot(v,M,1,3); }, dom:[-1,2.5], yr:[0,5],
+   type:"Removable", box:"box 1 (f(1) undefined)",
+   opts:["Removable — the limit exists, just a hole","Jump — the sides disagree","Infinite — it blows up","Oscillating"],
+   fb:"Both sides head to 3, so the limit exists — but f(1) is missing. That’s removable, failing box 1. Define f(1)=3 and it’s continuous." },
+ { look:"Two segments: left rises to an open circle at (2, 1); right starts at a filled dot at (2, 3) and rises.", a:2,
+   draw:(v,M)=>{ pcurve(x=>x<2?x-1:null,0,4,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.5}))); pcurve(x=>x>=2?x+1:null,0,4,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.5}))); openDot(v,M,2,1); fillDot(v,M,2,3); }, dom:[0,4], yr:[-0.5,5.5],
+   type:"Jump", box:"box 2 (one-sided limits differ)",
+   opts:["Jump — left and right limits differ","Removable — just a hole","Infinite — vertical asymptote","Oscillating"],
+   fb:"Left side → 1, right side → 3. The one-sided limits disagree, so no two-sided limit — a jump, failing box 2. Can’t be patched." },
+ { look:"A curve shooting up to infinity on both sides of a dashed vertical line at x=2.", a:2,
+   draw:(v,M)=>{ v.appendChild(el("line",{x1:M.sx(2),y1:M.sy(M.yr[0]),x2:M.sx(2),y2:M.sy(M.yr[1]),stroke:"#e0644f","stroke-width":1.2,"stroke-dasharray":"5 4",opacity:.6})); pcurve(x=>x<1.9?1/((x-2)*(x-2)):null,0,1.9,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.5}))); pcurve(x=>x>2.1?1/((x-2)*(x-2)):null,2.1,4,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.5}))); }, dom:[0,4], yr:[0,6],
+   type:"Infinite", box:"boxes 1 and 2 (undefined, no finite limit)",
+   opts:["Infinite — vertical asymptote","Jump — sides differ","Removable — a hole","Oscillating"],
+   fb:"The function blows up to +∞ at x=2 — an infinite discontinuity. No value, no finite limit. Never patchable." },
+ { look:"A smooth curve passing cleanly through (1, 2) with no break of any kind.", a:1,
+   draw:(v,M)=>{ pcurve(x=>(x-1)*(x-1)*0.5+2,-1,3,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.5}))); fillDot(v,M,1,2); }, dom:[-1,3], yr:[0.5,4.5],
+   type:"Continuous", box:"none — all three pass",
+   opts:["Continuous — no discontinuity at all","Removable — a hole","Jump","Infinite"],
+   fb:"Trick question! The curve flows through (1,2) with limit = value = 2. All three boxes pass — it’s continuous here, no break." },
+ { look:"A line to an open hole at (0, 1); a filled dot sits separately at (0, 3).", a:0,
+   draw:(v,M)=>{ pcurve(x=>Math.abs(x)<0.001?null:x+1,-2,2,M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.5}))); openDot(v,M,0,1); fillDot(v,M,0,3); }, dom:[-2,2], yr:[-1.5,4],
+   type:"Removable", box:"box 3 (value ≠ limit)",
+   opts:["Removable — value and limit disagree","Jump — one-sided limits differ","Infinite","Continuous"],
+   fb:"The limit is 1 (both sides), but f(0)=3 (the filled dot). Defined and limit both exist — they just disagree. Removable, failing box 3. Redefine f(0)=1." },
+ { look:"Endlessly tightening wiggles crowding toward x=0, never settling.", a:0,
+   draw:(v,M)=>{ pcurve(x=>Math.abs(x)>0.01?Math.sin(1/x)*1.3+2:null,-1.5,1.5,M,700).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":1.5}))); }, dom:[-1.5,1.5], yr:[0,4],
+   type:"Oscillating", box:"box 2 (no limit exists)",
+   opts:["Oscillating — infinite wiggles, no limit","Removable — a hole","Jump","Infinite — asymptote"],
+   fb:"sin(1/x) oscillates infinitely fast near 0 — the limit doesn’t exist (and it’s not ±∞ either). Oscillating discontinuity, failing box 2." }
+];
+let clI=0, clScore=0, clDone=0, clLock=false;
+function renderCL(){
+  clLock=false; const item=CL[clI];
+  const v=document.getElementById("clPlot"); v.innerHTML="";
+  const M=mapper(item.dom,item.yr,440,250,32); axes(v,M,440,250,32,4,4);
+  v.appendChild(el("line",{x1:M.sx(item.a),y1:30,x2:M.sx(item.a),y2:218,stroke:"#9a9183","stroke-width":1,"stroke-dasharray":"3 4",opacity:.4}));
+  item.draw(v,M);
+  document.getElementById("clLook").innerHTML="<b>What you\u2019re looking at:</b> "+item.look;
+  document.getElementById("clProg").textContent="Graph "+(clI+1)+" of "+CL.length;
+  document.getElementById("clScore").textContent="Score: "+clScore+" / "+clDone;
+  document.getElementById("clQ").textContent="What kind of discontinuity is this?";
+  document.getElementById("clFb").innerHTML="";
+  document.getElementById("clNext").style.display="none";
+  const box=document.getElementById("clOpts"); box.innerHTML="";
+  shuf(item.opts).forEach(o=>{
+    const b=document.createElement("button"); b.textContent=o;
+    b.dataset.ok=(o===item.opts[0])?"1":"0";
+    b.onclick=()=>{ if(clLock)return; clLock=true; clDone++;
+      [...box.children].forEach(bb=>{ bb.disabled=true; if(bb.dataset.ok==="1") bb.classList.add("correct"); });
+      const ok=(b.dataset.ok==="1");
+      if(ok){ clScore++; } else b.classList.add("wrong");
+      document.getElementById("clScore").textContent="Score: "+clScore+" / "+clDone;
+      document.getElementById("clFb").innerHTML=(ok?'<span style="color:var(--conv);font-weight:600">✓ </span>':'<span style="color:var(--div);font-weight:600">✗ </span>')+'<span style="color:var(--muted)">'+mathify(item.fb)+' <b>Violates:</b> '+item.box+'.</span>';
+      document.getElementById("clNext").style.display="block";
+      document.getElementById("clNext").textContent=clI<CL.length-1?"Next graph →":"Play again ↺";
+    };
+    box.appendChild(b);
+  });
+}
+document.getElementById("clNext").onclick=()=>{ if(clI<CL.length-1){ clI++; } else { clI=0; clScore=0; clDone=0; } renderCL(); };
+
+/* ======================= 5 · FIX THE HOLE ======================= */
+const FX=[
+ { name:"Removable factor", sub:"(x²−9)/(x−3) at 3", head:"f(x)=\\frac{x^2-9}{x-3},\\ x\\ne 3", a:3, L:6, f:x=>x+3,
+   steps:[{t:"At \\(x=3\\): substitution gives \\(\\frac00\\). The limit exists — factor and cancel:",m:"\\frac{(x-3)(x+3)}{x-3}=x+3"},
+          {t:"So the limit is:",m:"\\lim_{x\\to 3}f=3+3=6"},
+          {t:"Patch it: define \\(f(3)\\) to equal the limit. The hole seals:",m:"f(3)=6\\ \\Rightarrow\\ \\text{continuous}"}], fin:"f(3)=6" },
+ { name:"Solve for k", sub:"kx for x<2, x²for x≥2", head:"f(x)=\\begin{cases}kx & x<2\\\\ x^2 & x\\ge 2\\end{cases}", a:2, L:4, f:x=>x<2?2*x:x*x,
+   steps:[{t:"For continuity at the seam \\(x=2\\), the two pieces must meet. Left limit:",m:"\\lim_{x\\to 2^-}kx=2k"},
+          {t:"Right value:",m:"\\lim_{x\\to 2^+}x^2=4"},
+          {t:"Set them equal and solve:",m:"2k=4\\ \\Rightarrow\\ k=2"}], fin:"k=2" },
+ { name:"Fill the sinc hole", sub:"sin(x)/x at 0", head:"f(x)=\\frac{\\sin x}{x},\\ x\\ne 0", a:0, L:1, f:x=>x===0?1:Math.sin(x)/x,
+   steps:[{t:"At \\(x=0\\): \\(\\frac00\\). But from Lesson 3 the limit is known:",m:"\\lim_{x\\to 0}\\frac{\\sin x}{x}=1"},
+          {t:"Patch it: define the value at 0 to match:",m:"f(0)=1\\ \\Rightarrow\\ \\text{continuous}"}], fin:"f(0)=1" }
+];
+let fxKey=0, fxN=0;
+function renderFX(){
+  const e=FX[fxKey];
+  const panel=document.getElementById("fxWork"), read=document.getElementById("fxRead"), sum=document.getElementById("fxSum");
+  if(fxN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Find the limit at the trouble point, then set the value there equal to it.</div>';
+  else panel.innerHTML=mathify(e.steps.slice(0,fxN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join(""));
+  read.textContent=fxN===0?"press step":(fxN<e.steps.length?"step "+fxN+" of "+e.steps.length:"patched ✓");
+  const tx=fxN>=e.steps.length?e.head+"\\;\\Rightarrow\\;"+e.fin:e.head;
+  sum.innerHTML=tex(tx,tx,true);
+  /* graph: show the hole, fill it on the final step */
+  const v=document.getElementById("fxPlot"); v.innerHTML="";
+  const filled=fxN>=e.steps.length;
+  let dom,yr;
+  if(fxKey===0){dom=[1,5];yr=[2,9];} else if(fxKey===1){dom=[0,4];yr=[-1,9];} else {dom=[-6,6];yr=[-0.4,1.25];}
+  const M=mapper(dom,yr,560,200,30); axes(v,M,560,200,30,4,3);
+  if(fxKey===1){
+    pcurve(x=>x<2?2*x:null,dom[0],dom[1],M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.4})));
+    pcurve(x=>x>=2?x*x:null,dom[0],dom[1],M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.4})));
+    if(filled){ fillDot(v,M,2,4,"#3fd0b0"); } else { openDot(v,M,2,4); v.appendChild(el("circle",{cx:M.sx(2),cy:M.sy(2*2),r:5,fill:"#16140f",stroke:"#9a9183","stroke-width":1.5})); }
+  } else {
+    pcurve(x=>Math.abs(x-e.a)<(fxKey===2?0.06:0.001)?null:e.f(x),dom[0],dom[1],M,300).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.4,"stroke-linecap":"round"})));
+    if(filled) fillDot(v,M,e.a,e.L,"#3fd0b0"); else openDot(v,M,e.a,e.L);
+  }
+  if(filled){ v.appendChild(el("text",{x:M.sx(e.a),y:M.sy(e.L)-12,fill:"#3fd0b0","font-size":11,"text-anchor":"middle","font-family":"var(--mono)"},"filled ✓")); }
+  document.querySelectorAll("#fxBtns button").forEach((b,i)=>b.classList.toggle("on",i===fxKey));
+}
+document.getElementById("fxStep").onclick=()=>{ if(fxN<FX[fxKey].steps.length){ fxN++; renderFX(); } };
+document.getElementById("fxReset").onclick=()=>{ fxN=0; renderFX(); };
+(function(){ const box=document.getElementById("fxBtns");
+  FX.forEach((e,i)=>{ const b=document.createElement("button");
+    b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+    b.onclick=()=>{ fxKey=i; fxN=0; renderFX(); }; box.appendChild(b); }); })();
+
+/* ======================= A · DRAG-THE-POINT MACHINE ======================= */
+const DRAG={ f:x=>x+1, a:1, L:2, dom:[-1.5,3], yr:[-1,4.5], tol:0.08 };
+let dragY=DRAG.yr[0]+0.18*(DRAG.yr[1]-DRAG.yr[0]);
+function renderDrag(){
+  const v=document.getElementById("dragPlot"); if(!v) return; v.innerHTML="";
+  const M=mapper(DRAG.dom,DRAG.yr,560,280,38); axes(v,M,560,280,38,4,4);
+  v.appendChild(el("line",{x1:M.sx(DRAG.a),y1:38,x2:M.sx(DRAG.a),y2:242,stroke:"#9a9183","stroke-width":1,"stroke-dasharray":"3 4",opacity:.4}));
+  /* curve with a hole at a (the value is supplied by the draggable dot) */
+  pcurve(x=>Math.abs(x-DRAG.a)<0.001?null:DRAG.f(x),DRAG.dom[0],DRAG.dom[1],M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.6,"stroke-linecap":"round"})));
+  /* faint guide line at the limit height */
+  v.appendChild(el("line",{x1:38,y1:M.sy(DRAG.L),x2:M.sx(DRAG.a),y2:M.sy(DRAG.L),stroke:"#3fd0b0","stroke-width":1,"stroke-dasharray":"4 4",opacity:.35}));
+  v.appendChild(el("text",{x:42,y:M.sy(DRAG.L)-5,fill:"#3fd0b0","font-size":10.5,"font-family":"var(--mono)",opacity:.8},"limit = 2"));
+  const onTarget=Math.abs(dragY-DRAG.L)<DRAG.tol;
+  /* the open hole where the curve heads (always shown faint) */
+  openDot(v,M,DRAG.a,DRAG.L);
+  /* the draggable value dot */
+  const dy=onTarget?DRAG.L:dragY;
+  v.appendChild(el("circle",{cx:M.sx(DRAG.a),cy:M.sy(dy),r:13,fill:onTarget?"#3fd0b0":"#e86ab4",opacity:.15}));
+  v.appendChild(el("circle",{cx:M.sx(DRAG.a),cy:M.sy(dy),r:6,fill:onTarget?"#3fd0b0":"#f3a1cf"}));
+  /* the three live checks */
+  const checks=[
+    {t:"\\(f(1)\\) defined?",pass:true,note:"Yes \u2014 you\u2019ve placed the value."},
+    {t:"\\(\\lim_{x\\to 1}f\\) exists?",pass:true,note:"Yes \u2014 both sides \u2192 2."},
+    {t:"equal?",pass:onTarget,note:onTarget?"\\(2=2\\) \u2713":"\\("+dy.toFixed(1)+"\\ne 2\\) \u2014 heading \u2260 being"}
+  ];
+  const list=document.getElementById("dragList");
+  list.innerHTML=checks.map(c=>{
+    const mark=c.pass?'<span style="color:var(--conv)">\u2713</span>':'<span style="color:var(--div)">\u2717</span>';
+    return '<div class="stat"><span class="k">'+mark+' '+c.t+'</span><span class="v" style="font-size:11.5px;color:'+(c.pass?'var(--conv)':'var(--div)')+'">'+c.note+'</span></div>';
+  }).join("");
+  list.innerHTML=mathify(list.innerHTML);
+  const vd=document.getElementById("dragVerdict");
+  vd.className="callout show";
+  vd.innerHTML=onTarget
+    ? '<span style="color:var(--conv);font-weight:600">Continuous!</span> The value sits exactly where the curve is heading \u2014 all three boxes green. This single position is what continuity <i>means</i>.'
+    : '<span style="color:var(--div);font-weight:600">Discontinuous (removable).</span> The limit exists, but the value ('+dy.toFixed(1)+') misses it. Drag until the dot snaps onto the limit.';
+  document.getElementById("dragYv").textContent="f(1) = "+dy.toFixed(1);
+}
+(function(){ const sl=document.getElementById("dragSlide"); if(!sl) return;
+  sl.addEventListener("input",e=>{ const t=+e.target.value; dragY=DRAG.yr[0]+t*(DRAG.yr[1]-DRAG.yr[0]); renderDrag(); });
+})();
+
+/* ======================= B · DRAG-K MACHINE ======================= */
+const KM={ dom:[0,4], yr:[-1,9], a:2, rightAt:4, tol:0.06 };
+let kVal=0.8;
+function renderK(){
+  const v=document.getElementById("kPlot"); if(!v) return; v.innerHTML="";
+  const M=mapper(KM.dom,KM.yr,560,270,36); axes(v,M,560,270,36,4,4);
+  v.appendChild(el("line",{x1:M.sx(KM.a),y1:36,x2:M.sx(KM.a),y2:234,stroke:"#9a9183","stroke-width":1,"stroke-dasharray":"3 4",opacity:.4}));
+  /* left branch kx for x<2 */
+  pcurve(x=>x<2?kVal*x:null,KM.dom[0],KM.dom[1],M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.6,"stroke-linecap":"round"})));
+  /* right branch x² for x>=2 (fixed) */
+  pcurve(x=>x>=2?x*x:null,KM.dom[0],KM.dom[1],M).forEach(d=>v.appendChild(el("path",{d,fill:"none",stroke:"#e86ab4","stroke-width":2.6,"stroke-linecap":"round",opacity:.85})));
+  const leftAt=2*kVal, gap=Math.abs(leftAt-KM.rightAt), met=gap<KM.tol;
+  /* the two seam points */
+  if(met){ fillDot(v,M,2,4,"#3fd0b0"); }
+  else {
+    v.appendChild(el("circle",{cx:M.sx(2),cy:M.sy(leftAt),r:5.5,fill:"#1a1312",stroke:"#f3a1cf","stroke-width":2.2}));
+    fillDot(v,M,2,4);
+    /* the gap, drawn as a bracket */
+    v.appendChild(el("line",{x1:M.sx(2),y1:M.sy(leftAt),x2:M.sx(2),y2:M.sy(4),stroke:"#e0644f","stroke-width":2,"stroke-dasharray":"3 3",opacity:.8}));
+  }
+  const box=document.getElementById("kBox");
+  box.innerHTML=
+    '<div class="cv-row"><span class="cv-k">left lands at 2k</span><span class="cv-v cv-hi">'+leftAt.toFixed(2)+'</span></div>'
+   +'<div class="cv-row"><span class="cv-k">right lands at</span><span class="cv-v cv-match">4.00</span></div>'
+   +'<div class="cv-row" style="border-top:1px solid var(--line);margin-top:5px;padding-top:5px"><span class="cv-k">gap</span><span class="cv-v" style="color:'+(met?'var(--conv)':'var(--div)')+'">'+gap.toFixed(2)+'</span></div>';
+  const vd=document.getElementById("kVerdict"); vd.className="callout show";
+  vd.innerHTML=met
+    ? '<span style="color:var(--conv);font-weight:600">Continuous at k = 2.</span> The branches meet \u2014 gap zero. \(2k=4\Rightarrow k=2\).'
+    : '<span style="color:var(--div);font-weight:600">Gap = '+gap.toFixed(2)+'.</span> The branches don\u2019t meet yet. Keep dragging k toward 2.';
+  vd.innerHTML=mathify(vd.innerHTML);
+  document.getElementById("kVal").textContent="k = "+kVal.toFixed(2);
+}
+(function(){ const sl=document.getElementById("kSlide"); if(!sl) return;
+  sl.addEventListener("input",e=>{ kVal=+e.target.value; renderK(); });
+})();
+
+/* ======================= anatomy + concepts ======================= */
+function renderDef(){
+  const main="\\lim_{x\\to a}f(x)=f(a)";
+  const e=document.getElementById("defMain"); if(e) e.innerHTML=tex(main,main,true);
+  const a=document.getElementById("def1"); if(a) a.innerHTML=T("\\lim_{x\\to a}f(x)\\ \\text{(heading)}");
+  const b=document.getElementById("def2"); if(b) b.innerHTML=T("f(a)\\ \\text{(being)}");
+  const c=document.getElementById("def3"); if(c) c.innerHTML=T("\\text{both exist, then }=");
+}
+function renderAnatomy(){
+  const main="f\\text{ continuous at }a\\iff \\lim_{x\\to a}f(x)=f(a)";
+  document.getElementById("anatMain").innerHTML=tex(main,main,true);
+  document.getElementById("anatA").innerHTML=T("f(a)\\ \\exists,\\ \\lim\\ \\exists,\\ =");
+  document.getElementById("anatB").innerHTML=T("\\text{removable / jump / }\\infty\\text{ / osc}");
+  document.getElementById("anatC").innerHTML=T("\\text{patch: }f(a):=\\lim");
+}
+function renderConcepts(){
+  const set=[["c1","\\lim_{x\\to a}f=f(a)","limit = value"],
+   ["c2","\\exists f(a),\\ \\exists\\lim,\\ =","three checks"],
+   ["c3","\\lim\\ \\exists\\Rightarrow\\text{patchable}","removable = patchable"],
+   ["c4","\\text{poly cont. everywhere}","know the type"],
+   ["c5","\\sqrt{x}\\text{ cont. on }[0,\\infty)","endpoints: one-sided"]];
+  set.forEach(([id,t,fb])=>{ const e=document.getElementById(id); if(e) e.innerHTML=tex(t,fb); });
+}
+
+/* ======================= practice ======================= */
+const PRAC=[
+ { tag:"Run the test", q:()=>'Is \\(f(x)=\\dfrac{x^2-1}{x-1}\\) continuous at \\(x=1\\)? Run all three checks.',
+   sol:[{t:"Box 1 — is \\(f(1)\\) defined? Substituting gives \\(\\frac00\\): no, undefined.",m:"f(1):\\ \\tfrac00\\ \\text{undefined}"},
+        {t:"Box 2 — does the limit exist? Factor and cancel:",m:"\\frac{(x-1)(x+1)}{x-1}=x+1\\to 2"},
+        {t:"Box 3 fails automatically (no value to compare). So: discontinuous at 1 — but removable, since the limit exists.",m:"\\text{removable discontinuity}"}] },
+ { tag:"Classify", q:()=>'What type of discontinuity does \\(f(x)=\\dfrac{1}{x-2}\\) have at \\(x=2\\)?',
+   sol:[{t:"As \\(x\\to 2\\), the denominator \\(\\to 0\\) while the top stays at 1: the function blows up.",m:"\\lim_{x\\to 2^+}=+\\infty,\\quad \\lim_{x\\to 2^-}=-\\infty"},
+        {t:"Unbounded in both directions — an infinite discontinuity (vertical asymptote). Not patchable.",m:"\\text{infinite discontinuity}"}] },
+ { tag:"Solve for k", q:()=>'Find \\(k\\) so that \\(f(x)=\\begin{cases}x+k & x<3\\\\ 2x & x\\ge 3\\end{cases}\\) is continuous at \\(x=3\\).',
+   sol:[{t:"Continuity at the seam needs the left limit to equal the right value. Left:",m:"\\lim_{x\\to 3^-}(x+k)=3+k"},
+        {t:"Right:",m:"\\lim_{x\\to 3^+}2x=6"},
+        {t:"Set equal and solve:",m:"3+k=6\\ \\Rightarrow\\ k=3"}] },
+ { tag:"Where is it continuous?", q:()=>'On what set is \\(f(x)=\\dfrac{x+1}{x^2-x-6}\\) continuous?',
+   sol:[{t:"A rational function is continuous everywhere except where its denominator is 0. Factor:",m:"x^2-x-6=(x-3)(x+2)"},
+        {t:"Zeros at \\(x=3\\) and \\(x=-2\\). So \\(f\\) is continuous everywhere except those two points:",m:"\\text{all }x\\ne 3,\\,-2"}] },
+ { tag:"Limit exists, not continuous", q:()=>'A function has \\(\\lim_{x\\to 4}f(x)=7\\) but \\(f(4)=2\\). Is it continuous at 4? What type of break?',
+   sol:[{t:"Box 2 passes (limit is 7). Box 1 passes (value is 2). But box 3 fails:",m:"7\\ne 2"},
+        {t:"Limit exists but disagrees with the value — discontinuous, and removable. Redefining \\(f(4)=7\\) would fix it.",m:"\\text{removable; patch }f(4)=7"}] }
+];
+function renderPractice(){
+  document.getElementById("practice").innerHTML=mathify(PRAC.map((p,i)=>{
+    const steps=p.sol.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+    return '<div class="prob"><div class="prob-tag">'+p.tag+'</div><div class="prob-q">'+p.q()+'</div>'
+      +'<button class="soltoggle" data-i="'+i+'">Show solution</button><div class="sol" id="sol'+i+'">'+steps+'</div></div>';
+  }).join(""));
+  document.querySelectorAll(".soltoggle").forEach(btn=>{ btn.onclick=()=>{ const i=btn.getAttribute("data-i"), s=document.getElementById("sol"+i);
+    btn.textContent=s.classList.toggle("show")?"Hide solution":"Show solution"; }; });
+}
+
+/* ======================= quiz ======================= */
+const QUIZ=[
+ { q:()=>'A function is continuous at \\(a\\) exactly when:',
+   opts:[{h:()=>"\\(\\lim_{x\\to a}f(x)=f(a)\\)",ok:true},{h:()=>"\\(f(a)\\) is defined",ok:false},{h:()=>"the limit exists",ok:false},{h:()=>"the graph is a straight line",ok:false}],
+   fb:"Continuity = limit equals value. Both must exist AND agree — one alone isn't enough." },
+ { q:()=>'The three-part test requires all of these EXCEPT:',
+   opts:[{h:()=>"\\(f\\) is increasing at \\(a\\)",ok:true},{h:()=>"\\(f(a)\\) is defined",ok:false},{h:()=>"\\(\\lim_{x\\to a}f\\) exists",ok:false},{h:()=>"the limit equals \\(f(a)\\)",ok:false}],
+   fb:"Continuity says nothing about increasing/decreasing — only that value exists, limit exists, and they match." },
+ { q:()=>'\\(\\lim_{x\\to 2}f(x)=5\\) but \\(f(2)=3\\). The discontinuity at 2 is:',
+   opts:[{h:()=>"removable",ok:true},{h:()=>"jump",ok:false},{h:()=>"infinite",ok:false},{h:()=>"there is none",ok:false}],
+   fb:"The limit exists (5) but the value disagrees (3) — removable. Redefining f(2)=5 would seal it." },
+ { q:()=>'Which discontinuity can be &ldquo;patched&rdquo; by redefining one point?',
+   opts:[{h:()=>"removable",ok:true},{h:()=>"jump",ok:false},{h:()=>"infinite",ok:false},{h:()=>"oscillating",ok:false}],
+   fb:"Only removable — because the limit exists, you can just set the point equal to it. Jumps, asymptotes, and oscillations have no limit to match." },
+ { q:()=>'\\(f(x)=\\frac{1}{(x-4)^2}\\) at \\(x=4\\) has what kind of discontinuity?',
+   opts:[{h:()=>"infinite",ok:true},{h:()=>"removable",ok:false},{h:()=>"jump",ok:false},{h:()=>"none",ok:false}],
+   fb:"The denominator → 0 and the function blows up to +∞ — an infinite discontinuity (vertical asymptote)." },
+ { q:()=>'For \\(f(x)=\\begin{cases}3x & x<1\\\\ x+k & x\\ge1\\end{cases}\\) to be continuous at 1, \\(k=\\)',
+   opts:[{h:()=>"2",ok:true},{h:()=>"3",ok:false},{h:()=>"1",ok:false},{h:()=>"0",ok:false}],
+   fb:"Set left = right at x=1: 3(1) = 1+k, so k=2. Both one-sided values must agree at the seam." },
+ { q:()=>'A jump discontinuity fails which part of the test?',
+   opts:[{h:()=>"box 2 — the limit doesn't exist",ok:true},{h:()=>"box 1 — the value is undefined",ok:false},{h:()=>"box 3 — value ≠ limit",ok:false},{h:()=>"none — jumps are continuous",ok:false}],
+   fb:"At a jump the one-sided limits disagree, so the two-sided limit doesn't exist — box 2 fails. The value may well be defined." },
+ { q:()=>'Where is \\(f(x)=\\frac{x}{x^2-1}\\) discontinuous?',
+   opts:[{h:()=>"\\(x=1\\) and \\(x=-1\\)",ok:true},{h:()=>"\\(x=0\\) only",ok:false},{h:()=>"nowhere",ok:false},{h:()=>"everywhere",ok:false}],
+   fb:"Rational functions break where the denominator is 0: \\(x^2-1=0\\) at \\(x=\\pm1\\). Continuous everywhere else." }
+];
+let qi=0, qScore=0, qDone=0, qAnswered=false;
+const qOpts=document.getElementById("qOpts"), qFb=document.getElementById("qFb"), qNext=document.getElementById("qNext");
+function renderQuiz(){
+  qAnswered=false; const item=QUIZ[qi];
+  document.getElementById("qText").innerHTML=mathify(item.q());
+  document.getElementById("qProgress").textContent="Question "+(qi+1)+" of "+QUIZ.length;
+  document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+  qFb.innerHTML=""; qNext.style.display="none";
+  qNext.textContent = qi<QUIZ.length-1 ? "Next question →" : "Restart quiz ↺";
+  qOpts.innerHTML="";
+  const sopts=shuf(item.opts);
+  sopts.forEach((o)=>{ const b=document.createElement("button"); b.innerHTML=mathify(o.h());
+    b.onclick=()=>{ if(qAnswered)return; qAnswered=true; qDone++;
+      [...qOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(sopts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ qScore++; b.classList.add("correct"); qFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ Correct.</span> <span style="color:var(--muted)">'+mathify(item.fb)+'</span>'; }
+      else { b.classList.add("wrong"); qFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not quite.</span> <span style="color:var(--muted)">'+mathify(item.fb)+'</span>'; }
+      document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+      qNext.style.display="block"; };
+    qOpts.appendChild(b); });
+}
+qNext.onclick=()=>{ if(qi<QUIZ.length-1){ qi++; } else { qi=0; qScore=0; qDone=0; } renderQuiz(); };
+
+/* ======================= init ======================= */
+function refreshAll(){ renderPEN(); renderCK(); renderDrag(); renderZoo(); renderCL(); renderK(); renderFX(); renderDef(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic(); }
+renderPEN(); renderCK(); renderDrag(); renderZoo(); renderCL(); renderK(); renderFX(); renderDef(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); refreshAll(); }
+  else if(++tries>40) clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.animationDelay=Math.min(i*30,440)+'ms'; });
+
+</script>
+</body>
+</html>

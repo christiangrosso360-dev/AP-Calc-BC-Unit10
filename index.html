@@ -30,7 +30,7 @@
     /* course house accent: champagne gold */
     --gold:#d8b873; --gold-glow:#efd49b; --gold-deep:#a8893f;
     /* per-unit signature colors */
-    --u6:#5f7ff2; --u6b:#8fa6f7; --u7:#de5360; --u7b:#fb8590;
+    --u1:#e86ab4;--u6:#5f7ff2; --u1b:#f3a1cf; --u6b:#8fa6f7; --u7:#de5360; --u7b:#fb8590;
     --u8:#40c98a; --u8b:#5fe0a4;
     --u9:#3fb6d8; --u9b:#6dd4ef;
     --u10:#a98cf0; --u10b:#c4adff;
@@ -194,6 +194,7 @@
   .go .arr{transition:transform .4s cubic-bezier(.16,.8,.3,1)}
   .card:hover .go .arr{transform:translateX(6px)}
   /* per-card color binding */
+  .u1{--cardc:var(--u1);--cardglow:rgba(232,106,180,.20)}
   .u6{--cardc:var(--u6);--cardglow:rgba(95,127,242,.20)}
   .u7{--cardc:var(--u7);--cardglow:rgba(222,83,96,.20)}
   .u7:hover{border-color:rgba(222,83,96,.42);box-shadow:0 30px 66px -40px rgba(0,0,0,.92),0 0 50px -26px rgba(222,83,96,.4)}
@@ -429,7 +430,7 @@
         <a class="hero-cta" href="#readyGroup">Explore the units <span class="arr" aria-hidden="true">&#8595;</span></a>
         <div class="meta">
           <div><div class="n" data-count="10">10</div><div class="l">Units</div></div>
-          <div><div class="n"><em data-count="5">5</em></div><div class="l">Ready now</div></div>
+          <div><div class="n"><em data-count="5">6</em></div><div class="l">Ready now</div></div>
           <div><div class="n" data-count="24">24</div><div class="l">Lessons</div></div>
         </div>
       </div>
@@ -481,6 +482,26 @@
     </div>
     <div class="grid">
       <!-- Unit 6 -->
+      <a class="card u1" href="unit1.html">
+        <div class="card-art" aria-hidden="true">
+          <svg viewBox="0 0 150 118" width="150" height="118" fill="none">
+            <path d="M22 96 H130" stroke="currentColor" stroke-width="2" opacity=".22" stroke-linecap="round"/>
+            <path d="M26 96 V24" stroke="currentColor" stroke-width="2" opacity=".22" stroke-linecap="round"/>
+            <path class="cdraw" pathLength="1" d="M26 84 C 54 82, 70 64, 86 48" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+            <path class="cdraw" pathLength="1" d="M96 40 C 110 30, 120 28, 130 26" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+            <circle cx="91" cy="44" r="4.5" fill="var(--bg)" stroke="currentColor" stroke-width="2.4"/>
+            <circle cx="60" cy="30" r="3" fill="currentColor" opacity=".5"/>
+            <circle cx="118" cy="78" r="3" fill="currentColor" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="unum">Unit 01</div>
+          <h3 class="uname">Limits &amp; Continuity</h3>
+          <p class="udesc">What a limit is, computing limits algebraically, the Squeeze Theorem, continuity and its failures, and asymptotes with the Intermediate Value Theorem &mdash; the foundation everything else is built on.</p>
+          <div class="chips"><span class="chip">Limits</span><span class="chip">Squeeze</span><span class="chip">Continuity</span><span class="chip">Asymptotes</span><span class="chip">IVT</span></div>
+          <span class="go">Open unit <span class="arr">&#8594;</span></span>
+        </div>
+      </a>
       <a class="card u6" href="unit6.html">
         <div class="card-art" aria-hidden="true">
           <svg viewBox="0 0 150 118" width="150" height="118" fill="none">
@@ -610,10 +631,10 @@
     </div>
     <div class="progress-wrap">
       <div class="progress-track"><div class="progress-fill"></div></div>
-      <div class="progress-label"><b>4</b> of 10 units ready</div>
+      <div class="progress-label"><b>6</b> of 10 units ready</div>
     </div>
     <div class="road">
-      <div class="rrow soon"><span class="rnum">01</span><span class="rdot"></span><span class="rtitle">Limits &amp; Continuity<span class="rwhat">Limits, one&#8209;sided behavior, continuity, and the squeeze theorem.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
+      <a class="rrow live" href="unit1.html" style="--rc:var(--u1)"><span class="rnum">01</span><span class="rdot"></span><span class="rtitle">Limits &amp; Continuity<span class="rsub">5 lessons · exam · cheat sheet</span></span><span class="pill ready">Ready</span><span class="rarr">&#8594;</span></a>
       <div class="rrow soon"><span class="rnum">02</span><span class="rdot"></span><span class="rtitle">Differentiation: Definition &amp; Basic Rules<span class="rwhat">The derivative as a limit, plus the power, product, quotient, and trig rules.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
       <div class="rrow soon"><span class="rnum">03</span><span class="rdot"></span><span class="rtitle">Differentiation: Composite, Implicit &amp; Inverse<span class="rwhat">The chain rule, implicit differentiation, and derivatives of inverse functions.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
       <div class="rrow soon"><span class="rnum">04</span><span class="rdot"></span><span class="rtitle">Contextual Applications of Differentiation<span class="rwhat">Related rates, motion along a line, and linear approximation in context.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
@@ -837,6 +858,13 @@
 /* ---------- utility layer: catalog, progress, goal router, topic search ---------- */
 (function(){
   var CAT=[
+   {u:1,k:'lesson',t:'What a Limit Is',f:'what-is-a-limit.html',kw:'limit notation one-sided left right approach graph table estimate does not exist DNE instantaneous rate of change secant hole'},
+   {u:1,k:'lesson',t:'Computing Limits',f:'computing-limits.html',kw:'algebraic limit laws factor cancel conjugate rationalize complex fraction substitution indeterminate zero over zero piecewise'},
+   {u:1,k:'lesson',t:'The Squeeze Theorem',f:'squeeze-theorem.html',kw:'squeeze sandwich theorem trig limit sin x over x one minus cosine bounded oscillating'},
+   {u:1,k:'lesson',t:'Continuity & Its Failures',f:'continuity.html',kw:'continuity three part test removable jump infinite oscillating discontinuity hole asymptote piecewise solve for k interval endpoint patch'},
+   {u:1,k:'lesson',t:'Asymptotes & the IVT',f:'asymptotes-ivt.html',kw:'vertical horizontal asymptote infinite limit at infinity degree race end behavior intermediate value theorem IVT root sign change'},
+   {u:1,k:'exam',t:'Unit 1 \u2014 Exam Practice',f:'unit1-exam-practice.html',kw:'exam practice mcq frq test limits continuity asymptotes IVT squeeze'},
+   {u:1,k:'sheet',t:'Unit 1 \u2014 Cheat Sheet',f:'unit1-cheatsheet.html',kw:'cheat sheet formulas review limits continuity squeeze asymptotes IVT'},
    {u:6,k:'lesson',t:'Riemann Sums & the Definite Integral',f:'riemann-sums.html',kw:'riemann sum left right midpoint trapezoid rectangle approximation table overestimate underestimate definite integral accumulation'},
    {u:6,k:'lesson',t:'The Fundamental Theorem',f:'fundamental-theorem.html',kw:'fundamental theorem ftc accumulation function g(x) chain rule bound graph analysis area'},
    {u:6,k:'lesson',t:'Antiderivatives & u-Substitution',f:'antiderivatives.html',kw:'antiderivative deck u-substitution u sub reverse chain rule completing square arctan long division'},
@@ -889,7 +917,7 @@
       var c=byF[lf], kl=c.k==='lesson'?'Lesson':(c.k==='exam'?'Exam practice':'Cheat sheet');
       document.getElementById('continueName').innerHTML=c.t+' <em>'+UNAME[c.u]+' \u00b7 '+kl+'</em>';
       document.getElementById('continueGo').setAttribute('href',c.f);
-      document.getElementById('continueOverall').innerHTML='<b>'+lessonsDone+'</b> of 19 lessons explored';
+      document.getElementById('continueOverall').innerHTML='<b>'+lessonsDone+'</b> of 29 lessons explored';
       bar.classList.add('show');
     }
   }
@@ -910,7 +938,7 @@
 
   // goal router
   var ans={
-    fresh:'Go in order \u2014 the ready units build on each other. Start with <b>Unit 6</b> (Integration &amp; Accumulation), then 7, 8, 9, and 10.<span class="lk"><a href="unit6.html">Open Unit 6 &#8594;</a></span>',
+    fresh:'Go in order \u2014 the ready units build on each other. Start with <b>Unit 1</b> (Limits &amp; Continuity), the foundation for everything, then 6, 7, 8, 9, and 10.<span class="lk"><a href="unit1.html">Open Unit 1 &#8594;</a></span>',
     review:'Drill the practice set and keep the cheat sheet open for your unit:<span class="lk"><a href="unit6-exam-practice.html">Unit 6 exam</a><a href="unit7-exam-practice.html">Unit 7 exam</a><a href="unit8-exam-practice.html">Unit 8 exam</a><a href="unit9-exam-practice.html">Unit 9 exam</a><a href="exam-practice.html">Unit 10 exam</a></span>',
     stuck:'Search the exact topic and jump straight to the lesson.<span class="lk"><a href="#" id="goSearch">Go to search &#8595;</a></span>'
   };

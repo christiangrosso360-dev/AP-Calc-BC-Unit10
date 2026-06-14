@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Squeeze Theorem — Trapping a Limit · Unit 1 Guide</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%231c0f18%27%2F%3E%3Cpath%20d%3D%27M5%2024%20C%2011%2022%2C%2017%2016%2C%2026%208%27%20stroke%3D%27%23e86ab4%27%20stroke-width%3D%272.4%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3Ccircle%20cx%3D%2719%27%20cy%3D%2713.8%27%20r%3D%272.6%27%20fill%3D%27%231c0f18%27%20stroke%3D%27%23f3a1cf%27%20stroke-width%3D%272%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<script>
+/* fallback for previewing without helpers.js — the repo's helpers.js takes precedence when present */
+if(typeof tex==="undefined"){
+  window.tex=function(latex,fallback,display){
+    if(window.katex){ try{ return katex.renderToString(latex,{displayMode:!!display,throwOnError:false}); }catch(e){} }
+    return '<span class="tex-fallback">'+(fallback||latex)+'</span>';
+  };
+}
+</script>
+<style>
+  :root{ --approx:#e86ab4; --gold:#e86ab4; --true:#3fd0b0;
+         --glow:rgba(232,106,180,.10); --wrap-max:1060px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block;border-radius:10px}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:8px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button:disabled:hover{border-color:var(--line);transform:none}
+  .sb-name{font-weight:600;font-size:13.5px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .callout{margin-top:12px;font-size:13.5px;min-height:20px;color:var(--ink);
+    border-left:3px solid var(--gold);padding-left:12px;opacity:0;transition:opacity .3s}
+  .callout.show{opacity:1}
+  .whypanel .why-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+  .why-step{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .why-step:last-child{border-bottom:none}
+  .why-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .why-t{font-size:13px;line-height:1.5}
+  .why-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;overflow-x:auto}
+  .stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .stat:last-child{border-bottom:none}
+  .stat .k{color:var(--muted)}
+  .stat .v{font-family:var(--mono);color:var(--ink)}
+  .sumline{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;overflow-x:auto;min-height:46px;font-size:14px}
+  .anatomy{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:820px}
+  .anatomy .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .maprow{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .maprow:last-child{border-bottom:none}
+  .maprow .ph{color:var(--ink);flex:1 1 auto;line-height:1.45}
+  .maprow .sy{font-family:var(--mono);color:var(--muted);flex:none}
+  .concepts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.concepts{grid-template-columns:1fr}}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s,box-shadow .2s}
+  .concept:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(43,41,37,.45)}
+  .concept h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .concept p{font-size:13.5px;margin:6px 0;color:var(--ink)}
+  .concept .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;text-align:center;overflow-x:auto}
+  .key{color:var(--approx);font-weight:600}
+  .whatsnext{max-width:700px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  button:focus-visible, a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  .prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .prob-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--approx);font-weight:600}
+  .prob-q{font-size:14.5px;line-height:1.65;margin:6px 0 12px}
+  .soltoggle{font-size:13px;padding:7px 14px}
+  .sol{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .sol.show{display:block}
+  .mistakes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){.mistakes{grid-template-columns:1fr}}
+  .mistake{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--div);border-radius:10px;padding:13px 16px}
+  .mistake h4{margin:0 0 4px;font-size:14px;font-family:var(--display)}
+  .mistake p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+  .tipbox{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:780px}
+  .tipbox h4{margin:0 0 8px;font-size:14px;font-family:var(--display);color:var(--approx)}
+  .tipbox ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+  .tipbox li{margin:5px 0}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .qtag{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button{font-size:14px;padding:11px 14px}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px;line-height:1.5}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+  .bc-badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#0d1330;
+    background:var(--approx);border-radius:14px;padding:3px 11px;font-weight:600;vertical-align:middle;margin-left:10px}
+  /* tabular method table */
+  .ttab{border-collapse:collapse;margin:6px auto;font-size:15px}
+  .ttab th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);font-weight:500;
+    padding:6px 18px;border-bottom:1px solid var(--line)}
+  .ttab td{padding:9px 18px;text-align:center;font-size:15.5px}
+  .ttab td.sg{color:var(--approx);font-family:var(--mono);font-weight:600;font-size:14px}
+  .ttab td.ar{color:var(--true);font-family:var(--mono);font-size:15px;padding:0 4px}
+  .ttab tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+
+  .looking{font-size:12px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.5}
+  .looking b{color:var(--ink);font-style:normal}
+  .reader{margin-top:10px;background:var(--panel-2);border:1px solid var(--line);border-left:3px solid var(--gold);
+    border-radius:8px;padding:9px 12px;font-size:13px;color:var(--muted)}
+  .reader b{color:var(--ink)}
+  .vtable{border-collapse:collapse;margin:8px auto 0;font-family:var(--mono);font-size:13px}
+  .vtable th{font-size:10.5px;letter-spacing:.06em;color:var(--muted);font-weight:500;padding:4px 16px;border-bottom:1px solid var(--line)}
+  .vtable td{padding:5px 16px;text-align:center;color:var(--ink)}
+  .vtable tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+  .vtable td.hot{color:var(--approx);font-weight:600}
+  .convbox{background:var(--panel-2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-family:var(--mono);font-size:12.5px;line-height:1.7}
+  .convbox .cv-row{display:flex;justify-content:space-between;gap:10px}
+  .convbox .cv-k{color:var(--muted)} .convbox .cv-v{color:var(--ink);font-weight:600}
+  .convbox .cv-hi{color:var(--approx)} .convbox .cv-match{color:var(--true)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit1.html">← Unit 1 Guide</a>
+  <header class="reveal">
+    <h1>The <span class="em">Squeeze</span> Theorem</h1>
+    <div class="sub">Some limits shrug off every tool from last lesson &mdash; substitution gives 0/0, and
+      nothing factors or conjugates away. This lesson is the clever escape: when you can&rsquo;t reach a
+      function directly, <b>trap it between two friendlier ones</b> and let them do the work.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    The idea is almost unfair in how simple it is. Suppose a function is stuck <b>between</b> two others &mdash;
+    always above one, always below another. If those two outer functions both head to the <b>same</b> number
+    \(L\), the trapped function in the middle has nowhere else to go: it&rsquo;s squeezed to \(L\) too.
+    That&rsquo;s the whole theorem &mdash; and it cracks limits that nothing else can touch.
+  </div>
+
+  <h2 class="reveal">A limit nothing else can reach</h2>
+  <p class="lead reveal">Here&rsquo;s the problem that motivates everything. Consider
+    \(f(x)=x^2\sin\!\frac{1}{x}\) as \(x\to 0\). The \(\sin\frac1x\) part is the troublemaker from
+    Lesson 1&rsquo;s liar table &mdash; as \(x\to 0\) it oscillates infinitely fast between \(-1\) and
+    \(1\), settling on nothing. Substitution gives \(0\cdot(\text{undefined})\). No factoring, no
+    conjugate. But watch what happens when we trap it:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="sqPlot" viewBox="0 0 560 300" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <button class="play" id="sqRun">▶ close the jaws</button>
+          <button id="sqReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="sqRead">zoomed out</span>
+        </div>
+        <p class="looking"><b>What you&rsquo;re looking at:</b> the wild magenta curve is \(x^2\sin\frac1x\),
+          thrashing up and down. The two teal curves are \(y=x^2\) (top) and \(y=-x^2\) (bottom) &mdash;
+          the jaws. The wild curve can never escape between them.</p>
+        <div class="convbox" id="sqIneqLive" style="margin-top:10px;display:none"></div>
+        <div class="callout show" id="sqCall">Press play to zoom toward \(x=0\) and watch the jaws close.</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Why it works</div>
+        <div class="sumline" id="sqIneq"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          Since \(\sin\frac1x\) always lives between \(-1\) and \(1\), multiplying by \(x^2\) traps
+          the whole function between \(-x^2\) and \(x^2\). As \(x\to 0\), both jaws clamp to <b>0</b>
+          &mdash; so the wild curve, pinned between them, is forced to <b>0</b> as well. The oscillation never
+          stops, but its <i>size</i> is crushed to nothing.</p>
+        <div class="stat" style="margin-top:8px"><span class="k">top jaw \(x^2\)</span><span class="v" style="color:var(--true)">→ 0</span></div>
+        <div class="stat"><span class="k">bottom jaw \(-x^2\)</span><span class="v" style="color:var(--true)">→ 0</span></div>
+        <div class="stat"><span class="k">trapped \(x^2\sin\frac1x\)</span><span class="v" style="color:var(--approx)">→ 0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The theorem, now that you&rsquo;ve seen it</h2>
+  <p class="lead reveal">You just watched a limit get forced. Here&rsquo;s the statement mathematicians use
+    for that move &mdash; sometimes called the <b>Squeeze</b> (or Sandwich) Theorem:</p>
+
+  <div class="anatomy reveal">
+    <div class="m-big" id="thmMain"></div>
+    <div class="reader"><b>Read it aloud:</b> &ldquo;if \(g\) is below \(f\) is below \(h\) near
+      \(a\), and \(g\) and \(h\) both approach \(L\), then \(f\) approaches \(L\) too.&rdquo; The
+      middle function is trapped; the outer two decide its fate.</div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">The squeeze:</b> \(g(x)\le f(x)\le h(x)\) must hold for all \(x\) <i>near</i> \(a\) (it can fail exactly at \(a\) &mdash; limits don&rsquo;t care about the single point).</span><span class="sy" id="thm1"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">Same destination:</b> the outer bounds must approach the <i>same</i> \(L\). If they head to different values, the theorem says nothing.</span><span class="sy" id="thm2"></span></div>
+    <div class="maprow"><span class="ph"><b style="color:var(--approx)">The conclusion:</b> the trapped function is forced to that shared \(L\) &mdash; even if you could never compute it directly.</span><span class="sy" id="thm3"></span></div>
+  </div>
+
+  <h2 class="reveal">The most important limit in trig: sin x / x</h2>
+  <p class="lead reveal">Now the payoff. The limit \(\lim_{x\to 0}\frac{\sin x}{x}\) appears everywhere
+    in calculus &mdash; it&rsquo;s the engine behind the derivative of \(\sin x\). Substitution gives
+    \(\frac00\), and no algebra touches it. But a classic geometric argument traps \(\frac{\sin x}{x}\)
+    between \(\cos x\) and \(1\):</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="scPlot" viewBox="0 0 560 290" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <button class="play" id="scRun">▶ squeeze toward 0</button>
+          <button id="scReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="scRead"></span>
+        </div>
+        <div class="controls">
+          <span style="font-size:12.5px;color:var(--muted)">or drag x toward 0 yourself:</span>
+          <input type="range" id="scSlide" min="0" max="1" step="0.004" value="0" aria-label="x position">
+          <span class="nval" id="scXv">x = 1.500</span>
+        </div>
+        <div class="convbox" id="scConv" style="display:none"></div>
+        <p class="looking"><b>What you&rsquo;re looking at:</b> the magenta curve is \(\frac{\sin x}{x}\).
+          It&rsquo;s trapped between the teal \(\cos x\) (lower) and the flat line \(y=1\) (upper). As
+          \(x\to 0\), both bounds meet at height \(1\).</p>
+        <div class="callout show" id="scCall">Press play &mdash; watch all three curves funnel into the point \((0,1)\).</div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The squeeze</div>
+        <div class="sumline" id="scIneq"></div>
+        <div class="stat" style="margin-top:10px"><span class="k">upper bound \(1\)</span><span class="v" style="color:var(--true)">→ 1</span></div>
+        <div class="stat"><span class="k">lower bound \(\cos x\)</span><span class="v" style="color:var(--true)">→ 1</span></div>
+        <div class="stat"><span class="k">trapped \(\frac{\sin x}{x}\)</span><span class="v" style="color:var(--approx)">→ 1</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">
+          As \(x\to 0\), \(\cos x\to 1\) and the constant \(1\) is already there. The two bounds meet,
+          and \(\frac{\sin x}{x}\) is crushed to <b>1</b>. Commit this to memory:
+          \(\lim_{x\to 0}\frac{\sin x}{x}=1\).</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Its partner: (1 − cos x) / x → 0</h2>
+  <p class="lead reveal">The second trig limit you must know cold. It follows from the first by a slick
+    algebra move &mdash; multiply by the conjugate (the trick from Lesson 2 returns):</p>
+
+  <div class="card reveal whypanel">
+    <div class="why-title">Deriving it from sin x / x</div>
+    <div id="ocSteps"></div>
+  </div>
+
+  <h2 class="reveal">Using them — match the sin(u)/u pattern</h2>
+  <p class="lead reveal">Real problems disguise these limits. The skill is rewriting until you see the exact
+    form \(\frac{\sin u}{u}\to 1\), where the inside of the sine matches the denominator. Step through:</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="sumline" id="mtSum"></div>
+        <div class="controls">
+          <button class="play" id="mtStep">step →</button>
+          <button id="mtReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="mtRead">press step</span>
+        </div>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, shown</div>
+        <div id="mtWork"></div>
+        <svg id="mtPlot" viewBox="0 0 520 150" preserveAspectRatio="xMidYMid meet" style="margin-top:8px;display:none"></svg>
+        <p class="looking" id="mtLook" style="display:none;margin-top:4px"></p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Pick a problem</div>
+        <div class="series-btns" id="mtBtns"></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">The golden rule:
+          \(\frac{\sin u}{u}\to 1\) only when the angle inside the sine <b>exactly matches</b> the
+          denominator. Force that match by multiplying and dividing by whatever you need.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Does the squeeze even apply?</h2>
+  <p class="lead reveal">The theorem has conditions, and the exam tests whether you check them. For each
+    setup, decide: does the Squeeze Theorem let you conclude the limit &mdash; and if so, what is it?</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="row" style="margin-bottom:8px">
+          <div class="qtag" id="dgProg">Case 1 of 5</div>
+          <span class="score" id="dgScore">Score: 0 / 0</span>
+        </div>
+        <div class="m-big" id="dgHead"></div>
+        <div class="qtext" id="dgQ" style="font-size:14px;margin-bottom:10px"></div>
+        <div class="quiz-opts" id="dgOpts" style="grid-template-columns:1fr"></div>
+        <div class="feedback" id="dgFb"></div>
+        <button class="next" id="dgNext" style="margin-top:12px;width:100%;display:none">Next case →</button>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The checklist</div>
+        <div class="stat"><span class="k">1. is f trapped?</span><span class="v">\(g\le f\le h\) near \(a\)</span></div>
+        <div class="stat"><span class="k">2. same limit?</span><span class="v">\(g,h\to\) same \(L\)</span></div>
+        <div class="stat"><span class="k">3. then</span><span class="v" style="color:var(--approx)">\(f\to L\)</span></div>
+        <p style="font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5">The most common trap:
+          bounds that <i>don&rsquo;t</i> meet. If \(g\to 2\) and \(h\to 5\), the squeeze says nothing
+          &mdash; the function could be anywhere between.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The lesson on one card</h2>
+  <div class="anatomy reveal">
+    <div class="m-big" id="anatMain"></div>
+    <div class="maprow"><span class="ph">The Squeeze Theorem: trap \(f\) between \(g\) and \(h\); if both \(\to L\), then \(f\to L\)</span><span class="sy" id="anatA"></span></div>
+    <div class="maprow"><span class="ph">The two trig limits to memorize &mdash; they power the derivatives of sine and cosine</span><span class="sy" id="anatB"></span></div>
+    <div class="maprow"><span class="ph">Match the pattern: \(\frac{\sin u}{u}\to 1\) needs the angle to equal the denominator exactly</span><span class="sy" id="anatC"></span></div>
+  </div>
+
+  <h2 class="reveal">The ideas everything else builds on</h2>
+  <div class="concepts reveal">
+    <div class="concept">
+      <h3>Trap, don&rsquo;t compute</h3>
+      <p>When a function is <span class="key">unreachable directly</span>, bound it above and below by
+        functions you <i>can</i> evaluate, and let them pin it down.</p>
+      <div class="m" id="c1"></div>
+    </div>
+    <div class="concept">
+      <h3>The bounds must meet</h3>
+      <p>The whole method hinges on both outer functions reaching the <span class="key">same</span> limit. Bounds
+        that disagree prove nothing.</p>
+      <div class="m" id="c2"></div>
+    </div>
+    <div class="concept">
+      <h3>Bounded × small → 0</h3>
+      <p>Anything <span class="key">bounded</span> (like \(\sin\) of anything) times something heading to
+        \(0\) gets squeezed to \(0\). A pattern worth recognizing instantly.</p>
+      <div class="m" id="c3"></div>
+    </div>
+    <div class="concept">
+      <h3>Two limits, memorized</h3>
+      <p>\(\frac{\sin x}{x}\to 1\) and \(\frac{1-\cos x}{x}\to 0\) are <span class="key">building
+        blocks</span> &mdash; you&rsquo;ll use them constantly once derivatives arrive.</p>
+      <div class="m" id="c4"></div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Your turn</h2>
+  <p class="lead reveal">Five problems &mdash; the sandwich, both trig limits, and the pattern-matching trick.</p>
+  <div class="reveal" id="practice"></div>
+
+  <h2 class="reveal">Quick quiz</h2>
+  <p class="lead reveal">Eight fast checks across the whole lesson.</p>
+  <div class="card reveal" id="quizCard">
+    <div class="row" style="margin-bottom:12px">
+      <div class="qtag" id="qProgress">Question 1 of 8</div>
+      <span class="score" id="qScore">Score: 0 / 0</span>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="next" id="qNext" style="margin-top:14px;width:100%;display:none">Next question →</button>
+  </div>
+
+  <h2 class="reveal">Common mistakes &amp; exam tips</h2>
+  <div class="mistakes reveal">
+    <div class="mistake"><h4>Bounds that don&rsquo;t meet</h4><p>The squeeze only works when both outer functions reach the SAME limit. If one heads to 2 and the other to 5, the theorem is silent &mdash; you&rsquo;ve proven nothing.</p></div>
+    <div class="mistake"><h4>Forgetting the pattern must match exactly</h4><p>\(\frac{\sin 3x}{x}\) is NOT 1. The angle (3x) must equal the denominator. Fix it: \(\frac{\sin 3x}{3x}\cdot 3\to 1\cdot 3=3\).</p></div>
+    <div class="mistake"><h4>Mixing up the two trig limits</h4><p>\(\frac{\sin x}{x}\to 1\) but \(\frac{1-\cos x}{x}\to 0\). One is the star; the other vanishes. Don&rsquo;t swap their values.</p></div>
+    <div class="mistake"><h4>Trying to evaluate the wild part</h4><p>For \(x^2\sin\frac1x\), don&rsquo;t chase what \(\sin\frac1x\) &ldquo;equals&rdquo; &mdash; it never settles. Bound it: it lives in \([-1,1]\), and that&rsquo;s all you need.</p></div>
+    <div class="mistake"><h4>Squeezing toward the wrong point</h4><p>The bounds must straddle \(f\) <i>near the point a</i> you care about. A squeeze that holds far away but breaks near \(a\) doesn&rsquo;t help.</p></div>
+    <div class="mistake"><h4>Using degrees</h4><p>\(\frac{\sin x}{x}\to 1\) only in <b>radians</b>. In degrees the limit is \(\frac{\pi}{180}\). Calculus lives in radians &mdash; always.</p></div>
+  </div>
+  <div class="tipbox reveal">
+    <h4>On the AP exam</h4>
+    <ul>
+      <li>To invoke the Squeeze Theorem in writing, state all three pieces: the inequality, that both bounds share a limit, and the conclusion.</li>
+      <li>Spot the &ldquo;bounded × something→0&rdquo; pattern instantly &mdash; \(\sin\), \(\cos\), and \((-1)^n\) are all bounded.</li>
+      <li>Memorize both trig limits cold; they appear in derivative derivations and as standalone questions.</li>
+      <li>To match \(\frac{\sin u}{u}\), multiply and divide by whatever makes the denominator equal the sine&rsquo;s angle.</li>
+    </ul>
+  </div>
+
+  <div class="whatsnext reveal">
+    You can now handle limits that resist all algebra. Next, the flip side: when does a function have <b>no
+    break at all</b> &mdash; flowing through a point so the limit equals the value? That&rsquo;s
+    <b>continuity</b>, and its failures come in a whole zoo of types.
+    <a href="continuity.html">Continuity &amp; Its Failures</a> is next &mdash; or head back to the
+    <a href="unit1.html">Unit 1 Guide</a>.
+  </div>
+
+  <footer class="reveal">The Squeeze Theorem · part of the Unit 1 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const T=(s)=>tex(s,s,false);
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mathify(html){ if(!window.katex) return html;
+  return html.replace(/\\\((.+?)\\\)/g,(m,t)=>{ try{ return katex.renderToString(t,{throwOnError:false}); }catch(e){ return m; } }); }
+function mathifyStatic(){ if(!window.katex) return;
+  document.querySelectorAll('.sub,.lead,.big-idea,.looking,.reader,.maprow .ph,.mistake p,.tipbox li,.concept p,.whatsnext,.callout,.stat .k,.card > p').forEach(n=>{
+    if(n.dataset.mz) return;
+    if(n.innerHTML.indexOf('\\(')<0){ n.dataset.mz="1"; return; }
+    n.innerHTML=mathify(n.innerHTML); n.dataset.mz="1"; }); }
+const reduceMotion=()=> window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function mapper(dom,yr,W,H,P){ return { sx:x=>P+((x-dom[0])/(dom[1]-dom[0]))*(W-2*P),
+  sy:v=>H-P-((v-yr[0])/(yr[1]-yr[0]))*(H-2*P), dom,yr }; }
+function axes(svg,M,W,H,P,xt,yt){
+  for(let g=0;g<=yt;g++){ const yy=M.yr[0]+(g/yt)*(M.yr[1]-M.yr[0]),py=M.sy(yy);
+    svg.appendChild(el("line",{x1:P,y1:py,x2:W-P,y2:py,stroke:"#2b251a"}));
+    svg.appendChild(el("text",{x:P-6,y:py+3,fill:"#6b6457","font-size":9.5,"text-anchor":"end","font-family":"var(--mono)"},(+yy.toFixed(2)).toString())); }
+  const zx=M.sx(0);
+  if(zx>=P&&zx<=W-P) svg.appendChild(el("line",{x1:zx,y1:H-P,x2:zx,y2:P,stroke:"#4a4334","stroke-width":1.2}));
+  const zy=M.sy(0);
+  if(zy>=P&&zy<=H-P) svg.appendChild(el("line",{x1:P,y1:zy,x2:W-P,y2:zy,stroke:"#4a4334","stroke-width":1.2}));
+}
+function curve(f,a,b,M,N=240){ let d="",pen=false;
+  for(let k=0;k<=N;k++){ const x=a+(b-a)*k/N,y=f(x);
+    if(!isFinite(y)||y<M.yr[0]-30||y>M.yr[1]+30){pen=false;continue;}
+    d+=(pen?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(y).toFixed(1)+" "; pen=true; }
+  return d; }
+
+/* ======================= 1 · THE SANDWICH x²sin(1/x) ======================= */
+const SQ={ f:x=>x===0?0:x*x*Math.sin(1/x), hi:x=>x*x, lo:x=>-x*x };
+let sqZoom=0, sqRAF=null;  /* zoom 0 = wide, 1 = tight */
+function sqWin(){ const w=2.6*Math.pow(0.06,sqZoom); return w; }  /* domain half-width shrinks */
+function renderSQ(){
+  const v=document.getElementById("sqPlot"); v.innerHTML="";
+  const w=sqWin(), yr=[-w*w*1.15, w*w*1.15];
+  const M=mapper([-w,w],yr,560,300,40);
+  axes(v,M,560,300,40,4,4);
+  /* jaws (teal) */
+  v.appendChild(el("path",{d:curve(SQ.hi,-w,w,M,300),fill:"none",stroke:"#3fd0b0","stroke-width":2,opacity:.85}));
+  v.appendChild(el("path",{d:curve(SQ.lo,-w,w,M,300),fill:"none",stroke:"#3fd0b0","stroke-width":2,opacity:.85}));
+  /* shaded trap region */
+  let band="M";
+  for(let k=0;k<=120;k++){ const x=-w+2*w*k/120; band+=M.sx(x).toFixed(1)+" "+M.sy(SQ.hi(x)).toFixed(1)+" L"; }
+  for(let k=120;k>=0;k--){ const x=-w+2*w*k/120; band+=M.sx(x).toFixed(1)+" "+M.sy(SQ.lo(x)).toFixed(1)+(k?" L":" Z"); }
+  v.appendChild(el("path",{d:band,fill:"#3fd0b0",opacity:.07}));
+  /* the wild function (magenta) — dense sampling */
+  v.appendChild(el("path",{d:curve(SQ.f,-w,w,M,1400),fill:"none",stroke:"#e86ab4","stroke-width":2,"stroke-linecap":"round"}));
+  /* target dot at origin once tight */
+  if(sqZoom>0.6){ v.appendChild(el("circle",{cx:M.sx(0),cy:M.sy(0),r:4.5+ (sqZoom-0.6)*6,fill:"#e86ab4",opacity:.5})); }
+  document.getElementById("sqRead").textContent = sqZoom<0.05?"zoomed out":"window: ±"+w.toFixed(w<0.01?4:2);
+  if(sqZoom>0.04){
+    const xs=0.45*w, lo=-xs*xs, val=SQ.f(xs), hi=xs*xs;
+    const box=document.getElementById("sqIneqLive"); if(box){ box.style.display="";
+    box.innerHTML='<div class="cv-row"><span class="cv-k">at x = '+xs.toFixed(xs<0.01?4:3)+'</span><span class="cv-v">'
+      +lo.toExponential(2)+' &le; <span class="cv-hi">'+val.toExponential(2)+'</span> &le; '+hi.toExponential(2)+'</span></div>'
+      +'<div class="cv-row"><span class="cv-k">both jaws ±x²</span><span class="cv-v cv-match">→ '+hi.toExponential(2)+', shrinking to 0</span></div>'; }
+  } else { const b=document.getElementById("sqIneqLive"); if(b) b.style.display="none"; }
+}
+document.getElementById("sqRun").onclick=()=>{
+  if(sqRAF) return;
+  if(reduceMotion()){ sqZoom=1; renderSQ();
+    document.getElementById("sqCall").innerHTML="The jaws \\(\\pm x^2\\) clamp to 0, dragging the trapped curve to <b>0</b> with them — even though \\(\\sin\\frac1x\\) never stops oscillating."; return; }
+  const t0=performance.now(), DUR=3600;
+  const step=(now)=>{ const pr=Math.min(1,(now-t0)/DUR); sqZoom=pr*pr*(3-2*pr); renderSQ();
+    if(pr<1) sqRAF=requestAnimationFrame(step);
+    else { sqRAF=null;
+      document.getElementById("sqCall").innerHTML="The jaws \\(\\pm x^2\\) clamp to 0, dragging the trapped curve to <b>0</b> with them — even though \\(\\sin\\frac1x\\) never stops oscillating. <b>That’s the squeeze.</b>";
+      document.getElementById("sqCall").innerHTML=mathify(document.getElementById("sqCall").innerHTML);
+    } };
+  sqRAF=requestAnimationFrame(step);
+};
+document.getElementById("sqReset").onclick=()=>{ if(sqRAF){cancelAnimationFrame(sqRAF);sqRAF=null;} sqZoom=0; renderSQ();
+  document.getElementById("sqCall").innerHTML=mathify("Press play to zoom toward \\(x=0\\) and watch the jaws close."); };
+function renderSQineq(){ const t="-x^2\\;\\le\\;x^2\\sin\\tfrac1x\\;\\le\\;x^2"; document.getElementById("sqIneq").innerHTML=tex(t,t,true); }
+
+/* ======================= 2 · THEOREM ======================= */
+function renderThm(){
+  const main="\\text{If }g(x)\\le f(x)\\le h(x)\\text{ near }a,\\text{ and }\\lim_{x\\to a}g=\\lim_{x\\to a}h=L,\\text{ then }\\lim_{x\\to a}f=L.";
+  document.getElementById("thmMain").innerHTML=tex(main,main,true);
+  document.getElementById("thm1").innerHTML=T("g\\le f\\le h");
+  document.getElementById("thm2").innerHTML=T("g,h\\to L\\ \\text{(same!)}");
+  document.getElementById("thm3").innerHTML=T("\\Rightarrow f\\to L");
+}
+
+/* ======================= 3 · sin x / x SQUEEZE ======================= */
+const SC={ f:x=>x===0?1:Math.sin(x)/x, lo:x=>Math.cos(x), hi:x=>1 };
+let scZoom=0, scRAF=null;
+function scWin(){ return 1.5*Math.pow(0.04,scZoom)+0.04; }
+function renderSC(){
+  const v=document.getElementById("scPlot"); v.innerHTML="";
+  const w=scWin(); const M=mapper([-w,w],[Math.min(0.55,1-w*w*0.6), 1.06],560,290,40);
+  axes(v,M,560,290,40,4,3);
+  /* bounds */
+  v.appendChild(el("path",{d:curve(SC.hi,-w,w,M,200),fill:"none",stroke:"#3fd0b0","stroke-width":1.8,opacity:.8}));
+  v.appendChild(el("path",{d:curve(SC.lo,-w,w,M,300),fill:"none",stroke:"#3fd0b0","stroke-width":1.8,opacity:.8}));
+  /* band */
+  let band="M";
+  for(let k=0;k<=120;k++){ const x=-w+2*w*k/120; band+=M.sx(x).toFixed(1)+" "+M.sy(SC.hi(x)).toFixed(1)+" L"; }
+  for(let k=120;k>=0;k--){ const x=-w+2*w*k/120; band+=M.sx(x).toFixed(1)+" "+M.sy(SC.lo(x)).toFixed(1)+(k?" L":" Z"); }
+  v.appendChild(el("path",{d:band,fill:"#3fd0b0",opacity:.07}));
+  /* sin x / x */
+  v.appendChild(el("path",{d:curve(SC.f,-w,w,M,400),fill:"none",stroke:"#e86ab4","stroke-width":2.4,"stroke-linecap":"round"}));
+  /* the target (0,1) */
+  v.appendChild(el("circle",{cx:M.sx(0),cy:M.sy(1),r:4,fill:"#e86ab4",opacity:.4+scZoom*0.5}));
+  if(typeof scManual!=="undefined" && scManual!=null && scManual>=-w && scManual<=w){
+    const xm=scManual;
+    v.appendChild(el("line",{x1:M.sx(xm),y1:M.sy(SC.lo(xm)),x2:M.sx(xm),y2:M.sy(1),stroke:"#f3a1cf","stroke-width":1,"stroke-dasharray":"3 3",opacity:.7}));
+    v.appendChild(el("circle",{cx:M.sx(xm),cy:M.sy(SC.f(xm)),r:4.5,fill:"#f3a1cf"}));
+  }
+  /* labels */
+  v.appendChild(el("text",{x:560-44,y:M.sy(1)-6,fill:"#9a9183","font-size":11,"text-anchor":"end","font-family":"var(--mono)"},"y = 1"));
+  document.getElementById("scRead").textContent = scZoom<0.05?"zoomed out":"approaching (0, 1)";
+}
+document.getElementById("scRun").onclick=()=>{
+  if(scRAF) return;
+  scManual=null; var _cb=document.getElementById("scConv"); if(_cb)_cb.style.display="none";
+  if(reduceMotion()){ scZoom=1; renderSC();
+    document.getElementById("scCall").innerHTML=mathify("Both bounds meet at height 1, forcing \\(\\frac{\\sin x}{x}\\to 1\\)."); return; }
+  const t0=performance.now(), DUR=3200;
+  const step=(now)=>{ const pr=Math.min(1,(now-t0)/DUR); scZoom=pr*pr*(3-2*pr); renderSC();
+    if(pr<1) scRAF=requestAnimationFrame(step);
+    else { scRAF=null; document.getElementById("scCall").innerHTML=mathify("Both bounds meet at height 1, forcing \\(\\frac{\\sin x}{x}\\to 1\\). The single most useful limit in trig."); } };
+  scRAF=requestAnimationFrame(step);
+};
+document.getElementById("scReset").onclick=()=>{ if(scRAF){cancelAnimationFrame(scRAF);scRAF=null;} scZoom=0; scManual=null; renderSC();
+  document.getElementById("scSlide").value=0; document.getElementById("scXv").textContent="x = 1.500";
+  document.getElementById("scConv").style.display="none";
+  document.getElementById("scCall").innerHTML=mathify("Press play — watch all three curves funnel into the point \\((0,1)\\).");};
+let scManual=null;
+function scXof(t){ return 1.5*Math.pow(0.0067,t); }
+function fmt6(v){ return (v>=0?" ":"")+v.toFixed(6); }
+document.getElementById("scSlide").addEventListener("input",e=>{
+  const t=+e.target.value; const x=scXof(t); scManual=x; scZoom=t; renderSC();
+  document.getElementById("scXv").textContent="x = "+x.toFixed(3);
+  const cosx=Math.cos(x), sinc=Math.sin(x)/x;
+  const box=document.getElementById("scConv"); box.style.display="";
+  box.innerHTML='<div class="cv-row"><span class="cv-k">upper bound &nbsp;1</span><span class="cv-v">1.000000</span></div>'
+   +'<div class="cv-row"><span class="cv-k">sin x / x</span><span class="cv-v cv-hi">'+fmt6(sinc)+'</span></div>'
+   +'<div class="cv-row"><span class="cv-k">lower bound cos x</span><span class="cv-v cv-match">'+fmt6(cosx)+'</span></div>'
+   +'<div class="cv-row" style="border-top:1px solid var(--line);margin-top:5px;padding-top:5px"><span class="cv-k">gap (1 − cos x)</span><span class="cv-v">'+(1-cosx).toExponential(2)+'</span></div>';
+  document.getElementById("scRead").textContent = x<0.05 ? "all three agree to 4+ digits" : "dragging x = "+x.toFixed(3);
+});
+function renderSCineq(){ const t="\\cos x\\;\\le\\;\\frac{\\sin x}{x}\\;\\le\\;1"; document.getElementById("scIneq").innerHTML=tex(t,t,true); }
+
+/* ======================= 4 · (1−cos x)/x derivation ======================= */
+function renderOC(){
+  const steps=[
+   {t:"Multiply by the conjugate of the top, \\(1+\\cos x\\):",m:"\\frac{1-\\cos x}{x}\\cdot\\frac{1+\\cos x}{1+\\cos x}"},
+   {t:"The top becomes \\(1-\\cos^2 x=\\sin^2 x\\) (Pythagorean identity):",m:"\\frac{\\sin^2 x}{x\\,(1+\\cos x)}"},
+   {t:"Split into the pieces you know:",m:"\\frac{\\sin x}{x}\\cdot\\frac{\\sin x}{1+\\cos x}"},
+   {t:"Take the limit: the first factor \\(\\to 1\\); the second \\(\\to \\frac{0}{2}=0\\):",m:"1\\cdot\\frac{0}{2}=0"}
+  ];
+  document.getElementById("ocSteps").innerHTML=steps.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+mathify(st.t)+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("")
+    +'<div class="why-step" style="border-top:1px solid var(--line);margin-top:6px;padding-top:10px"><div class="why-n" style="background:var(--approx)">✓</div><div><div class="why-t">So the partner limit is:</div><div class="why-m">'+T("\\lim_{x\\to 0}\\frac{1-\\cos x}{x}=0")+'</div></div></div>';
+}
+
+/* ======================= 5 · MATCH THE PATTERN ======================= */
+const MT_F=[ x=>Math.sin(3*x)/x, x=>Math.sin(5*x)/Math.sin(2*x), x=>Math.sin(x)/(3*x), x=>Math.tan(x)/x ];
+const MT_L=[3, 2.5, 1/3, 1];
+const MT=[
+ { name:"Mismatched angle", sub:"sin(3x)/x", head:"\\lim_{x\\to 0}\\frac{\\sin 3x}{x}",
+   steps:[{t:"The angle is 3x but the bottom is x — they don’t match. Multiply and divide by 3 to fix it:",m:"\\frac{\\sin 3x}{x}\\cdot\\frac{3}{3}=3\\cdot\\frac{\\sin 3x}{3x}"},
+          {t:"Now the angle equals the denominator, so \\(\\frac{\\sin 3x}{3x}\\to 1\\):",m:"3\\cdot 1"}], fin:"=3" },
+ { name:"Ratio of sines", sub:"sin(5x)/sin(2x)", head:"\\lim_{x\\to 0}\\frac{\\sin 5x}{\\sin 2x}",
+   steps:[{t:"Force each sine over its own matching angle by inserting 5x and 2x:",m:"\\frac{\\sin 5x}{5x}\\cdot\\frac{2x}{\\sin 2x}\\cdot\\frac{5x}{2x}"},
+          {t:"The first \\(\\to 1\\), the second \\(\\to 1\\); the leftover is \\(\\frac{5}{2}\\):",m:"1\\cdot 1\\cdot\\frac{5}{2}"}], fin:"=\\tfrac52" },
+ { name:"Sine over a multiple", sub:"sin(x)/(3x)", head:"\\lim_{x\\to 0}\\frac{\\sin x}{3x}",
+   steps:[{t:"Pull the constant out front so the matched form is visible:",m:"\\frac{1}{3}\\cdot\\frac{\\sin x}{x}"},
+          {t:"The matched piece \\(\\to 1\\):",m:"\\frac{1}{3}\\cdot 1"}], fin:"=\\tfrac13" },
+ { name:"Tangent in disguise", sub:"tan(x)/x", head:"\\lim_{x\\to 0}\\frac{\\tan x}{x}",
+   steps:[{t:"Rewrite \\(\\tan x=\\frac{\\sin x}{\\cos x}\\):",m:"\\frac{\\sin x}{x\\,\\cos x}=\\frac{\\sin x}{x}\\cdot\\frac{1}{\\cos x}"},
+          {t:"First factor \\(\\to 1\\), and \\(\\frac{1}{\\cos x}\\to\\frac{1}{1}=1\\):",m:"1\\cdot 1"}], fin:"=1" }
+];
+let mtKey=0, mtN=0;
+function renderMT(){
+  const e=MT[mtKey];
+  const panel=document.getElementById("mtWork"), read=document.getElementById("mtRead"), sum=document.getElementById("mtSum");
+  if(mtN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Rewrite until the sine’s angle matches its denominator, then each \\(\\frac{\\sin u}{u}\\to 1\\).</div>';
+  else panel.innerHTML=e.steps.slice(0,mtN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+mathify(st.t)+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join("");
+  panel.innerHTML=mathify(panel.innerHTML);
+  read.textContent=mtN===0?"press step":(mtN<e.steps.length?"step "+mtN+" of "+e.steps.length:"done");
+  const tx=mtN>=e.steps.length?e.head+"\\;"+e.fin:e.head+"\\;=\\;?";
+  sum.innerHTML=tex(tx,tx,true);
+  document.querySelectorAll("#mtBtns button").forEach((b,i)=>b.classList.toggle("on",i===mtKey));
+  const plot=document.getElementById("mtPlot"), look=document.getElementById("mtLook");
+  if(plot){ if(mtN>=e.steps.length){
+    plot.style.display=""; look.style.display="";
+    const f=MT_F[mtKey], L=MT_L[mtKey]; plot.innerHTML="";
+    const W=520,H=150,P=28, lo=Math.min(L-0.8,L*0.4), hiY=Math.max(L+0.8,L*1.4);
+    const M=mapper([-0.6,0.6],[lo,hiY],W,H,P);
+    axes(plot,M,W,H,P,4,3);
+    plot.appendChild(el("path",{d:curve(f,-0.6,0.6,M,300),fill:"none",stroke:"#e86ab4","stroke-width":2.4,"stroke-linecap":"round"}));
+    plot.appendChild(el("line",{x1:P,y1:M.sy(L),x2:W-P,y2:M.sy(L),stroke:"#3fd0b0","stroke-width":1,"stroke-dasharray":"4 4",opacity:.6}));
+    plot.appendChild(el("circle",{cx:M.sx(0),cy:M.sy(L),r:9,fill:"#e86ab4",opacity:.16}));
+    plot.appendChild(el("circle",{cx:M.sx(0),cy:M.sy(L),r:5,fill:"#e86ab4"}));
+    look.innerHTML="<b>Confirmed:</b> the curve sails straight through its limit height — the hole at x=0 sits exactly where the algebra said.";
+  } else { plot.style.display="none"; look.style.display="none"; } }
+}
+document.getElementById("mtStep").onclick=()=>{ if(mtN<MT[mtKey].steps.length){ mtN++; renderMT(); } };
+document.getElementById("mtReset").onclick=()=>{ mtN=0; renderMT(); };
+(function(){ const box=document.getElementById("mtBtns");
+  MT.forEach((e,i)=>{ const b=document.createElement("button");
+    b.innerHTML='<div class="sb-name">'+e.name+'</div><div class="sb-sub">'+e.sub+'</div>';
+    b.onclick=()=>{ mtKey=i; mtN=0; renderMT(); }; box.appendChild(b); }); })();
+
+/* ======================= 6 · DOES IT APPLY? GAME ======================= */
+const DG=[
+ { head:"-x^2\\le f(x)\\le x^2", q:"Both bounds approach the same value as \\(x\\to 0\\). What can you conclude?",
+   opts:[{h:"\\(f\\to 0\\) by the Squeeze Theorem",ok:true},{h:"nothing — f is unknown",ok:false},{h:"\\(f\\to 1\\)",ok:false}],
+   tell:"Both \\(\\pm x^2\\to 0\\), so the trapped \\(f\\) is forced to 0. This is the classic setup — a bounded thing times \\(x^2\\)." },
+ { head:"2\\le g(x)\\le 5", q:"The bounds are constants 2 and 5. Does the Squeeze Theorem give a limit?",
+   opts:[{h:"No — the bounds don’t meet, so it says nothing",ok:true},{h:"Yes, the limit is 3.5",ok:false},{h:"Yes, the limit is 2",ok:false}],
+   tell:"The bounds head to DIFFERENT values (2 and 5). The squeeze is silent — \\(g\\) could be anything between them. Meeting at one value is mandatory." },
+ { head:"f(x)=x\\sin\\tfrac1x", q:"As \\(x\\to 0\\): can you find this limit, and how?",
+   opts:[{h:"Yes — \\(-|x|\\le f\\le|x|\\), both \\(\\to 0\\), so \\(f\\to 0\\)",ok:true},{h:"No — \\(\\sin\\frac1x\\) has no limit",ok:false},{h:"Yes, it equals 1",ok:false}],
+   tell:"\\(\\sin\\frac1x\\) is bounded in \\([-1,1]\\), so \\(x\\sin\\frac1x\\) is trapped between \\(-|x|\\) and \\(|x|\\). Both \\(\\to 0\\): squeeze gives 0. The oscillation is irrelevant once it’s bounded." },
+ { head:"\\frac{\\sin x}{x}", q:"What is \\(\\lim_{x\\to 0}\\frac{\\sin x}{x}\\)?",
+   opts:[{h:"1",ok:true},{h:"0",ok:false},{h:"undefined",ok:false}],
+   tell:"The headline limit, proven by squeezing between \\(\\cos x\\) and 1. Memorize it: \\(\\frac{\\sin x}{x}\\to 1\\)." },
+ { head:"\\cos x\\le k(x)\\le \\sec x", q:"As \\(x\\to 0\\), \\(\\cos x\\to 1\\) and \\(\\sec x\\to 1\\). Conclusion?",
+   opts:[{h:"\\(k\\to 1\\) — both bounds meet at 1",ok:true},{h:"nothing — the bounds differ",ok:false},{h:"\\(k\\to 0\\)",ok:false}],
+   tell:"\\(\\cos 0=1\\) and \\(\\sec 0=1\\): both bounds funnel to 1, so \\(k\\) is squeezed to 1. The bounds don’t have to be simple — just meet." }
+];
+let dgI=0, dgScore=0, dgDone=0, dgLock=false;
+function renderDG(){
+  dgLock=false; const item=DG[dgI];
+  document.getElementById("dgHead").innerHTML=tex(item.head,item.head,true);
+  document.getElementById("dgProg").textContent="Case "+(dgI+1)+" of "+DG.length;
+  document.getElementById("dgScore").textContent="Score: "+dgScore+" / "+dgDone;
+  document.getElementById("dgQ").innerHTML=mathify(item.q);
+  document.getElementById("dgFb").innerHTML="";
+  document.getElementById("dgNext").style.display="none";
+  const box=document.getElementById("dgOpts"); box.innerHTML="";
+  shuf(item.opts).forEach(o=>{
+    const b=document.createElement("button"); b.innerHTML=mathify(o.h);
+    b.onclick=()=>{ if(dgLock)return; dgLock=true; dgDone++;
+      const correctBtn=[...box.children].find(bb=>bb.dataset.ok==="1");
+      [...box.children].forEach(bb=>{ bb.disabled=true; });
+      if(correctBtn) correctBtn.classList.add("correct");
+      if(o.ok){ dgScore++; } else b.classList.add("wrong");
+      document.getElementById("dgScore").textContent="Score: "+dgScore+" / "+dgDone;
+      document.getElementById("dgFb").innerHTML=(o.ok?'<span style="color:var(--conv);font-weight:600">✓ </span>':'<span style="color:var(--div);font-weight:600">✗ </span>')+'<span style="color:var(--muted)">'+mathify(item.tell)+'</span>';
+      document.getElementById("dgNext").style.display="block";
+      document.getElementById("dgNext").textContent=dgI<DG.length-1?"Next case →":"Run them again ↺";
+    };
+    b.dataset.ok=o.ok?"1":"0";
+    box.appendChild(b);
+  });
+}
+document.getElementById("dgNext").onclick=()=>{ if(dgI<DG.length-1){ dgI++; } else { dgI=0; dgScore=0; dgDone=0; } renderDG(); };
+
+/* ======================= anatomy + concepts ======================= */
+function renderAnatomy(){
+  const main="\\lim_{x\\to 0}\\frac{\\sin x}{x}=1\\qquad\\lim_{x\\to 0}\\frac{1-\\cos x}{x}=0";
+  document.getElementById("anatMain").innerHTML=tex(main,main,true);
+  document.getElementById("anatA").innerHTML=T("g\\le f\\le h,\\ g,h\\to L\\Rightarrow f\\to L");
+  document.getElementById("anatB").innerHTML=T("\\tfrac{\\sin x}{x}\\to1,\\ \\tfrac{1-\\cos x}{x}\\to0");
+  document.getElementById("anatC").innerHTML=T("\\tfrac{\\sin u}{u}\\to1\\ (u\\text{ matches})");
+}
+function renderConcepts(){
+  const set=[["c1","\\text{bound }f\\text{ above and below}","trap it"],
+   ["c2","g,h\\to\\text{ same }L","bounds must meet"],
+   ["c3","(\\text{bounded})\\times(\\to0)\\to0","bounded × small → 0"],
+   ["c4","\\tfrac{\\sin x}{x}\\to1,\\ \\tfrac{1-\\cos x}{x}\\to0","memorize both"]];
+  set.forEach(([id,t,fb])=>{ const e=document.getElementById(id); if(e) e.innerHTML=tex(t,fb); });
+}
+
+/* ======================= practice ======================= */
+const PRAC=[
+ { tag:"The sandwich", q:()=>'Find \\(\\lim_{x\\to 0}x^2\\cos\\frac{1}{x}\\).',
+   sol:[{t:"\\(\\cos\\frac1x\\) is bounded: \\(-1\\le\\cos\\frac1x\\le1\\). Multiply by \\(x^2\\ge0\\):",m:"-x^2\\le x^2\\cos\\tfrac1x\\le x^2"},
+        {t:"Both bounds \\(\\to 0\\) as \\(x\\to 0\\). By the Squeeze Theorem:",m:"\\lim_{x\\to 0}x^2\\cos\\tfrac1x=0"}] },
+ { tag:"Headline limit", q:()=>'Find \\(\\lim_{x\\to 0}\\frac{\\sin 4x}{3x}\\).',
+   sol:[{t:"Match the angle to the denominator — force a \\(4x\\) on the bottom:",m:"\\frac{\\sin 4x}{3x}=\\frac{4}{3}\\cdot\\frac{\\sin 4x}{4x}"},
+        {t:"The matched piece \\(\\to 1\\):",m:"\\frac{4}{3}\\cdot 1=\\frac{4}{3}"}] },
+ { tag:"The partner", q:()=>'Find \\(\\lim_{x\\to 0}\\frac{1-\\cos x}{\\sin x}\\).',
+   sol:[{t:"Divide top and bottom by \\(x\\) to expose the known limits:",m:"\\frac{(1-\\cos x)/x}{(\\sin x)/x}"},
+        {t:"Top \\(\\to 0\\), bottom \\(\\to 1\\):",m:"\\frac{0}{1}=0"}] },
+ { tag:"Ratio of sines", q:()=>'Find \\(\\lim_{x\\to 0}\\frac{\\sin 7x}{\\sin 3x}\\).',
+   sol:[{t:"Give each sine its matching angle, and balance with the leftover ratio:",m:"\\frac{\\sin 7x}{7x}\\cdot\\frac{3x}{\\sin 3x}\\cdot\\frac{7x}{3x}"},
+        {t:"Each matched piece \\(\\to 1\\); the leftover is the answer:",m:"1\\cdot 1\\cdot\\frac{7}{3}=\\frac{7}{3}"}] },
+ { tag:"Bounded times zero", q:()=>'Does \\(\\lim_{x\\to 0}\\sin\\frac{1}{x}\\) exist? What about \\(\\lim_{x\\to 0}x\\sin\\frac{1}{x}\\)?',
+   sol:[{t:"\\(\\sin\\frac1x\\) alone oscillates forever between \\(-1\\) and \\(1\\) — no limit (DNE).",m:"\\lim_{x\\to 0}\\sin\\tfrac1x\\ \\text{DNE}"},
+        {t:"But multiplied by \\(x\\): bounded \\(\\times\\) (\\(\\to 0\\)) is trapped in \\([-|x|,|x|]\\), both \\(\\to 0\\):",m:"\\lim_{x\\to 0}x\\sin\\tfrac1x=0"},
+        {t:"Same wild factor — one limit exists, one doesn’t. The \\(x\\) out front is everything.",m:""}] }
+];
+function renderPractice(){
+  document.getElementById("practice").innerHTML=mathify(PRAC.map((p,i)=>{
+    const steps=p.sol.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+    return '<div class="prob"><div class="prob-tag">'+p.tag+'</div><div class="prob-q">'+p.q()+'</div>'
+      +'<button class="soltoggle" data-i="'+i+'">Show solution</button>'
+      +'<div class="sol" id="sol'+i+'">'+steps+'</div></div>';
+  }).join(""));
+  document.querySelectorAll(".soltoggle").forEach(btn=>{ btn.onclick=()=>{ const i=btn.getAttribute("data-i"), s=document.getElementById("sol"+i);
+    btn.textContent=s.classList.toggle("show")?"Hide solution":"Show solution"; }; });
+}
+
+/* ======================= quiz ======================= */
+const QUIZ=[
+ { q:()=>'The Squeeze Theorem lets you find \\(\\lim f\\) when:',
+   opts:[{h:()=>"f is trapped between two functions that share the same limit",ok:true},{h:()=>"f is continuous",ok:false},{h:()=>"f is bounded",ok:false},{h:()=>"substitution gives 0/0",ok:false}],
+   fb:"Trapped between two bounds that meet at the same L. Just being bounded isn't enough — the bounds must agree on a destination." },
+ { q:()=>'\\(\\lim_{x\\to 0}\\frac{\\sin x}{x}=\\)',
+   opts:[{h:()=>"1",ok:true},{h:()=>"0",ok:false},{h:()=>"undefined",ok:false},{h:()=>"\\(\\infty\\)",ok:false}],
+   fb:"The headline trig limit: 1. Squeezed between cos x and 1, which both → 1." },
+ { q:()=>'\\(\\lim_{x\\to 0}\\frac{1-\\cos x}{x}=\\)',
+   opts:[{h:()=>"0",ok:true},{h:()=>"1",ok:false},{h:()=>"1/2",ok:false},{h:()=>"undefined",ok:false}],
+   fb:"The partner limit: 0. Don't confuse it with sin x / x → 1. (Its cousin (1−cos x)/x² → 1/2, but over x alone it's 0.)" },
+ { q:()=>'If \\(3\\le f(x)\\le 5\\) near \\(a\\), the Squeeze Theorem tells you \\(\\lim_{x\\to a}f\\) is:',
+   opts:[{h:()=>"nothing — the bounds don't meet",ok:true},{h:()=>"4",ok:false},{h:()=>"3",ok:false},{h:()=>"between 3 and 5",ok:false}],
+   fb:"The bounds head to different values, so the squeeze is silent. f could be anything in between — the theorem requires the bounds to share a limit." },
+ { q:()=>'\\(\\lim_{x\\to 0}\\frac{\\sin 5x}{x}=\\)',
+   opts:[{h:()=>"5",ok:true},{h:()=>"1",ok:false},{h:()=>"0",ok:false},{h:()=>"1/5",ok:false}],
+   fb:"Rewrite as 5·(sin 5x)/(5x) → 5·1 = 5. The angle must match the denominator; the factor of 5 is the price." },
+ { q:()=>'Why is \\(\\lim_{x\\to 0}x^2\\sin\\frac1x=0\\)?',
+   opts:[{h:()=>"\\(\\sin\\frac1x\\) is bounded, and \\(x^2\\to0\\) crushes it",ok:true},{h:()=>"\\(\\sin\\frac1x\\to0\\)",ok:false},{h:()=>"the function is continuous at 0",ok:false},{h:()=>"\\(x^2\\to1\\)",ok:false}],
+   fb:"Bounded × (→0) → 0. \\(\\sin\\frac1x\\) never settles, but it's trapped in [−1,1], so x² times it is squeezed between ±x² → 0." },
+ { q:()=>'\\(\\lim_{x\\to 0}\\sin\\frac1x\\) (with no \\(x\\) factor) is:',
+   opts:[{h:()=>"DNE — it oscillates forever",ok:true},{h:()=>"0",ok:false},{h:()=>"1",ok:false},{h:()=>"bounded, so it converges",ok:false}],
+   fb:"Without a factor crushing it, \\(\\sin\\frac1x\\) oscillates between −1 and 1 infinitely fast — no destination, DNE. Bounded does NOT mean convergent." },
+ { q:()=>'The limit \\(\\frac{\\sin x}{x}\\to1\\) holds only when x is measured in:',
+   opts:[{h:()=>"radians",ok:true},{h:()=>"degrees",ok:false},{h:()=>"either one",ok:false},{h:()=>"gradians",ok:false}],
+   fb:"Radians — always, in calculus. In degrees the limit would be π/180. This is why calculus uses radians exclusively." }
+];
+let qi=0, qScore=0, qDone=0, qAnswered=false;
+const qOpts=document.getElementById("qOpts"), qFb=document.getElementById("qFb"), qNext=document.getElementById("qNext");
+function renderQuiz(){
+  qAnswered=false; const item=QUIZ[qi];
+  document.getElementById("qText").innerHTML=mathify(item.q());
+  document.getElementById("qProgress").textContent="Question "+(qi+1)+" of "+QUIZ.length;
+  document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+  qFb.innerHTML=""; qNext.style.display="none";
+  qNext.textContent = qi<QUIZ.length-1 ? "Next question →" : "Restart quiz ↺";
+  qOpts.innerHTML="";
+  const sopts=shuf(item.opts);
+  sopts.forEach((o)=>{ const b=document.createElement("button"); b.innerHTML=mathify(o.h());
+    b.onclick=()=>{ if(qAnswered)return; qAnswered=true; qDone++;
+      [...qOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(sopts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ qScore++; b.classList.add("correct"); qFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ Correct.</span> <span style="color:var(--muted)">'+mathify(item.fb)+'</span>'; }
+      else { b.classList.add("wrong"); qFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not quite.</span> <span style="color:var(--muted)">'+mathify(item.fb)+'</span>'; }
+      document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+      qNext.style.display="block"; };
+    qOpts.appendChild(b); });
+}
+qNext.onclick=()=>{ if(qi<QUIZ.length-1){ qi++; } else { qi=0; qScore=0; qDone=0; } renderQuiz(); };
+
+/* ======================= init ======================= */
+function refreshAll(){ renderSQ(); renderSQineq(); renderThm(); renderSC(); renderSCineq(); renderOC(); renderMT(); renderDG(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic(); }
+renderSQ(); renderSQineq(); renderThm(); renderSC(); renderSCineq(); renderOC(); renderMT(); renderDG(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic();
+if(!window.katex){ let tries=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); refreshAll(); }
+  else if(++tries>40) clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.animationDelay=Math.min(i*30,440)+'ms'; });
+
+</script>
+</body>
+</html>
