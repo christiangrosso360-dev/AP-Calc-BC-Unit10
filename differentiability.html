@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Differentiability &amp; Continuity — When a Derivative Exists · Unit 2</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%231c0f18%27%2F%3E%3Cpath%20d%3D%27M5%2024%20C%2011%2022%2C%2017%2016%2C%2026%208%27%20stroke%3D%27%238dcc4e%27%20stroke-width%3D%272.4%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3Ccircle%20cx%3D%2719%27%20cy%3D%2713.8%27%20r%3D%272.6%27%20fill%3D%27%231c0f18%27%20stroke%3D%27%23f3a1cf%27%20stroke-width%3D%272%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<script>
+/* fallback for previewing without helpers.js — the repo's helpers.js takes precedence when present */
+if(typeof tex==="undefined"){
+  window.tex=function(latex,fallback,display){
+    if(window.katex){ try{ return katex.renderToString(latex,{displayMode:!!display,throwOnError:false}); }catch(e){} }
+    return '<span class="tex-fallback">'+(fallback||latex)+'</span>';
+  };
+}
+</script>
+<style>
+  :root{ --approx:#8dcc4e; --gold:#ffd27a; --true:#8dcc4e;
+         --glow:rgba(141,204,78,.10); --wrap-max:1060px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block;border-radius:10px}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:8px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button:disabled:hover{border-color:var(--line);transform:none}
+  .sb-name{font-weight:600;font-size:13.5px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .callout{margin-top:12px;font-size:13.5px;min-height:20px;color:var(--ink);
+    border-left:3px solid var(--gold);padding-left:12px;opacity:0;transition:opacity .3s}
+  .callout.show{opacity:1}
+  .whypanel .why-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+  .why-step{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .why-step:last-child{border-bottom:none}
+  .why-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .why-t{font-size:13px;line-height:1.5}
+  .why-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;overflow-x:auto}
+  .stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .stat:last-child{border-bottom:none}
+  .stat .k{color:var(--muted)}
+  .stat .v{font-family:var(--mono);color:var(--ink)}
+  .sumline{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;overflow-x:auto;min-height:46px;font-size:14px}
+  .anatomy{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:820px}
+  .anatomy .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .maprow{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .maprow:last-child{border-bottom:none}
+  .maprow .ph{color:var(--ink);flex:1 1 auto;line-height:1.45}
+  .maprow .sy{font-family:var(--mono);color:var(--muted);flex:none}
+  .concepts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.concepts{grid-template-columns:1fr}}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s,box-shadow .2s}
+  .concept:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(43,41,37,.45)}
+  .concept h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .concept p{font-size:13.5px;margin:6px 0;color:var(--ink)}
+  .concept .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;text-align:center;overflow-x:auto}
+  .key{color:var(--approx);font-weight:600}
+  .whatsnext{max-width:700px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  button:focus-visible, a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  .prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .prob-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--approx);font-weight:600}
+  .prob-q{font-size:14.5px;line-height:1.65;margin:6px 0 12px}
+  .soltoggle{font-size:13px;padding:7px 14px}
+  .sol{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .sol.show{display:block}
+  .mistakes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){.mistakes{grid-template-columns:1fr}}
+  .mistake{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--div);border-radius:10px;padding:13px 16px}
+  .mistake h4{margin:0 0 4px;font-size:14px;font-family:var(--display)}
+  .mistake p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+  .tipbox{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:780px}
+  .tipbox h4{margin:0 0 8px;font-size:14px;font-family:var(--display);color:var(--approx)}
+  .tipbox ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+  .tipbox li{margin:5px 0}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .qtag{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button{font-size:14px;padding:11px 14px}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px;line-height:1.5}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+  .bc-badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#0d1330;
+    background:var(--approx);border-radius:14px;padding:3px 11px;font-weight:600;vertical-align:middle;margin-left:10px}
+  /* tabular method table */
+  .ttab{border-collapse:collapse;margin:6px auto;font-size:15px}
+  .ttab th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);font-weight:500;
+    padding:6px 18px;border-bottom:1px solid var(--line)}
+  .ttab td{padding:9px 18px;text-align:center;font-size:15.5px}
+  .ttab td.sg{color:var(--approx);font-family:var(--mono);font-weight:600;font-size:14px}
+  .ttab td.ar{color:var(--true);font-family:var(--mono);font-size:15px;padding:0 4px}
+  .ttab tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+
+  .looking{font-size:12px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.5}
+  .looking b{color:var(--ink);font-style:normal}
+  .reader{margin-top:10px;background:var(--panel-2);border:1px solid var(--line);border-left:3px solid var(--gold);
+    border-radius:8px;padding:9px 12px;font-size:13px;color:var(--muted)}
+  .reader b{color:var(--ink)}
+  .vtable{border-collapse:collapse;margin:8px auto 0;font-family:var(--mono);font-size:13px}
+  .vtable th{font-size:10.5px;letter-spacing:.06em;color:var(--muted);font-weight:500;padding:4px 16px;border-bottom:1px solid var(--line)}
+  .vtable td{padding:5px 16px;text-align:center;color:var(--ink)}
+  .vtable tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+  .vtable td.hot{color:var(--approx);font-weight:600}
+
+  /* data table for the estimate-from-a-table interactive */
+  .dtable{border-collapse:collapse;width:100%;margin-top:6px;font-family:var(--mono);font-size:14px}
+  .dtable th,.dtable td{border:1px solid var(--line);padding:9px 6px;text-align:center;min-width:38px}
+  .dtable th:first-child,.dtable td:first-child{text-align:left;color:var(--muted);font-weight:600;background:rgba(255,255,255,.02)}
+  .dtable thead th{color:var(--muted)}
+  .dtable .sel{background:rgba(141,204,78,.16);color:var(--gold);font-weight:700;border-color:var(--gold)}
+  .picker{font-family:var(--mono);font-size:14px;background:var(--panel);color:var(--ink);
+    border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+  .picker:focus{outline:none;border-color:var(--gold)}
+
+
+  /* implication arrows */
+  .impl-row{display:flex;align-items:center;gap:10px;padding:11px 0;flex-wrap:wrap}
+  .impl-row+.impl-row{border-top:1px solid var(--line)}
+  .impl-box{font-family:var(--mono);font-size:13px;padding:5px 11px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+  .impl-ar{font-size:22px;color:var(--gold)}
+  .impl-no .impl-ar{color:var(--div)}
+  .impl-tag{font-family:var(--mono);font-size:11px;margin-left:auto;text-transform:uppercase;letter-spacing:.05em}
+  /* segmented tabs */
+  .seg{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .segbtn{font-family:var(--mono);font-size:12px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;
+    background:var(--panel);color:var(--muted);cursor:pointer;transition:.15s}
+  .segbtn:hover{border-color:var(--approx);color:var(--ink)}
+  .segbtn.on{background:rgba(141,204,78,.16);border-color:var(--approx);color:var(--gold);font-weight:700}
+
+  .seameq{font-size:14px;padding:8px 0;border-bottom:1px solid var(--line)}
+
+  /* full-width cold-open hook */
+  .hook{margin:30px 0 8px;padding:26px 28px;border:1px solid var(--line);border-radius:18px;
+    background:linear-gradient(180deg,rgba(141,204,78,.05),rgba(141,204,78,0));position:relative;overflow:hidden}
+  .hook-q{font-size:19px;line-height:1.5;color:var(--ink);max-width:760px;margin-bottom:18px;font-weight:500}
+  .hook-stage{display:flex;flex-direction:column;align-items:center;gap:12px;margin:6px 0 18px}
+  .hook-stage svg{width:100%;max-width:760px}
+  .hook-controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center}
+  .hook-a{font-size:14.5px;line-height:1.55;color:var(--muted);max-width:760px;border-top:1px solid var(--line);padding-top:16px}
+  @media(max-width:640px){ .hook-q{font-size:16.5px} }
+
+
+  /* connective transitions between sections */
+  .bridge{max-width:720px;margin:42px auto 2px;padding-left:18px;border-left:2px solid var(--approx);
+    font-size:15px;line-height:1.55;color:var(--muted);font-style:italic}
+  .bridge b{color:var(--ink);font-style:normal}
+
+
+  /* failure-mode gallery — distinctive full-width layout */
+  .gallery{margin-top:16px;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--panel)}
+  .gallery-tabs{display:flex;gap:0;margin:0;border-bottom:1px solid var(--line);flex-wrap:nowrap}
+  .gallery-tabs .segbtn{flex:1;border:0;border-radius:0;border-right:1px solid var(--line);padding:14px 8px;font-size:13px}
+  .gallery-tabs .segbtn:last-child{border-right:0}
+  .gallery-tabs .segbtn.on{background:rgba(141,204,78,.12)}
+  .gallery-body{display:grid;grid-template-columns:1.4fr 1fr;gap:0}
+  .gallery-graph{padding:20px 22px;border-right:1px solid var(--line)}
+  .gallery-graph svg{width:100%}
+  .gallery-info{padding:22px 24px;display:flex;flex-direction:column;gap:4px}
+  @media(max-width:760px){ .gallery-body{grid-template-columns:1fr} .gallery-graph{border-right:0;border-bottom:1px solid var(--line)}
+    .gallery-tabs .segbtn{font-size:11px;padding:11px 4px} }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit2.html">← Unit 2 Guide</a>
+  <header class="reveal">
+    <h1><span class="em">Differentiability</span> &amp; Continuity</h1>
+    <div class="sub">A derivative is a slope &mdash; but not every function has one at every point. This lesson
+      pins down exactly when a derivative exists, the four classic ways it can fail, and the one-sided test the AP exam
+      uses to settle it at the seam of a piecewise function.</div>
+  </header>
+
+  <div class="big-idea reveal"> Here&rsquo;s the key relationship: <b>differentiable always implies continuous</b> &mdash; if a curve has a
+  slope at a point, it can&rsquo;t have a break there. But the reverse fails: a curve can be perfectly connected and
+  still have <b>no slope</b> at a point &mdash; think of a sharp corner, where the curve abruptly changes direction.
+  Differentiability is the <i>stronger</i> condition: it demands not just connection, but <b>smoothness</b>. </div>
+
+  <div class="hook reveal">
+    <div class="hook-q">Here is a curve with <b>no break anywhere</b> &mdash; you could draw it without lifting your pen.
+      Yet at the marked point, it has <b>no slope at all</b>. How can a perfectly connected curve fail to have a slope?</div>
+    <div class="hook-stage">
+      <svg id="hookPlot" viewBox="0 0 760 230" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="hook-controls">
+        <button class="play" id="hookProbe">drop a tangent at the point &rarr;</button>
+        <span class="readout" id="hookRead">the curve is continuous here &mdash; but watch the slope</span>
+      </div>
+    </div>
+    <div class="hook-a">The answer is the whole lesson: <b>continuity</b> (no breaks) and <b>differentiability</b> (a
+      well-defined slope) are <i>different</i> things. Connection isn't enough &mdash; the curve also has to be <b>smooth</b>.</div>
+  </div>
+
+
+
+  <h2 class="reveal">Differentiable is a one-way street to continuous</h2>
+  <p class="lead reveal">If a function has a derivative at a point, it <b>must</b> be continuous there &mdash; a slope can't exist
+    across a gap or a jump. So differentiability is the stronger property: every differentiable function is continuous,
+    but plenty of continuous functions fail to be differentiable. That arrow only points one way.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="implarrows" id="implWrap"></div>
+        <p class="looking"><b>What you're looking at:</b> the logic in both directions. The forward arrow always holds;
+          the backward arrow is crossed out because continuity alone is not enough.</p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The contrapositive (your fastest tool)</div>
+        <p class="note">Flip &ldquo;differentiable \(\Rightarrow\) continuous&rdquo; around: <b>not continuous \(\Rightarrow\) not
+          differentiable</b>. So the instant you spot a jump, hole, or asymptote, you're done &mdash; no derivative can live there.</p>
+        <p class="note" style="margin-top:8px">The interesting cases are the ones that <i>are</i> continuous but still fail.
+          That's the next section.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bridge reveal">So the question becomes: if a connected curve <i>can</i> fail to have a slope, exactly <b>when</b> does it happen? It turns out there are only four ways.</div>
+  <h2 class="reveal">The four ways a derivative dies</h2>
+  <p class="lead reveal">When a continuous function has no derivative at a point, it's one of four culprits. Tap each to see
+    the graph and the reason. The first three are continuous &mdash; the curve is connected, but it isn't <b>smooth</b>.</p>
+
+  <div class="gallery reveal">
+    <div class="seg gallery-tabs" id="failTabs"></div>
+    <div class="gallery-body">
+      <div class="gallery-graph">
+        <svg id="failPlot" viewBox="0 0 520 300" preserveAspectRatio="xMidYMid meet"></svg>
+        <p class="looking" id="failLook"><b>What you're looking at:</b> the live graph for the selected failure mode,
+          with the trouble point marked.</p>
+      </div>
+      <div class="gallery-info">
+        <div class="label" id="failName">Corner</div>
+        <div class="bigeq" id="failEq"></div>
+        <p class="note" id="failWhy"></p>
+        <div class="stat" id="failSlopes"></div>
+        <div class="stat" style="border:0"><span class="k">continuous here?</span><span class="v" id="failCont" style="color:var(--gold)">yes</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bridge reveal">Corner, cusp, vertical tangent, jump &mdash; four different-looking failures. But is there one idea underneath them all? There is, and you can see it by looking <b>up close</b>.</div>
+  <h2 class="reveal">Smooth means &ldquo;locally straight&rdquo;</h2>
+  <p class="lead reveal">Here's the deepest way to see it. A function is differentiable at a point exactly when, if you
+    <b>zoom in far enough</b>, the curve becomes indistinguishable from a straight line &mdash; the tangent. Zoom in on a
+    smooth point and it flattens to a line. Zoom in on a corner and it stays a corner forever.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="zoomPlot" viewBox="0 0 520 320" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <span class="label">move the lens</span>
+          <input type="range" id="lensX" min="-2.2" max="2.2" step="0.02" value="-1.2">
+          <button class="play" id="zoomToggle" data-pt="smooth">smooth curve</button>
+        </div>
+        <p class="looking"><b>What you're looking at:</b> the full curve, with a <b>magnifier lens</b> you slide along it.
+          Inside the lens you see the curve up close. On the <b>smooth curve</b>, every spot looks like a straight line
+          through the lens. Switch to the <b>corner</b> and slide the lens over the kink &mdash; it stays sharp, no matter how close you look.</p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Local linearity</div>
+        <p class="note">&ldquo;Has a derivative&rdquo; and &ldquo;looks like a line up close&rdquo; are the same statement.
+          Whatever the lens reveals as a straight line, its slope <i>is</i> the derivative there.</p>
+        <div class="stat"><span class="k">lens magnification</span><span class="v" id="zoomRead">18&times;</span></div>
+        <div class="stat"><span class="k">slope under the lens</span><span class="v" id="zoomSlope" style="color:var(--gold)">&mdash;</span></div>
+        <div class="stat" style="border:0"><span class="k">looks like a line?</span><span class="v" id="zoomVerdict" style="color:var(--gold)">&mdash;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bridge reveal">That zoom-in test is the intuition. Now here&rsquo;s the version the AP exam actually grades &mdash; turning &ldquo;is it smooth?&rdquo; into two concrete checks you can compute.</div>
+  <h2 class="reveal">The seam test for piecewise functions</h2>
+  <p class="lead reveal">The AP exam's favorite version of this: a function defined in pieces, glued at a seam. To check
+    differentiability there, run two tests in order. First <b>continuous?</b> (do the pieces meet?) Then <b>smooth?</b>
+    (do the one-sided slopes match?). It must pass both.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="seamPlot" viewBox="0 0 520 300" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <span class="label">right-piece slope m</span>
+          <input type="range" id="seamM" min="-1" max="5" step="0.5" value="2">
+          <span class="label">right-piece shift b</span>
+          <input type="range" id="seamB" min="-3" max="3" step="0.5" value="-1">
+        </div>
+        <p class="looking"><b>What you're looking at:</b> left piece is \(f(x)=x^2\) for \(x\le 1\); right piece is the line
+          \(mx+b\) for \(x \gt 1\). Tune \(m\) and \(b\) and watch the two tests.</p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Two tests at the seam x = 1</div>
+        <div class="seameq" id="seamEq" style="margin-bottom:10px"></div>
+        <div class="stat"><span class="k">left value vs right value</span><span class="v" id="seamCont"></span></div>
+        <div class="stat"><span class="k">continuous?</span><span class="v" id="seamContV"></span></div>
+        <div class="stat"><span class="k">left slope vs right slope</span><span class="v" id="seamSlope"></span></div>
+        <div class="stat"><span class="k">slopes match?</span><span class="v" id="seamSmoothV"></span></div>
+        <div class="stat" style="border:0"><span class="k">differentiable at x = 1?</span><span class="v" id="seamDiff" style="color:var(--gold)"></span></div>
+        <p class="note" id="seamHint" style="margin-top:8px"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bridge reveal">You can compute it at a seam. But often the exam just hands you a picture and asks you to <b>spot</b> the trouble. Same four culprits &mdash; now find them by eye.</div>
+  <h2 class="reveal">Reading it off a graph</h2>
+  <p class="lead reveal">On the exam you're often just shown a graph and asked where \(f\) is <b>not</b> differentiable. Scan for the
+    four culprits: breaks (not continuous), corners, cusps, and vertical tangents. Here's a graph with several &mdash; can you
+    spot them before revealing?</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="readPlot" viewBox="0 0 520 300" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <button class="play" id="readReveal">reveal the trouble spots</button>
+        </div>
+        <p class="looking"><b>What you're looking at:</b> a single continuous-looking graph with four trouble points.
+          Each is a different failure mode.</p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Where f' fails here</div>
+        <div id="readList"></div>
+        <p class="note" style="margin-top:8px">Everywhere else, the graph is a smooth curve &mdash; differentiable. The
+          derivative exists at every point <i>except</i> these four.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The whole idea on one card</h2>
+  <div class="anatomy reveal">
+    <div class="m-big" id="anatMain"></div>
+    <div class="maprow"><span class="ph">Differentiable at a point always forces continuous there &mdash; the forward implication never fails</span><span class="sy" id="anatA"></span></div>
+    <div class="maprow"><span class="ph">But continuous does NOT force differentiable: the curve can be connected yet not smooth</span><span class="sy" id="anatB"></span></div>
+    <div class="maprow"><span class="ph">Four failure modes: corner, cusp, vertical tangent (all continuous), and discontinuity (not even continuous)</span><span class="sy" id="anatC"></span></div>
+    <div class="maprow"><span class="ph">At a piecewise seam, differentiable means the one-sided derivatives exist and are equal</span><span class="sy" id="anatD"></span></div>
+  </div>
+  <h2 class="reveal">The ideas everything else builds on</h2>
+  <div class="concepts reveal">
+    <div class="concept">
+      <h3>One-way implication</h3>
+      <p>Differentiable <span class="key">always</span> implies continuous &mdash; a slope can&rsquo;t exist across a break. This direction never fails.</p>
+      <div class="m" id="c1"></div>
+    </div>
+    <div class="concept">
+      <h3>The reverse fails</h3>
+      <p>Continuous does <span class="key">not</span> imply differentiable. \(|x|\) is continuous at 0 but has a corner &mdash; no slope there.</p>
+      <div class="m" id="c2"></div>
+    </div>
+    <div class="concept">
+      <h3>Match the one-sided slopes</h3>
+      <p>A derivative exists at a point only when the <span class="key">left and right slopes agree</span>. At a corner they differ; at a smooth point they match.</p>
+      <div class="m" id="c3"></div>
+    </div>
+    <div class="concept">
+      <h3>The contrapositive shortcut</h3>
+      <p>Not continuous <span class="key">\(\Rightarrow\)</span> not differentiable. Spot a jump, hole, or asymptote and you&rsquo;re instantly done &mdash; no derivative there.</p>
+      <div class="m" id="c4"></div>
+    </div>
+  </div>
+  <h2 class="reveal">Your turn</h2>
+  <p class="lead reveal">Five problems &mdash; the implication, the failure modes, and the piecewise seam test (including a solve-for-\(k\)). Try each before revealing.</p>
+  <div class="reveal" id="practice"></div>
+
+  <h2 class="reveal">Quick quiz</h2>
+  <p class="lead reveal">Eight fast checks across the whole lesson.</p>
+  <div class="card reveal" id="quizCard">
+    <div class="row" style="margin-bottom:12px">
+      <div class="qtag" id="qProgress">Question 1 of 8</div>
+      <span class="score" id="qScore">Score: 0 / 0</span>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="next" id="qNext" style="margin-top:14px;width:100%;display:none">Next question →</button>
+  </div>
+
+  <h2 class="reveal">Common mistakes &amp; exam tips</h2>
+  <div class="mistakes reveal">
+    <div class="mistake"><h4>Assuming continuous means differentiable</h4><p>The single most common slip. Continuity is necessary but not sufficient &mdash; a continuous corner like \(|x|\) has no derivative. Always check smoothness separately.</p></div>
+    <div class="mistake"><h4>Getting the implication backwards</h4><p>It's differentiable \(\Rightarrow\) continuous, not the reverse. Memorize the one-way arrow; the backward direction is false.</p></div>
+    <div class="mistake"><h4>Only checking continuity at a seam</h4><p>On a piecewise problem, matching the values makes it continuous &mdash; but you still must match the one-sided <i>slopes</i> for differentiability. Two tests, not one.</p></div>
+    <div class="mistake"><h4>Forgetting the vertical-tangent case</h4><p>\(\sqrt[3]{x}\) is continuous and even has a tangent line at 0 &mdash; but it's vertical, so the slope is infinite and \(f'(0)\) doesn't exist.</p></div>
+    <div class="mistake"><h4>Solving for k with only one equation</h4><p>&ldquo;Make it differentiable&rdquo; usually needs two conditions (continuity and matching slopes), which may give two unknowns. Set up both equations.</p></div>
+    <div class="mistake"><h4>Calling a cusp a corner</h4><p>A corner has two different <i>finite</i> slopes; a cusp has slopes running to \(\pm\infty\). Both kill the derivative, but name them correctly if asked.</p></div>
+  </div>
+  <div class="tipbox reveal">
+    <h4>On the AP exam</h4>
+    <ul>
+      <li>To justify \(f'(a)\) <b>doesn't</b> exist, cite the specific reason: corner (one-sided slopes differ), cusp/vertical tangent (slope infinite), or discontinuity (not continuous).</li>
+      <li>For a piecewise &ldquo;is it differentiable&rdquo; question, show <b>both</b> the value check and the one-sided derivative check at the seam.</li>
+      <li>If asked whether \(f\) is continuous given that it's differentiable, the answer is immediately yes &mdash; no work needed.</li>
+      <li>One-sided derivatives \(f'_-(a)\) and \(f'_+(a)\) are the rigorous tool; use them whenever the formula changes at \(a\).</li>
+    </ul>
+  </div>
+  <div class="whatsnext reveal">
+    You can now <b>see</b> limits. Next: <b>computing</b> them — the limit laws, why plugging in usually
+    just works, and the algebra toolkit (factoring, conjugates) for when it doesn't, including that
+    \(\tfrac{\sqrt{x+4}-2}{x}\) mystery from the table.
+    <a href="computing-limits.html">Computing Limits</a> is next — or head back to the
+    <a href="unit2.html">Unit 2 Guide</a>.
+  </div>
+
+  <footer class="reveal">What a Limit Is · part of the Unit 1 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const T=(s)=>tex(s,s,false);
+const fmt=(v,d=2)=>{const s=v.toFixed(d); return s==="-0.00"?"0.00":s;};
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mapper(dom,yr,W,H,P){ const x0=dom[0],x1=dom[1],y0=yr[0],y1=yr[1];
+  return { sx:x=>P+((x-x0)/(x1-x0))*(W-2*P), sy:v=>H-P-((v-y0)/(y1-y0))*(H-2*P), x0,x1,y0,y1 }; }
+function drawAxes(svg,M,W,H,P,xt,yt){ const sx=M.sx, sy=M.sy;
+  for(let g=0;g<=yt;g++){ const yy=M.y0+(g/yt)*(M.y1-M.y0), py=sy(yy);
+    svg.appendChild(el("line",{x1:P,y1:py,x2:W-P,y2:py,stroke:"#2b251a"}));
+    svg.appendChild(el("text",{x:P-6,y:py+3,fill:"#6b6457","font-size":9.5,"text-anchor":"end","font-family":"var(--mono)"},(+yy.toFixed(1)).toString())); }
+  for(let g=0;g<=xt;g++){ const xx=M.x0+(g/xt)*(M.x1-M.x0), px=sx(xx);
+    svg.appendChild(el("text",{x:px,y:H-P+14,fill:"#6b6457","font-size":9.5,"text-anchor":"middle","font-family":"var(--mono)"},(+xx.toFixed(1)).toString())); }
+  svg.appendChild(el("line",{x1:P,y1:sy(Math.max(0,M.y0)),x2:W-P,y2:sy(Math.max(0,M.y0)),stroke:"#4a4334","stroke-width":1.2}));
+  svg.appendChild(el("line",{x1:P,y1:sy(M.y1),x2:P,y2:sy(M.y0),stroke:"#4a4334","stroke-width":1.2}));
+}
+function curve(f,a,b,M,N=140){ let d="";
+  for(let k=0;k<=N;k++){ const x=a+(b-a)*k/N; d+=(k?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(f(x)).toFixed(1)+" "; }
+  return d; }
+const reduceMotion=()=> window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function mathify(html){ if(!window.katex) return html;
+  return html.replace(/\\\((.+?)\\\)/g,(m,t)=>{ try{ return katex.renderToString(t,{throwOnError:false}); }catch(e){ return m; } }); }
+function mathifyStatic(){ if(!window.katex) return;
+  document.querySelectorAll('.sub,.lead,.big-idea,.looking,.note,.maprow .ph,.mistake p,.tipbox li,.concept p,.whatsnext,.callout,.stat .k,.notadesc,.card > p').forEach(n=>{
+    if(n.dataset.mz) return;
+    if(n.innerHTML.indexOf('\\(')<0){ n.dataset.mz="1"; return; }
+    n.innerHTML=mathify(n.innerHTML); n.dataset.mz="1"; }); }
+
+const LIME="#8dcc4e", GOLD="#ffd27a", DIM="#6b6457";
+const f=x=>x*x;                       // the running example: f(x)=x^2
+
+
+
+/* ===================== HOOK (cold open) ===================== */
+let hookProbed=false, hookT=null;
+function renderHook(){
+  const v=document.getElementById("hookPlot"); if(!v) return; v.innerHTML="";
+  const W=760,H=230,P=30;
+  const g=x=>Math.abs(x);
+  const M=mapper([-2.2,2.2],[-0.3,2.0],W,H,P);
+  // baseline
+  v.appendChild(el("line",{x1:P,y1:M.sy(0),x2:W-P,y2:M.sy(0),stroke:"#2b251a","stroke-width":1}));
+  // the corner curve
+  v.appendChild(el("path",{d:curve(g,-2.2,0,M,30)+curve(g,0,2.2,M,30),fill:"none",stroke:LIME,"stroke-width":3,"stroke-linejoin":"round"}));
+  // the trouble point
+  v.appendChild(el("circle",{cx:M.sx(0),cy:M.sy(0),r:7,fill:"none",stroke:GOLD,"stroke-width":2.5}));
+  v.appendChild(el("circle",{cx:M.sx(0),cy:M.sy(0),r:3,fill:GOLD}));
+  if(hookProbed){
+    // a tangent line that can't decide — show BOTH candidate slopes fanning from the point
+    [[-1,"slope −1?"],[1,"slope +1?"]].forEach(([m,lab])=>{
+      const line=x=>0+m*(x-0);
+      v.appendChild(el("line",{x1:M.sx(-1.6),y1:M.sy(line(-1.6)),x2:M.sx(1.6),y2:M.sy(line(1.6)),
+        stroke:GOLD,"stroke-width":1.8,opacity:.55,"stroke-dasharray":"6 5"}));
+    });
+    v.appendChild(el("text",{x:M.sx(-1.5),y:M.sy(1.5)+4,fill:GOLD,"font-size":13,"font-family":"var(--mono)"},"slope −1 from the left"));
+    v.appendChild(el("text",{x:M.sx(1.5),y:M.sy(1.5)+4,fill:GOLD,"font-size":13,"text-anchor":"end","font-family":"var(--mono)"},"slope +1 from the right"));
+  }
+}
+
+/* ===================== 1 · IMPLICATION ARROWS ===================== */
+function renderImpl(){
+  const w=document.getElementById("implWrap"); if(!w) return;
+  w.innerHTML=
+    '<div class="impl-row impl-ok"><span class="impl-box">differentiable</span><span class="impl-ar">&rarr;</span><span class="impl-box">continuous</span><span class="impl-tag" style="color:var(--conv)">always true</span></div>'
+   +'<div class="impl-row impl-no"><span class="impl-box">continuous</span><span class="impl-ar">&#8602;</span><span class="impl-box">differentiable</span><span class="impl-tag" style="color:var(--div)">not in general</span></div>';
+}
+
+/* ===================== 2 · FOUR FAILURE MODES ===================== */
+const FAILS={
+  corner:{ name:"Corner", eq:"f(x)=|x|\\quad\\text{at }x=0",
+    why:"The graph is continuous, but the left side has slope \\(-1\\) and the right side has slope \\(+1\\). The one-sided slopes <b>disagree</b>, so no single tangent slope exists.",
+    cont:"yes", slopes:["left slope","-1","right slope","+1"],
+    f:x=>Math.abs(x), pt:0, dom:[-2,2], yr:[-0.4,2] },
+  cusp:{ name:"Cusp", eq:"f(x)=x^{2/3}\\quad\\text{at }x=0",
+    why:"Continuous, but the slopes race off to \\(-\\infty\\) on the left and \\(+\\infty\\) on the right &mdash; the curve comes to an infinitely sharp point. No finite slope exists.",
+    cont:"yes", slopes:["left slope","&rarr; &minus;&infin;","right slope","&rarr; +&infin;"],
+    f:x=>Math.cbrt(x*x), pt:0, dom:[-2,2], yr:[-0.3,1.7] },
+  vtan:{ name:"Vertical tangent", eq:"f(x)=\\sqrt[3]{x}\\quad\\text{at }x=0",
+    why:"Continuous, and the tangent line exists &mdash; but it's <b>vertical</b>, so its slope is infinite. A derivative must be a finite number, so \\(f'(0)\\) doesn't exist.",
+    cont:"yes", slopes:["slope both sides","&rarr; +&infin;","tangent line","vertical"],
+    f:x=>Math.cbrt(x), pt:0, dom:[-2,2], yr:[-1.4,1.4] },
+  jump:{ name:"Discontinuity", eq:"\\text{a jump at }x=0",
+    why:"The graph <b>breaks</b> &mdash; it isn't even continuous. By the contrapositive, not continuous \\(\\Rightarrow\\) not differentiable. No slope can bridge a gap.",
+    cont:"no", slopes:["left limit","-1","right limit","+1"],
+    f:x=> x<0 ? x-1 : x+1, pt:0, dom:[-2,2], yr:[-3,3], jumpAt:0 }
+};
+let failKey="corner";
+function renderFail(){
+  const F=FAILS[failKey]; if(!F) return;
+  // tabs
+  const tabs=document.getElementById("failTabs");
+  tabs.innerHTML=Object.keys(FAILS).map(k=>'<button class="segbtn'+(k===failKey?' on':'')+'" data-k="'+k+'">'+FAILS[k].name+'</button>').join("");
+  tabs.querySelectorAll(".segbtn").forEach(b=>b.onclick=()=>{ failKey=b.getAttribute("data-k"); renderFail(); });
+  // plot
+  const v=document.getElementById("failPlot"); v.innerHTML="";
+  const W=520,H=300,P=34; const M=mapper(F.dom,F.yr,W,H,P);
+  drawAxes(v,M,W,H,P,4,4);
+  if(F.jumpAt!==undefined){
+    // draw two branches with an open/closed gap
+    v.appendChild(el("path",{d:curve(F.f,F.dom[0],-0.001,M,60),fill:"none",stroke:LIME,"stroke-width":2.6}));
+    v.appendChild(el("path",{d:curve(F.f,0.001,F.dom[1],M,60),fill:"none",stroke:LIME,"stroke-width":2.6}));
+    v.appendChild(el("circle",{cx:M.sx(0),cy:M.sy(-1),r:4.5,fill:"var(--panel)",stroke:LIME,"stroke-width":2}));
+    v.appendChild(el("circle",{cx:M.sx(0),cy:M.sy(1),r:4.5,fill:LIME}));
+  } else {
+    v.appendChild(el("path",{d:curve(F.f,F.dom[0],F.dom[1],M,160),fill:"none",stroke:LIME,"stroke-width":2.6,"stroke-linejoin":"round"}));
+    // mark the trouble point
+    v.appendChild(el("circle",{cx:M.sx(F.pt),cy:M.sy(F.f(F.pt)),r:6,fill:"none",stroke:GOLD,"stroke-width":2.5}));
+    v.appendChild(el("circle",{cx:M.sx(F.pt),cy:M.sy(F.f(F.pt)),r:2.5,fill:GOLD}));
+  }
+  // readouts
+  document.getElementById("failName").textContent=F.name;
+  document.getElementById("failEq").innerHTML=tex(F.eq,F.eq,true);
+  document.getElementById("failWhy").innerHTML=mathify(F.why);
+  document.getElementById("failSlopes").innerHTML='<span class="k">'+F.slopes[0]+'</span><span class="v">'+F.slopes[1]+'</span>';
+  const s2=document.getElementById("failSlopes");
+  s2.outerHTML='<div class="stat" id="failSlopes"><span class="k">'+F.slopes[0]+' / '+F.slopes[2]+'</span><span class="v">'+F.slopes[1]+'  /  '+F.slopes[3]+'</span></div>';
+  const cont=document.getElementById("failCont"); cont.textContent=F.cont;
+  cont.style.color=F.cont==="yes"?"var(--conv)":"var(--div)";
+}
+
+/* ===================== 3 · ZOOM / LOCAL LINEARITY ===================== */
+let lensX=-1.2, zoomPt="smooth";
+function renderZoom(){
+  const v=document.getElementById("zoomPlot"); if(!v) return; v.innerHTML="";
+  const W=520,H=320,P=30;
+  const smooth=(zoomPt==="smooth");
+  // host curves on x in [-2.4, 2.4]
+  const gS=x=>0.16*x*x*x - 0.08*x*x + 0.28*x + 0.2;     // a clearly curvy smooth cubic
+  const dS=x=>0.48*x*x - 0.16*x + 0.28;
+  const cornerAt=0.25;
+  const gC=x=>0.9 - Math.abs(x-cornerAt)*1.15 + 0.12*x; // slanted V, kink at x=0.25
+  const g = smooth ? gS : gC;
+  const dom=[-2.4,2.4], yr=[-1.6,1.6];
+  const M=mapper(dom,yr,W,H,P);
+  drawAxes(v,M,W,H,P,4,4);
+  // full curve (drawn normally)
+  if(smooth){ v.appendChild(el("path",{d:curve(g,dom[0],dom[1],M,220),fill:"none",stroke:LIME,"stroke-width":2.6,"stroke-linejoin":"round"})); }
+  else { // draw two straight arms so the kink is crisp
+    v.appendChild(el("path",{d:curve(g,dom[0],cornerAt,M,40),fill:"none",stroke:LIME,"stroke-width":2.6}));
+    v.appendChild(el("path",{d:curve(g,cornerAt,dom[1],M,40),fill:"none",stroke:LIME,"stroke-width":2.6}));
+  }
+  // lens center on the curve at x = lensX
+  const lx=lensX, ly=g(lx);
+  const lcx=M.sx(lx), lcy=M.sy(ly);
+  const Rscreen=58;                     // lens radius in screen px
+  const Zmag=18;                        // magnification factor
+  // marker ring on the main curve showing where the lens samples
+  v.appendChild(el("circle",{cx:lcx,cy:lcy,r:4,fill:GOLD}));
+  v.appendChild(el("circle",{cx:lcx,cy:lcy,r:13,fill:"none",stroke:GOLD,"stroke-width":1,opacity:.35}));
+  // ---- the LENS: a clipped circle showing the magnified curve ----
+  const clipId="lensclip";
+  const defs=el("defs",{}); 
+  const cp=el("clipPath",{id:clipId}); cp.appendChild(el("circle",{cx:lcx,cy:lcy,r:Rscreen})); defs.appendChild(cp); v.appendChild(defs);
+  // lens backdrop
+  v.appendChild(el("circle",{cx:lcx,cy:lcy,r:Rscreen,fill:"rgba(141,204,78,0.04)",stroke:GOLD,"stroke-width":2}));
+  const lensG=el("g",{"clip-path":"url(#"+clipId+")"});
+  // inside the lens: map real coords near (lx,ly) magnified by Zmag, centered in the lens circle.
+  // screen position of a real point (x,y): lcx + (x-lx)*pxPerUnitX*Zmag, lcy - (y-ly)*pxPerUnitY*Zmag
+  const pxX=(M.sx(1)-M.sx(0)), pxY=(M.sy(0)-M.sy(1));
+  const LX=x=> lcx + (x-lx)*pxX*Zmag;
+  const LY=y=> lcy - (y-ly)*pxY*Zmag;
+  // faint crosshair through lens center
+  lensG.appendChild(el("line",{x1:lcx-Rscreen,y1:lcy,x2:lcx+Rscreen,y2:lcy,stroke:"#4a4334","stroke-width":1}));
+  lensG.appendChild(el("line",{x1:lcx,y1:lcy-Rscreen,x2:lcx,y2:lcy+Rscreen,stroke:"#4a4334","stroke-width":1}));
+  // tangent reference inside lens (smooth only): straight gold dashed line at slope dS(lx)
+  if(smooth){ const m=dS(lx);
+    // draw across the lens: param by real x over a small range
+    const xr=(Rscreen/(pxX*Zmag))*1.4;
+    lensG.appendChild(el("line",{x1:LX(lx-xr),y1:LY(ly+m*(-xr)),x2:LX(lx+xr),y2:LY(ly+m*(xr)),stroke:GOLD,"stroke-width":1.6,opacity:.5,"stroke-dasharray":"6 5"})); }
+  // the magnified curve inside the lens
+  const xr=(Rscreen/(pxX*Zmag))*1.5;
+  let d=""; const N=120;
+  for(let k=0;k<=N;k++){ const x=lx-xr+2*xr*k/N; const sx=LX(x), sy=LY(g(x)); d+=(k?"L":"M")+sx.toFixed(1)+" "+sy.toFixed(1)+" "; }
+  lensG.appendChild(el("path",{d:d,fill:"none",stroke:LIME,"stroke-width":3,"stroke-linejoin":"round"}));
+  // center dot in lens
+  lensG.appendChild(el("circle",{cx:lcx,cy:lcy,r:4,fill:GOLD}));
+  v.appendChild(lensG);
+  // lens label
+  v.appendChild(el("text",{x:lcx,y:lcy-Rscreen-8,fill:GOLD,"font-size":11,"text-anchor":"middle","font-family":"var(--mono)"},Zmag+"× lens"));
+  // ---- readouts ----
+  document.getElementById("zoomRead").innerHTML=Zmag+"&times;";
+  const slopeEl=document.getElementById("zoomSlope");
+  const vd=document.getElementById("zoomVerdict");
+  // is the lens over the corner?
+  const overCorner = !smooth && Math.abs(lx-cornerAt) < (xr*0.9);
+  if(smooth){
+    slopeEl.textContent="≈ "+fmt(dS(lx),2); slopeEl.style.color="var(--gold)";
+    vd.textContent="yes — a straight line"; vd.style.color="var(--conv)";
+  } else if(overCorner){
+    slopeEl.textContent="two different slopes"; slopeEl.style.color="var(--div)";
+    vd.textContent="no — a sharp corner"; vd.style.color="var(--div)";
+  } else {
+    const m = lx<cornerAt ? -1.15+0.12 : 1.15+0.12;  // arm slopes (±1.15 plus the 0.12 tilt)
+    slopeEl.textContent="≈ "+fmt(m,2); slopeEl.style.color="var(--gold)";
+    vd.textContent="yes — a straight line"; vd.style.color="var(--conv)";
+  }
+}
+
+/* ===================== 4 · SEAM TEST (piecewise) ===================== */
+let seamM=2, seamB=-1;
+const SEAM_A=1;                          // seam at x=1; left piece x^2
+function renderSeam(){
+  const v=document.getElementById("seamPlot"); if(!v) return; v.innerHTML="";
+  const W=520,H=300,P=34; const M=mapper([-0.4,3],[-1,6],W,H,P);
+  drawAxes(v,M,W,H,P,4,5);
+  const gL=x=>x*x, gR=x=>seamM*x+seamB;
+  v.appendChild(el("path",{d:curve(gL,-0.4,SEAM_A,M,80),fill:"none",stroke:LIME,"stroke-width":2.6}));
+  v.appendChild(el("path",{d:curve(gR,SEAM_A,3,M,80),fill:"none",stroke:GOLD,"stroke-width":2.6}));
+  const lv=gL(SEAM_A), rv=gR(SEAM_A);
+  // seam markers
+  v.appendChild(el("line",{x1:M.sx(SEAM_A),y1:M.sy(-1),x2:M.sx(SEAM_A),y2:M.sy(6),stroke:DIM,"stroke-width":1,"stroke-dasharray":"3 4",opacity:.5}));
+  v.appendChild(el("circle",{cx:M.sx(SEAM_A),cy:M.sy(lv),r:4.5,fill:LIME}));
+  v.appendChild(el("circle",{cx:M.sx(SEAM_A),cy:M.sy(rv),r:4.5,fill:rv===lv?LIME:"var(--panel)",stroke:GOLD,"stroke-width":2}));
+  // tests
+  const cont = Math.abs(lv-rv)<1e-9;
+  const lslope=2*SEAM_A, rslope=seamM;
+  const smooth = Math.abs(lslope-rslope)<1e-9;
+  const diff = cont && smooth;
+  const eqEl=document.getElementById("seamEq");
+  if(eqEl){ const bsign=seamB<0?"-":"+"; const babs=Math.abs(seamB);
+    const rightPiece=fmt(seamM,1).replace(/\.0$/,'')+"x"+(babs===0?"":" "+bsign+" "+fmt(babs,1).replace(/\.0$/,''));
+    const cases="f(x)=\\begin{cases}x^2,&x\\le1\\\\ "+rightPiece+",&x \\gt 1\\end{cases}";
+    eqEl.innerHTML=tex(cases,cases,true); }
+  document.getElementById("seamCont").textContent=fmt(lv,2)+"  vs  "+fmt(rv,2);
+  const cv=document.getElementById("seamContV"); cv.textContent=cont?"yes ✓":"no ✗"; cv.style.color=cont?"var(--conv)":"var(--div)";
+  document.getElementById("seamSlope").textContent=fmt(lslope,2)+"  vs  "+fmt(rslope,2);
+  const sv=document.getElementById("seamSmoothV"); 
+  if(!cont){ sv.textContent="—"; sv.style.color="var(--muted)"; }
+  else { sv.textContent=smooth?"yes ✓":"no ✗"; sv.style.color=smooth?"var(--conv)":"var(--div)"; }
+  const dv=document.getElementById("seamDiff"); dv.textContent=diff?"YES":"NO"; dv.style.color=diff?"var(--conv)":"var(--div)";
+  const hint=document.getElementById("seamHint");
+  if(!cont) hint.innerHTML="The pieces don't meet &mdash; not continuous, so <b>not differentiable</b>. Fix continuity first.";
+  else if(!smooth) hint.innerHTML="Pieces meet, but it's a <b>corner</b> &mdash; the slopes disagree. Continuous but not differentiable.";
+  else hint.innerHTML="Pieces meet <i>and</i> slopes match &mdash; smooth join. <b>Differentiable</b> at the seam. (Here \\(m=2,\\ b=-1\\).)";
+  hint.innerHTML=mathify(hint.innerHTML);
+}
+
+/* ===================== 5 · READ OFF A GRAPH ===================== */
+let readShown=false;
+// a piecewise scenic graph on [-5,5] with 4 trouble spots: jump @ -3, corner @ -1, cusp @ 1.5, vertical tangent @ 3.5
+function readF(x){
+  if(x < -3) return 0.5*x + 3.0;            // line up to jump
+  if(x < -1) return 0.4*(x+3) + 0.3;        // after jump (lower), line to corner
+  if(x < 1.5) return -0.8*(x+1) + 1.1;      // down-slope into corner then to cusp base
+  if(x < 3.5) return Math.cbrt((x-1.5)*(x-1.5))*1.1 - 1.5; // cusp at 1.5
+  return Math.cbrt(x-3.5)*1.3 + (Math.cbrt(2)*1.1-1.5);    // vertical tangent at 3.5
+}
+const READ_PTS=[{x:-3,t:"Jump",d:"the graph breaks &mdash; not continuous"},
+  {x:-1,t:"Corner",d:"slopes disagree left vs right"},
+  {x:1.5,t:"Cusp",d:"slopes &rarr; &plusmn;&infin;, infinitely sharp point"},
+  {x:3.5,t:"Vertical tangent",d:"tangent is vertical, slope infinite"}];
+function renderRead(){
+  const v=document.getElementById("readPlot"); if(!v) return; v.innerHTML="";
+  const W=520,H=300,P=34; const M=mapper([-5,5],[-3,4],W,H,P);
+  drawAxes(v,M,W,H,P,5,4);
+  // draw in segments to render the jump as a real break
+  const segs=[[-5,-3.001],[-3,-1.001],[-1,1.499],[1.5,3.499],[3.5,5]];
+  segs.forEach(([a,b])=>v.appendChild(el("path",{d:curve(readF,a,b,M,90),fill:"none",stroke:LIME,"stroke-width":2.4,"stroke-linejoin":"round"})));
+  // jump dots
+  v.appendChild(el("circle",{cx:M.sx(-3),cy:M.sy(0.5*-3+3),r:4,fill:"var(--panel)",stroke:LIME,"stroke-width":2}));
+  v.appendChild(el("circle",{cx:M.sx(-3),cy:M.sy(0.3),r:4,fill:LIME}));
+  if(readShown){
+    READ_PTS.forEach(p=>{ const y=readF(p.x + (p.x===-3?0.0001:0));
+      v.appendChild(el("circle",{cx:M.sx(p.x),cy:M.sy(p.x===-3?0.3:readF(p.x)),r:9,fill:"none",stroke:GOLD,"stroke-width":2}));
+      v.appendChild(el("text",{x:M.sx(p.x),y:M.sy(p.x===-3?0.3:readF(p.x))-13,fill:GOLD,"font-size":11,"text-anchor":"middle","font-family":"var(--mono)","font-weight":"700"},"✕")); });
+  }
+  const list=document.getElementById("readList");
+  if(!readShown){ list.innerHTML='<p class="note">Look for breaks, corners, cusps, and vertical tangents, then hit reveal.</p>'; }
+  else { list.innerHTML=READ_PTS.map(p=>'<div class="stat"><span class="k">x = '+p.x+' &middot; <b style="color:var(--ink)">'+p.t+'</b></span><span class="v" style="font-size:11px;color:var(--muted)">'+p.d+'</span></div>').join(""); }
+}
+
+/* ===================== event wiring ===================== */
+(function(){
+  const hp=document.getElementById("hookProbe");
+  if(hp) hp.onclick=()=>{ hookProbed=!hookProbed; 
+    hp.textContent=hookProbed?"hide the tangents":"drop a tangent at the point →";
+    document.getElementById("hookRead").textContent=hookProbed
+      ?"two different slopes — so no single tangent exists. No derivative here."
+      :"the curve is continuous here — but watch the slope";
+    renderHook(); };
+  const zl=document.getElementById("lensX");
+  if(zl) zl.addEventListener("input",e=>{ lensX=+e.target.value; renderZoom(); });
+  const zt=document.getElementById("zoomToggle");
+  if(zt) zt.onclick=()=>{ zoomPt = zoomPt==="smooth"?"corner":"smooth";
+    zt.textContent = zoomPt==="smooth"?"smooth curve":"corner";
+    zt.setAttribute("data-pt",zoomPt); renderZoom(); };
+  const sm=document.getElementById("seamM"), sb=document.getElementById("seamB");
+  if(sm) sm.addEventListener("input",e=>{ seamM=+e.target.value; renderSeam(); });
+  if(sb) sb.addEventListener("input",e=>{ seamB=+e.target.value; renderSeam(); });
+  const rr=document.getElementById("readReveal");
+  if(rr) rr.onclick=()=>{ readShown=!readShown; rr.textContent=readShown?"hide the trouble spots":"reveal the trouble spots"; renderRead(); };
+})();
+
+/* ===================== anatomy + concepts ===================== */
+function renderAnatomy(){
+  const main="\\text{differentiable at }a\\ \\Longrightarrow\\ \\text{continuous at }a";
+  document.getElementById("anatMain").innerHTML=tex(main,main,true);
+  document.getElementById("anatA").innerHTML=T("\\text{but not conversely}");
+  document.getElementById("anatB").innerHTML=T("\\text{corner, cusp, vertical tangent}");
+  document.getElementById("anatC").innerHTML=T("\\text{or a discontinuity}");
+  document.getElementById("anatD").innerHTML=T("f'_-(a)=f'_+(a)");
+}
+function renderConcepts(){
+  const set=[["c1","\\text{diff}\\Rightarrow\\text{cont}","one-way"],
+   ["c2","\\text{cont}\\not\\Rightarrow\\text{diff}","not reverse"],
+   ["c3","f'_-(a)=f'_+(a)","slopes match"],
+   ["c4","\\text{not cont}\\Rightarrow\\text{not diff}","contrapositive"]];
+  set.forEach(([id,tx,fb])=>{ const e=document.getElementById(id); if(e) e.innerHTML=tex(tx,fb||tx); });
+}
+
+/* ===================== practice ===================== */
+const PRAC=[
+ { tag:"One-way implication", q:()=>'\\(f\\) is differentiable at \\(x=3\\). What can you conclude about continuity there?',
+   sol:[{t:"Differentiable always implies continuous:",m:"\\text{differentiable at }3\\Rightarrow\\text{continuous at }3"},
+        {t:"So \\(f\\) is definitely continuous at \\(x=3\\). (The reverse would not be guaranteed.)",m:""}] },
+ { tag:"Corner", q:()=>'Why is \\(f(x)=|x|\\) not differentiable at \\(x=0\\), even though it is continuous there?',
+   sol:[{t:"Check the one-sided slopes. For \\(x \\lt 0\\), \\(f(x)=-x\\) has slope \\(-1\\); for \\(x \\gt 0\\), \\(f(x)=x\\) has slope \\(+1\\):",m:"f'_-(0)=-1,\\quad f'_+(0)=+1"},
+        {t:"The one-sided slopes disagree, so no single tangent slope exists &mdash; a corner.",m:""}] },
+ { tag:"Discontinuity", q:()=>'A function has a jump discontinuity at \\(x=2\\). Is it differentiable there? Why?',
+   sol:[{t:"Use the contrapositive of &ldquo;differentiable \\(\\Rightarrow\\) continuous&rdquo;:",m:"\\text{not continuous}\\Rightarrow\\text{not differentiable}"},
+        {t:"A jump means not continuous, so \\(f\\) is not differentiable at \\(x=2\\).",m:""}] },
+ { tag:"Seam — continuity", q:()=>'For \\(f(x)=\\begin{cases}x^2,&x\\le1\\\\ x+1,&x \\gt 1\\end{cases}\\), is \\(f\\) continuous at \\(x=1\\)?',
+   sol:[{t:"Compare the two pieces at \\(x=1\\):",m:"\\text{left: }1^2=1,\\quad\\text{right: }1+1=2"},
+        {t:"\\(1\\ne 2\\): the pieces don't meet, so \\(f\\) is not continuous &mdash; and therefore not differentiable.",m:""}] },
+ { tag:"Seam — solve for k", q:()=>'Find \\(k\\) so that \\(f(x)=\\begin{cases}x^2,&x\\le2\\\\ kx-4,&x \\gt 2\\end{cases}\\) is differentiable at \\(x=2\\).',
+   sol:[{t:"First make it continuous: left value \\(=4\\), right value \\(=2k-4\\). Set equal:",m:"4=2k-4\\Rightarrow k=4"},
+        {t:"Now check slopes with \\(k=4\\): left \\(2x=4\\), right \\(k=4\\). They match, so it's differentiable.",m:"k=4"}] }
+];
+function renderPractice(){
+  document.getElementById("practice").innerHTML=mathify(PRAC.map((p,i)=>{
+    const steps=p.sol.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+    return '<div class="prob"><div class="prob-tag">'+p.tag+'</div><div class="prob-q">'+p.q()+'</div>'
+      +'<button class="soltoggle" data-i="'+i+'">Show solution</button><div class="sol" id="sol'+i+'">'+steps+'</div></div>';
+  }).join(""));
+  document.querySelectorAll(".soltoggle").forEach(btn=>{ btn.onclick=()=>{ const i=btn.getAttribute("data-i"), so=document.getElementById("sol"+i);
+    btn.textContent=so.classList.toggle("show")?"Hide solution":"Show solution"; }; });
+}
+
+/* ===================== quiz ===================== */
+const QUIZ=[
+ { q:()=>'If \\(f\\) is differentiable at \\(x=a\\), then \\(f\\) is &hellip;',
+   opts:[{h:()=>"continuous at \\(a\\)",ok:true},{h:()=>"a straight line",ok:false},{h:()=>"equal to its derivative",ok:false},{h:()=>"not continuous at \\(a\\)",ok:false}],
+   fb:"Differentiable \\(\\Rightarrow\\) continuous, always. The slope can't exist across a break." },
+ { q:()=>'Which is TRUE?',
+   opts:[{h:()=>"continuous does not guarantee differentiable",ok:true},{h:()=>"continuous guarantees differentiable",ok:false},{h:()=>"differentiable does not guarantee continuous",ok:false},{h:()=>"they're the same thing",ok:false}],
+   fb:"Continuity is necessary but not sufficient: \\(|x|\\) is continuous at 0 yet has a corner there." },
+ { q:()=>'\\(f(x)=|x|\\) at \\(x=0\\) fails to be differentiable because &hellip;',
+   opts:[{h:()=>"the left and right slopes are \\(-1\\) and \\(+1\\)",ok:true},{h:()=>"it's discontinuous",ok:false},{h:()=>"it has a vertical tangent",ok:false},{h:()=>"it's undefined at 0",ok:false}],
+   fb:"It's a corner: continuous, but the one-sided slopes \\(-1\\) and \\(+1\\) disagree." },
+ { q:()=>'\\(f(x)=\\sqrt[3]{x}\\) at \\(x=0\\) has &hellip;',
+   opts:[{h:()=>"a vertical tangent (infinite slope)",ok:true},{h:()=>"a corner",ok:false},{h:()=>"a jump",ok:false},{h:()=>"a removable hole",ok:false}],
+   fb:"The tangent at 0 is vertical, so the slope is infinite — not a finite derivative." },
+ { q:()=>'A function with a jump at \\(x=1\\) is differentiable at \\(x=1\\)?',
+   opts:[{h:()=>"no — it isn't even continuous",ok:true},{h:()=>"yes",ok:false},{h:()=>"only from the left",ok:false},{h:()=>"only if the jump is small",ok:false}],
+   fb:"Not continuous \\(\\Rightarrow\\) not differentiable. A jump kills the derivative outright." },
+ { q:()=>'At the seam of a piecewise function, differentiability requires &hellip;',
+   opts:[{h:()=>"the pieces meet AND the one-sided slopes match",ok:true},{h:()=>"only that the pieces meet",ok:false},{h:()=>"only that the slopes match",ok:false},{h:()=>"the same formula on both sides",ok:false}],
+   fb:"Two tests: continuous (pieces meet) and smooth (slopes equal). It must pass both." },
+ { q:()=>'For \\(f(x)=\\begin{cases}x^2,&x\\le1\\\\ 3x-2,&x \\gt 1\\end{cases}\\), at \\(x=1\\) the function is &hellip;',
+   opts:[{h:()=>"continuous but not differentiable",ok:true},{h:()=>"differentiable",ok:false},{h:()=>"discontinuous",ok:false},{h:()=>"undefined",ok:false}],
+   fb:"Values: \\(1\\) and \\(1\\) — continuous. Slopes: \\(2\\) and \\(3\\) — disagree. A corner." },
+ { q:()=>'&ldquo;Locally straight&rdquo; (looks like a line when you zoom in) is another name for &hellip;',
+   opts:[{h:()=>"differentiable at that point",ok:true},{h:()=>"continuous at that point",ok:false},{h:()=>"having a maximum",ok:false},{h:()=>"being linear everywhere",ok:false}],
+   fb:"Differentiability = local linearity. Zoom into a smooth point and the curve becomes its tangent line." }
+];
+let qi=0,qScore=0,qDone=0,qAnswered=false;
+const qOpts=document.getElementById("qOpts"), qFb=document.getElementById("qFb"), qNext=document.getElementById("qNext");
+function renderQuiz(){
+  qAnswered=false; const item=QUIZ[qi];
+  document.getElementById("qText").innerHTML=mathify(item.q());
+  document.getElementById("qProgress").textContent="Question "+(qi+1)+" of "+QUIZ.length;
+  document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+  qFb.innerHTML=""; qNext.style.display="none";
+  qNext.textContent = qi<QUIZ.length-1 ? "Next question →" : "Restart quiz ↺";
+  qOpts.innerHTML="";
+  const sopts=shuf(item.opts);
+  sopts.forEach((o)=>{ const b=document.createElement("button"); b.innerHTML=mathify(o.h());
+    b.onclick=()=>{ if(qAnswered)return; qAnswered=true; qDone++;
+      [...qOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(sopts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ qScore++; b.classList.add("correct"); qFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ Correct.</span> <span style="color:var(--muted)">'+mathify(item.fb)+'</span>'; }
+      else { b.classList.add("wrong"); qFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not quite.</span> <span style="color:var(--muted)">'+mathify(item.fb)+'</span>'; }
+      document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+      qNext.style.display="block"; };
+    qOpts.appendChild(b); });
+}
+qNext.onclick=()=>{ if(qi<QUIZ.length-1){ qi++; } else { qi=0; qScore=0; qDone=0; } renderQuiz(); };
+
+/* ===================== init ===================== */
+function refreshAll(){ renderHook(); renderImpl(); renderFail(); renderZoom(); renderSeam(); renderRead(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic(); }
+renderHook(); renderImpl(); renderFail(); renderZoom(); renderSeam(); renderRead(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic();
+if(!window.katex){ let n=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); refreshAll(); } else if(++n>40) clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.animationDelay=Math.min(i*30,440)+'ms'; });
+
+</script>
+</body>
+</html>

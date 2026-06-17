@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Unit 2 Cheat Sheet — every formula + when to use it · Differentiation</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23101420%27%2F%3E%3Cg%20fill%3D%27%238dcc4e%27%3E%3Crect%20x%3D%276%27%20y%3D%2718%27%20width%3D%274.6%27%20height%3D%278%27%20rx%3D%271%27%20opacity%3D%27.55%27%2F%3E%3Crect%20x%3D%2712%27%20y%3D%2714%27%20width%3D%274.6%27%20height%3D%2712%27%20rx%3D%271%27%20opacity%3D%27.75%27%2F%3E%3Crect%20x%3D%2718%27%20y%3D%2710%27%20width%3D%274.6%27%20height%3D%2716%27%20rx%3D%271%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M5%2017%20C%2012%2010%2C%2020%206%2C%2027%207%27%20stroke%3D%27%238fa6f7%27%20stroke-width%3D%272%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<script>
+/* fallback for previewing without helpers.js — the repo's helpers.js takes precedence when present */
+if(typeof tex==="undefined"){
+  window.tex=function(latex,fallback,display){
+    if(window.katex){ try{ return katex.renderToString(latex,{displayMode:!!display,throwOnError:false}); }catch(e){} }
+    return '<span class="tex-fallback">'+(fallback||latex)+'</span>';
+  };
+}
+</script>
+<style>
+  /* alias accent vars to Unit 2 lime so the shared cheat-sheet styling carries over */
+  :root{ --emerald:#8dcc4e; --emerald-glow:#b2db88; --approx:#8dcc4e; --amber:#e8a13c; --rose:#e0644f; --violet:#a892f0; --wrap-max:1100px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:10px;max-width:700px;line-height:1.6}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 8px}
+  .tool-btn{font-family:var(--mono);font-size:12.5px;background:var(--panel-2);color:var(--ink);border:1px solid var(--line-2);border-radius:9px;padding:9px 15px;cursor:pointer;text-decoration:none;transition:border-color .2s,color .2s}
+  .tool-btn:hover{border-color:var(--emerald);color:var(--emerald-glow)}
+
+  .sheet{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;margin-top:8px}
+  .col{display:flex;flex-direction:column;gap:16px;min-width:0}
+  @media(max-width:760px){.sheet{grid-template-columns:1fr}}
+  .block{background:linear-gradient(160deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:18px 20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .block.span2{grid-column:1 / -1}
+  .block h3{font-family:var(--display);font-weight:600;font-size:17px;color:var(--ink);margin:0 0 3px;display:flex;align-items:baseline;gap:10px}
+  .block h3 a{color:inherit;text-decoration:none;border-bottom:1px dashed var(--line-2);transition:border-color .2s,color .2s}
+  .block h3 a:hover{color:var(--emerald-glow);border-color:var(--emerald)}
+  .block .tno{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--emerald);font-weight:400}
+  .block .blurb{font-size:12.5px;color:var(--muted);margin:0 0 12px;line-height:1.5}
+
+  .f{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:11px 13px;margin:8px 0;overflow-x:auto;overflow-y:hidden}
+  .f .katex{color:var(--ink);font-size:1.02em}
+  .f .flab{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+
+  .mini{font-size:12.5px;color:var(--muted);line-height:1.55;margin:8px 0 0}
+  .mini b{color:var(--ink)} .mini .am{color:var(--amber)} .mini .ro{color:var(--rose)} .mini .cy{color:var(--emerald-glow)}
+
+  .decide{background:rgba(222,83,96,.06);border:1px solid rgba(222,83,96,.25);border-radius:10px;padding:12px 14px;margin-top:12px}
+  .decide .dh{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--emerald);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+  .decide .dh::before{content:"\25C6";font-size:9px}
+  .branch{display:flex;gap:10px;font-size:12.5px;color:var(--ink);padding:5px 0;align-items:flex-start;line-height:1.45}
+  .branch .cond{font-family:var(--mono);color:var(--emerald-glow);flex-shrink:0;min-width:104px}
+  .branch .res{color:var(--muted)}
+
+  .traps{background:rgba(224,100,79,.06);border-left:2px solid var(--rose);border-radius:0 9px 9px 0;padding:10px 14px;margin-top:12px}
+  .traps .th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+  .traps ul{margin:0;padding-left:16px} .traps li{font-size:12.5px;color:var(--muted);line-height:1.55;margin:3px 0} .traps li b{color:var(--ink)}
+
+  /* model / phrase gallery */
+  .gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  @media(max-width:420px){.gallery{grid-template-columns:1fr}}
+  .gcard{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 11px}
+  .gcard .gname{font-family:var(--mono);font-size:10.5px;color:var(--emerald-glow);margin-bottom:3px}
+  .gcard .geq{font-size:12px;color:var(--ink)} .gcard .gnote{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+  @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .55s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}}
+  footer{color:var(--muted);font-size:12px;margin-top:46px;border-top:1px solid var(--line);padding-top:14px} footer a{color:var(--emerald);text-decoration:none}
+
+  .closer{margin-top:18px;background:linear-gradient(110deg, rgba(222,83,96,.12), var(--panel-2) 60%, var(--panel));border:1px solid rgba(222,83,96,.3);border-radius:16px;padding:26px 28px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}
+  .closer-line{display:flex;gap:18px;align-items:flex-start}
+  .big-idea-mark{font-family:var(--display);font-size:42px;line-height:.95;color:var(--emerald);flex-shrink:0;opacity:.85}
+  .closer-line p{font-size:15px;color:var(--ink);line-height:1.65;margin:2px 0 0} .closer-line p b{color:var(--emerald-glow)}
+  .closer-jump{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+  .jump-primary{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:13.5px;font-weight:600;color:#2a0a0c;background:var(--emerald);border-radius:10px;padding:11px 18px;text-decoration:none;box-shadow:0 8px 20px -10px var(--emerald);transition:transform .2s,box-shadow .2s}
+  .jump-primary:hover{transform:translateY(-2px);box-shadow:0 12px 26px -10px var(--emerald)} .jump-primary span{transition:transform .2s} .jump-primary:hover span{transform:translateX(4px)}
+  .jump-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .jump-row a{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line-2);border-radius:30px;padding:6px 13px;text-decoration:none;transition:border-color .2s,color .2s}
+  .jump-row a:hover{border-color:var(--emerald);color:var(--emerald-glow)}
+  @media(max-width:560px){.closer-line{flex-direction:column;gap:8px}.big-idea-mark{font-size:34px}}
+
+  @media print{
+    @page{margin:1.2cm}
+    body{background:#fff!important;color:#111!important}
+    .backlink,.toolbar,.sub,.scroll-cue,footer a,.closer-jump{display:none!important}
+    .block{background:#fff!important;border:1px solid #bbb!important;box-shadow:none!important;break-inside:avoid}
+    .f,.gcard{background:#f7f7f5!important;border-color:#ccc!important}
+    .f .katex{color:#111!important}
+    .decide{background:#fdeeef!important;border-color:#e3a6ab}
+    .traps{background:#fdf2f0!important}
+    .closer{background:#fdeeef!important;border-color:#e3a6ab!important}
+    .closer-line p,.big-idea-mark{color:#111!important}.big-idea-mark{color:#b23440!important}
+    h1,.block h3,.block .blurb,.mini,.branch,.traps li,.gcard .geq,.gcard .gnote{color:#111!important}
+    .tno,.decide .dh,.branch .cond,.gcard .gname{color:#b23440!important}
+    .sheet{gap:10px}.col{gap:10px}
+    .reveal{animation:none;opacity:1}
+  }
+
+  .block.accent{border-color:var(--approx);box-shadow:0 0 30px rgba(141,204,78,.08)}
+  .block.accent h3{color:var(--approx)}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit2.html">← Unit 2</a>
+  <header class="reveal">
+    <h1>Unit 2 <span class="em">Cheat Sheet</span></h1>
+    <div class="sub">Differentiation — every formula, every decision rule, and every trap from the five lessons, on one printable page. Each block title links back to its lesson.</div>
+    <div class="toolbar">
+      <button class="tool-btn" onclick="window.print()">⎙ Print / save as PDF</button>
+      <a class="tool-btn" href="unit2-exam-practice.html">→ Test yourself</a>
+    </div>
+  </header>
+
+  <div class="sheet">
+    <div class="col">
+
+      <div class="block reveal">
+        <h3><a href="the-derivative-defined.html">The Derivative Defined</a> <span class="tno">2.1 – 2.3</span></h3>
+        <p class="blurb">The derivative is the <i>instantaneous</i> rate of change &mdash; the slope of the tangent line, defined as a limit of secant slopes.</p>
+        <div class="f"><div class="flab">limit definition</div><div id="f_def"></div></div>
+        <div class="f"><div class="flab">alternate form (at a point)</div><div id="f_alt"></div></div>
+        <div class="f"><div class="flab">estimate from a table</div><div id="f_est"></div></div>
+        <div class="decide"><div class="dh">Reading a limit as a derivative</div>
+          <div class="branch"><span class="cond">\(\lim_{h\to0}\frac{f(a+h)-f(a)}{h}\)</span><span class="res">\(f'(a)\) &mdash; the added value is \(a\)</span></div>
+          <div class="branch"><span class="cond">\(\lim_{x\to a}\frac{f(x)-f(a)}{x-a}\)</span><span class="res">\(f'(a)\) &mdash; alternate form</span></div>
+          <div class="branch"><span class="cond">\(\tfrac00\) at a point</span><span class="res">a derivative in disguise &mdash; factor & cancel</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li><b>Slope, not value.</b> \(f'(a)\) is a rate; \(f(a)\) is a height. The standalone constant in the limit is \(f(a)\), the added term is \(a\).</li>
+          <li><b>Divide by the run.</b> A table estimate is \(\frac{\Delta f}{\Delta x}\) &mdash; never just \(\Delta f\).</li>
+        </ul></div>
+      </div>
+
+      <div class="block reveal">
+        <h3><a href="differentiability.html">Differentiability &amp; Continuity</a> <span class="tno">2.4</span></h3>
+        <p class="blurb">Differentiable means &ldquo;locally straight.&rdquo; It forces continuity &mdash; but continuity does not force differentiability.</p>
+        <div class="f"><div class="flab">the one-way implication</div><div id="f_imp"></div></div>
+        <div class="f"><div class="flab">piecewise: differentiable at a seam</div><div id="f_seam"></div></div>
+        <div class="decide"><div class="dh">The four ways a derivative dies</div>
+          <div class="branch"><span class="cond">corner (e.g. \(|x|\))</span><span class="res">one-sided slopes differ &mdash; finite mismatch</span></div>
+          <div class="branch"><span class="cond">cusp (e.g. \(x^{2/3}\))</span><span class="res">slopes run to \(\pm\infty\)</span></div>
+          <div class="branch"><span class="cond">vertical tangent (e.g. \(\sqrt[3]{x}\))</span><span class="res">slope infinite</span></div>
+          <div class="branch"><span class="cond">discontinuity (jump/hole)</span><span class="res">not even continuous &mdash; auto-fail</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li><b>Piecewise needs TWO tests.</b> Continuous (pieces meet) <i>and</i> smooth (one-sided slopes match). Continuity alone isn't enough.</li>
+          <li><b>Corner = continuous.</b> A corner breaks differentiability, not continuity. Only a jump/hole breaks continuity.</li>
+        </ul></div>
+      </div>
+
+      <div class="block reveal">
+        <h3><a href="power-and-basic-rules.html">Power Rule, Tangents &amp; Normals</a> <span class="tno">2.5 – 2.6</span></h3>
+        <p class="blurb">One rule for every power, plus linearity for term-by-term differentiation &mdash; then the payoffs: tangent lines, horizontal tangents, normals.</p>
+        <div class="f"><div class="flab">power rule (any real \(n\))</div><div id="f_pow"></div></div>
+        <div class="f"><div class="flab">constant, multiple, sum</div><div id="f_lin"></div></div>
+        <div class="f"><div class="flab">tangent line at \(x=a\)</div><div id="f_tan"></div></div>
+        <div class="f"><div class="flab">normal line (perpendicular)</div><div id="f_norm"></div></div>
+        <div class="decide"><div class="dh">Tangent-line tasks</div>
+          <div class="branch"><span class="cond">&ldquo;horizontal tangent&rdquo;</span><span class="res">solve \(f'(x)=0\)</span></div>
+          <div class="branch"><span class="cond">&ldquo;tangent at \(x=a\)&rdquo;</span><span class="res">point \(f(a)\) + slope \(f'(a)\), point-slope</span></div>
+          <div class="branch"><span class="cond">&ldquo;normal line&rdquo;</span><span class="res">slope \(=-1/f'(a)\)</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li><b>Rewrite first.</b> Roots and reciprocals become exponents: \(\sqrt{x}=x^{1/2}\), \(\frac1{x^n}=x^{-n}\). Watch the sign on negative exponents.</li>
+          <li><b>Not on \(2^x\).</b> The power rule is for variable <i>base</i>, constant exponent &mdash; never when the variable is the exponent.</li>
+          <li><b>Horizontal tangent: \(f'=0\), not \(f=0\).</b></li>
+        </ul></div>
+      </div>
+
+    </div>
+    <div class="col">
+
+      <div class="block reveal">
+        <h3><a href="derivatives-of-functions.html">Key-Function Derivatives</a> <span class="tno">2.7, 2.10</span></h3>
+        <p class="blurb">The eight you memorize &mdash; but they're full of pattern: the sin/cos cycle, \(e^x\) unchanged, and the co-functions' minus signs.</p>
+        <div class="f"><div class="flab">trig (the core two)</div><div id="f_sc"></div></div>
+        <div class="f"><div class="flab">exponential &amp; log</div><div id="f_el"></div></div>
+        <div class="f"><div class="flab">the other four trig</div><div id="f_trig4"></div></div>
+        <div class="decide"><div class="dh">The sin/cos cycle (period 4)</div>
+          <div class="branch"><span class="cond">\(\sin\to\cos\to-\sin\to-\cos\to\sin\)</span><span class="res">reduce the order mod 4</span></div>
+          <div class="branch"><span class="cond">&ldquo;co-&rdquo; functions (cos, cot, csc)</span><span class="res">derivatives carry a minus sign</span></div>
+          <div class="branch"><span class="cond">tan/cot</span><span class="res">give squares (\(\sec^2,-\csc^2\))</span></div>
+          <div class="branch"><span class="cond">sec/csc</span><span class="res">give products (\(\sec\tan,-\csc\cot\))</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li><b>\(\cos\) gets the minus.</b> \(\frac{d}{dx}\cos x=-\sin x\). The single most common sign slip.</li>
+          <li><b>\(\frac{d}{dx}\ln x=\frac1x\)</b>, not \(\ln x\) or \(x\). And \(e^x\) stays \(e^x\) &mdash; never \(xe^{x-1}\).</li>
+        </ul></div>
+      </div>
+
+      <div class="block reveal">
+        <h3><a href="product-and-quotient.html">Product &amp; Quotient Rules</a> <span class="tno">2.8 – 2.9</span></h3>
+        <p class="blurb">For products and quotients, you can't differentiate the pieces separately &mdash; both factors change at once.</p>
+        <div class="f"><div class="flab">product rule</div><div id="f_prod"></div></div>
+        <div class="f"><div class="flab">quotient rule</div><div id="f_quot"></div></div>
+        <div class="decide"><div class="dh">Which approach?</div>
+          <div class="branch"><span class="cond">polynomial \(\times\) polynomial</span><span class="res">expand first, then power rule</span></div>
+          <div class="branch"><span class="cond">non-polynomial factor (trig/exp/log)</span><span class="res">product rule</span></div>
+          <div class="branch"><span class="cond">quotient that simplifies</span><span class="res">cancel first (e.g. \(\frac{x^2}{x}=x\))</span></div>
+          <div class="branch"><span class="cond">quotient that doesn't</span><span class="res">quotient rule, \(v\ne0\)</span></div>
+        </div>
+        <div class="traps"><div class="th">trap</div><ul>
+          <li><b>\((uv)'\ne u'v'\).</b> The product rule is \(u'v+uv'\) &mdash; the number-one error in the unit.</li>
+          <li><b>Quotient order matters.</b> &ldquo;Low d-high minus high d-low, over low squared&rdquo;: \(\frac{u'v-uv'}{v^2}\). Reversing flips the sign.</li>
+          <li><b>Square the denominator.</b> It's \(v^2\), not \(v\).</li>
+        </ul></div>
+      </div>
+
+      <div class="block reveal accent">
+        <h3>The Eight Derivatives <span class="tno">memorize</span></h3>
+        <p class="blurb">Your core toolkit. Every harder derivative is built from these by the power, product, quotient, and (Unit 3) chain rules.</p>
+        <div class="f"><div class="flab">power</div><div id="r_pow"></div></div>
+        <div class="f"><div class="flab">sine / cosine</div><div id="r_sc"></div></div>
+        <div class="f"><div class="flab">exponential / log</div><div id="r_el"></div></div>
+        <div class="f"><div class="flab">tangent / cotangent</div><div id="r_tc"></div></div>
+        <div class="f"><div class="flab">secant / cosecant</div><div id="r_seccsc"></div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="closer reveal">
+    <div class="closer-line">
+      <div class="big-idea-mark">&there4;</div>
+      <p>Every formula on this page is the <b>same idea</b> wearing different clothes: the derivative is the instantaneous rate of change &mdash; the slope of the tangent &mdash; defined as the limit of secant slopes. Unit 2 is the trade you make once and keep forever: you stop computing that limit by hand for every function and start reaching for <b>rules</b> instead. Power, sine/cosine, \(e^x\) and \(\ln x\), product, quotient &mdash; each one is a shortcut that the limit definition already proves. Master differentiability (when a derivative even exists) and these eight derivatives, and the rest of calculus is just <b>combining</b> them.</p>
+    </div>
+    <div class="closer-jump">
+      <a class="jump-primary" href="unit2-exam-practice.html">Test yourself on Unit 2 <span>&rarr;</span></a>
+      <div class="jump-row">
+        <a href="the-derivative-defined.html">The Derivative Defined</a>
+        <a href="differentiability.html">Differentiability</a>
+        <a href="power-and-basic-rules.html">Power &amp; Basic Rules</a>
+        <a href="derivatives-of-functions.html">Key-Function Derivatives</a>
+        <a href="product-and-quotient.html">Product &amp; Quotient</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="reveal">Unit 2 Cheat Sheet · Differentiation — the limit definition of the derivative, differentiability vs. continuity, the power &amp; basic rules, derivatives of the key functions, and the product &amp; quotient rules · <a href="unit2.html">back to the unit</a> · print to PDF for a one-page reference.</footer>
+</div>
+
+<script>
+function mathifySheet(){
+  if(!window.katex)return;            // don't mark nodes done before KaTeX has loaded
+  document.querySelectorAll('.cond,.res,.blurb,.traps li,.sub,.dh,.flab,.closer p').forEach(n=>{
+    if(n.dataset.mz||n.innerHTML.indexOf('\\(')<0)return;
+    n.innerHTML=n.innerHTML.replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return katex.renderToString(t,{throwOnError:false});}catch(e){return m;}});
+    n.dataset.mz="1";});
+}
+function renderSheet(){
+  const R=String.raw;
+  const put=(id,tex_,fb)=>{const e=document.getElementById(id);if(e)e.innerHTML=tex(tex_,fb||tex_,true);};
+  // The Derivative Defined
+  put('f_def', R`f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h}`, "f'(a)=lim (f(a+h)−f(a))/h");
+  put('f_alt', R`f'(a)=\lim_{x\to a}\frac{f(x)-f(a)}{x-a}`, "f'(a)=lim (f(x)−f(a))/(x−a)");
+  put('f_est', R`f'(a)\approx\frac{f(a+h)-f(a)}{h}`, "f'(a) ≈ Δf/Δx");
+  // Differentiability
+  put('f_imp', R`\text{differentiable}\;\Rightarrow\;\text{continuous}\quad(\text{not the reverse})`, "differentiable ⇒ continuous (one-way)");
+  put('f_seam', R`\lim_{x\to a^-}f=\lim_{x\to a^+}f\ \text{and}\ f'_-(a)=f'_+(a)`, "values match AND one-sided slopes match");
+  // Power rule & basics
+  put('f_pow', R`\frac{d}{dx}x^n=n\,x^{n-1}`, "d/dx xⁿ = n xⁿ⁻¹");
+  put('f_lin', R`\tfrac{d}{dx}c=0,\quad (cf)'=cf',\quad (f\pm g)'=f'\pm g'`, "const→0, constants factor, sums split");
+  put('f_tan', R`y=f(a)+f'(a)(x-a)`, "y = f(a) + f'(a)(x−a)");
+  put('f_norm', R`m_{\text{normal}}=-\frac{1}{f'(a)}`, "normal slope = −1/f'(a)");
+  // Key functions
+  put('f_sc', R`\tfrac{d}{dx}\sin x=\cos x,\quad \tfrac{d}{dx}\cos x=-\sin x`, "sin→cos, cos→−sin");
+  put('f_el', R`\tfrac{d}{dx}e^x=e^x,\quad \tfrac{d}{dx}\ln x=\tfrac1x`, "eˣ→eˣ, ln x→1/x");
+  put('f_trig4', R`\tfrac{d}{dx}\tan x=\sec^2x,\ \ \tfrac{d}{dx}\sec x=\sec x\tan x`, "tan→sec²x, sec→sec x tan x");
+  // Product & quotient
+  put('f_prod', R`(uv)'=u'v+uv'`, "(uv)' = u'v + uv'");
+  put('f_quot', R`\left(\frac{u}{v}\right)'=\frac{u'v-uv'}{v^2}`, "(u/v)' = (u'v − uv')/v²");
+  // The Eight Derivatives reference
+  put('r_pow', R`\frac{d}{dx}x^n=nx^{n-1}`, "xⁿ → n xⁿ⁻¹");
+  put('r_sc', R`\sin x\to\cos x,\qquad \cos x\to-\sin x`, "sin→cos, cos→−sin");
+  put('r_el', R`e^x\to e^x,\qquad \ln x\to\tfrac1x`, "eˣ→eˣ, ln x→1/x");
+  put('r_tc', R`\tan x\to\sec^2x,\qquad \cot x\to-\csc^2x`, "tan→sec²x, cot→−csc²x");
+  put('r_seccsc', R`\sec x\to\sec x\tan x,\qquad \csc x\to-\csc x\cot x`, "sec→sec tan, csc→−csc cot");
+}
+renderSheet();
+mathifySheet();
+if(!window.katex){let n=0;const t=setInterval(()=>{if(window.katex){clearInterval(t);renderSheet();mathifySheet();}else if(++n>40)clearInterval(t);},150);}
+document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.animationDelay=Math.min(i*40,400)+'ms';});
+</script>
+</body>
+</html>

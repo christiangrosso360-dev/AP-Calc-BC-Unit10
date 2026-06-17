@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Derivative Defined — Average to Instantaneous · Unit 2</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%231c0f18%27%2F%3E%3Cpath%20d%3D%27M5%2024%20C%2011%2022%2C%2017%2016%2C%2026%208%27%20stroke%3D%27%238dcc4e%27%20stroke-width%3D%272.4%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3Ccircle%20cx%3D%2719%27%20cy%3D%2713.8%27%20r%3D%272.6%27%20fill%3D%27%231c0f18%27%20stroke%3D%27%23f3a1cf%27%20stroke-width%3D%272%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<script>
+/* fallback for previewing without helpers.js — the repo's helpers.js takes precedence when present */
+if(typeof tex==="undefined"){
+  window.tex=function(latex,fallback,display){
+    if(window.katex){ try{ return katex.renderToString(latex,{displayMode:!!display,throwOnError:false}); }catch(e){} }
+    return '<span class="tex-fallback">'+(fallback||latex)+'</span>';
+  };
+}
+</script>
+<style>
+  :root{ --approx:#8dcc4e; --gold:#ffd27a; --true:#8dcc4e;
+         --glow:rgba(141,204,78,.10); --wrap-max:1060px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:640px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:700px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-top:18px;max-width:780px}
+  .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px 20px;
+    box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7)}
+  .grid{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start;margin-top:14px}
+  .left{flex:1 1 560px;min-width:300px}
+  .right{flex:1 1 270px;min-width:240px}
+  svg{width:100%;display:block;border-radius:10px}
+  .label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .series-btns{display:flex;flex-direction:column;gap:8px}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);
+    background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:13.5px;text-align:left;
+    transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--gold);transform:translateY(-1px)}
+  button:active{transform:translateY(0) scale(.99)}
+  button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  button.on .katex,button.on .sb-name{color:#16140f}
+  button:disabled{opacity:.4;cursor:default;transform:none}
+  button:disabled:hover{border-color:var(--line);transform:none}
+  .sb-name{font-weight:600;font-size:13.5px}
+  .sb-sub{font-size:11px;color:var(--muted);font-family:var(--mono);margin-top:2px}
+  button.on .sb-sub{color:#6b6457}
+  .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+  .play{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;
+    box-shadow:0 8px 18px -10px var(--approx)}
+  .play:hover{filter:brightness(1.06)}
+  .readout{font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .callout{margin-top:12px;font-size:13.5px;min-height:20px;color:var(--ink);
+    border-left:3px solid var(--gold);padding-left:12px;opacity:0;transition:opacity .3s}
+  .callout.show{opacity:1}
+  .whypanel .why-title{font-family:var(--display);font-weight:600;font-size:16px;margin-bottom:4px}
+  .why-step{display:flex;gap:11px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .why-step:last-child{border-bottom:none}
+  .why-n{flex:none;width:22px;height:22px;border-radius:50%;background:var(--bg);color:var(--muted);
+    font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:2px}
+  .why-t{font-size:13px;line-height:1.5}
+  .why-m{margin-top:6px;background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:7px 10px;overflow-x:auto}
+  .stat{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+  .stat:last-child{border-bottom:none}
+  .stat .k{color:var(--muted)}
+  .stat .v{font-family:var(--mono);color:var(--ink)}
+  .sumline{margin-top:12px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 14px;overflow-x:auto;min-height:46px;font-size:14px}
+  .anatomy{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:20px;max-width:820px}
+  .anatomy .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .m-big{text-align:center;padding:8px 0 14px;overflow-x:auto}
+  .maprow{display:flex;gap:14px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+  .maprow:last-child{border-bottom:none}
+  .maprow .ph{color:var(--ink);flex:1 1 auto;line-height:1.45}
+  .maprow .sy{font-family:var(--mono);color:var(--muted);flex:none}
+  .concepts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  @media(max-width:680px){.concepts{grid-template-columns:1fr}}
+  .concept{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    transition:transform .2s,box-shadow .2s}
+  .concept:hover{transform:translateY(-3px);box-shadow:0 16px 30px -20px rgba(43,41,37,.45)}
+  .concept h3{font-family:var(--display);font-size:16px;margin:0 0 6px}
+  .concept p{font-size:13.5px;margin:6px 0;color:var(--ink)}
+  .concept .m{background:var(--panel-2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;text-align:center;overflow-x:auto}
+  .key{color:var(--approx);font-weight:600}
+  .whatsnext{max-width:700px;margin-top:18px;font-size:14px;color:var(--muted);
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+  .whatsnext a{color:var(--approx);text-decoration:none;font-weight:600}
+  .whatsnext a:hover{text-decoration:underline}
+  footer{color:var(--muted);font-size:12px;margin-top:44px;border-top:1px solid var(--line);padding-top:14px}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .tex-fallback{font-family:var(--mono);font-size:13px}
+  button:focus-visible, a:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:8px}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  .prob{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:14px}
+  .prob-tag{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--approx);font-weight:600}
+  .prob-q{font-size:14.5px;line-height:1.65;margin:6px 0 12px}
+  .soltoggle{font-size:13px;padding:7px 14px}
+  .sol{display:none;margin-top:12px;border-top:1px solid var(--line);padding-top:6px}
+  .sol.show{display:block}
+  .mistakes{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+  @media(max-width:680px){.mistakes{grid-template-columns:1fr}}
+  .mistake{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--div);border-radius:10px;padding:13px 16px}
+  .mistake h4{margin:0 0 4px;font-size:14px;font-family:var(--display)}
+  .mistake p{margin:0;font-size:13px;color:var(--muted);line-height:1.55}
+  .tipbox{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:10px;padding:14px 18px;max-width:780px}
+  .tipbox h4{margin:0 0 8px;font-size:14px;font-family:var(--display);color:var(--approx)}
+  .tipbox ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.7;color:var(--ink)}
+  .tipbox li{margin:5px 0}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .qtag{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .qtext{font-size:15px;font-weight:600;margin-bottom:12px;line-height:1.5}
+  .quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  @media(max-width:520px){.quiz-opts{grid-template-columns:1fr}}
+  .quiz-opts button{font-size:14px;padding:11px 14px}
+  .quiz-opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv)}
+  .quiz-opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .quiz-opts button:disabled{cursor:default;opacity:.92}
+  .quiz-opts button:disabled:hover{transform:none;border-color:var(--line)}
+  .quiz-opts button.correct:disabled:hover{border-color:var(--conv)}
+  .quiz-opts button.wrong:disabled:hover{border-color:var(--div)}
+  .feedback{margin-top:14px;font-size:14px;min-height:24px;line-height:1.5}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .next{background:var(--approx);color:#fff;border-color:var(--approx);font-weight:600;text-align:center;box-shadow:0 8px 18px -10px var(--approx)}
+  .next:hover{filter:brightness(1.06);border-color:var(--approx)}
+  .bc-badge{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:#0d1330;
+    background:var(--approx);border-radius:14px;padding:3px 11px;font-weight:600;vertical-align:middle;margin-left:10px}
+  /* tabular method table */
+  .ttab{border-collapse:collapse;margin:6px auto;font-size:15px}
+  .ttab th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--muted);font-weight:500;
+    padding:6px 18px;border-bottom:1px solid var(--line)}
+  .ttab td{padding:9px 18px;text-align:center;font-size:15.5px}
+  .ttab td.sg{color:var(--approx);font-family:var(--mono);font-weight:600;font-size:14px}
+  .ttab td.ar{color:var(--true);font-family:var(--mono);font-size:15px;padding:0 4px}
+  .ttab tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+
+  .looking{font-size:12px;color:var(--muted);font-style:italic;margin-top:8px;line-height:1.5}
+  .looking b{color:var(--ink);font-style:normal}
+  .reader{margin-top:10px;background:var(--panel-2);border:1px solid var(--line);border-left:3px solid var(--gold);
+    border-radius:8px;padding:9px 12px;font-size:13px;color:var(--muted)}
+  .reader b{color:var(--ink)}
+  .vtable{border-collapse:collapse;margin:8px auto 0;font-family:var(--mono);font-size:13px}
+  .vtable th{font-size:10.5px;letter-spacing:.06em;color:var(--muted);font-weight:500;padding:4px 16px;border-bottom:1px solid var(--line)}
+  .vtable td{padding:5px 16px;text-align:center;color:var(--ink)}
+  .vtable tr.fresh td{animation:riseIn .4s cubic-bezier(.2,.7,.2,1)}
+  .vtable td.hot{color:var(--approx);font-weight:600}
+
+  /* data table for the estimate-from-a-table interactive */
+  .dtable{border-collapse:collapse;width:100%;margin-top:6px;font-family:var(--mono);font-size:14px}
+  .dtable th,.dtable td{border:1px solid var(--line);padding:9px 6px;text-align:center;min-width:38px}
+  .dtable th:first-child,.dtable td:first-child{text-align:left;color:var(--muted);font-weight:600;background:rgba(255,255,255,.02)}
+  .dtable thead th{color:var(--muted)}
+  .dtable .sel{background:rgba(141,204,78,.16);color:var(--gold);font-weight:700;border-color:var(--gold)}
+  .picker{font-family:var(--mono);font-size:14px;background:var(--panel);color:var(--ink);
+    border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+  .picker:focus{outline:none;border-color:var(--gold)}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit2.html">← Unit 2 Guide</a>
+  <header class="reveal">
+    <h1>The <span class="em">Derivative</span> Defined</h1>
+    <div class="sub">From average speed to the speed at a single instant. This lesson builds the
+      derivative the way it was actually invented — as the limit of a slope — and gives you the one
+      formula the entire rest of calculus rests on. The only thing assumed is what you learned about
+      limits in Unit&nbsp;1.</div>
+  </header>
+
+  <div class="big-idea reveal"> A <b>derivative</b> measures how fast a function is changing <i>at a single instant</i>. You already know how to find the <b>average</b> rate of change between two points &mdash; that&rsquo;s just the slope of the line connecting them. The derivative is what that average becomes when you shrink the gap to nothing: the slope at one exact point, the <b>instantaneous rate of change</b>. The trick that makes &ldquo;at one point&rdquo; mean something is a <b>limit</b> &mdash; which is why we needed Unit&nbsp;1 first. </div>
+
+  <h2 class="reveal">Average speed is just a slope</h2>
+  <p class="lead reveal">Drop a ball and ask &ldquo;how fast was it going?&rdquo; Between two instants, the answer is easy:
+    total distance over total time. On a graph of position, that&rsquo;s exactly the <b>slope of the line connecting
+    the two points</b> &mdash; the <b>secant line</b>. This is the <b>average rate of change</b>, and you already know it.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="avgPlot" viewBox="0 0 560 320" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <span class="label">left point a</span>
+          <input type="range" id="avgA" min="0.3" max="2.6" step="0.05" value="1">
+          <span class="label">right point b</span>
+          <input type="range" id="avgB" min="2.8" max="5.2" step="0.05" value="4">
+        </div>
+        <p class="looking"><b>What you're looking at:</b> the curve is \(f(x)=x^2\). The line through the two dots
+          is the secant; its slope is the average rate of change of \(f\) between \(a\) and \(b\).</p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Average rate of change</div>
+        <div class="bigeq" id="avgEq"></div>
+        <div class="stat"><span class="k">over the interval</span><span class="v" id="avgInt">[1, 4]</span></div>
+        <div class="stat"><span class="k">rise &divide; run</span><span class="v" id="avgSlope">5</span></div>
+        <p class="note">This is the slope of the <b>secant line</b>. It's an <i>average</i> &mdash; it smooths over
+          everything that happens between the two points.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Now shrink the gap to an instant</h2>
+  <p class="lead reveal">Average speed over two seconds isn't the speed <i>right now</i>. To get the rate at a single
+    instant, slide the second point toward the first and watch the secant pivot. As the gap closes, the secant
+    settles onto one specific line &mdash; the <b>tangent</b> &mdash; and its slope settles on one number. That
+    limiting slope is the <b>instantaneous rate of change</b>.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <svg id="instPlot" viewBox="0 0 560 320" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="controls">
+          <span class="label">gap&nbsp;&nbsp;h</span>
+          <input type="range" id="instH" min="0.02" max="2" step="0.02" value="1.5">
+          <button class="play" id="instPlay">▶ shrink h &rarr; 0</button>
+        </div>
+        <p class="looking"><b>What you're looking at:</b> the fixed point sits at \(x=1\). The second point is a
+          distance \(h\) away. As you push \(h\) toward \(0\), the secant pivots into the tangent at \(x=1\).</p>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Secant slope as h shrinks</div>
+        <div class="convbox" id="instBox"></div>
+        <div class="stat" style="margin-top:8px"><span class="k">slope is heading toward</span><span class="v" id="instLimit" style="color:var(--gold)">2</span></div>
+        <p class="note">The secant slope never <i>reaches</i> a fixed value by arithmetic alone &mdash; but it's
+          clearly <b>heading toward 2</b>. That limit is the slope of the tangent, and the speed at the instant \(x=1\).</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The definition, written down</h2>
+  <p class="lead reveal">Let's make &ldquo;the limit of the secant slope&rdquo; precise. The secant runs from \(x=a\) to a
+    point a distance \(h\) away, so its slope is \(\frac{f(a+h)-f(a)}{h}\). The <b>derivative</b> is what that
+    slope approaches as \(h\to 0\). That's the whole definition:</p>
+
+  <div class="card reveal" style="max-width:780px">
+    <div class="bigeq" id="defEq"></div>
+    <p class="note" style="margin-top:6px">When this limit exists, we call its value \(f'(a)\) &mdash; &ldquo;f prime of a&rdquo; &mdash;
+      the derivative of \(f\) at \(a\). It is a <b>number</b>: the slope of the tangent line at that point.</p>
+  </div>
+
+  <p class="lead reveal" style="margin-top:18px">Here it is in action &mdash; no shortcut rules, just the definition and the Unit&nbsp;1 algebra for
+    killing a <span class="mono">0/0</span>. Step through finding the derivative of \(f(x)=x^2\):</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="sumline" id="wkLine"></div>
+        <div class="controls">
+          <button class="play" id="wkStep">step &rarr;</button>
+          <button id="wkReset">↺ reset</button>
+          <div style="flex:1"></div>
+          <span class="readout" id="wkRead">press step</span>
+        </div>
+      </div>
+      <div class="card whypanel" style="margin-top:14px">
+        <div class="why-title">The work, line by line</div>
+        <div id="wkWork"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Why no &ldquo;plug in h = 0&rdquo;?</div>
+        <p class="note">Setting \(h=0\) at the start gives \(\frac{0}{0}\) &mdash; undefined. So we do the algebra
+          <i>first</i>: expand, simplify, and cancel the \(h\) in the denominator. Only once the \(h\) downstairs is
+          gone can we let \(h\to 0\) safely. This is exactly the &ldquo;\(0/0\) means do more work&rdquo; move from Unit&nbsp;1.</p>
+        <div class="stat" style="margin-top:8px"><span class="k">result</span><span class="v" id="wkResult" style="color:var(--gold)">f'(x) = 2x</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Four ways to write the same thing</h2>
+  <p class="lead reveal">Mathematicians invented several notations for the derivative, and the AP exam uses all of them
+    interchangeably. They mean exactly the same object &mdash; the rate of change of \(y=f(x)\) &mdash; so don't let the
+    different symbols rattle you.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="notarow"><span class="nota" id="nota1"></span><span class="notadesc"><b>Lagrange.</b> Compact and common. Read &ldquo;f prime of x.&rdquo; Best when you just want the derivative function.</span></div>
+        <div class="notarow"><span class="nota" id="nota2"></span><span class="notadesc"><b>Leibniz.</b> Reads &ldquo;dee y dee x.&rdquo; Shows <i>what changes with respect to what</i> &mdash; invaluable later for the chain rule and related rates.</span></div>
+        <div class="notarow"><span class="nota" id="nota3"></span><span class="notadesc"><b>Leibniz, operator form.</b> &ldquo;The derivative, with respect to x, of f.&rdquo; The \(\frac{d}{dx}\) is an instruction: differentiate what follows.</span></div>
+        <div class="notarow"><span class="nota" id="nota4"></span><span class="notadesc"><b>Evaluated at a point.</b> The derivative's value at \(x=a\) &mdash; a single number, the tangent slope there.</span></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">Function vs. number</div>
+        <p class="note">\(f'(x)\) is a <b>function</b> &mdash; it gives a slope for every \(x\). Plug in a specific input and
+          \(f'(a)\) is a <b>number</b> &mdash; the one slope at that point. Same idea as \(f(x)\) vs. \(f(3)\).</p>
+        <p class="note" style="margin-top:8px">The derivative turns one function into another: feed it \(x^2\), it hands back \(2x\),
+          a brand-new function whose <i>output</i> is the original's slope.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Estimating a derivative you can't compute</h2>
+  <p class="lead reveal">On the AP exam you're often handed a function only as a <b>table</b> or a <b>graph</b> &mdash; no formula to
+    differentiate. You can still estimate the derivative: it's a slope, so use the nearest points you have. This exact
+    skill shows up on a free-response table question almost every year.</p>
+
+  <div class="grid reveal">
+    <div class="left">
+      <div class="card">
+        <div class="label">A function given by a table</div>
+        <svg id="estPlot" viewBox="0 0 560 300" preserveAspectRatio="xMidYMid meet" style="margin-bottom:12px"></svg>
+        <table class="dtable" id="estTable"></table>
+        <div class="controls" style="margin-top:10px">
+          <span class="label">estimate f'(x) at x =</span>
+          <select id="estPick" class="picker"></select>
+        </div>
+        <div class="callout show" id="estOut" style="margin-top:10px"></div>
+      </div>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="label">The move</div>
+        <p class="note">Pick the two table points straddling your target and take rise over run &mdash; the
+          <b>symmetric difference</b> \(\frac{f(x+h)-f(x-h)}{2h}\). It's the secant slope across the gap, and it's the
+          best estimate the table allows.</p>
+        <p class="note" style="margin-top:8px">At an <b>endpoint</b>, you only have one neighbor, so use a one-sided
+          secant. Always show the difference quotient &mdash; that's where the AP points live.</p>
+        <p class="note" style="margin-top:8px">Watch the graph: the <span style="color:var(--gold)">gold line</span> is the
+          secant your estimate uses. Its slope <i>is</i> the number you compute &mdash; estimating \(f'\) from a table
+          is just measuring that line.</p>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The whole idea on one card</h2>
+  <div class="anatomy reveal">
+    <div class="m-big" id="anatMain"></div>
+    <div class="maprow"><span class="ph">Average rate of change = slope of the secant line through two points: \(\frac{f(b)-f(a)}{b-a}\)</span><span class="sy" id="anatA"></span></div>
+    <div class="maprow"><span class="ph">Instantaneous rate of change = the limit of that secant slope as the gap shrinks to zero &mdash; the slope of the tangent line</span><span class="sy" id="anatB"></span></div>
+    <div class="maprow"><span class="ph">The derivative \(f'(a)\) IS that limit; \(f'(x)\) is a whole new function giving the slope at every point</span><span class="sy" id="anatC"></span></div>
+    <div class="maprow"><span class="ph">No formula? Estimate from a table or graph with the secant slope through the nearest points</span><span class="sy" id="anatD"></span></div>
+  </div>
+  <h2 class="reveal">The ideas everything else builds on</h2>
+  <div class="concepts reveal">
+    <div class="concept">
+      <h3>A derivative is a slope</h3>
+      <p>Strip away the words and a derivative is just a <span class="key">slope at a point</span> &mdash; rise over run, where the run has shrunk to nothing. Every later rule is a shortcut for finding it.</p>
+      <div class="m" id="c1"></div>
+    </div>
+    <div class="concept">
+      <h3>Average becomes instantaneous</h3>
+      <p>The secant slope over an interval turns into the tangent slope at a point when you take the <span class="key">limit as the gap &rarr; 0</span>. That limit is the entire definition.</p>
+      <div class="m" id="c2"></div>
+    </div>
+    <div class="concept">
+      <h3>Do the algebra before h = 0</h3>
+      <p>The difference quotient is \(\frac00\) if you plug in \(h=0\) too early. <span class="key">Simplify first</span>, cancel the \(h\), <i>then</i> take the limit &mdash; the Unit&nbsp;1 move.</p>
+      <div class="m" id="c3"></div>
+    </div>
+    <div class="concept">
+      <h3>One object, many names</h3>
+      <p>\(f'(x)\), \(\frac{dy}{dx}\), \(\frac{d}{dx}f\) all name the <span class="key">same derivative</span>. Different notations highlight different things, but the object is one.</p>
+      <div class="m" id="c4"></div>
+    </div>
+  </div>
+  <h2 class="reveal">Your turn</h2>
+  <p class="lead reveal">Five problems across the lesson &mdash; average rates, the limit definition, table estimates, and tangent slopes. Try each before revealing.</p>
+  <div class="reveal" id="practice"></div>
+
+  <h2 class="reveal">Quick quiz</h2>
+  <p class="lead reveal">Eight fast checks across the whole lesson.</p>
+  <div class="card reveal" id="quizCard">
+    <div class="row" style="margin-bottom:12px">
+      <div class="qtag" id="qProgress">Question 1 of 8</div>
+      <span class="score" id="qScore">Score: 0 / 0</span>
+    </div>
+    <div class="qtext" id="qText"></div>
+    <div class="quiz-opts" id="qOpts"></div>
+    <div class="feedback" id="qFb"></div>
+    <button class="next" id="qNext" style="margin-top:14px;width:100%;display:none">Next question →</button>
+  </div>
+
+  <h2 class="reveal">Common mistakes &amp; exam tips</h2>
+  <div class="mistakes reveal">
+    <div class="mistake"><h4>Confusing average and instantaneous rate</h4><p>The average rate over \([a,b]\) is a secant slope; the instantaneous rate at \(a\) is the tangent slope (a limit). A question asking for the rate &ldquo;at \(t=3\)&rdquo; wants the derivative, not a secant.</p></div>
+    <div class="mistake"><h4>Setting \(h=0\) too early</h4><p>Plugging \(h=0\) into the difference quotient gives \(\frac00\). You must expand and cancel the \(h\) in the denominator <i>first</i>, then take the limit.</p></div>
+    <div class="mistake"><h4>Dropping the limit symbol</h4><p>Until the \(h\) is cancelled, every line still needs \(\lim_{h\to0}\). On the AP exam, an answer that loses the limit notation mid-derivation can lose points.</p></div>
+    <div class="mistake"><h4>Forgetting units on a rate</h4><p>An instantaneous rate of change carries units: feet per second, dollars per item. A bare number with no interpretation often misses the point of the question.</p></div>
+    <div class="mistake"><h4>Reporting \(f(a)\) instead of \(f'(a)\)</h4><p>The value of the function and the value of its derivative are different things. \(f(a)\) is the height; \(f'(a)\) is the slope there.</p></div>
+    <div class="mistake"><h4>Not showing the difference quotient on a table problem</h4><p>The AP table question awards points for the <i>setup</i> \(\frac{f(x_2)-f(x_1)}{x_2-x_1}\), not just the final number. Always write it out.</p></div>
+  </div>
+  <div class="tipbox reveal">
+    <h4>On the AP exam</h4>
+    <ul>
+      <li>&ldquo;Find the average rate of change&rdquo; &rarr; secant slope \(\frac{f(b)-f(a)}{b-a}\). &ldquo;Find the rate at a point&rdquo; &rarr; derivative.</li>
+      <li>When asked to use the <b>definition</b> of the derivative, you must show the limit of the difference quotient &mdash; the power rule will not earn the points, even if the answer is right.</li>
+      <li>For a table, estimate with the secant slope through the two nearest points; use a one-sided difference at an endpoint, and always show the quotient.</li>
+      <li>An instantaneous rate of change and a tangent slope are the same object &mdash; if you can find one, you can answer the other.</li>
+    </ul>
+  </div>
+  <div class="whatsnext reveal">
+    You can now <b>see</b> limits. Next: <b>computing</b> them — the limit laws, why plugging in usually
+    just works, and the algebra toolkit (factoring, conjugates) for when it doesn't, including that
+    \(\tfrac{\sqrt{x+4}-2}{x}\) mystery from the table.
+    <a href="computing-limits.html">Computing Limits</a> is next — or head back to the
+    <a href="unit2.html">Unit 2 Guide</a>.
+  </div>
+
+  <footer class="reveal">What a Limit Is · part of the Unit 1 guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+const SVGNS="http://www.w3.org/2000/svg";
+const el=(t,a,txt)=>{const e=document.createElementNS(SVGNS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;};
+const T=(s)=>tex(s,s,false);
+const fmt=(v,d=2)=>{const s=v.toFixed(d); return s==="-0.00"?"0.00":s;};
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function mapper(dom,yr,W,H,P){ const x0=dom[0],x1=dom[1],y0=yr[0],y1=yr[1];
+  return { sx:x=>P+((x-x0)/(x1-x0))*(W-2*P), sy:v=>H-P-((v-y0)/(y1-y0))*(H-2*P), x0,x1,y0,y1 }; }
+function drawAxes(svg,M,W,H,P,xt,yt){ const sx=M.sx, sy=M.sy;
+  for(let g=0;g<=yt;g++){ const yy=M.y0+(g/yt)*(M.y1-M.y0), py=sy(yy);
+    svg.appendChild(el("line",{x1:P,y1:py,x2:W-P,y2:py,stroke:"#2b251a"}));
+    svg.appendChild(el("text",{x:P-6,y:py+3,fill:"#6b6457","font-size":9.5,"text-anchor":"end","font-family":"var(--mono)"},(+yy.toFixed(1)).toString())); }
+  for(let g=0;g<=xt;g++){ const xx=M.x0+(g/xt)*(M.x1-M.x0), px=sx(xx);
+    svg.appendChild(el("text",{x:px,y:H-P+14,fill:"#6b6457","font-size":9.5,"text-anchor":"middle","font-family":"var(--mono)"},(+xx.toFixed(1)).toString())); }
+  svg.appendChild(el("line",{x1:P,y1:sy(Math.max(0,M.y0)),x2:W-P,y2:sy(Math.max(0,M.y0)),stroke:"#4a4334","stroke-width":1.2}));
+  svg.appendChild(el("line",{x1:P,y1:sy(M.y1),x2:P,y2:sy(M.y0),stroke:"#4a4334","stroke-width":1.2}));
+}
+function curve(f,a,b,M,N=140){ let d="";
+  for(let k=0;k<=N;k++){ const x=a+(b-a)*k/N; d+=(k?"L":"M")+M.sx(x).toFixed(1)+" "+M.sy(f(x)).toFixed(1)+" "; }
+  return d; }
+const reduceMotion=()=> window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function mathify(html){ if(!window.katex) return html;
+  return html.replace(/\\\((.+?)\\\)/g,(m,t)=>{ try{ return katex.renderToString(t,{throwOnError:false}); }catch(e){ return m; } }); }
+function mathifyStatic(){ if(!window.katex) return;
+  document.querySelectorAll('.sub,.lead,.big-idea,.looking,.note,.maprow .ph,.mistake p,.tipbox li,.concept p,.whatsnext,.callout,.stat .k,.notadesc,.card > p').forEach(n=>{
+    if(n.dataset.mz) return;
+    if(n.innerHTML.indexOf('\\(')<0){ n.dataset.mz="1"; return; }
+    n.innerHTML=mathify(n.innerHTML); n.dataset.mz="1"; }); }
+
+const LIME="#8dcc4e", GOLD="#ffd27a", DIM="#6b6457";
+const f=x=>x*x;                       // the running example: f(x)=x^2
+
+/* ===================== 1 · AVERAGE RATE OF CHANGE ===================== */
+let avgA=1, avgB=4;
+function renderAvg(){
+  const v=document.getElementById("avgPlot"); if(!v) return; v.innerHTML="";
+  const W=560,H=320,P=34; const M=mapper([0,5.4],[0,29],W,H,P);
+  drawAxes(v,M,W,H,P,5,4);
+  v.appendChild(el("path",{d:curve(f,0,5.4,M),fill:"none",stroke:LIME,"stroke-width":2.6,"stroke-linecap":"round"}));
+  const ya=f(avgA), yb=f(avgB);
+  // secant line, extended a bit
+  const m=(yb-ya)/(avgB-avgA), line=x=>ya+m*(x-avgA);
+  v.appendChild(el("line",{x1:M.sx(0),y1:M.sy(line(0)),x2:M.sx(5.4),y2:M.sy(line(5.4)),stroke:GOLD,"stroke-width":2,opacity:.55}));
+  // rise/run guide
+  v.appendChild(el("line",{x1:M.sx(avgA),y1:M.sy(ya),x2:M.sx(avgB),y2:M.sy(ya),stroke:DIM,"stroke-width":1.2,"stroke-dasharray":"4 4"}));
+  v.appendChild(el("line",{x1:M.sx(avgB),y1:M.sy(ya),x2:M.sx(avgB),y2:M.sy(yb),stroke:DIM,"stroke-width":1.2,"stroke-dasharray":"4 4"}));
+  v.appendChild(el("text",{x:(M.sx(avgA)+M.sx(avgB))/2,y:M.sy(ya)+15,fill:DIM,"font-size":10,"text-anchor":"middle","font-family":"var(--mono)"},"run "+fmt(avgB-avgA)));
+  v.appendChild(el("text",{x:M.sx(avgB)+6,y:(M.sy(ya)+M.sy(yb))/2,fill:DIM,"font-size":10,"font-family":"var(--mono)"},"rise "+fmt(yb-ya)));
+  [[avgA,ya],[avgB,yb]].forEach(([x,y])=>v.appendChild(el("circle",{cx:M.sx(x),cy:M.sy(y),r:5.5,fill:GOLD})));
+  // readouts
+  const slope=(yb-ya)/(avgB-avgA);
+  document.getElementById("avgEq").innerHTML=tex("\\dfrac{f("+fmt(avgB,1)+")-f("+fmt(avgA,1)+")}{"+fmt(avgB,1)+"-"+fmt(avgA,1)+"}=\\dfrac{"+fmt(yb,2)+"-"+fmt(ya,2)+"}{"+fmt(avgB-avgA,2)+"}",null,true);
+  document.getElementById("avgInt").textContent="["+fmt(avgA,1)+", "+fmt(avgB,1)+"]";
+  document.getElementById("avgSlope").textContent=fmt(slope,2);
+}
+(function(){ const a=document.getElementById("avgA"), b=document.getElementById("avgB"); if(!a) return;
+  a.addEventListener("input",e=>{ avgA=+e.target.value; if(avgA>avgB-0.2)avgA=avgB-0.2; renderAvg(); });
+  b.addEventListener("input",e=>{ avgB=+e.target.value; if(avgB<avgA+0.2)avgB=avgA+0.2; renderAvg(); });
+})();
+
+/* ===================== 2 · SHRINK TO AN INSTANT ===================== */
+const INST_A=1;
+let instH=1.5, instRAF=null;
+function renderInst(){
+  const v=document.getElementById("instPlot"); if(!v) return; v.innerHTML="";
+  const W=560,H=320,P=34; const M=mapper([0,3.2],[0,10],W,H,P);
+  drawAxes(v,M,W,H,P,4,5);
+  v.appendChild(el("path",{d:curve(f,0,3.2,M),fill:"none",stroke:LIME,"stroke-width":2.6,"stroke-linecap":"round"}));
+  const a=INST_A, ya=f(a), bx=a+instH, yb=f(bx);
+  // tangent (slope 2a=2) faint, for reference
+  const mt=2*a, tan=x=>ya+mt*(x-a);
+  v.appendChild(el("line",{x1:M.sx(0),y1:M.sy(tan(0)),x2:M.sx(3.2),y2:M.sy(tan(3.2)),stroke:GOLD,"stroke-width":1.4,opacity:.3,"stroke-dasharray":"5 5"}));
+  // secant
+  const ms=(yb-ya)/(bx-a), sec=x=>ya+ms*(x-a);
+  v.appendChild(el("line",{x1:M.sx(0),y1:M.sy(sec(0)),x2:M.sx(3.2),y2:M.sy(sec(3.2)),stroke:GOLD,"stroke-width":2.2}));
+  v.appendChild(el("circle",{cx:M.sx(a),cy:M.sy(ya),r:5.5,fill:LIME}));
+  v.appendChild(el("circle",{cx:M.sx(bx),cy:M.sy(yb),r:5,fill:GOLD}));
+  v.appendChild(el("text",{x:M.sx(a)-4,y:M.sy(ya)+18,fill:LIME,"font-size":10,"text-anchor":"end","font-family":"var(--mono)"},"x=1"));
+  v.appendChild(el("text",{x:M.sx(bx)+6,y:M.sy(yb)-6,fill:GOLD,"font-size":10,"font-family":"var(--mono)"},"x=1+h"));
+  // box readout
+  const slope=ms;
+  const box=document.getElementById("instBox");
+  box.innerHTML=
+     '<div class="stat"><span class="k">gap '+T("h")+'</span><span class="v">'+fmt(instH,3)+'</span></div>'
+    +'<div class="stat"><span class="k">secant slope '+T("\\dfrac{f(1+h)-f(1)}{h}")+'</span><span class="v" style="color:var(--gold)">'+fmt(slope,3)+'</span></div>'
+    +'<div class="stat" style="border:0"><span class="k">which simplifies to '+T("2+h")+'</span><span class="v">'+fmt(2+instH,3)+'</span></div>';
+}
+function instStop(){ if(instRAF){clearInterval(instRAF);instRAF=null;} }
+(function(){ const sl=document.getElementById("instH"); if(!sl) return;
+  sl.addEventListener("input",e=>{ instStop(); instH=+e.target.value; renderInst(); });
+  const btn=document.getElementById("instPlay"); if(btn) btn.onclick=()=>{
+    instStop();
+    if(reduceMotion()){ instH=0.04; sl.value=instH; renderInst(); return; }
+    instRAF=setInterval(()=>{ instH=Math.max(0.04, instH*0.90); sl.value=instH; renderInst(); if(instH<=0.041) instStop(); }, 90);
+  };
+})();
+
+/* ===================== 3 · WORKED LIMIT DEFINITION (stepper) ===================== */
+const WK=[
+ {t:"Start from the definition at a general \\(x\\), with \\(f(x)=x^2\\):", m:"f'(x)=\\lim_{h\\to0}\\frac{(x+h)^2-x^2}{h}"},
+ {t:"Expand \\((x+h)^2=x^2+2xh+h^2\\) in the numerator:", m:"=\\lim_{h\\to0}\\frac{x^2+2xh+h^2-x^2}{h}"},
+ {t:"The \\(x^2\\) terms cancel, leaving only terms with an \\(h\\):", m:"=\\lim_{h\\to0}\\frac{2xh+h^2}{h}"},
+ {t:"Factor \\(h\\) from the top and cancel it with the bottom &mdash; now the \\(0/0\\) is gone:", m:"=\\lim_{h\\to0}\\,(2x+h)"},
+ {t:"Only now is it safe to let \\(h\\to0\\). The \\(h\\) vanishes:", m:"f'(x)=2x"}
+];
+let wkN=0;
+function renderWk(){
+  const panel=document.getElementById("wkWork"), read=document.getElementById("wkRead"), line=document.getElementById("wkLine");
+  if(wkN===0) panel.innerHTML='<div class="why-t" style="padding:8px 0;color:var(--muted)">Expand, cancel the \\(x^2\\), factor and cancel \\(h\\), then take the limit.</div>';
+  else panel.innerHTML=mathify(WK.slice(0,wkN).map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div><div class="why-m">'+T(st.m)+'</div></div></div>').join(""));
+  read.textContent = wkN===0?"press step":(wkN<WK.length?"step "+wkN+" of "+WK.length:"done — f'(x)=2x");
+  const tx = wkN>=WK.length ? "f'(x)=2x" : "f'(x)=\\lim_{h\\to0}\\frac{(x+h)^2-x^2}{h}";
+  line.innerHTML=tex(tx,tx,true);
+}
+document.getElementById("wkStep").onclick=()=>{ if(wkN<WK.length){ wkN++; renderWk(); } };
+document.getElementById("wkReset").onclick=()=>{ wkN=0; renderWk(); };
+
+/* ===================== 4 · NOTATION ===================== */
+function renderNotation(){
+  const set=[["nota1","f'(x)"],["nota2","\\dfrac{dy}{dx}"],["nota3","\\dfrac{d}{dx}\\,f(x)"],["nota4","f'(a)=\\left.\\dfrac{dy}{dx}\\right|_{x=a}"]];
+  set.forEach(([id,tx])=>{ const e=document.getElementById(id); if(e) e.innerHTML=tex(tx,tx,true); });
+}
+
+/* ===================== 5 · ESTIMATE FROM A TABLE ===================== */
+const ET_X=[1,2,3,4,5,6], ET_F={1:-3,2:4,3:2,4:5,5:9,6:8};
+let estPick=3;
+
+function renderEstPlot(x, x1, x2){
+  const v=document.getElementById("estPlot"); if(!v) return; v.innerHTML="";
+  const W=560,H=300,P=38;
+  const fv=ET_X.map(xx=>ET_F[xx]);
+  const ymin=Math.min(...fv)-2, ymax=Math.max(...fv)+2;
+  const M=mapper([ET_X[0]-0.5, ET_X[ET_X.length-1]+0.5],[ymin,ymax],W,H,P);
+  drawAxes(v,M,W,H,P,ET_X.length+1,4);
+  // faint polyline connecting the data (just to suggest the underlying function)
+  let d=""; ET_X.forEach((xx,i)=>{ d+=(i?"L":"M")+M.sx(xx).toFixed(1)+" "+M.sy(ET_F[xx]).toFixed(1)+" "; });
+  v.appendChild(el("path",{d:d,fill:"none",stroke:LIME,"stroke-width":1.4,opacity:.28,"stroke-dasharray":"4 4"}));
+  // the secant line used by the current estimate, through (x1,f1)-(x2,f2), extended across the plot
+  const y1=ET_F[x1], y2=ET_F[x2], m=(y2-y1)/(x2-x1), line=xx=>y1+m*(xx-x1);
+  v.appendChild(el("line",{x1:M.sx(M.x0),y1:M.sy(line(M.x0)),x2:M.sx(M.x1),y2:M.sy(line(M.x1)),stroke:GOLD,"stroke-width":2.2}));
+  // slope triangle on the secant (rise/run between the two endpoints)
+  v.appendChild(el("line",{x1:M.sx(x1),y1:M.sy(y1),x2:M.sx(x2),y2:M.sy(y1),stroke:DIM,"stroke-width":1.1,"stroke-dasharray":"3 3"}));
+  v.appendChild(el("line",{x1:M.sx(x2),y1:M.sy(y1),x2:M.sx(x2),y2:M.sy(y2),stroke:DIM,"stroke-width":1.1,"stroke-dasharray":"3 3"}));
+  // all data points (lime); the two secant-endpoints emphasized (gold ring); the target point highlighted
+  ET_X.forEach(xx=>{
+    const isEnd=(xx===x1||xx===x2), isTarget=(xx===x);
+    v.appendChild(el("circle",{cx:M.sx(xx),cy:M.sy(ET_F[xx]),r:isEnd?5.5:4,
+      fill:isEnd?GOLD:LIME, stroke:isTarget?"#fff":"none","stroke-width":isTarget?2:0}));
+  });
+  // label the target on the x-axis
+  v.appendChild(el("text",{x:M.sx(x),y:H-P+26,fill:"#fff","font-size":10.5,"text-anchor":"middle","font-family":"var(--mono)"},"x="+x));
+}
+
+function renderEstTable(){
+  const t=document.getElementById("estTable"); if(!t) return;
+  let head="<tr><th>x</th>", row="<tr><th>f(x)</th>";
+  ET_X.forEach(x=>{ const sel=(x===estPick)?' class="sel"':''; head+="<th"+sel+">"+x+"</th>"; row+="<td"+sel+">"+ET_F[x]+"</td>"; });
+  t.innerHTML="<thead>"+head+"</tr></thead><tbody>"+row+"</tr></tbody>";
+  // picker
+  const pk=document.getElementById("estPick");
+  if(pk && !pk.dataset.built){ ET_X.forEach(x=>{ const o=document.createElement("option"); o.value=x; o.textContent=x; if(x===estPick)o.selected=true; pk.appendChild(o); }); pk.dataset.built="1"; }
+  // estimate
+  const x=estPick, hasL=ET_F[x-1]!==undefined, hasR=ET_F[x+1]!==undefined;
+  // render the difference quotient cleanly as real math; wrap negatives in parens only when needed
+  const neg=v=>v<0?"("+v+")":(""+v);
+  let html, est, x1, x2;
+  if(hasL && hasR){ x1=x-1; x2=x+1; est=(ET_F[x2]-ET_F[x1])/(x2-x1);
+    html="Symmetric difference, using the points on either side &mdash; \\(x="+x1+"\\) and \\(x="+x2+"\\):"; }
+  else if(hasR){ x1=x; x2=x+1; est=(ET_F[x2]-ET_F[x1])/(x2-x1);
+    html="Left endpoint &mdash; only a right neighbor exists, so use a one-sided difference:"; }
+  else { x1=x-1; x2=x; est=(ET_F[x2]-ET_F[x1])/(x2-x1);
+    html="Right endpoint &mdash; only a left neighbor exists, so use a one-sided difference:"; }
+  renderEstPlot(x, x1, x2);
+  const quotient="f'("+x+")\\approx\\dfrac{f("+x2+")-f("+x1+")}{"+x2+"-"+x1+"}=\\dfrac{"+neg(ET_F[x2])+"-"+neg(ET_F[x1])+"}{"+(x2-x1)+"}="+fmt(est,2);
+  document.getElementById("estOut").innerHTML=mathify(html)+'<div style="margin-top:8px">'+tex(quotient,quotient,true)+'</div>';
+}
+(function(){ const pk=document.getElementById("estPick"); if(!pk) return;
+  pk.addEventListener("change",e=>{ estPick=+e.target.value; renderEstTable(); }); })();
+
+/* ===================== anatomy + concepts ===================== */
+function renderAnatomy(){
+  const main="f'(a)=\\lim_{h\\to0}\\frac{f(a+h)-f(a)}{h}";
+  document.getElementById("anatMain").innerHTML=tex(main,main,true);
+  document.getElementById("anatA").innerHTML=T("\\frac{f(b)-f(a)}{b-a}");
+  document.getElementById("anatB").innerHTML=T("\\lim_{h\\to0}\\frac{\\Delta y}{\\Delta x}");
+  document.getElementById("anatC").innerHTML=T("f'(x)");
+  document.getElementById("anatD").innerHTML=T("\\frac{f(x+h)-f(x-h)}{2h}");
+}
+function renderConcepts(){
+  const set=[["c1","\\text{slope}=\\frac{\\text{rise}}{\\text{run}}","rise over run"],
+   ["c2","\\lim_{h\\to0}\\frac{\\Delta y}{\\Delta x}","gap → 0"],
+   ["c3","\\tfrac{0}{0}\\Rightarrow\\text{simplify first}","cancel the h"],
+   ["c4","f'=\\tfrac{dy}{dx}=\\tfrac{d}{dx}f","one object"]];
+  set.forEach(([id,tx,fb])=>{ const e=document.getElementById(id); if(e) e.innerHTML=tex(tx,fb||tx); });
+}
+
+/* ===================== practice ===================== */
+const PRAC=[
+ { tag:"Average rate of change", q:()=>'Find the average rate of change of \\(f(x)=x^2\\) on the interval \\([2,5]\\).',
+   sol:[{t:"Average rate of change is the secant slope \\(\\frac{f(b)-f(a)}{b-a}\\):",m:"\\frac{f(5)-f(2)}{5-2}=\\frac{25-4}{3}"},
+        {t:"Simplify:",m:"=\\frac{21}{3}=7"}] },
+ { tag:"Definition of the derivative", q:()=>'Use the limit definition to find \\(f\'(x)\\) for \\(f(x)=3x+2\\).',
+   sol:[{t:"Set up the difference quotient:",m:"\\lim_{h\\to0}\\frac{3(x+h)+2-(3x+2)}{h}"},
+        {t:"Expand the numerator; the \\(3x\\) and \\(+2\\) cancel:",m:"=\\lim_{h\\to0}\\frac{3h}{h}"},
+        {t:"Cancel \\(h\\), then take the limit:",m:"=3"}] },
+ { tag:"Definition of the derivative", q:()=>'Use the limit definition to find \\(f\'(2)\\) for \\(f(x)=x^2\\).',
+   sol:[{t:"Difference quotient at \\(a=2\\):",m:"\\lim_{h\\to0}\\frac{(2+h)^2-4}{h}"},
+        {t:"Expand: \\((2+h)^2=4+4h+h^2\\); the \\(4\\)s cancel:",m:"=\\lim_{h\\to0}\\frac{4h+h^2}{h}"},
+        {t:"Factor and cancel \\(h\\), then let \\(h\\to0\\):",m:"=\\lim_{h\\to0}(4+h)=4"}] },
+ { tag:"Estimate from a table", q:()=>'A function has \\(f(3)=10\\), \\(f(5)=18\\). Estimate \\(f\'(4)\\).',
+   sol:[{t:"Use the secant slope across the gap straddling \\(x=4\\):",m:"f'(4)\\approx\\frac{f(5)-f(3)}{5-3}=\\frac{18-10}{2}"},
+        {t:"Simplify:",m:"=4"}] },
+ { tag:"Tangent slope", q:()=>'The derivative of \\(f(x)=x^2\\) is \\(f\'(x)=2x\\). What is the slope of the tangent line at \\(x=-3\\)?',
+   sol:[{t:"The derivative evaluated at the point gives the tangent slope:",m:"f'(-3)=2(-3)"},
+        {t:"So the tangent line at \\(x=-3\\) has slope:",m:"=-6"}] }
+];
+function renderPractice(){
+  document.getElementById("practice").innerHTML=mathify(PRAC.map((p,i)=>{
+    const steps=p.sol.map((st,j)=>'<div class="why-step"><div class="why-n">'+(j+1)+'</div><div><div class="why-t">'+st.t+'</div>'+(st.m?'<div class="why-m">'+T(st.m)+'</div>':'')+'</div></div>').join("");
+    return '<div class="prob"><div class="prob-tag">'+p.tag+'</div><div class="prob-q">'+p.q()+'</div>'
+      +'<button class="soltoggle" data-i="'+i+'">Show solution</button><div class="sol" id="sol'+i+'">'+steps+'</div></div>';
+  }).join(""));
+  document.querySelectorAll(".soltoggle").forEach(btn=>{ btn.onclick=()=>{ const i=btn.getAttribute("data-i"), s=document.getElementById("sol"+i);
+    btn.textContent=s.classList.toggle("show")?"Hide solution":"Show solution"; }; });
+}
+
+/* ===================== quiz ===================== */
+const QUIZ=[
+ { q:()=>'The average rate of change of \\(f\\) on \\([a,b]\\) is the slope of the &hellip;',
+   opts:[{h:()=>"secant line through the two endpoints",ok:true},{h:()=>"tangent line at \\(a\\)",ok:false},{h:()=>"curve at \\(b\\)",ok:false},{h:()=>"x-axis",ok:false}],
+   fb:"Average rate of change = \\(\\frac{f(b)-f(a)}{b-a}\\), which is exactly the slope of the secant line connecting the endpoints." },
+ { q:()=>'The derivative \\(f\'(a)\\) is the slope of the &hellip;',
+   opts:[{h:()=>"tangent line at \\(x=a\\)",ok:true},{h:()=>"secant over \\([a,b]\\)",ok:false},{h:()=>"function's average",ok:false},{h:()=>"normal line",ok:false}],
+   fb:"As the gap shrinks to zero, the secant becomes the tangent. The derivative is the tangent's slope at that point." },
+ { q:()=>'In \\(\\lim_{h\\to0}\\frac{f(a+h)-f(a)}{h}\\), why can\'t we just set \\(h=0\\) immediately?',
+   opts:[{h:()=>"it gives \\(\\frac00\\), which is undefined",ok:true},{h:()=>"\\(h\\) can't be zero ever",ok:false},{h:()=>"the answer would be infinite",ok:false},{h:()=>"you can, it's fine",ok:false}],
+   fb:"Setting \\(h=0\\) gives \\(\\frac00\\). You must simplify first (cancel the \\(h\\)), then take the limit." },
+ { q:()=>'Using the definition, \\(f(x)=x^2\\) gives \\(f\'(x)=\\)',
+   opts:[{h:()=>"\\(2x\\)",ok:true},{h:()=>"\\(x^2\\)",ok:false},{h:()=>"\\(2\\)",ok:false},{h:()=>"\\(x\\)",ok:false}],
+   fb:"\\((x+h)^2-x^2 = 2xh+h^2\\); divide by \\(h\\) to get \\(2x+h\\); let \\(h\\to0\\) for \\(2x\\)." },
+ { q:()=>'Which notation does NOT mean the derivative of \\(y=f(x)\\)?',
+   opts:[{h:()=>"\\(\\Delta y\\)",ok:true},{h:()=>"\\(f'(x)\\)",ok:false},{h:()=>"\\(\\frac{dy}{dx}\\)",ok:false},{h:()=>"\\(\\frac{d}{dx}f(x)\\)",ok:false}],
+   fb:"\\(\\Delta y\\) is just a change in \\(y\\) (a difference), not a rate. The other three all denote the derivative." },
+ { q:()=>'\\(f\'(x)\\) compared to \\(f\'(a)\\):',
+   opts:[{h:()=>"\\(f'(x)\\) is a function; \\(f'(a)\\) is a number",ok:true},{h:()=>"they're identical",ok:false},{h:()=>"\\(f'(a)\\) is a function",ok:false},{h:()=>"\\(f'(x)\\) is always larger",ok:false}],
+   fb:"\\(f'(x)\\) gives a slope for every input; plugging in \\(x=a\\) yields the single number \\(f'(a)\\)." },
+ { q:()=>'A table gives \\(f(2)=5\\) and \\(f(6)=21\\). Best estimate of \\(f\'(4)\\)?',
+   opts:[{h:()=>"\\(4\\)",ok:true},{h:()=>"\\(16\\)",ok:false},{h:()=>"\\(8\\)",ok:false},{h:()=>"\\(13\\)",ok:false}],
+   fb:"Symmetric difference: \\(\\frac{f(6)-f(2)}{6-2}=\\frac{21-5}{4}=4\\)." },
+ { q:()=>'The tangent slope of \\(f(x)=x^2\\) (where \\(f\'(x)=2x\\)) at \\(x=5\\) is',
+   opts:[{h:()=>"\\(10\\)",ok:true},{h:()=>"\\(25\\)",ok:false},{h:()=>"\\(5\\)",ok:false},{h:()=>"\\(2\\)",ok:false}],
+   fb:"\\(f'(5)=2(5)=10\\). Evaluate the derivative function at the point to get the slope there." }
+];
+let qi=0,qScore=0,qDone=0,qAnswered=false;
+const qOpts=document.getElementById("qOpts"), qFb=document.getElementById("qFb"), qNext=document.getElementById("qNext");
+function renderQuiz(){
+  qAnswered=false; const item=QUIZ[qi];
+  document.getElementById("qText").innerHTML=mathify(item.q());
+  document.getElementById("qProgress").textContent="Question "+(qi+1)+" of "+QUIZ.length;
+  document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+  qFb.innerHTML=""; qNext.style.display="none";
+  qNext.textContent = qi<QUIZ.length-1 ? "Next question →" : "Restart quiz ↺";
+  qOpts.innerHTML="";
+  const sopts=shuf(item.opts);
+  sopts.forEach((o)=>{ const b=document.createElement("button"); b.innerHTML=mathify(o.h());
+    b.onclick=()=>{ if(qAnswered)return; qAnswered=true; qDone++;
+      [...qOpts.children].forEach((bb,k)=>{ bb.disabled=true; if(sopts[k].ok) bb.classList.add("correct"); });
+      if(o.ok){ qScore++; b.classList.add("correct"); qFb.innerHTML='<span style="color:var(--conv);font-weight:600">✓ Correct.</span> <span style="color:var(--muted)">'+mathify(item.fb)+'</span>'; }
+      else { b.classList.add("wrong"); qFb.innerHTML='<span style="color:var(--div);font-weight:600">✗ Not quite.</span> <span style="color:var(--muted)">'+mathify(item.fb)+'</span>'; }
+      document.getElementById("qScore").textContent="Score: "+qScore+" / "+qDone;
+      qNext.style.display="block"; };
+    qOpts.appendChild(b); });
+}
+qNext.onclick=()=>{ if(qi<QUIZ.length-1){ qi++; } else { qi=0; qScore=0; qDone=0; } renderQuiz(); };
+
+/* ===================== init ===================== */
+function refreshAll(){ renderAvg(); renderInst(); renderWk(); renderNotation(); renderEstTable(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic(); }
+renderAvg(); renderInst(); renderWk(); renderNotation(); renderEstTable(); renderAnatomy(); renderConcepts(); renderPractice(); renderQuiz(); mathifyStatic();
+if(!window.katex){ let n=0; const t=setInterval(()=>{ if(window.katex){ clearInterval(t); refreshAll(); } else if(++n>40) clearInterval(t); },150); }
+document.querySelectorAll('.reveal').forEach((n,i)=>{ n.style.animationDelay=Math.min(i*30,440)+'ms'; });
+
+</script>
+</body>
+</html>
