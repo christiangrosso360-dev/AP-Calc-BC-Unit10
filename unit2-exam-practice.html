@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Exam Practice — Mixed Review &amp; FRQ · Unit 2</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%277%27%20fill%3D%27%23101420%27%2F%3E%3Cg%20fill%3D%27%238dcc4e%27%3E%3Crect%20x%3D%276%27%20y%3D%2718%27%20width%3D%274.6%27%20height%3D%278%27%20rx%3D%271%27%20opacity%3D%27.55%27%2F%3E%3Crect%20x%3D%2712%27%20y%3D%2714%27%20width%3D%274.6%27%20height%3D%2712%27%20rx%3D%271%27%20opacity%3D%27.75%27%2F%3E%3Crect%20x%3D%2718%27%20y%3D%2710%27%20width%3D%274.6%27%20height%3D%2716%27%20rx%3D%271%27%2F%3E%3C%2Fg%3E%3Cpath%20d%3D%27M5%2017%20C%2012%2010%2C%2020%206%2C%2027%207%27%20stroke%3D%27%238fa6f7%27%20stroke-width%3D%272%27%20fill%3D%27none%27%20stroke-linecap%3D%27round%27%2F%3E%3C%2Fsvg%3E" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="styles.css">
+<script src="helpers.js"></script>
+<script>
+/* fallback for previewing without helpers.js — the repo's helpers.js takes precedence when present */
+if(typeof tex==="undefined"){
+  window.tex=function(latex,fallback,display){
+    if(window.katex){ try{ return katex.renderToString(latex,{displayMode:!!display,throwOnError:false}); }catch(e){} }
+    return '<span class="tex-fallback">'+(fallback||latex)+'</span>';
+  };
+}
+</script>
+<style>
+  :root{ --approx:#8dcc4e; --emerald:#8dcc4e; --cyan:#8dcc4e; --true:#3fd0b0; --glow:rgba(141,204,78,.10); --wrap-max:820px; }
+  .sub{color:var(--muted);font-size:15px;margin-top:8px;max-width:680px}
+  h2{font-family:var(--display);font-weight:600;font-size:21px;margin:40px 0 8px;letter-spacing:-0.01em}
+  p.lead{font-size:15.5px;max-width:720px;margin:8px 0}
+  .big-idea{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-top:18px} .big-idea b{color:var(--approx)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 18px 40px -26px rgba(0,0,0,.7);margin-top:14px}
+  .row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+  .score{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--line);background:var(--panel-2);color:var(--ink);padding:10px 13px;font-size:14px;text-align:left;transition:transform .14s,border-color .14s,background .14s}
+  button:hover{border-color:var(--emerald);transform:translateY(-1px)} button:active{transform:translateY(0) scale(.99)} button:disabled{cursor:default}
+  .qtag{display:inline-block;font-family:var(--mono);font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:20px;padding:3px 10px;margin-bottom:10px;background:var(--panel-2)}
+  .qprompt{font-size:15.5px;font-weight:500;margin:6px 0 4px;line-height:1.5}
+  .qmath{font-family:var(--mono);font-size:16px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center;margin:12px 0;overflow-x:auto} .qmath .katex{font-size:1.06em}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:6px}
+  @media(max-width:560px){.opts{grid-template-columns:1fr}}
+  .opts button{text-align:center;font-size:14.5px;padding:11px}
+  .opts button.correct{background:rgba(63,208,176,.16);border-color:var(--conv);color:var(--conv);font-weight:600}
+  .opts button.wrong{background:rgba(224,100,79,.16);border-color:var(--div);color:var(--div)}
+  .fb{font-size:13.5px;line-height:1.55;margin-top:12px;background:var(--bg);border-radius:9px;padding:11px 13px;display:none} .fb.show{display:block} .fb .ftag{font-weight:600}
+  .fb .ftag.ok{color:var(--conv)} .fb .ftag.bad{color:var(--div)}
+  .next{background:var(--approx);color:#1a1408;border-color:var(--approx);font-weight:600;text-align:center;width:100%;box-shadow:0 8px 18px -10px var(--approx);margin-top:16px;display:none} .next.show{display:block}
+  .review-link{display:inline-block;margin-top:8px;font-size:12.5px;font-family:var(--mono);color:var(--emerald);text-decoration:none} .review-link:hover{text-decoration:underline}
+  /* FRQ */
+  .frq-given{background:var(--panel-2);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+  .frq-given .katex{font-size:1.05em} .frq-given .gl{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .frq-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .frq-tabs button{font-size:13px;padding:9px 13px;text-align:center;border-radius:9px}
+  .frq-tabs button.on{background:var(--ink);color:var(--panel);border-color:var(--ink)}
+  .frq-desc{font-size:13px;color:var(--muted);background:var(--bg);border-radius:9px;padding:9px 13px;margin-bottom:6px} .frq-desc b{color:var(--approx)}
+  .part{border-top:1px solid var(--line);padding:16px 0 4px} .part:first-child{border-top:none}
+  .part-h{display:flex;justify-content:space-between;align-items:center;gap:10px} .part-l{font-weight:600;font-size:14.5px;color:var(--ink)} .part-pts{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .part-q{font-size:14.5px;line-height:1.55;margin:8px 0 4px}
+  .frq-fields{display:flex;flex-direction:column;gap:10px;margin:4px 0 12px}
+  .frq-field{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .frq-flabel{font-size:14px;min-width:54px;color:var(--ink)} .frq-flabel .katex{font-size:1em}
+  .frq-input{font-family:var(--mono);font-size:14px;padding:8px 11px;border:1px solid var(--line);border-radius:8px;background:var(--panel-2);color:var(--ink);min-width:140px}
+  .frq-input:focus{outline:none;border-color:var(--emerald)} .frq-input.ok{border-color:var(--conv);background:rgba(63,208,176,.16)} .frq-input.no{border-color:var(--div);background:rgba(224,100,79,.16)}
+  .frq-check{background:var(--ink);color:var(--panel);border-color:var(--ink);font-size:13px;padding:8px 14px} .frq-check:hover{background:#d8d2c6} .frq-check:disabled{opacity:.5}
+  .frq-sol{display:none;margin-top:10px;font-size:13.5px;line-height:1.6;background:var(--bg);border-left:2px solid var(--emerald);border-radius:0 9px 9px 0;padding:11px 14px} .frq-sol.show{display:block}
+  .frq-sol .stepm{font-family:var(--mono);background:var(--panel-2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;margin:7px 0;overflow-x:auto;font-size:13px}
+  .rubric{margin-top:10px} .rubric-h{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+  .rubric label{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink);padding:5px 0;cursor:pointer} .rubric input{margin-top:3px;accent-color:var(--emerald)}
+  .reveal-sol{font-family:var(--mono);font-size:12.5px;color:var(--emerald);background:none;border:1px dashed var(--line-2);width:100%;text-align:center;margin-top:8px}
+  .scoreline{font-family:var(--mono);font-size:14px;color:var(--ink);background:var(--panel-2);border-radius:9px;padding:12px 14px;margin-top:14px;text-align:center} .scoreline b{color:var(--emerald)}
+  .weakrow{display:flex;align-items:center;gap:10px;margin:8px 0;font-size:13.5px}
+  .weakbar{flex:1;height:8px;background:var(--panel-2);border-radius:5px;overflow:hidden} .weakbar i{display:block;height:100%;background:var(--emerald);border-radius:5px}
+  .weaklabel{min-width:160px;color:var(--ink)} .weakpct{font-family:var(--mono);font-size:12px;color:var(--muted);min-width:48px;text-align:right}
+  @keyframes riseIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .reveal{opacity:0;animation:riseIn .6s cubic-bezier(.2,.7,.2,1) forwards}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none;opacity:1}*{transition:none!important}}
+  footer{color:var(--muted);font-size:12px;margin-top:50px;border-top:1px solid var(--line);padding-top:14px}
+  .tex-fallback{font-family:var(--mono);font-size:13px;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="backlink" href="unit2.html">← Unit 2 Guide</a>
+  <header class="reveal">
+    <h1>Exam <span class="em">Practice</span></h1>
+    <div class="sub">Thirty multiple-choice questions across all five lessons of Unit 2 &mdash; the derivative defined, differentiability and continuity, the power rule and tangent lines, the key-function derivatives, and the product and quotient rules &mdash; followed by two AP-style free-response problems. Every answer choice is a specific, named mistake, and every explanation tells you why.</div>
+  </header>
+
+  <div class="big-idea reveal">
+    <b>How to use this.</b> The multiple choice pulls a fresh batch of 12 from a bank of 30, mixing every topic the way the real exam does. Answer, read the worked explanation &mdash; every distractor is a specific, named mistake &mdash; then reshuffle for a new set. The two free-response problems mirror real AP Section II: type your answers and grade them against the official-style rubric. Tap any topic tag in the feedback to jump straight to that lesson.
+  </div>
+
+  <h2 class="reveal">Mixed multiple choice</h2>
+  <div class="card reveal" id="mcCard">
+    <div class="row">
+      <span class="score" id="mcProgress">Question 1 of 12</span>
+      <span class="score" id="mcScore">Score: 0</span>
+    </div>
+    <div class="qtag" id="mcTag"></div>
+    <div class="qprompt" id="mcPrompt"></div>
+    <div class="qmath" id="mcMath"></div>
+    <div class="opts" id="mcOpts"></div>
+    <div class="fb" id="mcFb"></div>
+    <button class="next" id="mcNext">Next question →</button>
+    <div id="mcDone" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Free-response trainer <span style="font-family:var(--mono);font-size:13px;color:var(--approx);font-weight:400">· Section II style</span></h2>
+  <p class="lead reveal">One scenario, several chained parts — exactly how the real FRQ works. Pick a problem below; type
+    what you can, then check the worked solution and score your reasoning against the rubric.</p>
+  <div class="frq-tabs reveal" id="frqTabs"></div>
+  <div class="card reveal" id="frqCard">
+    <div class="frq-desc" id="frqDesc"></div>
+    <div class="frq-given">
+      <div class="gl">Given</div>
+      <div id="frqGiven"></div>
+      <div id="frqGivenNote" style="font-size:12.5px;color:var(--muted);margin-top:8px"></div>
+    </div>
+    <div id="frqParts"></div>
+    <div class="scoreline" id="frqScore" style="display:none"></div>
+  </div>
+
+  <h2 class="reveal">Where you stand</h2>
+  <div class="card reveal" id="weakCard">
+    <div id="weakBody" style="font-size:14px;color:var(--muted)">Finish some multiple-choice questions and your topic breakdown shows up here.</div>
+  </div>
+
+  <footer class="reveal">Exam Practice · Unit 6 · part of the Visual AP Calculus guide · open in any browser, no install needed.</footer>
+</div>
+
+<script>
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+const TOPICS={
+ derivdefined:["The Derivative Defined","the-derivative-defined.html"],
+ diffcont:["Differentiability & Continuity","differentiability.html"],
+ powerrule:["Power Rule, Tangents & Normals","power-and-basic-rules.html"],
+ keyfunc:["Key-Function Derivatives","derivatives-of-functions.html"],
+ prodquot:["Product & Quotient Rules","product-and-quotient.html"]
+};
+
+// ===================== MC BANK (30, all verified in Node) =====================
+const MC=[
+// ============ THE DERIVATIVE DEFINED (6) ============
+ {topic:"derivdefined",calc:false,prompt:"The expression \\(\\displaystyle\\lim_{h\\to 0}\\dfrac{(2+h)^3-8}{h}\\) is equal to which of the following?",
+  opts:[{t:"\\(f'(2)\\) where \\(f(x)=x^3\\)",correct:true},{t:"\\(f'(0)\\) where \\(f(x)=x^3\\)"},{t:"\\(f(2)\\) where \\(f(x)=x^3\\)"},{t:"\\(f'(8)\\) where \\(f(x)=x^3\\)"}],
+  explain:`<b>Match the limit to the derivative template.</b> The definition \\(f'(a)=\\lim_{h\\to0}\\frac{f(a+h)-f(a)}{h}\\). Here \\(f(a+h)=(2+h)^3\\) and \\(f(a)=8=2^3\\), so \\(f(x)=x^3\\) and \\(a=2\\). The limit is \\(f'(2)=3(2)^2=12\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(f'(0)\\)</b> mistakes the \\(h\\) (which \\(\\to0\\)) for the point \\(a\\). The point is \\(2\\), not \\(0\\).<br>• <b>\\(f(2)\\)</b> forgets this is a <i>rate of change</i> (a derivative), not a function value.<br>• <b>\\(f'(8)\\)</b> reads the constant \\(8\\) as the point, but \\(8\\) is \\(f(2)\\), not \\(a\\).<br><br><b>The principle:</b> in \\(\\frac{f(a+h)-f(a)}{h}\\), the number added to \\(h\\) inside is \\(a\\); the standalone constant subtracted is \\(f(a)\\).`},
+
+ {topic:"derivdefined",calc:false,prompt:"\\(\\displaystyle\\lim_{x\\to 3}\\dfrac{x^2-9}{x-3}\\) can be interpreted as the derivative of \\(f(x)=x^2\\) at \\(x=3\\). Its value is",
+  opts:[{t:"6",correct:true},{t:"0"},{t:"3"},{t:"does not exist"}],
+  explain:`<b>This is the alternate form of the derivative,</b> \\(f'(a)=\\lim_{x\\to a}\\frac{f(x)-f(a)}{x-a}\\), with \\(f(x)=x^2\\), \\(a=3\\). So the value is \\(f'(3)=2(3)=6\\). (You can also factor: \\(\\frac{(x-3)(x+3)}{x-3}=x+3\\to6\\).)<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0</b> sees the indeterminate \\(\\frac00\\) form and stops, concluding the limit is \\(0\\) — but \\(\\frac00\\) means &ldquo;simplify further,&rdquo; not &ldquo;zero.&rdquo;<br>• <b>3</b> reports the \\(x\\)-value being approached instead of evaluating.<br>• <b>does not exist</b> assumes the hole makes the limit fail, but the limit ignores the single missing point.<br><br><b>The principle:</b> \\(\\frac00\\) at a point is the signature of a derivative in disguise — factor and cancel.`},
+
+ {topic:"derivdefined",calc:false,prompt:"A differentiable function \\(f\\) has values \\(f(4)=10\\) and \\(f(4.2)=10.7\\). The best estimate of \\(f'(4)\\) from this data is",
+  opts:[{t:"3.5",correct:true},{t:"0.7"},{t:"0.2"},{t:"53.5"}],
+  explain:`<b>Estimate the derivative with the difference quotient.</b> \\(f'(4)\\approx\\frac{f(4.2)-f(4)}{4.2-4}=\\frac{10.7-10}{0.2}=\\frac{0.7}{0.2}=3.5\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>0.7</b> computes only the change in \\(f\\) (the numerator) and forgets to divide by the change in \\(x\\).<br>• <b>0.2</b> reports the change in \\(x\\) instead of the rate.<br>• <b>53.5</b> divides by \\(0.2\\) but also keeps the raw \\(10.7\\) — an arithmetic slip from not subtracting first.<br><br><b>The principle:</b> a derivative is a <i>ratio</i> — change in output over change in input — never just one of the two.`},
+
+ {topic:"derivdefined",calc:false,prompt:"If \\(s(t)\\) gives position, which notation represents the object's instantaneous velocity at time \\(t=5\\)?",
+  opts:[{t:"\\(s'(5)\\)",correct:true},{t:"\\(s(5)\\)"},{t:"\\(\\dfrac{s(5)}{5}\\)"},{t:"\\(s(5)-s(0)\\)"}],
+  explain:`<b>Velocity is the derivative of position.</b> Instantaneous velocity at \\(t=5\\) is the rate of change of position there: \\(s'(5)\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(s(5)\\)</b> is the position at \\(t=5\\), not how fast it's changing.<br>• <b>\\(\\frac{s(5)}{5}\\)</b> is average velocity from \\(t=0\\) only if \\(s(0)=0\\) — and it's still an <i>average</i>, not instantaneous.<br>• <b>\\(s(5)-s(0)\\)</b> is total displacement over \\([0,5]\\), again not a rate.<br><br><b>The principle:</b> &ldquo;instantaneous rate&rdquo; always means the derivative; averages are differences over intervals.`},
+
+ {topic:"derivdefined",calc:false,prompt:"The graph of \\(f\\) passes through \\((1,2)\\) with a sharp <b>corner</b> there. Which statement is true?",
+  opts:[{t:"\\(f\\) is continuous at \\(x=1\\) but \\(f'(1)\\) does not exist",correct:true},{t:"\\(f'(1)=0\\)"},{t:"\\(f\\) is not continuous at \\(x=1\\)"},{t:"\\(f'(1)\\) exists and equals the average of the two slopes"}],
+  explain:`<b>A corner breaks differentiability but not continuity.</b> The graph connects (you can draw through the point without lifting your pen), so \\(f\\) is continuous. But the left and right slopes disagree at a corner, so no single tangent slope exists — \\(f'(1)\\) is undefined.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(f'(1)=0\\)</b> confuses a corner with a flat spot; the slope isn't zero, it's undefined.<br>• <b>not continuous</b> confuses a corner (continuous) with a jump (discontinuous).<br>• <b>average of the two slopes</b> invents a value; the derivative simply doesn't exist when the one-sided slopes differ.<br><br><b>The principle:</b> differentiable \\(\\Rightarrow\\) continuous, but continuous does <i>not</i> \\(\\Rightarrow\\) differentiable.`},
+
+ {topic:"derivdefined",calc:false,prompt:"Using the limit definition, the derivative of \\(f(x)=x^2\\) is found by simplifying \\(\\lim_{h\\to0}\\frac{(x+h)^2-x^2}{h}\\). After expanding, the expression inside the limit becomes",
+  opts:[{t:"\\(2x+h\\)",correct:true},{t:"\\(2x\\)"},{t:"\\(2x+h^2\\)"},{t:"\\(x+h\\)"}],
+  explain:`<b>Expand, cancel, then simplify — but before taking the limit.</b> \\((x+h)^2-x^2=2xh+h^2\\). Divide by \\(h\\): \\(\\frac{2xh+h^2}{h}=2x+h\\). <i>Then</i> the limit as \\(h\\to0\\) gives \\(2x\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(2x\\)</b> is the final answer <i>after</i> the limit — the question asks for the expression still inside the limit, before \\(h\\to0\\).<br>• <b>\\(2x+h^2\\)</b> divides only the first term by \\(h\\), forgetting \\(\\frac{h^2}{h}=h\\).<br>• <b>\\(x+h\\)</b> drops the factor of \\(2\\) from \\(2xh\\).<br><br><b>The principle:</b> the algebra must cancel the \\(h\\) in the denominator <i>before</i> substituting \\(h=0\\), or you get \\(\\frac00\\).`},
+
+// ============ DIFFERENTIABILITY & CONTINUITY (6) ============
+ {topic:"diffcont",calc:false,prompt:"Let \\(f(x)=\\begin{cases}ax^2 & x\\le 1\\\\ bx+1 & x>1\\end{cases}\\). For \\(f\\) to be <b>differentiable</b> at \\(x=1\\), the values of \\(a\\) and \\(b\\) must satisfy",
+  opts:[{t:"\\(a=-1,\\ b=-2\\)",correct:true},{t:"\\(a=2,\\ b=1\\)"},{t:"\\(a=1,\\ b=2\\)"},{t:"any \\(a,b\\) with \\(a=b\\)"}],
+  explain:`<b>Differentiable means two conditions: continuous AND equal slopes.</b><br><b>Continuity:</b> left value \\(a(1)^2=a\\) must equal right value \\(b(1)+1=b+1\\), so \\(a=b+1\\).<br><b>Equal slopes:</b> left derivative \\(2ax\\big|_{1}=2a\\) must equal right derivative \\(b\\), so \\(2a=b\\).<br>Substituting: \\(2a=b\\) and \\(a=b+1\\Rightarrow a=2a+1\\Rightarrow a=-1,\\ b=-2\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(a=2,b=1\\)</b> satisfies only continuity (\\(2=1+1\\)) but not the slope match (\\(2(2)\\ne1\\)).<br>• <b>\\(a=1,b=2\\)</b> matches slopes (\\(2(1)=2\\)) but fails continuity (\\(1\\ne3\\)).<br>• <b>any \\(a=b\\)</b> ignores both conditions entirely.<br><br><b>The principle:</b> piecewise differentiability is a <i>two-test</i> problem — the pieces must meet <i>and</i> have matching slopes.`},
+
+ {topic:"diffcont",calc:false,prompt:"Which function is continuous at \\(x=0\\) but <b>not</b> differentiable there?",
+  opts:[{t:"\\(f(x)=|x|\\)",correct:true},{t:"\\(f(x)=x^2\\)"},{t:"\\(f(x)=\\dfrac{1}{x}\\)"},{t:"\\(f(x)=\\begin{cases}1&x\\ge0\\\\0&x<0\\end{cases}\\)"}],
+  explain:`<b>Look for a corner — connected but not smooth.</b> \\(|x|\\) is continuous everywhere, but at \\(x=0\\) the left slope is \\(-1\\) and the right slope is \\(+1\\): a corner, so \\(f'(0)\\) doesn't exist.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(x^2\\)</b> is smooth everywhere, including \\(x=0\\) (slope \\(0\\)) — differentiable.<br>• <b>\\(1/x\\)</b> isn't even <i>continuous</i> at \\(0\\) (vertical asymptote), so it fails the wrong condition.<br>• <b>the step function</b> has a jump at \\(0\\) — also not continuous.<br><br><b>The principle:</b> the question wants continuous-but-not-differentiable, which is exactly a corner, cusp, or vertical tangent — not a discontinuity.`},
+
+ {topic:"diffcont",calc:false,prompt:"If \\(f\\) is differentiable at \\(x=a\\), which of the following <b>must</b> be true?",
+  opts:[{t:"\\(f\\) is continuous at \\(x=a\\)",correct:true},{t:"\\(f'(a)=0\\)"},{t:"\\(f\\) has a maximum or minimum at \\(x=a\\)"},{t:"\\(f\\) is a polynomial"}],
+  explain:`<b>Differentiability forces continuity.</b> If a function has a well-defined slope at a point, it can't have a break there — this is the one-way implication: differentiable \\(\\Rightarrow\\) continuous.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(f'(a)=0\\)</b> would mean a horizontal tangent, which is just one special case, not a requirement.<br>• <b>max or min</b> describes a critical point, unrelated to merely being differentiable.<br>• <b>polynomial</b> — plenty of differentiable functions (like \\(\\sin x\\), \\(e^x\\)) aren't polynomials.<br><br><b>The principle:</b> the only thing differentiability guarantees is continuity; the converse and the other claims don't follow.`},
+
+ {topic:"diffcont",calc:false,prompt:"The function \\(f(x)=x^{2/3}\\) at \\(x=0\\) has",
+  opts:[{t:"a cusp — continuous but not differentiable",correct:true},{t:"a corner with slopes \\(\\pm1\\)"},{t:"a removable discontinuity"},{t:"a horizontal tangent"}],
+  explain:`<b>\\(x^{2/3}\\) has a cusp at the origin.</b> It's continuous (\\(f(0)=0\\)), but the derivative \\(f'(x)=\\frac23x^{-1/3}\\) blows up to \\(+\\infty\\) on one side and \\(-\\infty\\) on the other as \\(x\\to0\\). The graph comes to a sharp point with vertical tangent lines — a cusp.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>corner with slopes \\(\\pm1\\)</b> describes \\(|x|\\), where slopes are finite; a cusp has infinite slopes.<br>• <b>removable discontinuity</b> is wrong — the function is perfectly continuous there.<br>• <b>horizontal tangent</b> is the opposite; the tangents are vertical, not horizontal.<br><br><b>The principle:</b> a cusp is a failure mode where the one-sided slopes run off to \\(\\pm\\infty\\), unlike a corner's finite mismatch.`},
+
+ {topic:"diffcont",calc:false,prompt:"For \\(g(x)=\\begin{cases}x^2 & x\\le 2\\\\ kx-4 & x>2\\end{cases}\\) to be <b>continuous</b> at \\(x=2\\), \\(k\\) must equal",
+  opts:[{t:"4",correct:true},{t:"2"},{t:"0"},{t:"8"}],
+  explain:`<b>Continuity just needs the pieces to meet.</b> Left value: \\(2^2=4\\). Right value: \\(k(2)-4=2k-4\\). Set equal: \\(2k-4=4\\Rightarrow 2k=8\\Rightarrow k=4\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>2</b> solves \\(2k-4=0\\) (sets the right piece to zero) instead of matching the left value of \\(4\\).<br>• <b>0</b> forgets the \\(-4\\) and sets \\(2k=4\\) wrong, or matches to the wrong value.<br>• <b>8</b> matches \\(2k=8\\) but forgets to bring the \\(-4\\) across, leaving \\(k\\) twice as large as needed... actually solves \\(2k-4=4\\) as \\(2k=8,k=4\\); choosing \\(8\\) means stopping at \\(2k=8\\) and reporting \\(2k\\) instead of \\(k\\).<br><br><b>The principle:</b> continuity is the <i>first</i> test (values meet); it's weaker than differentiability, which would also need the slopes to match.`},
+
+ {topic:"diffcont",calc:false,prompt:"At a point where a continuous function has a <b>vertical tangent</b>, the derivative",
+  opts:[{t:"does not exist (the slope is infinite)",correct:true},{t:"equals zero"},{t:"equals one"},{t:"equals the \\(y\\)-value at that point"}],
+  explain:`<b>A vertical tangent means an infinite slope, so the derivative is undefined.</b> The function can be perfectly continuous (like \\(\\sqrt[3]{x}\\) at \\(0\\)), but a vertical line has no finite slope, so \\(f'\\) does not exist there.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>zero</b> describes a <i>horizontal</i> tangent — the opposite situation.<br>• <b>one</b> is an arbitrary finite value; vertical tangents have no finite slope at all.<br>• <b>the \\(y\\)-value</b> confuses the function's height with its slope.<br><br><b>The principle:</b> &ldquo;derivative exists&rdquo; requires a <i>finite</i> slope; vertical tangents (infinite slope) are one of the four ways differentiability fails.`},
+
+// ============ POWER RULE, TANGENTS & NORMALS (6) ============
+ {topic:"powerrule",calc:false,prompt:"If \\(f(x)=\\sqrt{x}+\\dfrac{1}{x}\\), then \\(f'(x)=\\)",
+  opts:[{t:"\\(\\dfrac{1}{2\\sqrt{x}}-\\dfrac{1}{x^2}\\)",correct:true},{t:"\\(\\dfrac{1}{2\\sqrt{x}}+\\dfrac{1}{x^2}\\)"},{t:"\\(2\\sqrt{x}-\\dfrac{1}{x^2}\\)"},{t:"\\(\\dfrac{1}{2\\sqrt{x}}-\\ln x\\)"}],
+  explain:`<b>Rewrite as powers, then apply the power rule to each term.</b> \\(\\sqrt{x}=x^{1/2}\\Rightarrow \\frac12x^{-1/2}=\\frac{1}{2\\sqrt x}\\). And \\(\\frac1x=x^{-1}\\Rightarrow -x^{-2}=-\\frac{1}{x^2}\\). So \\(f'=\\frac{1}{2\\sqrt x}-\\frac{1}{x^2}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(+\\frac{1}{x^2}\\)</b> forgets that \\(x^{-1}\\) differentiates to \\(-x^{-2}\\) — the negative exponent brings a minus sign.<br>• <b>\\(2\\sqrt x\\)</b> handles \\(x^{1/2}\\) backwards (integrating instead of differentiating).<br>• <b>\\(-\\ln x\\)</b> wrongly recalls \\(\\frac1x\\) as the <i>derivative</i> of \\(\\ln x\\) and runs it in reverse.<br><br><b>The principle:</b> rewrite roots and reciprocals as exponents <i>first</i>, then &ldquo;bring down, subtract one&rdquo; — watching the sign on negative exponents.`},
+
+ {topic:"powerrule",calc:false,prompt:"The equation of the tangent line to \\(f(x)=x^3-4x\\) at \\(x=2\\) is",
+  opts:[{t:"\\(y=8(x-2)\\)",correct:true},{t:"\\(y=8x\\)"},{t:"\\(y=0\\)"},{t:"\\(y-2=8(x-0)\\)"}],
+  explain:`<b>Tangent line = point + slope.</b> Point: \\(f(2)=8-8=0\\), so \\((2,0)\\). Slope: \\(f'(x)=3x^2-4\\), \\(f'(2)=12-4=8\\). Point-slope: \\(y-0=8(x-2)\\), i.e. \\(y=8(x-2)\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(y=8x\\)</b> uses the slope but forgets to anchor at the point \\((2,0)\\) — this line passes through the origin, not \\((2,0)\\).<br>• <b>\\(y=0\\)</b> uses only the point's height and forgets the slope entirely.<br>• <b>\\(y-2=8(x-0)\\)</b> swaps the coordinates of the point, using \\(2\\) as the \\(y\\)-value and \\(0\\) as the \\(x\\)-value.<br><br><b>The principle:</b> a tangent line needs <i>both</i> \\(f(a)\\) for the point and \\(f'(a)\\) for the slope, assembled as \\(y-f(a)=f'(a)(x-a)\\).`},
+
+ {topic:"powerrule",calc:false,prompt:"The function \\(f(x)=x^3-3x\\) has a horizontal tangent at",
+  opts:[{t:"\\(x=1\\) and \\(x=-1\\)",correct:true},{t:"\\(x=0\\) only"},{t:"\\(x=3\\) and \\(x=-3\\)"},{t:"\\(x=\\sqrt3\\) and \\(x=-\\sqrt3\\)"}],
+  explain:`<b>Horizontal tangent means \\(f'(x)=0\\).</b> \\(f'(x)=3x^2-3=0\\Rightarrow x^2=1\\Rightarrow x=\\pm1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(x=0\\)</b> finds where \\(f=0\\) or where the inflection is, not where the slope is zero.<br>• <b>\\(x=\\pm3\\)</b> drops the factor of \\(3\\) wrong, solving \\(x^2=9\\).<br>• <b>\\(x=\\pm\\sqrt3\\)</b> solves \\(3x^2-3=0\\) as \\(x^2=3\\) — forgetting to divide the \\(3\\) out (\\(3x^2=3\\Rightarrow x^2=1\\)).<br><br><b>The principle:</b> horizontal tangents are the zeros of \\(f'\\), not the zeros of \\(f\\).`},
+
+ {topic:"powerrule",calc:false,prompt:"The slope of the line <b>normal</b> to \\(f(x)=x^2\\) at the point \\((1,1)\\) is",
+  opts:[{t:"\\(-\\dfrac12\\)",correct:true},{t:"\\(2\\)"},{t:"\\(\\dfrac12\\)"},{t:"\\(-2\\)"}],
+  explain:`<b>The normal is perpendicular to the tangent.</b> Tangent slope: \\(f'(1)=2(1)=2\\). The normal slope is the negative reciprocal: \\(-\\frac12\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(2\\)</b> gives the <i>tangent</i> slope, not the normal.<br>• <b>\\(\\frac12\\)</b> takes the reciprocal but forgets the negative sign.<br>• <b>\\(-2\\)</b> negates but forgets to take the reciprocal.<br><br><b>The principle:</b> perpendicular slopes are <i>negative reciprocals</i> — both flip the fraction <i>and</i> change the sign.`},
+
+ {topic:"powerrule",calc:false,prompt:"If \\(f(x)=2x^3-9x^2+12x\\), on which interval is \\(f\\) <b>decreasing</b>?",
+  opts:[{t:"\\((1,2)\\)",correct:true},{t:"\\((-\\infty,1)\\)"},{t:"\\((2,\\infty)\\)"},{t:"\\((0,3)\\)"}],
+  explain:`<b>Decreasing means \\(f'(x)<0\\).</b> \\(f'(x)=6x^2-18x+12=6(x^2-3x+2)=6(x-1)(x-2)\\). This is negative between the roots, on \\((1,2)\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\((-\\infty,1)\\)</b> and <b>\\((2,\\infty)\\)</b> are where \\(f'>0\\) (increasing) — outside the roots.<br>• <b>\\((0,3)\\)</b> grabs convenient round numbers but isn't tied to the sign of \\(f'\\).<br><br><b>The principle:</b> a product like \\(6(x-1)(x-2)\\) is negative only <i>between</i> its roots, where one factor is positive and the other negative.`},
+
+ {topic:"powerrule",calc:false,prompt:"\\(\\dfrac{d}{dx}\\left(\\dfrac{x^2+3x}{x}\\right)=\\) (simplify first)",
+  opts:[{t:"\\(1\\)",correct:true},{t:"\\(2x+3\\)"},{t:"\\(\\dfrac{2x+3}{x}\\)"},{t:"\\(\\dfrac{2x+3}{1}-1\\)"}],
+  explain:`<b>Simplify before differentiating.</b> \\(\\frac{x^2+3x}{x}=x+3\\). Its derivative is just \\(1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(2x+3\\)</b> differentiates the <i>numerator</i> \\(x^2+3x\\) alone, ignoring the division by \\(x\\).<br>• <b>\\(\\frac{2x+3}{x}\\)</b> differentiates top and bottom separately — that's never a valid rule.<br>• <b>\\(\\frac{2x+3}{1}-1\\)</b> is a garbled quotient-rule attempt on something that didn't need it.<br><br><b>The principle:</b> always check whether a quotient <i>simplifies</i> first — here it collapses to a line, no quotient rule required.`},
+
+// ============ KEY FUNCTION DERIVATIVES (6) ============
+ {topic:"keyfunc",calc:false,prompt:"\\(\\dfrac{d}{dx}\\left(3\\sin x-2\\cos x\\right)=\\)",
+  opts:[{t:"\\(3\\cos x+2\\sin x\\)",correct:true},{t:"\\(3\\cos x-2\\sin x\\)"},{t:"\\(-3\\cos x+2\\sin x\\)"},{t:"\\(3\\cos x+2\\sin x+C\\)"}],
+  explain:`<b>Differentiate term by term with the trig rules.</b> \\(\\frac{d}{dx}\\sin x=\\cos x\\) gives \\(3\\cos x\\). \\(\\frac{d}{dx}\\cos x=-\\sin x\\), so \\(-2\\cos x\\) becomes \\(-2(-\\sin x)=+2\\sin x\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(3\\cos x-2\\sin x\\)</b> forgets that the derivative of \\(\\cos\\) is <i>negative</i> \\(\\sin\\); the two minus signs should make a plus.<br>• <b>\\(-3\\cos x+2\\sin x\\)</b> wrongly makes \\(\\sin\\) differentiate to \\(-\\cos\\).<br>• <b>\\(+C\\)</b> adds a constant of integration — but this is differentiation, not an integral.<br><br><b>The principle:</b> the minus sign lives on \\(\\cos\\)'s derivative; track how it interacts with the coefficient's sign.`},
+
+ {topic:"keyfunc",calc:false,prompt:"\\(\\dfrac{d}{dx}\\left(e^x+\\ln x\\right)\\) evaluated at \\(x=1\\) is",
+  opts:[{t:"\\(e+1\\)",correct:true},{t:"\\(e\\)"},{t:"\\(1\\)"},{t:"\\(e+0\\)"}],
+  explain:`<b>Use the two self-evident derivatives.</b> \\(\\frac{d}{dx}e^x=e^x\\) and \\(\\frac{d}{dx}\\ln x=\\frac1x\\). So the derivative is \\(e^x+\\frac1x\\); at \\(x=1\\): \\(e^1+\\frac11=e+1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(e\\)</b> differentiates \\(e^x\\) correctly but forgets the \\(\\ln x\\) term contributes \\(\\frac11=1\\).<br>• <b>\\(1\\)</b> keeps only the \\(\\ln\\) term's contribution and drops \\(e^x\\).<br>• <b>\\(e+0\\)</b> wrongly treats \\(\\frac{d}{dx}\\ln x\\) as \\(0\\) (as if \\(\\ln x\\) were constant).<br><br><b>The principle:</b> \\(e^x\\) is its own derivative; \\(\\ln x\\) becomes \\(\\frac1x\\) — two of the most-tested derivatives in the unit.`},
+
+ {topic:"keyfunc",calc:false,prompt:"The fourth derivative of \\(f(x)=\\cos x\\) is",
+  opts:[{t:"\\(\\cos x\\)",correct:true},{t:"\\(-\\cos x\\)"},{t:"\\(\\sin x\\)"},{t:"\\(-\\sin x\\)"}],
+  explain:`<b>Follow the cycle.</b> \\(\\cos x\\to-\\sin x\\to-\\cos x\\to\\sin x\\to\\cos x\\). Four derivatives bring you back to the start: \\(\\cos x\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(-\\cos x\\)</b> is the <i>second</i> derivative (two steps in), not the fourth.<br>• <b>\\(\\sin x\\)</b> is the third derivative.<br>• <b>\\(-\\sin x\\)</b> is the first derivative.<br><br><b>The principle:</b> derivatives of \\(\\sin\\) and \\(\\cos\\) cycle with period \\(4\\); reduce the order mod \\(4\\) to find where you land.`},
+
+ {topic:"keyfunc",calc:false,prompt:"\\(\\dfrac{d}{dx}\\tan x\\) at \\(x=\\dfrac{\\pi}{4}\\) equals",
+  opts:[{t:"\\(2\\)",correct:true},{t:"\\(1\\)"},{t:"\\(\\sqrt2\\)"},{t:"\\(\\dfrac{\\sqrt2}{2}\\)"}],
+  explain:`<b>\\(\\frac{d}{dx}\\tan x=\\sec^2x\\).</b> At \\(x=\\frac{\\pi}{4}\\), \\(\\cos\\frac{\\pi}{4}=\\frac{\\sqrt2}{2}\\), so \\(\\sec\\frac{\\pi}{4}=\\sqrt2\\) and \\(\\sec^2\\frac{\\pi}{4}=2\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(1\\)</b> reports \\(\\tan\\frac{\\pi}{4}=1\\) (the function value) instead of its derivative.<br>• <b>\\(\\sqrt2\\)</b> stops at \\(\\sec\\frac{\\pi}{4}\\) and forgets to <i>square</i> it.<br>• <b>\\(\\frac{\\sqrt2}{2}\\)</b> reports \\(\\cos\\frac{\\pi}{4}\\) instead.<br><br><b>The principle:</b> the derivative of \\(\\tan\\) is \\(\\sec^2\\) — evaluate the secant, then square it.`},
+
+ {topic:"keyfunc",calc:false,prompt:"Which of the six basic trig functions has the derivative \\(-\\csc^2 x\\)?",
+  opts:[{t:"\\(\\cot x\\)",correct:true},{t:"\\(\\csc x\\)"},{t:"\\(\\tan x\\)"},{t:"\\(\\sec x\\)"}],
+  explain:`<b>\\(\\frac{d}{dx}\\cot x=-\\csc^2x\\).</b> It's the &ldquo;co-&rdquo; partner of \\(\\tan\\) (whose derivative is \\(+\\sec^2x\\)), and the co-functions carry the negative sign.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\csc x\\)</b> has derivative \\(-\\csc x\\cot x\\), a product, not \\(-\\csc^2x\\).<br>• <b>\\(\\tan x\\)</b> gives \\(+\\sec^2x\\) — same structure but secant, and positive.<br>• <b>\\(\\sec x\\)</b> gives \\(\\sec x\\tan x\\).<br><br><b>The principle:</b> \\(\\tan/\\cot\\) give squared functions (\\(\\sec^2,-\\csc^2\\)); \\(\\sec/\\csc\\) give products. The co-functions (\\(\\cot,\\csc\\)) take the minus sign.`},
+
+ {topic:"keyfunc",calc:false,prompt:"For \\(f(x)=e^x\\), at what point does the tangent line have slope equal to the function's value \\(e^2\\)?",
+  opts:[{t:"\\(x=2\\)",correct:true},{t:"\\(x=e^2\\)"},{t:"\\(x=\\ln 2\\)"},{t:"there is no such point"}],
+  explain:`<b>\\(e^x\\) is its own derivative, so slope equals height at every point.</b> The slope at \\(x=a\\) is \\(e^a\\), which equals the value \\(e^a\\). For this to be \\(e^2\\), take \\(a=2\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(x=e^2\\)</b> confuses the input with the output value.<br>• <b>\\(x=\\ln2\\)</b> would give slope \\(e^{\\ln2}=2\\), not \\(e^2\\).<br>• <b>no such point</b> misses the defining feature of \\(e^x\\): slope <i>always</i> equals height.<br><br><b>The principle:</b> for \\(e^x\\), \\(f'(a)=f(a)=e^a\\) — the slope and the height are the same number everywhere.`},
+
+// ============ PRODUCT & QUOTIENT RULES (6) ============
+ {topic:"prodquot",calc:false,prompt:"\\(\\dfrac{d}{dx}\\left(x^2 e^x\\right)=\\)",
+  opts:[{t:"\\(2xe^x+x^2e^x\\)",correct:true},{t:"\\(2xe^x\\)"},{t:"\\(x^2e^x\\)"},{t:"\\(2xe^{x}\\cdot 1\\)"}],
+  explain:`<b>Product rule: \\(u'v+uv'\\).</b> With \\(u=x^2,\\ v=e^x\\): \\(u'=2x,\\ v'=e^x\\). So \\(f'=(2x)(e^x)+(x^2)(e^x)=2xe^x+x^2e^x=xe^x(2+x)\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(2xe^x\\)</b> only differentiates the \\(x^2\\) and keeps \\(e^x\\) along for the ride — the classic &ldquo;\\(u'v'\\)&rdquo; trap that forgets the second term.<br>• <b>\\(x^2e^x\\)</b> differentiates only the \\(e^x\\) factor.<br>• <b>\\(2xe^x\\cdot1\\)</b> mistakenly uses \\(v'=1\\) (as if \\(e^x\\) differentiated to \\(1\\)).<br><br><b>The principle:</b> a product changes when <i>either</i> factor changes — you need both \\(u'v\\) and \\(uv'\\).`},
+
+ {topic:"prodquot",calc:false,prompt:"\\(\\dfrac{d}{dx}\\left(\\dfrac{\\ln x}{x}\\right)=\\)",
+  opts:[{t:"\\(\\dfrac{1-\\ln x}{x^2}\\)",correct:true},{t:"\\(\\dfrac{\\ln x-1}{x^2}\\)"},{t:"\\(\\dfrac{1}{x^2}\\)"},{t:"\\(\\dfrac{1/x}{1}\\)"}],
+  explain:`<b>Quotient rule: \\(\\frac{u'v-uv'}{v^2}\\).</b> With \\(u=\\ln x,\\ v=x\\): \\(u'=\\frac1x,\\ v'=1\\). Numerator: \\(\\frac1x\\cdot x-\\ln x\\cdot1=1-\\ln x\\). Denominator: \\(x^2\\). So \\(\\frac{1-\\ln x}{x^2}\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\frac{\\ln x-1}{x^2}\\)</b> reverses the numerator order — &ldquo;low d-high minus high d-low,&rdquo; not the other way; the sign flips.<br>• <b>\\(\\frac{1}{x^2}\\)</b> keeps only the \\(u'v\\) term and drops \\(-uv'\\).<br>• <b>\\(\\frac{1/x}{1}\\)</b> differentiates top and bottom separately — not a real rule.<br><br><b>The principle:</b> order matters in the quotient rule; the derivative of the <i>top</i> comes first.`},
+
+ {topic:"prodquot",calc:false,prompt:"\\(\\dfrac{d}{dx}\\left(x\\ln x\\right)=\\)",
+  opts:[{t:"\\(\\ln x+1\\)",correct:true},{t:"\\(\\dfrac1x\\)"},{t:"\\(1+\\dfrac1x\\)"},{t:"\\(\\ln x+x\\)"}],
+  explain:`<b>Product rule with \\(u=x,\\ v=\\ln x\\).</b> \\(u'=1,\\ v'=\\frac1x\\). So \\(f'=(1)(\\ln x)+(x)\\left(\\frac1x\\right)=\\ln x+1\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\frac1x\\)</b> differentiates only \\(\\ln x\\) and ignores the \\(x\\) factor.<br>• <b>\\(1+\\frac1x\\)</b> uses \\(u'=1\\) and \\(v'=\\frac1x\\) but forgets to <i>multiply</i> each by the other factor.<br>• <b>\\(\\ln x+x\\)</b> computes \\(uv'\\) as \\(x\\cdot\\frac1x\\) wrong, leaving \\(x\\) instead of \\(1\\).<br><br><b>The principle:</b> in \\(uv'\\), the \\(x\\) and \\(\\frac1x\\) cancel to \\(1\\) — a clean, very common result.`},
+
+ {topic:"prodquot",calc:false,prompt:"The table gives values at \\(x=3\\): \\(f(3)=5,\\ f'(3)=-1\\). If \\(g(x)=2x\\,f(x)\\), then \\(g'(3)=\\)",
+  opts:[{t:"\\(4\\)",correct:true},{t:"\\(-6\\)",},{t:"\\(10\\)"},{t:"\\(-2\\)"}],
+  explain:`<b>Product rule with the given table values.</b> \\(g=2x\\cdot f(x)\\), so \\(g'=2f(x)+2x\\,f'(x)\\). At \\(x=3\\): \\(g'(3)=2(5)+2(3)(-1)=10-6=4\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(-6\\)</b> keeps only the \\(2x\\,f'(x)=6(-1)\\) term and drops \\(2f(x)\\).<br>• <b>\\(10\\)</b> keeps only \\(2f(x)=2(5)\\) and drops the second term.<br>• <b>\\(-2\\)</b> uses \\(2\\cdot f'(3)=2(-1)\\) but forgets the \\(x\\) in the second term and the first term entirely.<br><br><b>The principle:</b> table-based product/quotient problems are pure FRQ bread-and-butter — plug the given values into both terms of the rule.`},
+
+ {topic:"prodquot",calc:false,prompt:"If \\(h(x)=\\dfrac{f(x)}{x}\\) and \\(f(2)=6,\\ f'(2)=3\\), then \\(h'(2)=\\)",
+  opts:[{t:"\\(0\\)",correct:true},{t:"\\(\\dfrac32\\)"},{t:"\\(3\\)"},{t:"\\(-\\dfrac32\\)"}],
+  explain:`<b>Quotient rule with \\(u=f(x),\\ v=x\\).</b> \\(h'=\\frac{f'(x)\\cdot x-f(x)\\cdot1}{x^2}\\). At \\(x=2\\): \\(\\frac{3(2)-6(1)}{4}=\\frac{6-6}{4}=0\\).<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>\\(\\frac32\\)</b> computes \\(\\frac{f'(2)}{2}=\\frac32\\), forgetting the \\(-f(x)\\) term — i.e. differentiating top over bottom.<br>• <b>\\(3\\)</b> reports \\(f'(2)\\) alone.<br>• <b>\\(-\\frac32\\)</b> gets the numerator order backwards.<br><br><b>The principle:</b> even when the answer is a clean \\(0\\), you must run the full quotient rule — both numerator terms.`},
+
+ {topic:"prodquot",calc:false,prompt:"To differentiate \\(y=(x^2+1)(x^3-x)\\), the <b>most efficient</b> first step on the AP exam is",
+  opts:[{t:"expand to a polynomial, then use the power rule",correct:true},{t:"apply the quotient rule"},{t:"rewrite as \\((x^2+1)\\div(x^3-x)^{-1}\\)"},{t:"differentiate each factor and multiply"}],
+  explain:`<b>When both factors are polynomials, expanding is often cleanest.</b> \\((x^2+1)(x^3-x)=x^5-x^3+x^3-x=x^5-x\\), so \\(y'=5x^4-1\\) in one line — no product rule bookkeeping.<br><br><b>Why each distractor is a specific mistake:</b><br>• <b>quotient rule</b> doesn't apply — there's no division here.<br>• <b>rewriting as a quotient</b> manufactures a harder problem out of a simple product.<br>• <b>differentiate each factor and multiply</b> is the \\((uv)'=u'v'\\) trap — flat-out wrong.<br><br><b>The principle:</b> the product rule always works, but for polynomial \\(\\times\\) polynomial, expanding first is usually faster and less error-prone.`}
+];
+
+// ===================== MC ENGINE (batches of 12) =====================
+let mcBatch=[], mcIdx=0, mcScore=0, mcAnswered=false;
+const stats={};
+Object.keys(TOPICS).forEach(k=>stats[k]={right:0,total:0});
+
+function mathify(h){return (h||"").replace(/\\\((.+?)\\\)/g,(m,t)=>{try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return m;}});}
+// Decide how to render an MC option: embedded inline-math or prose -> mathify as-is; pure math -> wrap in \( \).
+function renderOpt(t){
+  if(t.indexOf("\\(")>=0) return mathify(t);                 // already has inline math (text+math mix)
+  // Pure math if it has LaTeX structure markers (commands, sup/sub, etc.). Prose otherwise.
+  if(/[\\^_{}]/.test(t)){
+    try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return t;}
+  }
+  // no LaTeX markers: simple numeric/symbolic (e.g. "3", "0,4") -> render as math; wordy -> render as text
+  if(/[A-Za-z]{2,}/.test(t)) return mathify(t);              // prose like "Slowing down", "15 ft/s"
+  try{return window.katex?katex.renderToString(t,{throwOnError:false}):'<span class="tex-fallback">'+t+'</span>';}catch(e){return t;}
+}
+
+function newBatch(){
+  mcBatch=shuffle(MC).slice(0,12); mcIdx=0; mcScore=0;
+  document.getElementById('mcDone').style.display='none';
+  document.getElementById('mcTag').style.display='';
+  document.getElementById('mcPrompt').style.display='';
+  document.getElementById('mcOpts').style.display='';
+  renderMC();
+}
+function renderMC(){
+  mcAnswered=false;
+  const q=mcBatch[mcIdx];
+  document.getElementById('mcProgress').textContent="Question "+(mcIdx+1)+" of "+mcBatch.length;
+  document.getElementById('mcScore').textContent="Score: "+mcScore;
+  document.getElementById('mcTag').textContent=TOPICS[q.topic][0];
+  document.getElementById('mcPrompt').innerHTML=mathify(q.prompt);
+  const mm=document.getElementById('mcMath');
+  if(q.math){mm.style.display='';mm.innerHTML=tex(q.math,q.math,true);}else{mm.style.display='none';}
+  const opts=document.getElementById('mcOpts'); opts.innerHTML="";
+  const list=shuffle(q.opts.map((o,i)=>({...o})));
+  list.forEach(o=>{const b=document.createElement('button');b.innerHTML=renderOpt(o.t);b.dataset.correct=!!o.correct;b.onclick=()=>pickMC(b,q);opts.appendChild(b);});
+  const fb=document.getElementById('mcFb');fb.className="fb";fb.innerHTML="";
+  document.getElementById('mcNext').className="next";
+}
+function pickMC(btn,q){
+  if(mcAnswered)return; mcAnswered=true;
+  const correct=btn.dataset.correct==="true";
+  stats[q.topic].total++; if(correct){stats[q.topic].right++;mcScore++;}
+  [...document.getElementById('mcOpts').children].forEach(b=>{b.disabled=true;if(b.dataset.correct==="true")b.classList.add('correct');});
+  if(!correct)btn.classList.add('wrong');
+  const fb=document.getElementById('mcFb');
+  fb.className="fb show";
+  fb.innerHTML='<span class="ftag '+(correct?'ok':'bad')+'">'+(correct?'Correct. ':'Not quite. ')+'</span>'+mathify(q.explain)+
+    '<br><a class="review-link" href="'+TOPICS[q.topic][1]+'">Review: '+TOPICS[q.topic][0]+' →</a>';
+  document.getElementById('mcScore').textContent="Score: "+mcScore;
+  const nx=document.getElementById('mcNext'); nx.className="next show";
+  nx.textContent = mcIdx<mcBatch.length-1 ? "Next question →" : "See batch results →";
+  renderWeak();
+}
+document.getElementById('mcNext').onclick=()=>{
+  if(mcIdx<mcBatch.length-1){mcIdx++;renderMC();}
+  else{
+    document.getElementById('mcTag').style.display='none';
+    document.getElementById('mcPrompt').style.display='none';
+    document.getElementById('mcMath').style.display='none';
+    document.getElementById('mcOpts').style.display='none';
+    document.getElementById('mcFb').className="fb";
+    document.getElementById('mcNext').className="next";
+    const pct=Math.round(100*mcScore/mcBatch.length);
+    const msg=pct>=85?"Exam-ready across the board.":pct>=65?"Solid — clean up the misses below.":"Keep drilling; your weak topics are flagged below.";
+    const d=document.getElementById('mcDone');
+    d.style.display='block';
+    d.innerHTML='<div style="text-align:center;padding:10px"><div style="font-family:var(--display);font-size:34px;font-weight:600;color:var(--emerald)">'+mcScore+' / '+mcBatch.length+'</div><p style="color:var(--muted);margin:8px auto 16px;max-width:420px;font-size:14px">'+msg+'</p></div>';
+    const r=document.createElement('button');r.className="next show";r.style.maxWidth="240px";r.style.margin="4px auto 0";r.textContent="↺ Get a new batch of 12";r.onclick=newBatch;d.appendChild(r);
+    document.getElementById('mcProgress').textContent="Batch complete";
+  }
+};
+
+// ===================== WEAK-SPOTS =====================
+function renderWeak(){
+  const rows=Object.keys(TOPICS).filter(k=>stats[k].total>0);
+  const body=document.getElementById('weakBody');
+  if(!rows.length){return;}
+  rows.sort((a,b)=>(stats[a].right/stats[a].total)-(stats[b].right/stats[b].total));
+  body.innerHTML=rows.map(k=>{
+    const s=stats[k],pct=Math.round(100*s.right/s.total);
+    return '<div class="weakrow"><span class="weaklabel">'+TOPICS[k][0]+'</span><span class="weakbar"><i style="width:'+pct+'%"></i></span><span class="weakpct">'+s.right+'/'+s.total+'</span></div>';
+  }).join('')+'<p style="font-size:12.5px;color:var(--muted);margin-top:12px">Lowest topics first. Tap a topic in the question feedback to jump to its lesson.</p>';
+}
+
+// ===================== FRQ TRAINER =====================
+function frqNorm(s){return (s||"").toLowerCase().replace(/\s+/g,"").replace(/−/g,"-").replace(/·/g,"*").replace(/\{|\}/g,"");}
+const FRQS=[
+ { label:"Tangent Lines, Horizontal Tangents & the Normal Line",
+   desc:"<b>Build a tangent line from a point and a slope → locate every horizontal tangent → construct the perpendicular normal line.</b> A Section-II style problem, 9 points, no calculator. Tangent-line construction is the single most-tested skill in this unit's free-response.",
+   context:"Let \\(f(x)=x^3-3x^2+2\\).",
+   parts:[
+    {pl:"Part A",pts:3,topic:"powerrule",
+     q:"Find the equation of the line tangent to the graph of \\(f\\) at \\(x=1\\).",
+     fields:[{label:"y =",hint:"e.g. -3(x-1) or -3x+3",match:s=>["-3(x-1)","-3x+3","-3(x-1)+0","0-3(x-1)"].includes(frqNorm(s))}],
+     sol:`<b>A tangent line needs a point and a slope.</b><br><b>Point:</b> \\(f(1)=1-3+2=0\\), so the curve passes through \\((1,0)\\).<br><b>Slope:</b> \\(f'(x)=3x^2-6x\\), so \\(f'(1)=3-6=-3\\).<br><b>Assemble (point-slope):</b> \\(y-0=-3(x-1)\\), i.e. \\(\\boxed{y=-3(x-1)}\\) or equivalently \\(y=-3x+3\\).<br><br><b>Scoring:</b> 1 pt for \\(f(1)=0\\), 1 pt for \\(f'(1)=-3\\), 1 pt for the correct point-slope equation. A common deduction is using the slope without anchoring at the point.`,
+     rubric:["point \\(f(1)=0\\)","slope \\(f'(1)=-3\\)","equation \\(y=-3(x-1)\\)"]},
+    {pl:"Part B",pts:3,topic:"powerrule",
+     q:"Find the \\(x\\)-coordinates of all points where the graph of \\(f\\) has a horizontal tangent line.",
+     fields:[{label:"x =",hint:"both values, e.g. 0, 2",match:s=>{const n=frqNorm(s);return ["0,2","2,0","x=0,2","x=0,x=2","0and2"].includes(n)||(n.includes("0")&&n.includes("2")&&!n.includes("-")&&n.length<=8);}}],
+     sol:`<b>Horizontal tangent means \\(f'(x)=0\\).</b><br>\\(f'(x)=3x^2-6x=3x(x-2)=0\\).<br>So \\(x=0\\) or \\(x=2\\).<br>(For context: \\(f(0)=2\\) and \\(f(2)=-2\\), the local max and min.)<br><br><b>Scoring:</b> 1 pt for setting \\(f'(x)=0\\), 1 pt for factoring \\(3x(x-2)\\), 1 pt for both solutions \\(x=0,2\\). Reporting only one root loses a point; solving \\(f(x)=0\\) instead of \\(f'(x)=0\\) earns none.`,
+     rubric:["set \\(f'(x)=0\\)","factor \\(3x(x-2)\\)","both roots \\(x=0,2\\)"]},
+    {pl:"Part C",pts:3,topic:"powerrule",
+     q:"Find the equation of the line normal to the graph of \\(f\\) at \\(x=1\\).",
+     fields:[{label:"y =",hint:"e.g. (1/3)(x-1)",match:s=>{const n=frqNorm(s);return ["(1/3)(x-1)","1/3(x-1)","(1/3)x-1/3","(x-1)/3"].includes(n);}}],
+     sol:`<b>The normal is perpendicular to the tangent.</b><br>From Part A, the tangent slope at \\(x=1\\) is \\(-3\\). The normal slope is the negative reciprocal: \\(-\\frac{1}{-3}=\\frac13\\).<br>Through the same point \\((1,0)\\): \\(y-0=\\frac13(x-1)\\), i.e. \\(\\boxed{y=\\frac13(x-1)}\\).<br><br><b>Scoring:</b> 1 pt for recognizing normal slope \\(=-1/f'(1)\\), 1 pt for computing \\(\\frac13\\), 1 pt for the equation through \\((1,0)\\). Forgetting the negative reciprocal (using \\(-3\\) or \\(3\\)) is the typical error.`,
+     rubric:["normal slope \\(=-1/f'(1)\\)","slope \\(=\\tfrac13\\)","equation \\(y=\\tfrac13(x-1)\\)"]}
+   ]},
+
+ { label:"Derivatives from a Table: Product & Quotient Rules",
+   desc:"<b>Apply the product and quotient rules using tabulated values → build a tangent line from the results → combine with the power rule.</b> A Section-II style problem, 9 points, no calculator. The table-of-values setup is an AP staple — it tests whether you can apply the rules <i>structurally</i>, without formulas for \\(f\\) and \\(g\\) themselves.",
+   context:"The differentiable functions \\(f\\) and \\(g\\) have the following values at \\(x=2\\):<br><div style='margin:10px 0;font-family:var(--mono);font-size:14px;text-align:center'>\\(f(2)=3,\\quad f'(2)=5,\\quad g(2)=-1,\\quad g'(2)=4\\)</div>",
+   parts:[
+    {pl:"Part A",pts:2,topic:"prodquot",
+     q:"Let \\(P(x)=f(x)\\,g(x)\\). Find \\(P'(2)\\).",
+     fields:[{label:"P'(2) =",hint:"a number",match:s=>["7"].includes(frqNorm(s))}],
+     sol:`<b>Product rule: \\(P'=f'g+fg'\\).</b><br>\\(P'(2)=f'(2)g(2)+f(2)g'(2)=(5)(-1)+(3)(4)=-5+12=\\boxed{7}\\).<br><br><b>Scoring:</b> 1 pt for the correct product-rule structure \\(f'g+fg'\\), 1 pt for the correct value \\(7\\). Writing \\(f'g'\\) (the classic trap) earns nothing.`,
+     rubric:["product rule \\(f'g+fg'\\)","value \\(=7\\)"]},
+    {pl:"Part B",pts:2,topic:"prodquot",
+     q:"Let \\(Q(x)=\\dfrac{f(x)}{g(x)}\\). Find \\(Q'(2)\\).",
+     fields:[{label:"Q'(2) =",hint:"a number",match:s=>["-17"].includes(frqNorm(s))}],
+     sol:`<b>Quotient rule: \\(Q'=\\dfrac{f'g-fg'}{g^2}\\).</b><br>\\(Q'(2)=\\dfrac{f'(2)g(2)-f(2)g'(2)}{[g(2)]^2}=\\dfrac{(5)(-1)-(3)(4)}{(-1)^2}=\\dfrac{-5-12}{1}=\\boxed{-17}\\).<br><br><b>Scoring:</b> 1 pt for the quotient-rule structure with \\(g^2\\) in the denominator, 1 pt for the value \\(-17\\). Reversing the numerator order gives \\(+17\\) and loses the value point.`,
+     rubric:["quotient rule \\(\\tfrac{f'g-fg'}{g^2}\\)","value \\(=-17\\)"]},
+    {pl:"Part C",pts:3,topic:"prodquot",
+     q:"Write the equation of the line tangent to the graph of \\(P(x)=f(x)g(x)\\) at \\(x=2\\).",
+     fields:[{label:"y =",hint:"e.g. -3+7(x-2)",match:s=>{const n=frqNorm(s);return ["-3+7(x-2)","7(x-2)-3","7(x-2)+(-3)","7x-17"].includes(n);}}],
+     sol:`<b>Need the point and the slope.</b><br><b>Point:</b> \\(P(2)=f(2)g(2)=(3)(-1)=-3\\), so \\((2,-3)\\).<br><b>Slope:</b> from Part A, \\(P'(2)=7\\).<br><b>Equation:</b> \\(y-(-3)=7(x-2)\\), i.e. \\(\\boxed{y=-3+7(x-2)}\\) (equivalently \\(y=7x-17\\)).<br><br><b>Scoring:</b> 1 pt for \\(P(2)=-3\\), 1 pt for using \\(P'(2)=7\\) as the slope, 1 pt for the equation. Reusing \\(f(2)=3\\) as the point instead of \\(P(2)=-3\\) is the common slip.`,
+     rubric:["point \\(P(2)=-3\\)","slope \\(P'(2)=7\\)","equation \\(y=-3+7(x-2)\\)"]},
+    {pl:"Part D",pts:2,topic:"prodquot",
+     q:"Let \\(R(x)=x^2 f(x)\\). Find \\(R'(2)\\).",
+     fields:[{label:"R'(2) =",hint:"a number",match:s=>["32"].includes(frqNorm(s))}],
+     sol:`<b>Product rule with one factor being a power.</b><br>\\(R'(x)=2x\\,f(x)+x^2 f'(x)\\).<br>\\(R'(2)=2(2)(3)+(2)^2(5)=12+20=\\boxed{32}\\).<br><br><b>Scoring:</b> 1 pt for the product-rule structure \\(2xf+x^2f'\\), 1 pt for the value \\(32\\). Forgetting the \\(2x\\,f\\) term (treating \\(x^2\\) as a constant) is the usual error.`,
+     rubric:["product rule \\(2xf+x^2f'\\)","value \\(=32\\)"]}
+   ]}
+];
+
+let frqActive=0;
+function buildFrqTabs(){
+  const t=document.getElementById('frqTabs');t.innerHTML="";
+  FRQS.forEach((f,i)=>{const b=document.createElement('button');b.textContent=f.label;if(i===frqActive)b.classList.add('on');b.onclick=()=>{frqActive=i;buildFrqTabs();renderFRQ();};t.appendChild(b);});
+}
+function renderFRQ(){
+  const f=FRQS[frqActive];
+  document.getElementById('frqDesc').innerHTML=mathify(f.desc);
+  document.getElementById('frqGiven').innerHTML=tex(f.given,f.givenFall,true);
+  document.getElementById('frqGivenNote').textContent=f.givenNote;
+  document.getElementById('frqScore').style.display='none';
+  const wrap=document.getElementById('frqParts');wrap.innerHTML="";
+  f.parts.forEach((p,pi)=>{
+    const div=document.createElement('div');div.className="part";
+    let fieldsHtml='<div class="frq-fields">';
+    p.fields.forEach((fl,fi)=>{
+      fieldsHtml+='<div class="frq-field"><span class="frq-flabel">'+tex(fl.label,fl.label,false)+'</span>'+
+        '<input class="frq-input" id="f'+pi+'_'+fi+'" placeholder="'+(fl.hint||'')+'" autocomplete="off"></div>';
+    });
+    fieldsHtml+='</div>';
+    let rubricHtml='<div class="rubric"><div class="rubric-h">Score your reasoning ('+p.pts+' pt'+(p.pts>1?'s':'')+')</div>';
+    p.rubric.forEach((r,ri)=>{rubricHtml+='<label><input type="checkbox" id="r'+pi+'_'+ri+'" onchange="updFrqScore()"> <span>'+mathify(r)+'</span></label>';});
+    rubricHtml+='</div>';
+    div.innerHTML='<div class="part-h"><span class="part-l">'+p.pl+'</span><span class="part-pts">'+p.pts+' pt'+(p.pts>1?'s':'')+'</span></div>'+
+      '<div class="part-q">'+mathify(p.q)+'</div>'+fieldsHtml+
+      '<button class="frq-check" onclick="checkFrqPart('+pi+')">Check answer</button>'+
+      '<button class="reveal-sol" onclick="document.getElementById(\'sol'+pi+'\').classList.add(\'show\');this.style.display=\'none\'">show worked solution</button>'+
+      '<div class="frq-sol" id="sol'+pi+'">'+mathify(p.sol)+rubricHtml+'</div>';
+    wrap.appendChild(div);
+  });
+}
+function checkFrqPart(pi){
+  const p=FRQS[frqActive].parts[pi];
+  p.fields.forEach((fl,fi)=>{
+    const inp=document.getElementById('f'+pi+'_'+fi);
+    if(!inp.value.trim()){inp.classList.remove('ok','no');return;}
+    const ok=fl.match(inp.value);
+    inp.classList.toggle('ok',ok);inp.classList.toggle('no',!ok);
+  });
+  document.getElementById('sol'+pi).classList.add('show');
+}
+function updFrqScore(){
+  const f=FRQS[frqActive];let got=0,tot=0;
+  f.parts.forEach((p,pi)=>{tot+=p.pts;let checked=0;p.rubric.forEach((r,ri)=>{const c=document.getElementById('r'+pi+'_'+ri);if(c&&c.checked)checked++;});got+=Math.round(p.pts*checked/p.rubric.length);});
+  const sl=document.getElementById('frqScore');sl.style.display='block';
+  sl.innerHTML='Self-scored: <b>'+got+' / '+tot+'</b> points'+(got===tot?' — full marks. ':' ')+'<span style="color:var(--muted);font-size:12.5px">(check rubric boxes for each part you earned)</span>';
+}
+window.checkFrqPart=checkFrqPart;window.updFrqScore=updFrqScore;
+
+// ===================== BOOT =====================
+function boot(){newBatch();buildFrqTabs();renderFRQ();}
+boot();
+if(window.addEventListener)window.addEventListener('load',()=>{if(window.katex){newBatch();renderFRQ();}});
+if(!window.katex){let t=0;const iv=setInterval(()=>{if(window.katex){clearInterval(iv);newBatch();renderFRQ();}else if(++t>60)clearInterval(iv);},100);}
+document.querySelectorAll('.reveal').forEach((n,i)=>{n.style.animationDelay=Math.min(i*40,360)+'ms';});
+</script>
+</body>
+</html>
