@@ -30,7 +30,7 @@
     /* course house accent: champagne gold */
     --gold:#d8b873; --gold-glow:#efd49b; --gold-deep:#a8893f;
     /* per-unit signature colors */
-    --u1:#e86ab4;--u6:#5f7ff2; --u1b:#f3a1cf; --u6b:#8fa6f7; --u7:#de5360; --u7b:#fb8590;
+    --u1:#e86ab4; --u2:#8dcc4e; --u6:#5f7ff2; --u1b:#f3a1cf; --u2b:#b2db88; --u6b:#8fa6f7; --u7:#de5360; --u7b:#fb8590;
     --u8:#40c98a; --u8b:#5fe0a4;
     --u9:#3fb6d8; --u9b:#6dd4ef;
     --u10:#a98cf0; --u10b:#c4adff;
@@ -195,6 +195,7 @@
   .card:hover .go .arr{transform:translateX(6px)}
   /* per-card color binding */
   .u1{--cardc:var(--u1);--cardglow:rgba(232,106,180,.20)}
+  .u2{--cardc:var(--u2);--cardglow:rgba(141,204,78,.20)}
   .u6{--cardc:var(--u6);--cardglow:rgba(95,127,242,.20)}
   .u7{--cardc:var(--u7);--cardglow:rgba(222,83,96,.20)}
   .u7:hover{border-color:rgba(222,83,96,.42);box-shadow:0 30px 66px -40px rgba(0,0,0,.92),0 0 50px -26px rgba(222,83,96,.4)}
@@ -218,7 +219,7 @@
   .progress-track{flex:1;height:5px;border-radius:30px;background:var(--line);overflow:hidden;max-width:320px}
   .progress-fill{height:100%;width:0;border-radius:30px;transition:width 1.2s cubic-bezier(.2,.7,.2,1);
     background:linear-gradient(90deg,var(--u8),var(--u9) 55%,var(--u10))}
-  .group-fade.shown .progress-fill{width:50%}
+  .group-fade.shown .progress-fill{width:70%}
   .sec-head .t .sn{color:var(--gold-glow);font-weight:600;margin-right:1px}
   .rrow{--d:0s}
   @keyframes rowSweep{0%{background:transparent}38%{background:rgba(255,255,255,.05)}100%{background:transparent}}
@@ -430,8 +431,8 @@
         <a class="hero-cta" href="#readyGroup">Explore the units <span class="arr" aria-hidden="true">&#8595;</span></a>
         <div class="meta">
           <div><div class="n" data-count="10">10</div><div class="l">Units</div></div>
-          <div><div class="n"><em data-count="5">6</em></div><div class="l">Ready now</div></div>
-          <div><div class="n" data-count="24">24</div><div class="l">Lessons</div></div>
+          <div><div class="n"><em data-count="7">7</em></div><div class="l">Ready now</div></div>
+          <div><div class="n" data-count="34">34</div><div class="l">Lessons</div></div>
         </div>
       </div>
       <div class="hero-chips">
@@ -499,6 +500,26 @@
           <h3 class="uname">Limits &amp; Continuity</h3>
           <p class="udesc">What a limit is, computing limits algebraically, the Squeeze Theorem, continuity and its failures, and asymptotes with the Intermediate Value Theorem &mdash; the foundation everything else is built on.</p>
           <div class="chips"><span class="chip">Limits</span><span class="chip">Squeeze</span><span class="chip">Continuity</span><span class="chip">Asymptotes</span><span class="chip">IVT</span></div>
+          <span class="go">Open unit <span class="arr">&#8594;</span></span>
+        </div>
+      </a>
+      <!-- Unit 2 -->
+      <a class="card u2" href="unit2.html">
+        <div class="card-art" aria-hidden="true">
+          <svg viewBox="0 0 150 118" width="150" height="118" fill="none">
+            <path d="M22 96 H130" stroke="currentColor" stroke-width="2" opacity=".22" stroke-linecap="round"/>
+            <path d="M26 96 V24" stroke="currentColor" stroke-width="2" opacity=".22" stroke-linecap="round"/>
+            <path class="cdraw" pathLength="1" d="M26 92 C 58 86, 76 52, 130 30" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+            <path class="cdraw" pathLength="1" d="M44 88 L 104 40" stroke="currentColor" stroke-width="2" opacity=".6" stroke-linecap="round"/>
+            <circle cx="70" cy="67" r="4.5" fill="var(--bg)" stroke="currentColor" stroke-width="2.4"/>
+            <circle cx="112" cy="36" r="3" fill="currentColor" opacity=".5"/>
+          </svg>
+        </div>
+        <div class="card-body">
+          <div class="unum">Unit 02</div>
+          <h3 class="uname">Differentiation: Definition &amp; Rules</h3>
+          <p class="udesc">The derivative as the limit of a difference quotient, differentiability vs. continuity, the power and basic rules, derivatives of the key functions, and the product &amp; quotient rules &mdash; where the derivative arrives and becomes a toolkit.</p>
+          <div class="chips"><span class="chip">Derivative</span><span class="chip">Power</span><span class="chip">Trig</span><span class="chip">Product</span><span class="chip">Quotient</span></div>
           <span class="go">Open unit <span class="arr">&#8594;</span></span>
         </div>
       </a>
@@ -631,11 +652,11 @@
     </div>
     <div class="progress-wrap">
       <div class="progress-track"><div class="progress-fill"></div></div>
-      <div class="progress-label"><b>6</b> of 10 units ready</div>
+      <div class="progress-label"><b>7</b> of 10 units ready</div>
     </div>
     <div class="road">
       <a class="rrow live" href="unit1.html" style="--rc:var(--u1)"><span class="rnum">01</span><span class="rdot"></span><span class="rtitle">Limits &amp; Continuity<span class="rsub">5 lessons · exam · cheat sheet</span></span><span class="pill ready">Ready</span><span class="rarr">&#8594;</span></a>
-      <div class="rrow soon"><span class="rnum">02</span><span class="rdot"></span><span class="rtitle">Differentiation: Definition &amp; Basic Rules<span class="rwhat">The derivative as a limit, plus the power, product, quotient, and trig rules.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
+      <a class="rrow live" href="unit2.html" style="--rc:var(--u2)"><span class="rnum">02</span><span class="rdot"></span><span class="rtitle">Differentiation: Definition &amp; Basic Rules<span class="rsub">5 lessons · cheat sheet</span></span><span class="pill ready">Ready</span><span class="rarr">&#8594;</span></a>
       <div class="rrow soon"><span class="rnum">03</span><span class="rdot"></span><span class="rtitle">Differentiation: Composite, Implicit &amp; Inverse<span class="rwhat">The chain rule, implicit differentiation, and derivatives of inverse functions.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
       <div class="rrow soon"><span class="rnum">04</span><span class="rdot"></span><span class="rtitle">Contextual Applications of Differentiation<span class="rwhat">Related rates, motion along a line, and linear approximation in context.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
       <div class="rrow soon"><span class="rnum">05</span><span class="rdot"></span><span class="rtitle">Analytical Applications of Differentiation<span class="rwhat">The Mean Value Theorem, curve sketching, optimization, and concavity.</span></span><span class="pill">Soon</span><span class="rarr">&#8594;</span></div>
@@ -865,6 +886,12 @@
    {u:1,k:'lesson',t:'Asymptotes & the IVT',f:'asymptotes-ivt.html',kw:'vertical horizontal asymptote infinite limit at infinity degree race end behavior intermediate value theorem IVT root sign change'},
    {u:1,k:'exam',t:'Unit 1 \u2014 Exam Practice',f:'unit1-exam-practice.html',kw:'exam practice mcq frq test limits continuity asymptotes IVT squeeze'},
    {u:1,k:'sheet',t:'Unit 1 \u2014 Cheat Sheet',f:'unit1-cheatsheet.html',kw:'cheat sheet formulas review limits continuity squeeze asymptotes IVT'},
+   {u:2,k:'lesson',t:'The Derivative Defined',f:'the-derivative-defined.html',kw:'derivative definition limit difference quotient secant tangent instantaneous rate of change notation estimate from table average rate'},
+   {u:2,k:'lesson',t:'Differentiability & Continuity',f:'differentiability.html',kw:'differentiable continuous implies corner cusp vertical tangent discontinuity piecewise one-sided slope absolute value'},
+   {u:2,k:'lesson',t:'Power Rule & Basic Rules',f:'power-and-basic-rules.html',kw:'power rule constant multiple sum difference linearity tangent line normal line horizontal tangent rewrite negative exponent'},
+   {u:2,k:'lesson',t:'Key-Function Derivatives',f:'derivatives-of-functions.html',kw:'sin cos derivative exponential e^x natural log ln tangent cotangent secant cosecant trig cycle'},
+   {u:2,k:'lesson',t:'Product & Quotient Rules',f:'product-and-quotient.html',kw:'product rule quotient rule uv u over v low d high derivative of a product'},
+   {u:2,k:'sheet',t:'Unit 2 — Cheat Sheet',f:'unit2-cheatsheet.html',kw:'cheat sheet formulas review differentiation derivative rules power product quotient trig'},
    {u:6,k:'lesson',t:'Riemann Sums & the Definite Integral',f:'riemann-sums.html',kw:'riemann sum left right midpoint trapezoid rectangle approximation table overestimate underestimate definite integral accumulation'},
    {u:6,k:'lesson',t:'The Fundamental Theorem',f:'fundamental-theorem.html',kw:'fundamental theorem ftc accumulation function g(x) chain rule bound graph analysis area'},
    {u:6,k:'lesson',t:'Antiderivatives & u-Substitution',f:'antiderivatives.html',kw:'antiderivative deck u-substitution u sub reverse chain rule completing square arctan long division'},
